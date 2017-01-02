@@ -1,0 +1,16 @@
+[Unit]
+Description=Node TV - Media Library Manager
+After=syslog.target network.target
+
+[Service]
+ExecStart=/usr/bin/node /opt/nodetv/index.js
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=nodetv
+User=media
+Group=media
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,31 @@
+@import "common";
+@import "variables";
+
+html {
+	background-color: #E7E7E7;
+	margin: 0;
+	min-height: 100vh;
+	position: relative;
+	
+	body {
+		font-family: 'Noto Sans', sans-serif;
+		margin: 0;
+		min-height: inherit;
+	}
+}
+
+main {
+	padding-top: 70px;
+}
+
+footer {
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	right: 0;
+	width: auto;
+	div.info {
+		font-size: 10px;
+		text-align: center;
+	}
+}

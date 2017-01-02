@@ -1,0 +1,47 @@
+"use strict";
+
+//var List = require(process.env.MODELS+'/watchlist');
+
+var WatchlistAPI = function(app){
+	
+	app.route('/api/watchlists')
+		.get(function(req,res){
+			List.findByUser(req.user._id)
+				.then(list=>{
+					res.send(list);
+				})
+				.catch(error=>{
+					res.status(400).send({error:error});
+				})
+		})
+		.post(function(req,res){
+			req.trakt.users.lists.create({
+				name:req.body.name,
+				privacy: 'private'
+			})
+			.then(result=>{
+				// name, ids, created_at, updated_at
+				var list = new List(result);
+				return list.save()
+			})
+			.then(list=>{
+				res.send(list)
+			})
+			.catch(error=>{
+				res.status(400).send({error:error})
+			})
+		})
+	
+	app.route('/api/watchlists/:slug')
+		.get(function(){
+			// retrieve list
+		})
+		.post(function(){
+			
+		})
+		
+		
+		
+};
+
+module.exports = WatchlistAPI;

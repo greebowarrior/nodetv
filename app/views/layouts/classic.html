@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="nutv">
+<head>
+	<meta charset="UTF-8">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+	
+	<title update-title>NodeTV</title>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans:400,700;" />
+	<link rel="stylesheet" href="/static/css/classic.css" />
+	
+	<link rel="manifest" href="/static/manifest.json">
+</head>
+
+</head>
+<body>
+	<header class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation" ng-controller="NavigationController">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" ng-click="toggle()">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" ui-sref="dashboard.shows">NodeTV</a>
+			</div>
+			<nav class="collapse navbar-collapse" collapse="isCollapsed" ng-cloak>
+				<ul class="nav navbar-nav navbar-left" ng-if="visible">
+					<li ng-repeat="item in menu|orderBy:'sort'" ng-class="{'active':state.includes(item.root)}" ng-cloak>
+						<a ui-sref="{{::item.path}}" ng-click="collapse()">
+							<span class="fa fa-{{::item.icon}}"></span>
+							{{::item.name}}
+						</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right" ng-if="visible">
+					<li class="dropdown" dropdown ng-cloak>
+						<a class="dropdown-toggle" dropdown-toggle>
+							<span class="fa fa-user" ng-if="!user.avatar"></span>
+							<span ng-if="!user.name">{{user.username}}</span>
+							<span ng-if="user.name">{{user.name}}</span>
+							<img ng-src="{{user.avatar}}" class="avatar avatar-xs" ng-if="user.avatar" />
+						</a>
+						<ul class="dropdown-menu">
+							<li><a ng-click="profile()"><span class="fa fa-cog"></span> Settings</a></li>
+							<li><a ui-sref="logout"><span class="fa fa-sign-out"></span> Logout</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+	
+	<main role="main">
+		<div class="container" ui-view>
+			<%- body %>
+		</div>
+	</main>
+	
+	<footer>
+		<div class="info">NodeTV v<%- nutv.version %></div>
+	</footer>
+	
+	<script src="//code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-touch.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<!--
+	<script src="/static/js/ui-router.min.js"></script>
+	-->
+	
+	<script src="/static/js/libs/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script src="/static/js/libs/ng-socket.min.js"></script>
+	<script src="/static/js/libs/ng-storage-0.3.10.min.js"></script>
+	
+	<script src="/static/js/nutv.core.js"></script>
+	<script src="/static/js/nutv.js"></script>
+</body>
+</html>

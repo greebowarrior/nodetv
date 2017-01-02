@@ -1,0 +1,26 @@
+
+<!-- list of latest episodes (scroller) -->
+
+<!-- list of latest movies added to YTS -->
+
+<div ng-controller="TestController">
+	<div class="form-group">
+		<label for="">Add show by Slug</label>
+		<span class="input-group">
+			<input type="text" class="form-control" ng-model="show.slug" />
+			<span class="input-group-btn">
+				<button type="button" class="btn btn-default" ng-disabled="!show.slug" ng-click="addShow()">Add Show</button>
+			</span>
+		</span>
+	</div>
+	<div class="form-group">
+		<label for="">Add movie by Slug</label>
+		<span class="input-group">
+			<input type="text" class="form-control" ng-model="movie.slug" />
+			<span class="input-group-btn">
+				<button type="button" class="btn btn-default" ng-disabled="!movie.slug" ng-click="addMovie()">Add Movie</button>
+			</span>
+		</span>
+	</div>
+
+</div>
