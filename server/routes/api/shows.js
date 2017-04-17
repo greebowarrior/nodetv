@@ -1,86 +1,93 @@
-"use strict";
+"use strict"
 
-var Show = require(process.env.MODELS+'/show');
-var helpers = require(process.env.HELPERS);
+const Show = require(process.env.MODELS+'/show')
+const helpers = require(process.env.HELPERS)
 
 // probably need to move most of these to another file, so we can call them from tasks
 // boo you whore
 
 // TO MOVE: feed, */download, */collected
 
-var ShowsAPI = function(app){
-	console.debug('API loaded: Shows');
+let ShowsAPI = function(app){
+	console.debug('API loaded: Shows')
 	
 	app.route('/api/shows')
 		.get(function(req,res){
 			Show.findByUser(req.user._id)
 				.then(shows=>{
-					res.send(shows || []);
+					res.send(shows || [])
 				})
 				.catch(error=>{
-					res.status(404).send({error:error});
+					res.status(404).send({error:error})
 				})
 		})
 		.post(function(req,res){
 			new Promise((resolve,reject)=>{
 				Show.findBySlug(req.body.slug)
 					.then(show=>{
-						if (show) return resolve(show);
+						if (show) return resolve(show)
 						// Doesn't exist, need to create a document
 						return req.trakt.shows.summary({id:req.body.slug,extended:'full'})
 							.then(summary=>{
-								console.info('Adding show: %s', summary.title);
-								return new Show(summary);
+								console.info('Adding show: %s', summary.title)
+								return new Show(summary)
 							})
 							.then(show=>{
 								return req.trakt.seasons.summary({id:req.body.slug,extended:'episodes,full'})
 									.then(function(seasons){
 										// Loop seasons
-										seasons.forEach(function(season, season_idx){
+										
+										seasons.forEach(function(season){
 											show.seasons.push({
 												season: parseInt(season.number,10),
 												ids: season.ids,
 												overview: season.overview
-											});
+											})
+											
 											// Add/update episodes
 											season.episodes.forEach(function(episode){
-												show.seasons[season_idx].episodes.push({
+												show.episodes.push({
+													season: parseInt(season.number,10),
 													episode: episode.number,
 													ids: episode.ids,
 													title: episode.title || 'TBA',
 													overview: episode.overview,
 													first_aired: episode.first_aired ? new Date(episode.first_aired) : null,
 													updated_at: episode.updated_at ? new Date(episode.updated_at) : null
-												});
-											});
+												})
+											})
+											
+											/*
 											// Sort episodes by int:episode
 											show.seasons[season_idx].episodes.sort(function(a,b){
-												if (a.episode < b.episode) return -1;
-												if (a.episode > b.episode) return 1;
-												return 0;
-											});
-										});
+												if (a.episode < b.episode) return -1
+												if (a.episode > b.episode) return 1
+												return 0
+											})
+											*/
+										})
 										// Sort seasons array by int:season
 										show.seasons.sort(function(a,b){
-											if (a.season < b.season) return -1;
-											if (a.season > b.season) return 1;
-											return 0;
-										});
-										resolve(show);
-									});
-							});
+											if (a.season < b.season) return -1
+											if (a.season > b.season) return 1
+											return 0
+										})
+										resolve(show)
+									})
+							})
 					})
-					.catch(reject);
+					.catch(reject)
 			})
 			.then(show=>{
 				// Subscribe to show
-				return show.subscribe(req.user._id).save();
+				return show.subscribe(req.user._id).save()
 			})
 			.then(show=>{
-				res.status(201).send(show);
+				res.status(201).send(show)
 			})
 			.catch(error=>{
-				res.status(400).send({error:error});
+				console.error(error)
+				res.status(400).send({error:error})
 			})
 		})
 	
@@ -93,39 +100,39 @@ var ShowsAPI = function(app){
 						shows: [{id:show.ids}]
 					})
 					.then(()=>{
-						return show;
+						return show
 					})
 				})
 				.then(show=>{
-					return show.unsubscribe(req.user._id).save();
+					return show.unsubscribe(req.user._id).save()
 				})
 				.then(()=>{
-					res.status(204).end();
+					res.status(204).end()
 				})
 				.catch(error=>{
-					res.status(400).send({error:error});
+					res.status(400).send({error:error})
 				})
 		})
 		.get(function(req,res){
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
-					res.send(show);
+					res.send(show)
 				})
 				.catch(error=>{
-					res.status(404).send({error:error});
-				});
+					res.status(404).send({error:error})
+				})
 		})
 		.post(function(req,res){
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
-					show.config = req.body.config;
-					return show.save();
+					show.config = req.body.config
+					return show.save()
 				})
 				.then(show=>{
-					res.send(show);
+					res.send(show)
 				})
 				.catch(error=>{
-					res.status(400).send({error:error});
+					res.status(400).send({error:error})
 				})
 		})
 	
@@ -139,18 +146,18 @@ var ShowsAPI = function(app){
 						}]
 					})
 					.then(()=>{
-						return show.setCollected();
+						return show.setCollected()
 					})
 					.this(()=>{
-						return show.save();
-					});
+						return show.save()
+					})
 				})
 				.then(show=>{
-					res.send(show);
+					res.send(show)
 				})
 				.catch(error=>{
-					res.status(400).send({error:error});
-				});
+					res.status(400).send({error:error})
+				})
 		})
 		
 	app.route('/api/shows/:slug/download')
@@ -160,28 +167,28 @@ var ShowsAPI = function(app){
 				.then(show=>{
 					show.seasons.forEach(season=>{
 						season.episode.forEach(episode=>{
-							if (!episode.hashes) return;
-							helpers.torrent.add(episode.hashes, show.config.hd);
+							if (!episode.hashes) return
+							helpers.torrent.add(episode.hashes, show.config.hd)
 						})
 					})
-					return;
+					return
 				})
 				.then(()=>{
-					res.status(202).end();
+					res.status(202).end()
 				})
 				.catch(error=>{
-					res.status(400).send({error:error});
-				});
+					res.status(400).send({error:error})
+				})
 		})
 	
 	app.route('/api/shows/:slug/feed')
 		.get(function(req,res){
 			helpers.shows.parseFeed(req.params.slug)
 				.then(show=>{
-					res.send(show);
+					res.send(show)
 				})
 				.catch(error=>{
-					res.status(400).send({error:error});
+					res.status(400).send({error:error})
 				})
 		}) // Updated
 	
@@ -190,16 +197,18 @@ var ShowsAPI = function(app){
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
 					
-					console.log(show.config);
+					console.log(show.config)
 					// scan show directory
 					
 					
 					
 				})
 				.catch(error=>{
-					res.status(404).send({error:error});
+					res.status(404).send({error:error})
 				})
 		})
+	app.route('/api/shows/:slug/sync')
+	//	.get()	// synchronise with Trakt
 	
 	app.route('/api/shows/:slug/watched')
 		.post(function(req,res){
@@ -213,7 +222,7 @@ var ShowsAPI = function(app){
 			/*
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
-					let watched_at = req.body.watched_at || new Date();
+					let watched_at = req.body.watched_at || new Date()
 					return req.trakt.history.add({
 						shows:[{
 							ids:show.ids,
@@ -221,15 +230,15 @@ var ShowsAPI = function(app){
 						}]
 					})
 					.then(()=>{
-						show.setWatched();
-						return show.save();
-					});
+						show.setWatched()
+						return show.save()
+					})
 				})
 				.then(show=>{
-					res.send(show);
+					res.send(show)
 				})
 				.catch(error=>{
-					res.status(400).send({error:error});
+					res.status(400).send({error:error})
 				})
 			*/
 		})
@@ -242,45 +251,24 @@ var ShowsAPI = function(app){
 					return show.getSeason(req.params.season)
 				})
 				.then(season=>{
-					res.send(season);
+					res.send(season)
 				})
 				.catch(error=>{
-					res.status(404).send({error:error});
-				});
-		});
+					res.status(404).send({error:error})
+				})
+		})
 	
 	app.route('/api/shows/:slug/seasons/:season/collected')
 		.post(function(req,res){
-			// this needs to be triggered for all subscribers
-			
-			Show.findBySlug(req.params.slug)
+			helpers.show.collected(req.params.slug, {season:req.params.season})
 				.then(show=>{
-					return req.trakt.sync.collection.add({
-						shows:[{
-							ids: show.ids,
-							seasons: [{
-								number: parseInt(req.params.season,10)
-							}]
-						}]
-					})
-					.then(()=>{
-						return show.getSeason(req.params.season);
-					})
-					.then(season=>{
-						season.setWatched();
-						return show.save();
-					})
-				})
-				
-				
-				.then(show=>{
-					show.getSeason(req.params.season);
+					return show.getSeason(req.params.season)
 				})
 				.then(season=>{
-					res.send(season);
+					res.send(season)
 				})
 				.catch(error=>{
-					res.status(400).send({error:error});
+					res.status(400).send({error:error})
 				})
 		})
 
@@ -292,18 +280,18 @@ var ShowsAPI = function(app){
 					return show.getSeason(req.params.season)
 						.then(season=>{
 							season.episode.forEach(episode=>{
-								console.debug('Downloading %s - S%dE%d', show.title, season.season, episode.episode);
+								console.debug('Downloading %s - S%dE%d', show.title, season.season, episode.episode)
 								// TODO: ADD MAGIC
-							});
-							return;
+							})
+							return
 						})
 				})
 				.then(()=>{
-					res.status(202).end();
+					res.status(202).end()
 				})
 				.catch(error=>{
-					res.status(400).send({error:error});
-				});
+					res.status(400).send({error:error})
+				})
 		})
 	
 	app.route('/api/shows/:slug/seasons/:season/watched')
@@ -322,7 +310,7 @@ var ShowsAPI = function(app){
 			/*
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
-					let watched_at = req.body.watched_at || new Date();
+					let watched_at = req.body.watched_at || new Date()
 					return req.trakt.history.add({
 						shows:[{
 							ids: show.ids,
@@ -335,20 +323,20 @@ var ShowsAPI = function(app){
 					.then(()=>{
 						return show.getSeason(req.params.season)
 							.then(season=>{
-								season.setWatched();
-								return show.save();
+								season.setWatched()
+								return show.save()
 							})
-					});
+					})
 				})
 				.then(show=>{
-					return show.getSeason(req.params.season);
+					return show.getSeason(req.params.season)
 				})
 				.then(season=>{
-					res.send(season);
+					res.send(season)
 				})
 				.catch(error=>{
-					res.status(404).send({error:error});
-				});
+					res.status(404).send({error:error})
+				})
 			*/
 		})
 	
@@ -369,11 +357,11 @@ var ShowsAPI = function(app){
 						*/
 				})
 				.then(episode=>{
-					res.send(episode);
+					res.send(episode)
 				})
 				.catch(error=>{
-					res.status(404).send({error:error});
-				});
+					res.status(404).send({error:error})
+				})
 		})
 
 	app.route('/api/shows/:slug/seasons/:season/episodes/:episodes/collected')
@@ -394,20 +382,20 @@ var ShowsAPI = function(app){
 					.then(()=>{
 						return show.getEpisode(req.params.season,req.params.episode)
 							.then(episode=>{
-								episode.setCollected();
-								return show.save();
+								episode.setCollected()
+								return show.save()
 							})
 					})
 				})
 				.then(show=>{
-					return show.getEpisode(req.params.season,req.params.episode);
+					return show.getEpisode(req.params.season,req.params.episode)
 				})
 				.then(episode=>{
-					res.send(episode);
+					res.send(episode)
 				})
 				.catch(error=>{
-					res.status(400).send({error:error});
-				});
+					res.status(400).send({error:error})
+				})
 		})
 
 	app.route('/api/shows/:slug/seasons/:season/episodes/:episode/download')
@@ -421,21 +409,21 @@ var ShowsAPI = function(app){
 								.then(data=>{
 									return helpers.torrent.createMagnet(data.btih)
 										.then(magnet=>{
-											return helpers.torrent.add(magnet);
+											return helpers.torrent.add(magnet)
 										})
 										.then(result=>{
-											episode.hashes[data.idx].hash = result.hashString;
+											episode.hashes[data.idx].hash = result.hashString
 											return show.save()
 										})
 								})
 						})
 				})
 				.then(()=>{
-					res.status(202).end();
+					res.status(202).end()
 				})
 				.catch(error=>{
-					res.status(400).send({error:error});
-				});
+					res.status(400).send({error:error})
+				})
 		})
 	
 	app.route('/api/shows/:slug/seasons/:season/episodes/:episode/watched')
@@ -454,7 +442,7 @@ var ShowsAPI = function(app){
 			/*
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
-					let watched_at = req.body.watched_at || new Date();
+					let watched_at = req.body.watched_at || new Date()
 					return req.trakt.history.add({
 						shows:[{
 							ids: show.ids,
@@ -470,7 +458,7 @@ var ShowsAPI = function(app){
 					.then(()=>{
 						return show.getEpisode(req.params.season, req.params.episode)
 							.then(episode=>{
-								episode.setWatched();
+								episode.setWatched()
 								return show.save()
 							})
 					})
@@ -479,12 +467,12 @@ var ShowsAPI = function(app){
 					return show.getEpisode(req.params.season, req.params.episode)
 				})
 				.then(episode=>{
-					res.send(episode);
+					res.send(episode)
 				})
 				.catch(error=>{
-					res.status(400).send({error:error});
-				});
+					res.status(400).send({error:error})
+				})
 			*/
 		})
-};
-module.exports = ShowsAPI;
+}
+module.exports = ShowsAPI

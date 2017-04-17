@@ -9,20 +9,12 @@ var torrent = new Transmission({
 	url: global.config.transmission.url || '/transmission/rpc'
 });
 
-var trackers = [
-	'udp://9.rarbg.com:2710',
-	'udp://p4p.arenabg.com:1337',
+const trackers = [
+	'udp://tracker.opentrackr.org:1337',
 	'udp://tracker.coppersurfer.tk:6969',
 	'udp://tracker.leechers-paradise.org:6969',
-	'udp://tracker.opentrackr.org:1337',
-	'http://tracker.trackerfix.com:80'
-	
-	/*
-	'udp://open.demonii.com:1337',
-	'udp://tracker.openbittorrent.com:80',
-	'udp://glotorrents.pw:6969',
-	'udp://torrent.gresille.org:80',
-	*/
+	'udp://zer0day.ch:1337',
+	'udp://explodie.org:6969'
 ];
 
 exports.add = function(url){

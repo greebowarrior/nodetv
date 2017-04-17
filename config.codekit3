@@ -7,7 +7,7 @@
 		"uuidString": "18A536C4-F3C0-4048-81AF-7D5149E0AE13"
 		}
 	],
-"creatorBuild": "25479",
+"creatorBuild": "25704",
 "files": {
 	"\/.env": {
 		"ft": 8192,
@@ -101,7 +101,7 @@
 		"oS": 1
 		},
 	"\/app\/scss\/_common.scss": {
-		"aP": 0,
+		"aP": 1,
 		"bl": 0,
 		"dP": 10,
 		"dS": 0,
@@ -114,7 +114,7 @@
 		"uL": 1
 		},
 	"\/app\/scss\/_variables.scss": {
-		"aP": 0,
+		"aP": 1,
 		"bl": 0,
 		"dP": 10,
 		"dS": 0,
@@ -127,7 +127,7 @@
 		"uL": 1
 		},
 	"\/app\/scss\/classic.scss": {
-		"aP": 0,
+		"aP": 1,
 		"bl": 0,
 		"dP": 10,
 		"dS": 0,
@@ -140,7 +140,7 @@
 		"uL": 1
 		},
 	"\/app\/scss\/modern.scss": {
-		"aP": 0,
+		"aP": 1,
 		"bl": 0,
 		"dP": 10,
 		"dS": 0,
@@ -221,6 +221,24 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/Milestones.md": {
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"eLB": 0,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 1,
+		"oAP": "\/Milestones.html",
+		"oF": 1,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
 	"\/node_modules": {
 		"ft": 65536,
 		"oA": 2,
@@ -262,9 +280,9 @@
 	"\/server\/app.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/min\/app-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
@@ -272,7 +290,7 @@
 		"ft": 524288,
 		"oA": 1,
 		"oAP": "\/server\/config\/development-min.json",
-		"oF": 0,
+		"oF": 1,
 		"oO": 0,
 		"oS": 1
 		},
@@ -280,7 +298,7 @@
 		"ft": 524288,
 		"oA": 1,
 		"oAP": "\/server\/config\/production-min.json",
-		"oF": 0,
+		"oF": 1,
 		"oO": 0,
 		"oS": 1
 		},
@@ -288,32 +306,32 @@
 		"ft": 524288,
 		"oA": 1,
 		"oAP": "\/server\/config\/testing-min.json",
-		"oF": 0,
+		"oF": 1,
 		"oO": 0,
 		"oS": 1
 		},
 	"\/server\/database.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/min\/database-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/helpers\/index.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/helpers\/min\/index-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/helpers\/index.old.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/helpers\/min\/index.old-min.js",
 		"oF": 1,
 		"sC": 3,
@@ -322,54 +340,54 @@
 	"\/server\/helpers\/modules\/rss.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/helpers\/modules\/min\/rss-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/helpers\/modules\/shows.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/helpers\/modules\/min\/shows-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/helpers\/modules\/torrent.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/helpers\/modules\/min\/torrent-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/helpers\/modules\/utils.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/helpers\/modules\/min\/utils-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/helpers\/modules\/worker.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/helpers\/modules\/min\/worker-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/helpers\/tasks\/torrent.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/helpers\/tasks\/min\/torrent-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
@@ -394,9 +412,9 @@
 	"\/server\/helpers\/workers\/directory\/scan.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/helpers\/workers\/directory\/min\/scan-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
@@ -430,121 +448,139 @@
 	"\/server\/helpers\/workers\/file\/transcode.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/helpers\/workers\/file\/min\/transcode-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/models\/episode.schema.js": {
+	"\/server\/models\/log.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
-		"oAP": "\/server\/models\/min\/episode.schema-min.js",
-		"oF": 0,
+		"oA": 1,
+		"oAP": "\/server\/models\/min\/log-min.js",
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/models\/movie.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/models\/min\/movie-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/models\/season.schema.js": {
+	"\/server\/models\/schema\/episode.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
-		"oAP": "\/server\/models\/min\/season.schema-min.js",
-		"oF": 0,
+		"oA": 1,
+		"oAP": "\/server\/models\/schema\/min\/episode.min.js",
+		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/models\/schema\/season.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/models\/schema\/min\/season.min.js",
+		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/models\/schema\/show.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/models\/schema\/min\/show.min.js",
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/models\/show.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/models\/min\/show-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/models\/user.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/models\/min\/user-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/routes\/api.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/routes\/min\/api-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/routes\/api\/latest.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/routes\/api\/min\/latest-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/routes\/api\/movies.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/routes\/api\/min\/movies-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/routes\/api\/shows.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/routes\/api\/min\/shows-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/routes\/api\/trakt.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/routes\/api\/min\/trakt-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/routes\/api\/users.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/routes\/api\/min\/users-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/routes\/api\/watchlist.js.derp": {
 		"ft": 8192,
-		"oA": 2,
+		"oA": 1,
 		"oAP": "\/server\/routes\/api\/watchlist.js.derp",
-		"oF": 0
+		"oF": 1
 		},
 	"\/server\/routes\/auth.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/routes\/min\/auth-min.js",
 		"oF": 1,
 		"sC": 3,
@@ -553,7 +589,7 @@
 	"\/server\/routes\/socket.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/routes\/min\/socket-min.js",
 		"oF": 1,
 		"sC": 3,
@@ -562,27 +598,54 @@
 	"\/server\/routes\/trakt.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/routes\/min\/trakt-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/routes\/user.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/routes\/min\/user-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/server.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/server\/min\/server-min.js",
 		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/tasks\/index.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/index.min.js",
+		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/tasks\/latest.task.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 0,
+		"oAP": "\/server\/tasks\/min\/latest.task.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/tasks\/min\/latest.task.min.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 0,
+		"oAP": "\/server\/tasks\/min\/min\/latest.task.min.min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -624,6 +687,15 @@
 		"mi": 0,
 		"oA": 0,
 		"oAP": "\/tests\/min\/settings-min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/upnp.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 0,
+		"oAP": "\/min\/upnp-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -1035,7 +1107,7 @@
 		},
 	"esLintConfigFileHandlingType": 1,
 	"esLintECMAVersion": 7,
-	"esLintEnvironmentsMask": 8519699,
+	"esLintEnvironmentsMask": 8527923,
 	"esLintRules": {
 		"accessor-pairs": {
 			"active": 0,
@@ -1285,12 +1357,16 @@
 			"active": 0,
 			"optionString": ""
 			},
+		"no-await-in-loop": {
+			"active": 0,
+			"optionString": ""
+			},
 		"no-bitwise": {
 			"active": 0,
 			"optionString": "{'allow': ['~'], 'int32Hint': true}"
 			},
 		"no-caller": {
-			"active": 0,
+			"active": 1,
 			"optionString": ""
 			},
 		"no-case-declarations": {
@@ -1303,6 +1379,10 @@
 			},
 		"no-class-assign": {
 			"active": 1,
+			"optionString": ""
+			},
+		"no-compare-neg-zero": {
+			"active": 0,
 			"optionString": ""
 			},
 		"no-cond-assign": {
@@ -1505,6 +1585,10 @@
 			"active": 0,
 			"optionString": ""
 			},
+		"no-multi-assign": {
+			"active": 0,
+			"optionString": ""
+			},
 		"no-multi-spaces": {
 			"active": 0,
 			"optionString": "{'exceptions': {'Property': true, 'BinaryExpression': false, 'VariableDeclarator': false, 'ImportDeclaration': false}}"
@@ -1558,7 +1642,7 @@
 			"optionString": ""
 			},
 		"no-octal-escape": {
-			"active": 0,
+			"active": 1,
 			"optionString": ""
 			},
 		"no-param-reassign": {
@@ -1781,6 +1865,10 @@
 			"active": 0,
 			"optionString": ""
 			},
+		"nonblock-statement-body-position": {
+			"active": 0,
+			"optionString": "'beside'"
+			},
 		"object-curly-newline": {
 			"active": 0,
 			"optionString": "{'ObjectExpression': {'multiline': true}, 'ObjectPattern': {'multiline': true}}"
@@ -1825,9 +1913,17 @@
 			"active": 0,
 			"optionString": "{'destructuring': 'any', 'ignoreReadBeforeAssign': false}"
 			},
+		"prefer-destructuring": {
+			"active": 0,
+			"optionString": "{'array': true, 'object': true}, {'enforceForRenamedProperties': false}"
+			},
 		"prefer-numeric-literals": {
 			"active": 0,
 			"optionString": ""
+			},
+		"prefer-promise-reject-errors": {
+			"active": 0,
+			"optionString": "{'allowEmptyReject': false}"
 			},
 		"prefer-rest-params": {
 			"active": 0,
@@ -1925,6 +2021,10 @@
 			"active": 0,
 			"optionString": "'never'"
 			},
+		"template-tag-spacing": {
+			"active": 0,
+			"optionString": "'never'"
+			},
 		"unicode-bom": {
 			"active": 0,
 			"optionString": "'never'"
@@ -1966,7 +2066,7 @@
 	"externalServerAddress": "http:\/\/localhost:8888",
 	"gitIgnoreBuildFolder": 1,
 	"hideConfigFile": 0,
-	"jsCheckerReservedNamesString": "angular",
+	"jsCheckerReservedNamesString": "$,angular",
 	"jsHintFlags2": {
 		"asi": {
 			"active": 1,
@@ -2368,11 +2468,12 @@
 		"autoOutputPathRelativePath": "",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
-		"autoOutputPathStyle": 0
+		"autoOutputPathStyle": 0,
+		"quality": 100
 		},
 	"languageDefaultsJS": {
-		"autoOutputAction": 0,
-		"autoOutputPathFilenamePattern": "*-min.js",
+		"autoOutputAction": 1,
+		"autoOutputPathFilenamePattern": "*.min.js",
 		"autoOutputPathRelativePath": "\/min",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
@@ -2428,7 +2529,7 @@
 		"strictUnits": 0
 		},
 	"languageDefaultsMARKDOWN": {
-		"autoOutputAction": 0,
+		"autoOutputAction": 1,
 		"autoOutputPathFilenamePattern": "*.html",
 		"autoOutputPathRelativePath": "",
 		"autoOutputPathReplace1": "",
@@ -2461,7 +2562,9 @@
 		"autoOutputPathRelativePath": "",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
-		"autoOutputPathStyle": 0
+		"autoOutputPathStyle": 0,
+		"enableLossy": 1,
+		"quality": 100
 		},
 	"languageDefaultsPUG": {
 		"autoOutputAction": 1,
@@ -2484,7 +2587,7 @@
 		"debugStyle": 0,
 		"decimalPrecision": 10,
 		"outputStyle": 3,
-		"shouldRunAutoprefixer": 0,
+		"shouldRunAutoprefixer": 1,
 		"shouldRunBless": 0,
 		"useLibsass": 1
 		},
@@ -2528,21 +2631,21 @@
 	"languageDefaultsTS": {
 		"autoOutputAction": 0,
 		"autoOutputPathFilenamePattern": "*.js",
-		"autoOutputPathRelativePath": "\/js",
+		"autoOutputPathRelativePath": "..\/js",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
 		"autoOutputPathStyle": 2,
 		"createDeclarationFile": 0,
-		"createSourceMap": 0,
+		"createSourceMap": 1,
 		"jsxMode": 0,
-		"minifyOutput": 0,
+		"minifyOutput": 1,
 		"moduleResolutionType": 0,
-		"moduleType": 0,
+		"moduleType": 4,
 		"noImplicitAny": 0,
 		"preserveConstEnums": 0,
-		"removeComments": 0,
+		"removeComments": 1,
 		"suppressImplicitAnyIndexErrors": 0,
-		"targetECMAVersion": 0
+		"targetECMAVersion": 2
 		},
 	"languageDefaultsUserDefined": [
 		],

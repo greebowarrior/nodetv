@@ -1,11 +1,13 @@
-'use strict';
+'use strict'
 
-process.title = 'NodeTV';
-process.chdir(__dirname);
+process.title = 'NuTV'
+process.chdir(__dirname)
+
+global.Promise = require('bluebird')
 
 require('log4js').configure({
-	appenders:[{type:'console',layout:{type:'pattern',pattern:'[%[%p%]]\t- %m'}}],
+	appenders:[{type:'stdout',layout:{type:'pattern',pattern:'[%[%p%]]\t- %m'}}],
 	replaceConsole: true
-});
+})
 
-require('./server/server.js');
+require('./server/server.js')

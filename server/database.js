@@ -1,30 +1,25 @@
-"use strict";
+"use strict"
 
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+const mongoose = require('mongoose')
+mongoose.Promise = global.Promise
 
-var Database = (config)=>{
+const Database = (config)=>{
 	
-	var conn = 'mongodb://';
+	let conn = 'mongodb://'
 	
-	if (config.auth){
-		conn += config.user+':'+config.pass+'@';
-	}
-	conn += config.host+':'+config.port;
-	conn += '/'+config.name;
+	if (config.auth) conn += `${config.user}:${config.pass}@`
+	conn += `${config.host}:${config.port}/${config.name}`
 	
-	mongoose.connect(conn);
+	mongoose.connect(conn)
 	mongoose.connection.on('error', (error)=>{
-		console.error(error);
+		console.error(error)
 	})
-	
 	mongoose.connection.on('connected', ()=>{
-		console.info('Connected to MongoDB: %s', config.host);
-	});
-	
+		console.info('Connected to MongoDB: %s', config.host)
+	})
 	process.on('SIGTERM', ()=>{
-		mongoose.disconnect();
-	});
-};
-
-module.exports = Database;
+		mongoose.disconnect()
+		process.exit(0)
+	})
+}
+module.exports = Database
