@@ -6,7 +6,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/greebowarrior/nutv.git"
+    "url": "https://github.com/greebowarrior/nodetv.git"
   },
   "main": "./nutv.js",
   "dependencies": {
@@ -42,7 +42,7 @@
     "zero-fill": "^2.2.3"
   },
   "engines": {
-    "node": "^6.9.1"
+    "node": "^6.10.2"
   },
   "devDependencies": {}
 }
