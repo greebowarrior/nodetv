@@ -1,0 +1,13 @@
+// Overrides for bootstrap default styles
+
+.tab-content {
+	.tab-pane {
+		padding: 20px 2px;
+	}
+}
+
+.breadcrumb {
+	.active {
+		color: $nodetv-grey;
+	}
+}
