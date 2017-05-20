@@ -1,0 +1,55 @@
+<form method="post" ng-submit="save()">
+	<div class="form-group">
+		<label for="ipt_format">Filename Format</label>
+		
+		<div class="input-group">
+			<span class="input-group-addon"><span class="fa fa-file-o"></span></span>
+			<input id="ipt_format" type="text" class="form-control" ng-model="show.config.format" />
+		</div>
+		<small class="help-block text-right">
+			<strong>%S</strong>: Season,
+			<strong>%E</strong>: Episode,
+			<strong>%T</strong>: Title,
+			<strong>%X</strong>: File extension
+		</small>
+	</div>
+	
+	<div class="form-group">
+		<label>Show Directory</label>
+		<div class="input-group">
+			<span class="input-group-addon" uib-tooltip="<%- config.media.base %>/">
+				<%- config.media.shows.path %>/
+			</span>
+			<input type="text" class="form-control" ng-model="show.config.directory" />
+		</div>
+	</div>
+	
+	<div class="checkbox">
+		<label>
+			<input type="checkbox" class="checkbox" ng-model="show.config.enabled" /> Download new episodes when available
+		</label>
+	</div>
+	<div class="checkbox" ng-show="show.config.enabled">
+		<label>
+			<input type="checkbox" class="checkbox" ng-model="show.config.hd"  /> Prefer HD Video
+		</label>
+	</div>
+	<div class="checkbox" ng-show="show.config.enabled">
+		<label>
+			<input type="checkbox" class="checkbox" ng-model="show.config.transcode" /> Transcode to MP4
+		</label>
+	</div>
+	
+	<div class="form-group" ng-show="show.config.enabled">
+		<label>RSS Feed</label>
+		<div class="input-group">
+			<span class="input-group-addon"><span class="fa fa-rss"></span></span>
+			<input type="url" class="form-control" ng-repeat="feed in show.config.feed" ng-model="feed.url" />
+		</div>
+		<small class="help-block text-right">We recommend <a href="https://showrss.info" target="_blank">ShowRSS</a></small>
+	</div>
+	<hr />
+	<div class="form-group">
+		<button type="submit" class="btn btn-success">Save</button>
+	</div>
+</form>

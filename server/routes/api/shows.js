@@ -1,101 +1,91 @@
 "use strict"
 
-const Show = require(process.env.MODELS+'/show')
-const helpers = require(process.env.HELPERS)
+const Show = require(require('path').join(process.env.MODELS,'show'))
 
-// probably need to move most of these to another file, so we can call them from tasks
-// boo you whore
+const router = require('express').Router()
+const helpers = require('nodetv-helpers')
 
-// TO MOVE: feed, */download, */collected
-
-let ShowsAPI = function(app){
+const ShowsAPI = app=>{
 	console.debug('API loaded: Shows')
-	
-	app.route('/api/shows')
-		.get(function(req,res){
-			Show.findByUser(req.user._id)
+	app.use('/api/shows', router)
+		
+	router.route('/')
+		.get((req,res)=>{
+			Show.findByUser(req.user._id, {episodes:false,seasons:false},{sort:{title:1}})
 				.then(shows=>{
-					res.send(shows || [])
+					res.send(shows)
 				})
 				.catch(error=>{
 					res.status(404).send({error:error})
 				})
 		})
-		.post(function(req,res){
-			new Promise((resolve,reject)=>{
-				Show.findBySlug(req.body.slug)
-					.then(show=>{
-						if (show) return resolve(show)
-						// Doesn't exist, need to create a document
-						return req.trakt.shows.summary({id:req.body.slug,extended:'full'})
-							.then(summary=>{
-								console.info('Adding show: %s', summary.title)
-								return new Show(summary)
-							})
-							.then(show=>{
-								return req.trakt.seasons.summary({id:req.body.slug,extended:'episodes,full'})
-									.then(function(seasons){
-										// Loop seasons
-										
-										seasons.forEach(function(season){
-											show.seasons.push({
-												season: parseInt(season.number,10),
-												ids: season.ids,
-												overview: season.overview
-											})
-											
-											// Add/update episodes
-											season.episodes.forEach(function(episode){
-												show.episodes.push({
-													season: parseInt(season.number,10),
-													episode: episode.number,
-													ids: episode.ids,
-													title: episode.title || 'TBA',
-													overview: episode.overview,
-													first_aired: episode.first_aired ? new Date(episode.first_aired) : null,
-													updated_at: episode.updated_at ? new Date(episode.updated_at) : null
-												})
-											})
-											
-											/*
-											// Sort episodes by int:episode
-											show.seasons[season_idx].episodes.sort(function(a,b){
-												if (a.episode < b.episode) return -1
-												if (a.episode > b.episode) return 1
-												return 0
-											})
-											*/
-										})
-										// Sort seasons array by int:season
-										show.seasons.sort(function(a,b){
-											if (a.season < b.season) return -1
-											if (a.season > b.season) return 1
-											return 0
-										})
-										resolve(show)
-									})
-							})
-					})
-					.catch(reject)
-			})
-			.then(show=>{
-				// Subscribe to show
-				return show.subscribe(req.user._id).save()
-			})
-			.then(show=>{
-				res.status(201).send(show)
-			})
-			.catch(error=>{
-				console.error(error)
-				res.status(400).send({error:error})
-			})
+		.post((req,res)=>{
+			Show.findBySlug(req.body.slug)
+				.then(show=>{
+					if (show) return show
+					
+					show = new Show({ids:{slug:req.body.slug}})
+					return show.sync(req.user)
+				})
+				.then(show=>{
+					// Subscribe to show
+					return show.subscribe(req.user._id).save()
+				})
+				.then(show=>{
+					return show.save()
+				})
+				.then(show=>{
+					res.status(201).send(show)
+				})
+				.catch(error=>{
+					console.error(error)
+					res.status(400).send({error:error})
+				})
 		})
+
+	router.route('/latest')
+		.get((req,res)=>{
+			Show.recentEpisodes()
+				.then(shows=>{
+					let results = []
+					shows.forEach(show=>{
+						if (!show.episodes.length) return
+						show.episodes.sort((a,b)=>{
+							if (a.episode > b.episode) return 1
+							if (a.episode < b.episode) return -1
+							return 0
+						})
+						results.push(show)
+					})
+					res.send(results)
+				})
+				.catch(error=>{
+					res.status(404).send({error:error})
+				})
+		})
+
+	router.route('/upcoming')
+		.get((req,res)=>{
+			Show.upcomingEpisodes()
+				.then(shows=>{
+					let results = []
+					shows.forEach(show=>{
+						if (show.episodes.length) results.push(show)
+					})
+					res.send(results)
+				})
+				.catch(error=>{
+					res.status(404).send({error:error})
+				})
+		})
+
 	
 	// Show
-	app.route('/api/shows/:slug')
-		.delete(function(req,res){
+	router.route('/:slug')
+		.delete((req,res)=>{
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
 					return req.trakt.sync.collection.remove({
 						shows: [{id:show.ids}]
 					})
@@ -106,6 +96,9 @@ let ShowsAPI = function(app){
 				.then(show=>{
 					return show.unsubscribe(req.user._id).save()
 				})
+				.then(show=>{
+					return show.save()
+				})
 				.then(()=>{
 					res.status(204).end()
 				})
@@ -113,19 +106,36 @@ let ShowsAPI = function(app){
 					res.status(400).send({error:error})
 				})
 		})
-		.get(function(req,res){
+		.get((req,res)=>{
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
 					res.send(show)
 				})
 				.catch(error=>{
 					res.status(404).send({error:error})
 				})
 		})
-		.post(function(req,res){
+		.patch((req,res)=>{
+			
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
-					show.config = req.body.config
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					Object.assign(show.config, req.body.config)
+					return show.save()
+				})
+				.then(show=>{
+					res.send(show.config)
+				})
+				.catch(error=>{
+					res.status(400).send({error:error})
+				})
+		})
+		.post((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					Object.assign(show, req.body)
 					return show.save()
 				})
 				.then(show=>{
@@ -136,8 +146,212 @@ let ShowsAPI = function(app){
 				})
 		})
 	
-	app.route('/api/shows/:slug/collected')
-		.post(function(req,res){
+	router.route('/:slug/images')
+		.get((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					return helpers.trakt.images(show.ids)
+				})
+				.then(images=>{
+					res.send(images)
+				})
+		})
+		
+	router.route('/:slug/scan')
+		.get((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					show.scan()
+					res.status(202).send({message: 'In Progress'})
+				})
+				.catch(error=>{
+					console.log(error)
+					res.status(400).send(error)
+				})
+		})
+	
+	router.route('/:slug/seasons')
+		.get((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					show.seasons.sort((a,b)=>{
+						if (a.season > b.season) return 1
+						if (a.season < b.season) return -1
+						return 0
+					})
+					res.send(show.seasons)
+				})
+				.catch(error=>{
+					res.status(404).send({error:error})
+				})
+		})
+		
+	router.route('/:slug/seasons/:season')
+		.get((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					let season = show.seasons.filter(item=>{
+						return item.season == parseInt(req.params.season,10)
+					})
+					
+					season[0].getEpisodes()
+						.then(episodes=>{
+							season[0].episodes = episodes
+							res.send(season.length ? season[0] : {})
+						})
+					
+				})
+				.catch(error=>{
+					res.status(404).send({error:error})
+				})
+		})
+	
+	router.route('/:slug/seasons/:season/episodes')
+		.get((req,res)=>{
+			// Return episodes for this season
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					let episodes = show.episodes.filter(item=>{
+						return item.season == req.params.season
+					})
+					episodes.sort((a,b)=>{
+						if (a.episode > b.episode) return 1
+						if (a.episode < b.episode) return -1
+						return 0
+					})
+					res.send(episodes)
+				})
+				.catch(error=>{
+					res.status(404).send({error:error})
+				})
+		})
+	
+	router.route('/:slug/seasons/:season/episodes/:episode')
+		.get((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					let episodes = show.episodes.filter(item=>{
+						return item.season == req.params.season && item.episode == req.params.episode
+					})
+					if (episodes) res.send(episodes[0])
+				})
+				.catch(error=>{
+					res.status(404).send({error:error})
+				})
+		})
+	
+	
+	// SHOW - WATCHED
+	router.route('/:slug/watched')
+		.post((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					
+					show.setWatched(req.user)
+						.then(()=>{
+							return show.save()
+						})
+						.then(()=>{
+							res.send(show)
+						})
+				})
+		})
+	
+	router.route('/:slug/seasons/:season/watched')
+		.post((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					let idx = show.seasons.findIndex(item=>{
+						return item.season == req.params.season
+					})
+					if (idx){
+						show.seasons[idx].setWatched(req.user)
+							.then(()=>{
+								return show.save()
+							})
+							.then(()=>{
+								res.send(show.seasons[idx])
+							})
+							.catch(error=>{
+								res.status(400).send({error:error.message})
+							})
+					}
+				})
+		})
+	
+	router.route('/:slug/seasons/:season/episodes/:episode/watched')
+		.post((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					
+					let idx = show.episodes.findIndex(item=>{
+						return item.season == req.params.season && item.episode == req.params.episode
+					})
+					
+					if (idx){
+						show.episodes[idx].setWatched(req.user)
+							.then(()=>{
+								return show.save()
+							})
+							.then(()=>{
+								res.send(show.episodes[idx])
+							})
+							.catch(error=>{
+								res.status(400).send({error:error.message})
+							})
+					} else {
+						res.status(404).end()
+					}
+				})
+				.catch(error=>{
+					res.status(400).send({error:error.message})
+				})
+		})
+	
+	
+	// SHOW - DOWNLOAD
+	router.route('/:slug/seasons/:season/episodes/:episode/download')
+		.post((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					let idx = show.episodes.findIndex(item=>{
+						return item.season == req.params.season && item.episode == req.params.episode
+					})
+					if (!idx) throw new Error(`Episode not found:`)
+					
+					// Could be better...
+					
+					return this.episodes[idx].getMagnet()
+						.then(magnet=>helpers.torrents.add(magnet))
+						.then(hash=>{
+							return this.episodes[idx].setDownloading(hash)
+						})
+						.then(()=>{
+							return show.save()
+						})
+				})
+				.then(()=>{
+					res.send({success:true})
+				})
+				.catch(error=>{
+					res.status(400).send({error:error})
+				})
+		})
+	
+	// SHOW - COLLECTED ??
+	
+	// should this have an endpoint?
+	
+	/*
+	router.route('/:slug/collected')
+		.post((req,res)=>{
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
 					return req.trakt.sync.collection.add({
@@ -160,8 +374,8 @@ let ShowsAPI = function(app){
 				})
 		})
 		
-	app.route('/api/shows/:slug/download')
-		.post(function(req,res){
+	router.route('/:slug/download')
+		.post((req,res)=>{
 			// download all episodes
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
@@ -181,8 +395,8 @@ let ShowsAPI = function(app){
 				})
 		})
 	
-	app.route('/api/shows/:slug/feed')
-		.get(function(req,res){
+	router.route('/:slug/feed')
+		.get((req,res)=>{
 			helpers.shows.parseFeed(req.params.slug)
 				.then(show=>{
 					res.send(show)
@@ -191,288 +405,7 @@ let ShowsAPI = function(app){
 					res.status(400).send({error:error})
 				})
 		}) // Updated
+	*/
 	
-	app.route('/api/shows/:slug/scan')
-		.get(function(req,res){
-			Show.findBySlug(req.params.slug)
-				.then(show=>{
-					
-					console.log(show.config)
-					// scan show directory
-					
-					
-					
-				})
-				.catch(error=>{
-					res.status(404).send({error:error})
-				})
-		})
-	app.route('/api/shows/:slug/sync')
-	//	.get()	// synchronise with Trakt
-	
-	app.route('/api/shows/:slug/watched')
-		.post(function(req,res){
-			helpers.shows.watched(req.params.slug,req.params.user)
-				.then(show=>{
-					res.send(show)
-				})
-				.catch(error=>{
-					res.status(400).send({error:error})
-				})
-			/*
-			Show.findBySlug(req.params.slug)
-				.then(show=>{
-					let watched_at = req.body.watched_at || new Date()
-					return req.trakt.history.add({
-						shows:[{
-							ids:show.ids,
-							watched_at: watched_at
-						}]
-					})
-					.then(()=>{
-						show.setWatched()
-						return show.save()
-					})
-				})
-				.then(show=>{
-					res.send(show)
-				})
-				.catch(error=>{
-					res.status(400).send({error:error})
-				})
-			*/
-		})
-	
-	// Season
-	app.route('/api/shows/:slug/seasons/:season')
-		.get(function(req,res){
-			Show.findBySlug(req.params.slug)
-				.then(show=>{
-					return show.getSeason(req.params.season)
-				})
-				.then(season=>{
-					res.send(season)
-				})
-				.catch(error=>{
-					res.status(404).send({error:error})
-				})
-		})
-	
-	app.route('/api/shows/:slug/seasons/:season/collected')
-		.post(function(req,res){
-			helpers.show.collected(req.params.slug, {season:req.params.season})
-				.then(show=>{
-					return show.getSeason(req.params.season)
-				})
-				.then(season=>{
-					res.send(season)
-				})
-				.catch(error=>{
-					res.status(400).send({error:error})
-				})
-		})
-
-	app.route('/api/shows/:slug/seasons/:season/download')
-		.post(function(req,res){
-			// download all episodes in a season
-			Show.findBySlug(req.params.slug)
-				.then(show=>{
-					return show.getSeason(req.params.season)
-						.then(season=>{
-							season.episode.forEach(episode=>{
-								console.debug('Downloading %s - S%dE%d', show.title, season.season, episode.episode)
-								// TODO: ADD MAGIC
-							})
-							return
-						})
-				})
-				.then(()=>{
-					res.status(202).end()
-				})
-				.catch(error=>{
-					res.status(400).send({error:error})
-				})
-		})
-	
-	app.route('/api/shows/:slug/seasons/:season/watched')
-		.post(function(req,res){
-			helpers.shows.watched(req.params.slug,req.params.user,{season:req.params.season})
-				.then(show=>{
-					return show.getSeason(req.params.season)
-				})
-				.then(season=>{
-					res.send(season)
-				})
-				.catch(error=>{
-					res.status(400).send({error:error})
-				})
-			
-			/*
-			Show.findBySlug(req.params.slug)
-				.then(show=>{
-					let watched_at = req.body.watched_at || new Date()
-					return req.trakt.history.add({
-						shows:[{
-							ids: show.ids,
-							seasons:[{
-								season: parseInt(req.params.season,10)
-							}],
-							watched_at: watched_at
-						}]
-					})
-					.then(()=>{
-						return show.getSeason(req.params.season)
-							.then(season=>{
-								season.setWatched()
-								return show.save()
-							})
-					})
-				})
-				.then(show=>{
-					return show.getSeason(req.params.season)
-				})
-				.then(season=>{
-					res.send(season)
-				})
-				.catch(error=>{
-					res.status(404).send({error:error})
-				})
-			*/
-		})
-	
-	// Episode
-	app.route('/api/shows/:slug/seasons/:season/episodes/:episode')
-		.get(function(req,res){
-			Show.findBySlug(req.params.slug)
-				.then(show=>{
-					return show.getEpisode(req.params.season, req.params.episode)
-						/*
-						.then(episode=>{
-							return {
-								title: show.title,
-								ids: show.ids,
-								episode: episode
-							}
-						})
-						*/
-				})
-				.then(episode=>{
-					res.send(episode)
-				})
-				.catch(error=>{
-					res.status(404).send({error:error})
-				})
-		})
-
-	app.route('/api/shows/:slug/seasons/:season/episodes/:episodes/collected')
-		.post(function(req,res){
-			Show.findBySlug(req.params.slug)
-				.then(show=>{
-					return req.trakt.sync.collection.add({
-						episodes:[{
-							ids: show.ids,
-							seasons: [{
-								number: parseInt(req.params.season,10),
-								episodes: [{
-									number: parseInt(req.params.episode,10)
-								}]
-							}]
-						}]
-					})
-					.then(()=>{
-						return show.getEpisode(req.params.season,req.params.episode)
-							.then(episode=>{
-								episode.setCollected()
-								return show.save()
-							})
-					})
-				})
-				.then(show=>{
-					return show.getEpisode(req.params.season,req.params.episode)
-				})
-				.then(episode=>{
-					res.send(episode)
-				})
-				.catch(error=>{
-					res.status(400).send({error:error})
-				})
-		})
-
-	app.route('/api/shows/:slug/seasons/:season/episodes/:episode/download')
-		.post(function(req,res){
-			// Download all episodes in a season
-			Show.findBySlug(req.params.slug)
-				.then(show=>{
-					return show.getEpisode(req.params.season, req.params.episode)
-						.then(episode=>{
-							return helpers.torrent.getHash(episode.hashes, req.body.hd || episode.config.hd)
-								.then(data=>{
-									return helpers.torrent.createMagnet(data.btih)
-										.then(magnet=>{
-											return helpers.torrent.add(magnet)
-										})
-										.then(result=>{
-											episode.hashes[data.idx].hash = result.hashString
-											return show.save()
-										})
-								})
-						})
-				})
-				.then(()=>{
-					res.status(202).end()
-				})
-				.catch(error=>{
-					res.status(400).send({error:error})
-				})
-		})
-	
-	app.route('/api/shows/:slug/seasons/:season/episodes/:episode/watched')
-		.post(function(req,res){
-			helpers.shows.watched(req.params.slug,req.params.user,{season:req.params.season,episodes:[req.params.episode]})
-				.then(show=>{
-					return show.getEpisode(req.params.season, req.params.episode)
-				})
-				.then(episode=>{
-					res.send(episode)
-				})
-				.catch(error=>{
-					res.status(400).send({error:error})
-				})
-			
-			/*
-			Show.findBySlug(req.params.slug)
-				.then(show=>{
-					let watched_at = req.body.watched_at || new Date()
-					return req.trakt.history.add({
-						shows:[{
-							ids: show.ids,
-							seasons: [{
-								number: parseInt(req.params.season,10),
-								episodes: [
-									{number: parseInt(req.params.episode,10)}
-								]
-							}],
-							watched_at: watched_at
-						}]
-					})
-					.then(()=>{
-						return show.getEpisode(req.params.season, req.params.episode)
-							.then(episode=>{
-								episode.setWatched()
-								return show.save()
-							})
-					})
-				})
-				.then(show=>{
-					return show.getEpisode(req.params.season, req.params.episode)
-				})
-				.then(episode=>{
-					res.send(episode)
-				})
-				.catch(error=>{
-					res.status(400).send({error:error})
-				})
-			*/
-		})
 }
 module.exports = ShowsAPI

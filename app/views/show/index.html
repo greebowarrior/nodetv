@@ -1,0 +1,38 @@
+<ol class="breadcrumb">
+	<li><a ui-sref="dashboard.home">Home</a></li>
+	<li><a ui-sref="shows.list">Shows</a></li>
+	<li class="active">{{show.title}}</li>
+</ol>
+<div>
+	<h1>{{show.title}}</h1>
+	<p>{{show.overview}}</p>
+	
+	<uib-tabset>
+		<uib-tab heading="Episodes">
+			<div class="row">
+				<div class="col-sm-12">
+					<ul class="list-inline">
+						<li>Seasons:</li>
+						<li ng-repeat="season in show.seasons">
+							<a ui-sref="shows.show.season({season:season.season})">{{season.season===0?'Specials':season.season}}</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<ui-view />
+		</uib-tab>
+		<uib-tab heading="Settings">
+			<ng-include src="'/views/show/settings.html'"></ng-include>
+		</uib-tab>
+		<uib-tab heading="Tools">
+			<div class="row">
+				<div class="col-sm-12">
+					<button class="btn btn-default">Rescan Folder</button>
+					<button class="btn btn-default">Download All</button>
+					<button class="btn btn-default">Update Artwork</button>
+					<button class="btn btn-danger">Remove Show</button>
+				</div>
+			</div>
+		</uib-tab>
+	</uib-tabset>
+</div>

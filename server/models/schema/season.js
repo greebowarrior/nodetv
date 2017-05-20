@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose')
 
-let seasonSchema = new mongoose.Schema({
+const seasonSchema = new mongoose.Schema({
 	ids: {
 		imdb: String,
 		tmdb: Number,
@@ -12,14 +12,20 @@ let seasonSchema = new mongoose.Schema({
 	season: {type: Number, required: true},
 	title: String,
 	overview: String,
-	episodes: Number,
-	first_aired: Date
+	episodes: [],
+	first_aired: Date,
+	updated_at: {type: Date, default: null}
 })
 
 seasonSchema.methods.getEpisodes = function(){
 	return new Promise(resolve=>{
 		let episodes = this.parent().episodes.filter(item=>{
 			return item.season == this.season
+		})
+		episodes.sort((a,b)=>{
+			if (a.episode > b.episode) return 1
+			if (a.episode < b.episode) return -1
+			return 0
 		})
 		resolve(episodes)
 	})
@@ -37,13 +43,13 @@ seasonSchema.methods.setCollected = function(){
 		resolve(this)
 	})
 }
-seasonSchema.methods.setWatched = function(){
+seasonSchema.methods.setWatched = function(user){
 	new Promise(resolve=>{
 		let episodes = this.parent().episodes.filter(item=>{
 			return item.season == this.season
 		})
 		episodes.forEach(episode=>{
-			episode.setWatched()
+			episode.setWatched(user)
 		})
 		resolve(this)
 	})

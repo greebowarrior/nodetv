@@ -1,0 +1,30 @@
+<div class="row episode">
+	<div class="col-md-12">
+		<h4>{{season.season}}x{{episode.episode}} - {{episode.title}}</h4>
+	</div>
+	<div class="col-md-12">
+		<p>{{episode.overview}}</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-5">
+		<small class="help-block">Air date: {{episode.first_aired|date:'d MMMM yyyy, HH:mm'}}</small>
+	</div>
+	<div class="col-sm-5">
+		{{episode.hashes.length}}
+	</div>
+	<div class="col-sm-2 text-right">
+		<div class="btn-group" uib-dropdown>
+			<button type="button" class="btn btn-sm btn-default" uib-dropdown-toggle>
+				Actions <span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" uib-dropdown-menu>
+				<li><a href="#">Download SD</a></li>
+				<li><a href="#">Download HD</a></li>
+				<li role="separator" class="divider"></li>
+				<li><a href="#">Mark as Watched</a></li>
+			</ul>
+		</div>
+	</div>
+</div>

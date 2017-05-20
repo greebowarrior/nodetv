@@ -1,6 +1,4 @@
-"user strict"
-
-const path = require('path')
+"use strict"
 
 const secret = 'Customer-Service-Immolation-Incident'
 
@@ -23,16 +21,17 @@ const App = function(app){
 	// Template Engine
 	app.engine('html', require('ejs').renderFile)
 	app.set('view engine', 'html')
-	app.set('views', path.join(process.cwd(),'app','views'))
+	app.set('views', require('path').join(process.cwd(),'app','views'))
 	
 	// Enable layout templates
 	app.set('layout', 'layouts/classic')
 	app.use(require('express-ejs-layouts'))
 	
 	// Define static paths
-	app.use('/static', require('express').static(path.join(process.cwd(),'app'),{etag:false}))
+	app.use('/static', require('express').static(require('path').join(process.cwd(),'app'),{etag:false}))
 	
 	app.locals.nutv = require('../package.json')
+	app.locals.config = global.config
 	
 	// Sessions
 	app.use(session({

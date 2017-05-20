@@ -1,0 +1,9 @@
+{
+	"env": {
+		"PORT": 3001,
+		"NGINX": false,
+		"NODE_ENV": "development"
+	},
+	"ignore": [".codekit-cache","config.codekit3"],
+	"watch": ["server.js","server/","server/node_modules/**/*"]
+}

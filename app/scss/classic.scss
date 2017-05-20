@@ -1,21 +1,44 @@
-@import "common";
-@import "variables";
+@import "nodetv/variables";
+@import "nodetv/common";
+@import "nodetv/bootstrap";
 
 html {
-	background-color: #E7E7E7;
+	background-color: $nodetv-white;
 	margin: 0;
 	min-height: 100vh;
 	position: relative;
 	
 	body {
-		font-family: 'Noto Sans', sans-serif;
+		color: $nodetv-black;
+		font-family: 'Open Sans', sans-serif;
+		font-weight: 400;
 		margin: 0;
 		min-height: inherit;
+	}
+	h1,h2,h3,h4,h5,h6 {
+		color: $nodetv-black;
+		font-weight: 400;
+	}
+	p {
+		color: $nodetv-black;
+	}
+	a {
+		color: $nodetv-red;
+		&:focus, &:hover {
+			color: $nodetv-red;
+		}
+	}
+	strong {
+		font-weight: 800;
 	}
 }
 
 main {
 	padding-top: 70px;
+}
+
+.highlight {
+	color: $nodetv-red;
 }
 
 footer {

@@ -17,6 +17,7 @@
 	<link rel="stylesheet" href="/static/css/modern.css" />
 	
 	<link rel="manifest" href="/assets/manifest.json">
+	<base href="/" />
 </head>
 
 </head>
@@ -25,7 +26,7 @@
 		
 	</header>
 	
-	<main class="container" role="main" ui-view>
+	<main class="container" role="main">
 		<%- body %>
 	</main>
 	
@@ -33,19 +34,23 @@
 		<div class="info">NodeTV v<%- nutv.version %></div>
 	</footer>
 	
-	<script src="//code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.min.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.min.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-touch.min.js"></script>
+	<script src="//code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-cookies.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-resource.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-touch.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
-	<!--
-	<script src="/static/js/ui-bootstrap.min.js"></script>
-	<script src="/static/js/ui-router.min.js"></script>
-	<script src="/static/js/ng-socket.min.js"></script>
-	-->
-	<script src="/static/js/main.js"></script>
+	
+	<script src="/static/js/libs/ui-bootstrap-tpls-2.5.0.min.js"></script>
+	<script src="/static/js/libs/ui-router-1.0.3.min.js"></script>
+	<script src="/static/js/libs/ng-socket.min.js"></script>
+	<script src="/static/js/libs/ng-storage-0.3.10.min.js"></script>
+	
+	<script src="/static/js/nutv.core.js"></script>
+	<script src="/static/js/nutv.shows.js"></script>
+	
+	<script src="/static/js/nutv.js"></script>
 </body>
 </html>

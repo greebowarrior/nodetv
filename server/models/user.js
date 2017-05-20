@@ -1,9 +1,9 @@
 "use strict"
 
-const bcrypt = require('bcrypt-nodejs'),
-	mongoose = require('mongoose')
+const bcrypt = require('bcrypt-nodejs')
+const mongoose = require('mongoose')
 
-let userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
 	username: {
 		type: String, required: true, trim: true
 	},
@@ -65,6 +65,13 @@ userSchema.methods.verifyPassword = function(password){
 		console.error(e)
 		return false
 	}
+}
+
+userSchema.methods.refreshToken = function(){
+	if (this.trakt.expires <= new Date()){
+		// refresh the access_token
+	}
+	return
 }
 
 userSchema.pre('save', function(next){

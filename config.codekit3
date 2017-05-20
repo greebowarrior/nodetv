@@ -7,7 +7,7 @@
 		"uuidString": "18A536C4-F3C0-4048-81AF-7D5149E0AE13"
 		}
 	],
-"creatorBuild": "25704",
+"creatorBuild": "25813",
 "files": {
 	"\/.env": {
 		"ft": 8192,
@@ -20,22 +20,6 @@
 		"oA": 2,
 		"oAP": "\/.gitignore",
 		"oF": 0
-		},
-	"\/_docs\/formats\/shows.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "\/_docs\/formats\/shows-min.json",
-		"oF": 0,
-		"oO": 0,
-		"oS": 1
-		},
-	"\/_docs\/formats\/users.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "\/_docs\/formats\/users-min.json",
-		"oF": 0,
-		"oO": 0,
-		"oS": 1
 		},
 	"\/app\/css\/classic.css": {
 		"aP": 0,
@@ -53,29 +37,73 @@
 		"oAP": "\/app\/css\/classic.css.map",
 		"oF": 0
 		},
+	"\/app\/gfx\/icons\/favicon.ico": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/gfx\/icons\/favicon.ico",
+		"oF": 0
+		},
+	"\/app\/gfx\/icons\/touch-icon.png": {
+		"ft": 32768,
+		"iS": 9290,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/touch-icon.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/js\/components\/nutv.show.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/app\/js\/components\/min\/nutv.show.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/app\/js\/libs\/ng-socket.min.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/app\/js\/libs\/min\/ng-socket.min-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/app\/js\/libs\/ng-storage-0.3.10.min.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/app\/js\/libs\/min\/ng-storage-0.3.10.min-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/app\/js\/libs\/ui-bootstrap-tpls-2.2.0.min.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/app\/js\/libs\/min\/ui-bootstrap-tpls-2.2.0.min-min.js",
+		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/app\/js\/libs\/ui-bootstrap-tpls-2.5.0.min.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/app\/js\/libs\/min\/ui-bootstrap-tpls-2.5.0.min.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/app\/js\/libs\/ui-router-1.0.3.min.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/app\/js\/libs\/min\/ui-router-1.0.3.min.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -83,17 +111,26 @@
 	"\/app\/js\/nutv.core.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/app\/js\/min\/nutv.core-min.js",
-		"oF": 0,
+		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/app\/js\/nutv.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/app\/js\/min\/nutv-min.js",
+		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/app\/js\/nutv.shows.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/app\/js\/min\/nutv.shows.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -105,32 +142,6 @@
 		"oF": 0,
 		"oO": 0,
 		"oS": 1
-		},
-	"\/app\/scss\/_common.scss": {
-		"aP": 1,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 1,
-		"oA": 1,
-		"oAP": "\/app\/css\/_common.css",
-		"oF": 0,
-		"oS": 3,
-		"uL": 1
-		},
-	"\/app\/scss\/_variables.scss": {
-		"aP": 1,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 1,
-		"oA": 1,
-		"oAP": "\/app\/css\/_variables.css",
-		"oF": 0,
-		"oS": 3,
-		"uL": 1
 		},
 	"\/app\/scss\/classic.scss": {
 		"aP": 1,
@@ -158,16 +169,86 @@
 		"oS": 3,
 		"uL": 1
 		},
+	"\/app\/scss\/nodetv\/_bootstrap.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 1,
+		"oA": 1,
+		"oAP": "\/app\/scss\/css\/_bootstrap.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/app\/scss\/nodetv\/_common.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 1,
+		"oA": 1,
+		"oAP": "\/app\/scss\/css\/_common.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/app\/scss\/nodetv\/_shows.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 1,
+		"oA": 1,
+		"oAP": "\/app\/scss\/css\/_shows.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/app\/scss\/nodetv\/_variables.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 1,
+		"oA": 1,
+		"oAP": "\/app\/scss\/css\/_variables.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/app\/views\/404.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/404.html",
+		"oF": 0
+		},
 	"\/app\/views\/auth\/login.html": {
 		"ft": 8192,
 		"oA": 1,
 		"oAP": "\/app\/views\/auth\/login.html",
 		"oF": 1
 		},
+	"\/app\/views\/auth\/logout.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/auth\/logout.html",
+		"oF": 0
+		},
 	"\/app\/views\/auth\/trakt.html": {
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/auth\/trakt.html",
+		"oF": 0
+		},
+	"\/app\/views\/dashboard\/index.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/dashboard\/index.html",
 		"oF": 0
 		},
 	"\/app\/views\/grid.html": {
@@ -194,6 +275,48 @@
 		"oAP": "\/app\/views\/layouts\/modern.html",
 		"oF": 0
 		},
+	"\/app\/views\/show\/add.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/show\/add.html",
+		"oF": 0
+		},
+	"\/app\/views\/show\/episode.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/show\/episode.html",
+		"oF": 0
+		},
+	"\/app\/views\/show\/index.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/show\/index.html",
+		"oF": 0
+		},
+	"\/app\/views\/show\/list.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/show\/list.html",
+		"oF": 0
+		},
+	"\/app\/views\/show\/season.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/show\/season.html",
+		"oF": 0
+		},
+	"\/app\/views\/show\/settings.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/show\/settings.html",
+		"oF": 0
+		},
+	"\/app\/views\/test.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/test.html",
+		"oF": 0
+		},
 	"\/app\/views\/user\/profile.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -209,15 +332,6 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/index.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "\/min\/index-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/karma.conf.js": {
 		"ft": 64,
 		"mi": 0,
@@ -226,6 +340,12 @@
 		"oF": 1,
 		"sC": 3,
 		"tS": 0
+		},
+	"\/LICENCE.txt": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/LICENCE.txt",
+		"oF": 0
 		},
 	"\/Milestones.md": {
 		"cS": 0,
@@ -245,11 +365,28 @@
 		"rFN": 0,
 		"uCM": 0
 		},
+	"\/newrelic.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/min\/newrelic.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/node_modules": {
 		"ft": 65536,
 		"oA": 2,
 		"oAP": "\/build\/node_modules",
 		"oF": 0
+		},
+	"\/nodemon.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "\/nodemon-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
 		},
 	"\/package.json": {
 		"ft": 524288,
@@ -282,6 +419,15 @@
 		"oA": 2,
 		"oAP": "\/scripts\/nodetv.service",
 		"oF": 0
+		},
+	"\/server.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/min\/server.min.js",
+		"oF": 1,
+		"sC": 3,
+		"tS": 0
 		},
 	"\/server\/app.js": {
 		"ft": 64,
@@ -321,141 +467,6 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/min\/database-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/index.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/min\/index-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/index.old.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/min\/index.old-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/modules\/rss.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/modules\/min\/rss-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/modules\/shows.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/modules\/min\/shows-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/modules\/torrent.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/modules\/min\/torrent-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/modules\/utils.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/modules\/min\/utils-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/modules\/worker.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/modules\/min\/worker-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/tasks\/torrent.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/tasks\/min\/torrent-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/workers\/directory\/list.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/workers\/directory\/min\/list-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/workers\/directory\/move.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/workers\/directory\/min\/move-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/workers\/directory\/scan.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/workers\/directory\/min\/scan-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/workers\/file\/copy.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/workers\/file\/min\/copy-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/workers\/file\/delete.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/workers\/file\/min\/delete-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/workers\/file\/move.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/workers\/file\/min\/move-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/helpers\/workers\/file\/transcode.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/helpers\/workers\/file\/min\/transcode-min.js",
 		"oF": 1,
 		"sC": 3,
 		"tS": 0
@@ -523,6 +534,12 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/server\/node_modules": {
+		"ft": 65536,
+		"oA": 2,
+		"oAP": "\/build\/server\/node_modules",
+		"oF": 0
+		},
 	"\/server\/routes\/api.js": {
 		"ft": 64,
 		"mi": 0,
@@ -532,23 +549,17 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/routes\/api\/latest.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/routes\/api\/min\/latest-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
+	"\/server\/routes\/api\/latest.js~": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/server\/routes\/api\/latest.js~",
+		"oF": 0
 		},
-	"\/server\/routes\/api\/movies.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/routes\/api\/min\/movies-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
+	"\/server\/routes\/api\/movies.js~": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/server\/routes\/api\/movies.js~",
+		"oF": 0
 		},
 	"\/server\/routes\/api\/shows.js": {
 		"ft": 64,
@@ -568,19 +579,16 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/routes\/api\/users.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/routes\/api\/min\/users-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
+	"\/server\/routes\/api\/users.js~": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/server\/routes\/api\/users.js~",
+		"oF": 0
 		},
-	"\/server\/routes\/api\/watchlist.js.derp": {
+	"\/server\/routes\/api\/watchlist.js~": {
 		"ft": 8192,
 		"oA": 1,
-		"oAP": "\/server\/routes\/api\/watchlist.js.derp",
+		"oAP": "\/server\/routes\/api\/watchlist.js~",
 		"oF": 1
 		},
 	"\/server\/routes\/auth.js": {
@@ -592,30 +600,48 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/routes\/socket.js": {
+	"\/server\/routes\/sockets.js": {
 		"ft": 64,
 		"mi": 0,
 		"oA": 1,
-		"oAP": "\/server\/routes\/min\/socket-min.js",
+		"oAP": "\/server\/routes\/min\/sockets.min.js",
 		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/routes\/trakt.js": {
+	"\/server\/routes\/ui.js": {
 		"ft": 64,
 		"mi": 0,
 		"oA": 1,
-		"oAP": "\/server\/routes\/min\/trakt-min.js",
-		"oF": 1,
+		"oAP": "\/server\/routes\/min\/ui.min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/routes\/user.js": {
+	"\/server\/routes\/ui\/shows.js~": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/server\/routes\/ui\/shows.js~",
+		"oF": 0
+		},
+	"\/server\/routes\/ui\/trakt.js~": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/server\/routes\/ui\/trakt.js~",
+		"oF": 0
+		},
+	"\/server\/routes\/ui\/user.js~": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/server\/routes\/ui\/user.js~",
+		"oF": 0
+		},
+	"\/server\/scheduler.js": {
 		"ft": 64,
 		"mi": 0,
 		"oA": 1,
-		"oAP": "\/server\/routes\/min\/user-min.js",
-		"oF": 1,
+		"oAP": "\/server\/min\/scheduler.min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -628,29 +654,56 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/tasks\/index.js": {
+	"\/server\/tasks\/guidebox.js~": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/server\/tasks\/guidebox.js~",
+		"oF": 0
+		},
+	"\/server\/tasks\/show.feeds.js": {
 		"ft": 64,
 		"mi": 0,
 		"oA": 1,
-		"oAP": "\/server\/tasks\/min\/index.min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/tasks\/latest.task.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "\/server\/tasks\/min\/latest.task.min.js",
+		"oAP": "\/server\/tasks\/min\/show.feeds.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/tasks\/min\/latest.task.min.js": {
+	"\/server\/tasks\/show.sync.js": {
 		"ft": 64,
 		"mi": 0,
-		"oA": 0,
-		"oAP": "\/server\/tasks\/min\/min\/latest.task.min.min.js",
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/show.sync.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/tasks\/sync.history.js~": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/server\/tasks\/sync.history.js~",
+		"oF": 0
+		},
+	"\/server\/tasks\/sync.shows.js~": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/server\/tasks\/sync.shows.js~",
+		"oF": 0
+		},
+	"\/server\/tasks\/torrents.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/torrents.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/upnp.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/min\/upnp.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -688,20 +741,17 @@
 		"oAP": "\/tests\/derp",
 		"oF": 0
 		},
+	"\/tests\/S02E02.mkv": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/tests\/S02E02.mkv",
+		"oF": 0
+		},
 	"\/tests\/settings.js": {
 		"ft": 64,
 		"mi": 0,
 		"oA": 0,
 		"oAP": "\/tests\/min\/settings-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/upnp.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "\/min\/upnp-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -1852,7 +1902,7 @@
 			"optionString": ""
 			},
 		"no-var": {
-			"active": 0,
+			"active": 1,
 			"optionString": ""
 			},
 		"no-void": {
@@ -2499,14 +2549,6 @@
 		"orderOutput": 0,
 		"outputStyle": 1
 		},
-	"languageDefaultsJSX": {
-		"autoOutputAction": 0,
-		"autoOutputPathFilenamePattern": "*.js",
-		"autoOutputPathRelativePath": "",
-		"autoOutputPathReplace1": "jsx",
-		"autoOutputPathReplace2": "js",
-		"autoOutputPathStyle": 0
-		},
 	"languageDefaultsKIT": {
 		"autoOutputAction": 0,
 		"autoOutputPathFilenamePattern": "*.html",
@@ -2569,7 +2611,7 @@
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
 		"autoOutputPathStyle": 0,
-		"enableLossy": 1,
+		"optimizerType": 1,
 		"quality": 100
 		},
 	"languageDefaultsPUG": {

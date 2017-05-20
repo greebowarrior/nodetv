@@ -1,85 +1,44 @@
-# Node TV Rebuild Project
+# Node TV
 
-## To do:
+A complete re-write of my [existing project](https://github.com/greebowarrior/nessa)
+but hopefully learning from my previous mistakes
 
-- UI
-	- Client-side registration
-	- Grid view with pagination for movies & shows
-	- Details page for movies & shows
-		- Config page for shows (hd, feed, enabled, transcode)
+## Tech Specs
 
-- RSS Parser
-	- ~~Parse feed and update documents~~
-	- Parse feeds on schedule (Hourly? Nightly?)
-	- Download automatically (As available)
-- Workers
-	- Create forked worker system
-	- File operations
-	- Transcoding
-	- Tasks?
+- MongoDB backend
+- Angular.js frontend
+- Trakt.tv as primary data source
 
-- Tasks
-	- Run scheduled tasks
-		- Update episodes
-		- Feed parsing
-		- Download torrents automatically
-			- Limit to episodes AIRED in the last 7-ish days
-		- Completed torrent watcher
-			- Remove torrents from Transmission when seeding is complete
+# Why do this?
 
-- File System scanner
-	- Rename file using format string
-	- Update when episodes are removed too
-- Sockets
-	- Authentication
-	- Use for notifications
-- Helpers
-- Tests
-- Documentation
+My previous project was built was due to a lack of available software that met my requirements.
+In part, this software is also a test-bed for me to trial new technologies and ideas.
 
----
+So, use it, or don't. I don't care. But if you do, there's a few things to be aware of:
 
-## Done:
+## Requirements
 
-### Express
-- Enabled template engine
-	- EJS with layouts extension
+- Developed on: macOS 10.12
+- Tested on: Ubuntu Linux 16.4 LTS
 
-### Authentication
-- Client-side login form
-- Passport
-	- Local for client-side login
-		- Passwords hashed with bcrypt
-		- SessionStore in DB
-	- UUID (v4) Token based for API
+It should work on any *nix-compatible system that can run NodeJS.
+Totally untested on Windows, but I can't think of any reason it wouldn't.
 
-### Database
-- Mongoose
-	- Using models
-- mLab database set up for dev/testing
-- User collection
-- Show collection
-	- Seasons/Episodes saved as subdocuments
-	- Add/Subscribe/Unsubscribe methods
-- Movie Collection
-	- Add/Subscribe/Unsubscribe methods
+### Third-party software
+
+- [Node.js](https://nodejs.org) 6.10
+- [MongoDB](https://mongodb.org) 2.6.x
+- [Transmission](https://transmissionbt.com) with RPC Enabled
+
+I'd recommend using nginx with SSL as a reverse proxy. Example config to be added at a later date.
+
+### Third-party dependencies
+
+- [Trakt](https://trakt.tv) (This is the only required one)
+- [ShowRSS](https://showrss.com)
+- [Proxy Spider](https://trakt.tv)
 
 
+# Running
 
-## Trakt
-- Using trakt.tv npm module
-- Methods built into routes
-
-## API
-
-- Will handle all actions
-- Require authentication (unless an auth call)
-	- Use Passport/OAuth?
-- Structure API calls intelligently
-	- Broken down into manageable scripts
-
-## Sockets
-
-- Notifications
-- Live update of current data
-	- No need to reload page when fetching listings
+Systemd script is available, or use your favourite process manager

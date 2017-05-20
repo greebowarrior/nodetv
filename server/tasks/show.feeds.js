@@ -1,0 +1,48 @@
+"use strict"
+
+const helpers = require('nodetv-helpers')
+const Show = require(require('path').join(process.env.MODELS, 'show'))
+
+// Runs at 10 past the hour
+
+require('node-schedule').scheduleJob('10 * * * *', ()=>{
+	console.debug('Updating from RSS feeds')
+	
+	Show.findEnabled()
+		.then(shows=>{
+			shows.forEach(show=>{
+				return show.parseFeed()
+					.then(()=>show.getLatestEpisodes())
+					.then(results=>{
+						let promises = []
+						
+						results.forEach(result=>{
+							let episode = show.episodes.id(result._id)
+							// Don't get latest episode if it's already downloading or downloaded
+							if (episode.file.download.active || episode.file.added) return
+							// Get magnet for preferred format
+							let process = episode.getMagnet()
+								// Send to transmission
+								.then(magnet=>helpers.torrents.add(magnet))
+								// Mark episode as downloading
+								.then(hash=>{
+									return episode.setDownloading(hash)
+								})
+							
+							promises.push(process)
+						})
+						
+						return Promise.all(promises)
+					})
+					.then(()=>{
+						return show.save()
+					})
+					.catch(error=>{
+						console.error(error)
+					})
+			})
+		})
+		.catch(error=>{
+			console.error(error)
+		})
+})
