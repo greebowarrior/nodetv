@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
 	<li><a ui-sref="dashboard.home">Home</a></li>
-	<li><a ui-sref="shows.list">Shows</a></li>
+	<li><a ui-sref="^.list">Shows</a></li>
 	<li class="active">{{show.title}}</li>
 </ol>
 <div>
@@ -21,15 +21,44 @@
 			</div>
 			<ui-view />
 		</uib-tab>
+		
 		<uib-tab heading="Settings">
 			<ng-include src="'/views/show/settings.html'"></ng-include>
 		</uib-tab>
+		
+		<uib-tab heading="Artwork">
+			<button class="btn btn-default" ng-click="getArtwork()">Get Artwork</button>
+			
+			<div class="row" ng-show="images.banners.length">
+				<div class="col-sm-12"><h6>Banners</h6></div>
+				<div class="col-md-3" ng-repeat="image in images.banners">
+					<img ng-src="{{image.url}}" class="img-responsive" />
+				</div>
+			</div>
+			
+			<div class="row" ng-show="images.banners.length">
+				<div class="col-sm-12"><h6>Posters</h6></div>
+				<div class="col-md-3 col-md-2" ng-repeat="image in images.posters" ng-click="setArtwork('poster', image)">
+					<img ng-src="{{image.url}}" class="img-responsive" />
+				</div>
+			</div>
+			
+			<div class="row" ng-show="images.banners.length">
+				<div class="col-sm-12"><h6>Backgrounds</h6></div>
+				<div class="col-md-3" ng-repeat="image in images.backgrounds">
+					<img ng-src="{{image.url}}" class="img-responsive" />
+				</div>
+			</div>
+		</uib-tab>
+		
 		<uib-tab heading="Tools">
 			<div class="row">
 				<div class="col-sm-12">
+					
+					
 					<button class="btn btn-default">Rescan Folder</button>
 					<button class="btn btn-default">Download All</button>
-					<button class="btn btn-default">Update Artwork</button>
+					
 					<button class="btn btn-danger">Remove Show</button>
 				</div>
 			</div>

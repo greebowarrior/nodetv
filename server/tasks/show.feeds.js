@@ -38,11 +38,11 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 						return show.save()
 					})
 					.catch(error=>{
-						console.error(error)
+						console.error(`${show.title}: `, error)
 					})
 			})
 		})
 		.catch(error=>{
-			console.error(error)
+			if (error) console.error(error)
 		})
 })

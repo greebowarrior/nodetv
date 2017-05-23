@@ -146,14 +146,26 @@ const ShowsAPI = app=>{
 				})
 		})
 	
-	router.route('/:slug/images')
+	router.route('/:slug/artwork')
 		.get((req,res)=>{
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
-					return helpers.trakt.images(show.ids)
+					return helpers.trakt().images.get(show.ids)
 				})
 				.then(images=>{
 					res.send(images)
+				})
+		})
+		.post((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					return show.setArtwork(req.body.image).then(show.save)
+				})
+				.then(()=>{
+					res.send({success:true})
+				})
+				.catch(()=>{
+					res.status(404).end()
 				})
 		})
 		

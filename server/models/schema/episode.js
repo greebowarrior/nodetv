@@ -62,7 +62,7 @@ episodeSchema.methods.setCollected = function(file=false){
 			subscribers.forEach(user=>{
 				helpers.trakt(user).sync.collection.add({episodes:[{ids:this.ids}]})
 					.then(result=>{
-						console.log(result, this.title)
+						console.debug(this.parent().title, this.title, result)
 					})
 			})
 		})

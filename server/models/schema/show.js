@@ -37,9 +37,18 @@ const showSchema = new mongoose.Schema({
 	status: String,
 	genres: Array,
 	images: {
-		background: {type: Boolean, default: false},
-		cover: {type: Boolean, default: false},
-		poster: {type: Boolean, default: false}
+		background: {
+			enabled: {type: Boolean, default: false},
+			source: String
+		},
+		cover: {
+			enabled: {type: Boolean, default: false},
+			source: String
+		},
+		poster: {
+			enabled: {type: Boolean, default: false},
+			source: String
+		}
 	},
 	seasons: [seasonSchema],
 	episodes: [episodeSchema],
@@ -113,7 +122,6 @@ showSchema.methods.parseFeed = function(){
 			// TODO: Support multiple feeds
 			// TODO: Support proxying (for YTS, etc)
 			
-			
 			request(this.config.feed[0].url, {proxy:false})
 				.then(xml=>{
 					require('rss-parser').parseString(xml, (error,json)=>{
@@ -161,7 +169,7 @@ showSchema.methods.parseFeed = function(){
 		return this.save()
 	})
 	.catch(error=>{
-		if (error) console.error(error)
+		if (error) console.error(`${this.title}`, error)
 	})
 }
 showSchema.methods.subscribe = function(user_id){
@@ -212,16 +220,16 @@ showSchema.methods.setArtwork = function(data){
 	// Fetch artwork, save to show directory
 	return new Promise((resolve,reject)=>{
 		let target = require('path').join(this.getDirectory(), data.type + require('path').extname(data.url))
-		let output = require('fs-extra').createWriteStream(target)
-		output.on('error', error=>{
-			console.error(error)
-			reject(error)
-		})
-		output.on('close', ()=>{
-			this.images[data.type] = true
-			resolve()
-		})
-		require('request').get({uri: data.url}).pipe(output)
+		
+		helpers.files.download(data.url, target)
+			.then(()=>{
+				this.images[data.type] = {
+					enabled: true,
+				//	mime: 
+					source: data.url
+				}
+			})
+			.catch(reject)
 	})
 }
 showSchema.methods.setCollected = function(){

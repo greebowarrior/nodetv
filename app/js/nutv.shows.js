@@ -64,6 +64,7 @@ angular.module('nutv.shows', ['nutv.core'])
 	}])
 	.controller('ShowCtrl', ['$http','$log','$scope','$stateParams',function($http,$log,$scope,$stateParams){
 		$scope.show = {}
+		$scope.images = []
 		
 		$scope.save = ()=>{
 			$http.patch(`/api/shows/${$scope.show.ids.slug}`, {config:$scope.show.config})
@@ -77,6 +78,17 @@ angular.module('nutv.shows', ['nutv.core'])
 					$log.error(error)
 				})
 		}
+		
+		$scope.getArtwork = ()=>{
+			$http.get(`/api/shows/${$stateParams.slug}/artwork`)
+				.then(response=>{
+					$scope.images = response.data
+				})
+				.catch(error=>{
+					if (error) $log.error(error)
+				})
+		}
+		
 		if ($stateParams.slug){
 			$http.get(`/api/shows/${$stateParams.slug}`)
 				.then(response=>{

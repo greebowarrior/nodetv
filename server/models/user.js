@@ -78,5 +78,17 @@ userSchema.pre('save', function(next){
 	this.updated = new Date()
 	next()
 })
+userSchema.post('remove', function(next){
+	// Remove user from shows
+	const Show = require('./show')
+	
+	Show.findByUser(this._id)
+		.then(shows=>{
+			shows.forEach(show=>{
+				 show.unsubscribe(this._id)
+			})
+			if (typeof next === 'function') next()
+		})
+})
 
 module.exports = mongoose.model('User', userSchema)

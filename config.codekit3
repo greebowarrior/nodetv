@@ -37,6 +37,28 @@
 		"oAP": "\/app\/css\/classic.css.map",
 		"oF": 0
 		},
+	"\/app\/gfx\/default-banner.png": {
+		"ft": 32768,
+		"iS": 1038,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/default-banner.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/default-cover.png": {
+		"ft": 32768,
+		"iS": 928,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/default-cover.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
 	"\/app\/gfx\/icons\/favicon.ico": {
 		"ft": 8192,
 		"oA": 2,
@@ -413,6 +435,12 @@
 		"pME": 1,
 		"rFN": 0,
 		"uCM": 0
+		},
+	"\/scripts\/nginx.conf": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/scripts\/nginx.conf",
+		"oF": 0
 		},
 	"\/scripts\/nodetv.service": {
 		"ft": 8192,
