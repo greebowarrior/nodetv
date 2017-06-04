@@ -39,18 +39,18 @@
 		},
 	"\/app\/gfx\/default-banner.png": {
 		"ft": 32768,
-		"iS": 1038,
+		"iS": 4479,
 		"oA": 0,
 		"oAP": "\/app\/gfx\/default-banner.png",
 		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
+		"oIPL": 1,
+		"opt": 1,
 		"oT": 1,
 		"q": 100
 		},
 	"\/app\/gfx\/default-cover.png": {
 		"ft": 32768,
-		"iS": 928,
+		"iS": 2941,
 		"oA": 0,
 		"oAP": "\/app\/gfx\/default-cover.png",
 		"oF": 0,
@@ -76,6 +76,15 @@
 		"oT": 1,
 		"q": 100
 		},
+	"\/app\/js\/components\/artwork.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/app\/js\/components\/min\/artwork.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/app\/js\/components\/nutv.show.js": {
 		"ft": 64,
 		"mi": 0,
@@ -100,6 +109,15 @@
 		"oA": 1,
 		"oAP": "\/app\/js\/libs\/min\/ng-storage-0.3.10.min-min.js",
 		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/app\/js\/libs\/ng-sweetalert-1.1.2.min.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/app\/js\/libs\/min\/ng-sweetalert-1.1.2.min.min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -153,6 +171,15 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/min\/nutv.shows.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/app\/js\/nutv.users.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/app\/js\/min\/nutv.users.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -267,6 +294,36 @@
 		"oAP": "\/app\/views\/auth\/trakt.html",
 		"oF": 0
 		},
+	"\/app\/views\/components\/alerts.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/alerts.html",
+		"oF": 0
+		},
+	"\/app\/views\/components\/artwork.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/artwork.html",
+		"oF": 0
+		},
+	"\/app\/views\/components\/breadcrumbs.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/breadcrumbs.html",
+		"oF": 0
+		},
+	"\/app\/views\/components\/grid.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/grid.html",
+		"oF": 0
+		},
+	"\/app\/views\/components\/search.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/search.html",
+		"oF": 0
+		},
 	"\/app\/views\/dashboard\/index.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -309,16 +366,10 @@
 		"oAP": "\/app\/views\/show\/episode.html",
 		"oF": 0
 		},
-	"\/app\/views\/show\/index.html": {
+	"\/app\/views\/show\/search.html": {
 		"ft": 8192,
 		"oA": 2,
-		"oAP": "\/app\/views\/show\/index.html",
-		"oF": 0
-		},
-	"\/app\/views\/show\/list.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/app\/views\/show\/list.html",
+		"oAP": "\/app\/views\/show\/search.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/season.html": {
@@ -333,16 +384,28 @@
 		"oAP": "\/app\/views\/show\/settings.html",
 		"oF": 0
 		},
+	"\/app\/views\/show\/show.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/show\/show.html",
+		"oF": 0
+		},
 	"\/app\/views\/test.html": {
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/test.html",
 		"oF": 0
 		},
-	"\/app\/views\/user\/profile.html": {
+	"\/app\/views\/user\/index.html": {
 		"ft": 8192,
 		"oA": 2,
-		"oAP": "\/app\/views\/user\/profile.html",
+		"oAP": "\/app\/views\/user\/index.html",
+		"oF": 0
+		},
+	"\/app\/views\/user\/list.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/user\/list.html",
 		"oF": 0
 		},
 	"\/derp.js": {
@@ -406,6 +469,14 @@
 		"ft": 524288,
 		"oA": 1,
 		"oAP": "\/nodemon-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"\/package-lock.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "\/package-lock-min.json",
 		"oF": 0,
 		"oO": 0,
 		"oS": 1
@@ -607,11 +678,14 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/routes\/api\/users.js~": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/server\/routes\/api\/users.js~",
-		"oF": 0
+	"\/server\/routes\/api\/users.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/routes\/api\/min\/users.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		},
 	"\/server\/routes\/api\/watchlist.js~": {
 		"ft": 8192,
@@ -679,6 +753,15 @@
 		"oA": 1,
 		"oAP": "\/server\/min\/server-min.js",
 		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/tasks\/ddns.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/ddns.min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},

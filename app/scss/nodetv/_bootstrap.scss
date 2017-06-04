@@ -11,3 +11,50 @@
 		color: $nodetv-grey;
 	}
 }
+
+.navbar {
+	color: $nodetv-white;
+}
+
+.container {
+	max-width: 970px;
+}
+
+.row {
+	// Add flex capabilities to bootstrap3 grid
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	
+	>[class*="col-"]{
+		display: block;
+		float: none;
+		@media (max-width: 991px){
+			width: 100%;
+		}
+	}
+}
+
+.pagination {
+	li {
+		a {
+			color: $nodetv-red;
+			&:hover {
+				color: $nodetv-red;
+			}
+		}
+	}
+	.active {
+		a {
+			background-color: $nodetv-red;
+			border-color: $nodetv-red;
+			color: $nodetv-white;
+			&:hover {
+				background-color: $nodetv-red;
+				border-color: $nodetv-red;
+				color: $nodetv-white;
+			}
+		}
+	}
+}

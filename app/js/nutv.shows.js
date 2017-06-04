@@ -1,6 +1,44 @@
 "use strict"
 
 angular.module('nutv.shows', ['nutv.core'])
+
+	.factory('showService', ['$http',($http)=>{
+		const Shows = function(){
+			this.api = '/api/shows'
+			return this
+		}
+		
+		Shows.prototype.add = function(show){
+			return $http.post(this.api, show)
+		}
+		Shows.prototype.delete = function(id){
+			return $http.delete(`${this.api}/${id}`)
+		}
+		Shows.prototype.get = function(id){
+			return $http.get(`${this.api}/${id}`)
+				.then(res=>res.data)
+		}
+		Shows.prototype.list = function(){
+			return $http.get(this.api)
+				.then(res=>res.data)
+		}
+		Shows.prototype.update = function(id){
+			return $http.post(`${this.api}/${id}`)
+				.then(res=>res.data)
+		}
+		
+		Shows.prototype.season = function(slug,season){
+			return $http.get(`/api/shows/${slug}/seasons/${season}`)
+				.then(res=>res.data)
+		}
+		Shows.prototype.episodes = function(slug,season){
+			return $http.get(`/api/shows/${slug}/seasons/${season}/episodes`)
+				.then(res=>res.data)
+		}
+		
+		
+		return new Shows()
+	}])
 	
 	.config(['$stateProvider',($stateProvider)=>{
 		$stateProvider
@@ -8,73 +46,128 @@ angular.module('nutv.shows', ['nutv.core'])
 				abstract: true,
 				url: '/shows',
 				template: '<ui-view />',
-				data: {
-					breadcrumb: 'Shows'
-				}				
-			})
-			.state('shows.add', {
-				url: '/add',
-				controller: 'ShowsCtrl',
-				templateUrl: 'views/show/add.html'
-			})
-			.state('shows.list', {
-				url: '/',
-				controller: 'ShowsCtrl',
-				templateUrl: 'views/show/list.html'
-			})
-			.state('shows.show', {
-				url: '/:slug',
-				controller: 'ShowCtrl',
-				templateUrl: 'views/show/index.html',
-				data: {
-					breadcrumb: 'Show name here'
+				redirectTo: 'shows.index',
+				breadcrumb: {
+					title: 'Shows'
 				}
 			})
-			.state('shows.show.season', {
+			.state('shows.index', {
+				url: '/',
+				component: 'nutvGrid',
+				resolve: {
+					list: (showService)=>showService.list(),
+					type: ()=>'show'
+				}
+			})
+			.state('shows.detail', {
+				url: '/:slug',
+				component: 'nutvShow',
+				resolve: {
+					show: ($stateParams,showService)=>showService.get($stateParams.slug)
+				},
+				breadcrumb: {
+					title: '{{show.title}}'
+				}
+			})
+			.state('shows.detail.season', {
 				url: '/seasons/:season',
-				controller: 'SeasonCtrl',
-				templateUrl: 'views/show/season.html',
-				data: {
-					breadcrumb: 'Season #'
+				component: 'nutvShowSeason',
+				resolve: {
+					episodes: ($stateParams,showService)=>showService.episodes($stateParams.slug,$stateParams.season),
+					season: ($stateParams,showService)=>showService.season($stateParams.slug,$stateParams.season)
 				}
 			})
 	}])
 	
-	.controller('ShowsCtrl', ['$http','$log','$scope',function($http,$log,$scope){
-		$scope.items = []
-		$scope.results = []
-		
-		$http.get('/api/shows')
-			.then(response=>{
-				$scope.items = response.data
+	.component('nutvShow', {
+		bindings:{show:'='},
+		templateUrl: '/views/show/show.html',
+		controller: ['$http','$log','alertService',function($http,$log,alertService){
+			this.images = []
+			
+			this.save = ()=>{
+				$http.patch(`/api/shows/${this.show.ids.slug}`, {config:this.show.config})
+					.then(()=>{
+						alertService.notify({type:'success',msg:`Show updated: '${this.show.title}'`})
+					})
+					.catch(error=>{
+						alertService.notify({type:'danger',msg:`Unable to update '${this.show.title}'`})
+						$log.error(error)
+					})
+			}
+			this.getArtwork = ()=>{
+				$http.get(`/api/shows/${this.show.ids.slug}/artwork`)
+					.then(response=>{
+						this.images = response.data
+					})
+					.catch(error=>{
+						alertService.notify({type:'warning',msg:`Unable to find artwork for '${this.show.title}'`})
+						if (error) $log.error(error)
+					})
+			}
+		}]
+	})
+	.component('nutvShowSeason', {
+		bindings: {
+			episodes: '=',
+			season: '='
+		},
+		templateUrl: '/views/show/season.html',
+		controller: [function(){
+			/*
+			$http.get(`/api/shows/${$stateParams.slug}/seasons/${$stateParams.season}`)
+			.then(season=>{
+				$scope.season = season.data
+				return $http.get(`/api/shows/${$stateParams.slug}/seasons/${$stateParams.season}/episodes`)
 			})
-			.catch(()=>{
-			//	if (error) $log.error(error.statusText)
+			.then(episodes=>{
+				$scope.episodes = episodes.data
 			})
-		
-		$scope.search = ()=>{
-			$http.post('/api/trakt/search/show',{q:$scope.query})
-				.then(response=>{
-					$scope.results = response.data
-				})
-				.catch(error=>{
-					$log.error(error)
-				})
-		}
-	}])
-	.controller('ShowCtrl', ['$http','$log','$scope','$stateParams',function($http,$log,$scope,$stateParams){
+			.catch(error=>{
+				if (error) $log.error(error)
+			})
+			*/
+		}]
+	})
+	.component('nutvShowEpisode', {
+		bindings: {episode:'='},
+		templateUrl: '/views/show/episode.html',
+		controller: ['$http','$log',function($http,$log){
+			this.download = ()=>{
+				$log.debug('download episode')
+			}
+			this.watched = ()=>{
+				$log.debug('set watched')
+			}
+		}]
+	})
+
+	
+	
+	
+	
+	/*
+	.controller('ShowCtrl', ['$http','$log','$scope','$state','$stateParams','alertService',function($http,$log,$scope,$state,$stateParams,alertService){
 		$scope.show = {}
 		$scope.images = []
 		
 		$scope.save = ()=>{
 			$http.patch(`/api/shows/${$scope.show.ids.slug}`, {config:$scope.show.config})
-				.then(response=>{
-					// success, post a notification
-					$scope.$emit('alert', {type:'success',msg:`${$scope.show.title} updated`})
-					$log.debug(response)
+				.then(()=>{
+					alertService.notify({type:'success',msg:`Show updated: '${$scope.show.title}'`})
 				})
 				.catch(error=>{
-					$scope.$emit('alert', {type:'danger',msg:`${$scope.show.title} was not updated`})
+					alertService.notify({type:'danger',msg:`Unable to update '${$scope.show.title}'`})
+					$log.error(error)
+				})
+		}
+		
+		$scope.match = ()=>{
+			$http.get(`/api/shows/${$stateParams.slug}/match`)
+				.then(res=>{
+					this.config.directory = res.data.directory
+				})
+				.catch(error=>{
 					$log.error(error)
 				})
 		}
@@ -93,12 +186,25 @@ angular.module('nutv.shows', ['nutv.core'])
 			$http.get(`/api/shows/${$stateParams.slug}`)
 				.then(response=>{
 					$scope.show = response.data
+				//	crumbService.current({title:response.data.title})
+					
 					if (!$scope.show.config.feed.length) $scope.show.config.feed.push({url:''})
 				})
 				.catch(error=>{
 					if (error) $log.error(error.message)
 				})
 		}
+		
+		$scope.setArtwork = (type)=>{
+			$http.post(`/api/shows/${$stateParams.slug}/artwork/${type}`)
+				.then(()=>{
+					alertService.notify({type:'success',msg:`${$scope.show.title} updated`})
+				})
+				.catch(()=>{
+					alertService.notify({type:'danger',msg:`${$scope.show.title} was not updated`})
+				})
+		}
+		
 	}])
 	.controller('SeasonCtrl', ['$http','$log','$scope','$stateParams',function($http,$log,$scope,$stateParams){
 		$scope.season = {}
@@ -114,23 +220,5 @@ angular.module('nutv.shows', ['nutv.core'])
 			.catch(error=>{
 				if (error) $log.error(error)
 			})
-			.finally(()=>{
-				$log.debug('finally')
-			})
 	}])
-	.controller('EpisodeCtrl', function(){
-		
-	})
-	.controller('ResultCtrl', ['$http','$log','$scope','$state',function($http,$log,$scope,$state){
-		$scope.add = ()=>{
-			$http.post('/api/shows', {slug: $scope.result.show.ids.slug})
-				.then(response=>{
-					$scope.$emit('alert',{type:'success',msg:`Added: ${response.data.title}`})
-					$state.go('shows.show', {slug:response.data.ids.slug})
-				})
-				.catch(()=>{
-					$scope.$emit('alert',{type:'danger',msg:`Error while adding show`})
-				})
-		}
-	}])
-	
+	*/

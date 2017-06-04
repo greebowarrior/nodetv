@@ -13,9 +13,11 @@ const ShowsAPI = app=>{
 		.get((req,res)=>{
 			Show.findByUser(req.user._id, {episodes:false,seasons:false},{sort:{title:1}})
 				.then(shows=>{
+					shows.sort((a,b)=>a.title.toLowerCase().localeCompare(b.title.toLowerCase()))
 					res.send(shows)
 				})
 				.catch(error=>{
+					console.error(error)
 					res.status(404).send({error:error})
 				})
 		})
@@ -159,16 +161,31 @@ const ShowsAPI = app=>{
 		.post((req,res)=>{
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
-					return show.setArtwork(req.body.image).then(show.save)
+					return show.setArtwork(req.body).then(()=>show.save())
 				})
 				.then(()=>{
 					res.send({success:true})
 				})
-				.catch(()=>{
+				.catch(error=>{
+					console.error(error)
 					res.status(404).end()
 				})
 		})
-		
+	
+	router.route('/:slug/match')
+		.get((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					return show.match()
+				})
+				.then(directory=>{
+					res.send({directory:directory})
+				})
+				.catch(()=>{
+					res.status(304).end()
+				})
+		})
+	
 	router.route('/:slug/scan')
 		.get((req,res)=>{
 			Show.findBySlug(req.params.slug)

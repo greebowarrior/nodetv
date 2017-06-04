@@ -41,12 +41,37 @@ main {
 	color: $nodetv-red;
 }
 
+.cover {
+	margin-bottom: 10px;
+	text-align: center;
+	position: relative;
+	
+	a {
+		display: block;
+	}
+	img {
+		border: 1px solid $nodetv-grey;
+	}
+	.title {
+		display: block;
+		left: 50%;
+		position: absolute;
+		top: 50%;
+		transform: translate(-50%,-50%);
+		width: 85%;
+	}
+}
+
+div.search {
+	margin-bottom: 10px;
+}
+
 footer {
-	bottom: 0;
-	left: 0;
-	position: absolute;
-	right: 0;
-	width: auto;
+//	bottom: 0;
+//	left: 0;
+//	position: absolute;
+//	right: 0;
+//	width: auto;
 	div.info {
 		font-size: 10px;
 		text-align: center;

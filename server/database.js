@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 
-const Database = (config)=>{
+const Database = config=>{
 	
 	let conn = 'mongodb://'
 	
@@ -11,12 +11,13 @@ const Database = (config)=>{
 	conn += `${config.host}:${config.port}/${config.name}`
 	
 	mongoose.connect(conn)
-	mongoose.connection.on('error', (error)=>{
-		console.error(error)
-	})
-	mongoose.connection.on('connected', ()=>{
-		console.info('Connected to MongoDB: %s', config.host)
-	})
+		.then(()=>{
+			console.info('Connected to MongoDB: %s', config.host)
+		})
+		.catch(error=>{
+			console.error(error.message)
+		})
+	
 	process.on('SIGTERM', ()=>{
 		mongoose.disconnect()
 		process.exit(0)

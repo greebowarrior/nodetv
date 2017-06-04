@@ -11,6 +11,12 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 	Show.findEnabled()
 		.then(shows=>{
 			shows.forEach(show=>{
+				if (!show.subscribers.length){
+					// Disable shows with no subscribers
+					show.config.enabled = false
+					return show.save()
+				}
+				
 				return show.parseFeed()
 					.then(()=>show.getLatestEpisodes())
 					.then(results=>{

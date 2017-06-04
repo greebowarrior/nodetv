@@ -1,11 +1,6 @@
-<div ng-show="season">
-	<h6>Season {{season.season}}</h6>
-	<p>{{season.overview}}</p>
-	
+<div ng-show="$ctrl.season">
+	<h6>Season {{$ctrl.season.season}}</h6>
+	<p>{{$ctrl.season.overview}}</p>
 	<hr />
-	
-	<div ng-repeat="episode in episodes" ng-controller="EpisodeCtrl">
-		<ng-include src="'/views/show/episode.html'"></ng-include>
-	</div>
-	
+	<nutv-show-episode ng-repeat="episode in $ctrl.episodes" episode="episode"></nutv-show-episode>
 </div>

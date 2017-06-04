@@ -12,20 +12,28 @@
 # Phase 2
 
 - ~~Rebuild REST API endpoints~~
-- ~~Create basic UI~~
-- ~~Server-side rendering of views~~
-
-# Phase 3
-
 - ~~Get it running on the server~~
-- ~~UI: Search & add show~~
-- UI: Use directives/components
+- ~~Server-side rendering of views~~
+- ~~Create basic UI~~
+	- ~~UI: Search and add shows~~
+	- ~~UI: Breadcrumb Service~~
+	- ~~UI: Alerts Service~~
+- ~~Scan existing folders & update document~~
+- ~~Remove *completed* torrents if they've be copied into media directory~~
+- ~~Grid pagination~~
+
+
+- Match folders to show
+- Manual download functions per episode
+
+- Match folders to show document
+	- Might be better to have some level of manual assignment?
+
+- Rebuild DNS system
+
 - Feed Parsing - seems to make things laggy
 	- Use child_process?
-- Match to shows collection
-	- Might be better to have some level of manual assignment?
-- Scan existing folders
-
+	
 # Phase 3
 
 - Add proxy support
@@ -35,7 +43,7 @@
 	- Unsubscribe if show is removed, but keep files
 - Support multiple feeds per show (e.g. ShowRSS & TVShowsApp)
 	- Optional, but TVSA *does* have more data
-- Remove *completed* torrents if they've be copied into media directory
+
 
 
 # Phase 4
@@ -58,7 +66,7 @@
 # Eventually
 
 - Socket notifications
-- Git-based updater & scripts
+- Git-based updater & scripts?
 
 
 

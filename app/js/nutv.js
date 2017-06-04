@@ -1,6 +1,6 @@
 "use strict"
 
-angular.module('nutv', ['nutv.core','nutv.shows'])
+angular.module('nutv', ['nutv.core','nutv.shows','nutv.users'])
 	
 	.config(['$stateProvider','$urlRouterProvider',($stateProvider,$urlRouterProvider)=>{
 		$urlRouterProvider.when('/', $state=>{
@@ -10,19 +10,14 @@ angular.module('nutv', ['nutv.core','nutv.shows'])
 		$stateProvider
 			.state('login', {
 				url: '/login',
-				controller: 'LoginCtrl',
-				templateUrl: 'views/auth/login.html',
+				component: 'nutvLogin',
 				breadcrumb: {
 					label: 'Login'
 				}
 			})
 			.state('logout', {
 				url: '/logout',
-				controller: 'LogoutCtrl',
-				templateUrl: 'views/auth/logout.html',
-				breadcrumb: {
-					label: 'Logout'
-				}
+				component: 'nutvLogout'
 			})
 			.state('dashboard', {
 				url: '/dashboard',
@@ -32,63 +27,61 @@ angular.module('nutv', ['nutv.core','nutv.shows'])
 			.state('dashboard.home', {
 				url: '/',
 				controller: 'DashboardCtrl',
-				templateUrl: 'views/dashboard/index.html',
-				breadcrumb: {
-					label: 'Dashboard'
-				}
+				templateUrl: 'views/dashboard/index.html'
 			})
 	}])
 	
-	.controller('NavigationCtrl', ['$localStorage','$scope',($localStorage,$scope)=>{
+	.component('nutvAlerts', {
+		templateUrl: '/views/components/alerts.html',
+		controller: ['alertService', function(alertService){
+			this.alerts = alertService.alerts
+			this.alertClose = alertService.close
+		}]
+	})
+	.component('nutvLogin', {
+		templateUrl: 'views/auth/login.html',
+		controller: ['$http','$localStorage','$log','$state','alertService',function($http,$localStorage,$log,$state,alertService){
+			this.auth = {}
+			
+			this.login = ()=>{
+				$http.post('/auth/login', this.auth)
+					.then(response=>{
+						$localStorage.token = response.data
+						$state.go('dashboard.home')
+					})
+					.catch(()=>{
+						alertService.notify({type:'danger',msg:'Incorrect username/password'})
+						$log.warn('Authentication error')
+					})
+			}
+		}]
+	})
+	.component('nutvLogout', {
+		templateUrl: 'views/auth/logout.html',
+		controller: ['$http','$localStorage','$log','$state',function($http,$localStorage,$log,$state){
+			$http.get('/auth/logout')
+				.then(()=>{
+					delete $localStorage.token
+					$state.go('dashboard.home')
+				})
+				.catch(()=>{
+					$log.debug('Error while logging out')
+				})
+		}]
+	})
+	
+	
+	.controller('NavigationCtrl', ['$localStorage','$scope','$socket','$transitions',($localStorage,$scope,$socket,$transitions)=>{
 		$scope.collapsed = true
 		$scope.authenticated = false
 		
 		$scope.$watch(()=>$localStorage.token, (current)=>{
 			$scope.authenticated = current && current.token ? true : false
 		},true)
-	}])
-	
-	
-	.controller('BodyCtrl', ['$scope', $scope=>{
-		$scope.alerts = []
 		
-		$scope.alertClose = index=>{
-			$scope.alerts.splice(index, 1)
-		}
-		
-		$scope.$on('alert', (e,data)=>{
-			$scope.alerts.push({type:data.type,msg:data.msg})
+		$transitions.onStart({}, ()=>{
+			$scope.collapsed = true
 		})
-	}])
-	
-	
-	.controller('LoginCtrl', ['$http','$localStorage','$log','$scope','$state',function($http,$localStorage,$log,$scope,$state){
-		$scope.auth = {}
-		
-		$scope.login = ()=>{
-			$log.debug('Authenticating...')
-			$http.post('/auth/login', $scope.auth)
-				.then(response=>{
-					$localStorage.token = response.data
-					$state.go('dashboard.home')
-				})
-				.catch(()=>{
-					$scope.$emit('alert',{type:'danger',msg:'Incorrect username/password'})
-					$log.warn('Authentication error')
-				})
-		}
-	}])
-
-	.controller('LogoutCtrl', ['$http','$localStorage','$log','$scope','$state',function($http,$localStorage,$log,$scope,$state){
-		$http.get('/auth/logout')
-			.then(()=>{
-				$log.debug('Logging out')
-				delete $localStorage.token
-				$state.go('dashboard.home')
-			})
-			.catch(()=>{
-				$log.debug('fuck')
-			})
 	}])
 
 	.controller('DashboardCtrl', ['$http','$log','$scope',function($http,$log,$scope){

@@ -100,15 +100,15 @@ episodeSchema.methods.setWatched = function(user, date=null){
 			resolve(this)
 		}
 	})
-	/*
-	.then(()=>{
-		// Send to Trakt
-	//	return helpers.trakt(user).sync.history.add({episodes:[{ids:this.ids}]})
+}
+episodeSchema.methods.setUnwatched = function(user){
+	return new Promise(resolve=>{
+		let idx = (this.watchers || []).findIndex(item=>item.watcher.equals(user._id))
+		if (idx >= 0){
+			this.watchers[idx] = undefined
+		}
+		resolve()
 	})
-	.finally(()=>{
-//		return this
-	})
-	*/
 }
 
 episodeSchema.methods.getFilename = function(){

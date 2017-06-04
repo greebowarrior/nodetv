@@ -1,0 +1,3 @@
+<div class="container alert-container ng-cloak">
+	<div uib-alert ng-repeat="alert in $ctrl.alerts" ng-class="'alert-' + (alert.type || 'info')" close="$ctrl.alertClose($index)" dismiss-on-timeout="3000">{{alert.msg}}</div>
+</div>

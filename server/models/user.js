@@ -53,11 +53,9 @@ userSchema.methods.apiToken = function(){
 	}
 	return this.tokens[this.tokens.length-1].token
 }
-
 userSchema.methods.generateHash = function(password){
 	return bcrypt.hashSync(password, bcrypt.genSaltSync(8))
 }
-
 userSchema.methods.verifyPassword = function(password){
 	try {
 		return bcrypt.compareSync(password, this.password)
@@ -66,7 +64,6 @@ userSchema.methods.verifyPassword = function(password){
 		return false
 	}
 }
-
 userSchema.methods.refreshToken = function(){
 	if (this.trakt.expires <= new Date()){
 		// refresh the access_token
@@ -78,16 +75,26 @@ userSchema.pre('save', function(next){
 	this.updated = new Date()
 	next()
 })
-userSchema.post('remove', function(next){
+userSchema.pre('remove', function(next){
 	// Remove user from shows
 	const Show = require('./show')
 	
 	Show.findByUser(this._id)
 		.then(shows=>{
+			let promises = []
+			
 			shows.forEach(show=>{
-				 show.unsubscribe(this._id)
+				console.log(show.title)
+				let promise = show.unsubscribe(this).then(()=>{
+					return show.save()
+				})
+				promises.push(promise)
 			})
-			if (typeof next === 'function') next()
+			
+			Promise.all(promises)
+				.then(()=>{
+					if (typeof next === 'function') next()
+				})
 		})
 })
 

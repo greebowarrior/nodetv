@@ -41,12 +41,19 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 								return show.save()
 							})
 					})
+					.then(()=>{
+						// Check seed ratio, if >= limit, remove torrent
+						if (torrent.uploadLimit >= torrent.seedRatioLimit || torrent.isFinished){
+							helpers.torrents.delete(torrent.id)
+						}
+					})
 					.catch(error=>{
 						if (error) console.error(error.message)
 					})
 			})
-			
 		//	return Promise.all(promises)
 		})
-	//	.finally()
+		.catch(error=>{
+			console.error(error)
+		})
 })

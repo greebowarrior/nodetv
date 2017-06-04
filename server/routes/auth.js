@@ -9,7 +9,7 @@ const TraktStrategy = require('passport-trakt').Strategy
 const User = require(require('path').join(process.env.MODELS,'user'))
 
 passport.serializeUser((user,done)=>{
-	done(null, user.id)
+	done(null, user._id)
 })
 
 passport.deserializeUser((id,done)=>{
@@ -18,27 +18,26 @@ passport.deserializeUser((id,done)=>{
 	})
 })
 
-passport.use('local', new LocalStrategy(
-	(username,password,done)=>{
-		User.findOne({$or:[{username:username},{email:username}]}, (error,user)=>{
-			if (!error && user && user.verifyPassword(password)){
-				return done(null, user)
-			}
-			return done(error, false)
+passport.use('local', new LocalStrategy((username,password,done)=>{
+	User.findOne({$or:[{username:username},{email:username}]})
+		.then(user=>{
+			if (!user.verifyPassword(password)) throw new Error('Invalid password')
+			done(null, user)
 		})
-	}
-))
-
-passport.use('token', new TokenStrategy(
-	(username,token,done)=>{
-		User.findOne({username:username,'tokens.token':token}, (error,user)=>{
-			if (!error && user){
-				return done(null, user)
-			}
-			return done(error, false)
+		.catch(error=>{
+			done(error, false)
 		})
-	}
-))
+}))
+passport.use('token', new TokenStrategy((username,token,done)=>{
+	User.findOne({username:username,'tokens.token':token})
+		.then(user=>{
+			if (!user) throw new Error('Invalid user')
+			done(null, user)
+		})
+		.catch(error=>{
+			done(error, false)
+		})
+}))
 
 passport.use('trakt', new TraktStrategy(
 	{
@@ -53,7 +52,7 @@ passport.use('trakt', new TraktStrategy(
 	}
 ))
 
-const Auth = (app)=>{
+const Auth = app=>{
 	app.use(passport.initialize())
 	app.use(passport.session())
 	

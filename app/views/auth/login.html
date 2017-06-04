@@ -1,11 +1,11 @@
-<form name="loginForm" ng-submit="login()">
+<form name="loginForm" ng-submit="$ctrl.login()">
 	<div class="form-group">
 		<label for="ipt_username">Username/Email</label>
-		<input type="text" id="ipt_username" name="username" class="form-control" required="true" ng-model="auth.username" />
+		<input type="text" id="ipt_username" name="username" class="form-control" required="true" ng-model="$ctrl.auth.username" />
 	</div>
 	<div class="form-group">
 		<label for="ipt_password">Password</label>
-		<input type="password" id="ipt_password" name="password" class="form-control" required="true" ng-model="auth.password" />
+		<input type="password" id="ipt_password" name="password" class="form-control" required="true" ng-model="$ctrl.auth.password" />
 	</div>
 	<div class="form-group">
 		<button type="submit" class="btn btn-default" ng-disabled="loginForm.$invalid">Login</button>

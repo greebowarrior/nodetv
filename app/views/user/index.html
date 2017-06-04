@@ -1,0 +1,19 @@
+<div>
+	<form name="userForm" ng-submit="$ctrl.save()">
+		<div class="form-group">
+			<label for="ipt_username">Username</label>
+			<input type="text" id="ipt_username" class="form-control" required="true" ng-model="$ctrl.user.username" />
+		</div>
+		<div class="form-group">
+			<label for="ipt_email">Email</label>
+			<input type="email" id="ipt_email" class="form-control" required="true" ng-model="$ctrl.user.email" />
+		</div>
+		
+		<div class="form-group">
+			<button type="submit" class="btn btn-success" ng-disabled="userForm.$invalid || userForm.$pristine" >Save</button>
+			<button type="button" class="btn btn-default" ui-sref="^.list">Cancel</button>
+			
+			<button type="button" class="btn btn-danger pull-right" ng-click="$ctrl.delete()">Delete</button>
+		</div>
+	</form>
+</div>

@@ -39,14 +39,17 @@ const showSchema = new mongoose.Schema({
 	images: {
 		background: {
 			enabled: {type: Boolean, default: false},
+			filename: String,
 			source: String
 		},
-		cover: {
+		banner: {
 			enabled: {type: Boolean, default: false},
+			filename: String,
 			source: String
 		},
 		poster: {
 			enabled: {type: Boolean, default: false},
+			filename: String,
 			source: String
 		}
 	},
@@ -81,7 +84,8 @@ showSchema.statics.findByUser = function(user_id,projection={},options={}){
 }
 showSchema.statics.findEnabled = function(projection={},options={}){
 	return this.find({
-		'config.enabled':true,'config.feed':{$exists:true}
+		'config.enabled':true,
+		'config.feed':{$exists:true}
 	},projection,options)
 }
 
@@ -176,18 +180,18 @@ showSchema.methods.subscribe = function(user_id){
 	let idx = this.subscribers.findIndex(item=>{
 		return item.subscriber.equals(user_id)
 	})
-	if (idx === -1){this.subscribers.push({subscriber:user_id})}
+	if (idx === -1) this.subscribers.push({subscriber:user_id})
 	return this
 }
-showSchema.methods.unsubscribe = function(user_id){
-	let idx = this.subscribers.findIndex(item=>{
-		return item.subscriber.equals(user_id)
+showSchema.methods.unsubscribe = function(user){
+	return new Promise(resolve=>{
+		let idx = this.subscribers.findIndex(item=>{
+			return item.subscriber.equals(user._id)
+		})
+		if (idx >= 0) this.subscribers.splice(idx,1)
+		
+		resolve(this)
 	})
-	if (idx >= 0){this.subscribers.splice(idx,1)}
-	
-	// TODO: Trakt - remove from collection (but keep watches)
-	
-	return this
 }
 
 showSchema.methods.getDirectory = function(){
@@ -225,9 +229,10 @@ showSchema.methods.setArtwork = function(data){
 			.then(()=>{
 				this.images[data.type] = {
 					enabled: true,
-				//	mime: 
+					filename: require('path').basename(target),
 					source: data.url
 				}
+				resolve()
 			})
 			.catch(reject)
 	})
@@ -248,7 +253,32 @@ showSchema.methods.setWatched = function(){
 	})
 	return this
 }
+showSchema.methods.setUnwatched = function(){
+	this.episodes.forEach(episode=>{
+		episode.setUnwatched()
+	})
+	return this
+}
 
+showSchema.methods.match = function(){
+	// ISSUES: Shows with reboots
+	// e.g. Doctor Who (1963/2005)
+	
+	return new Promise((resolve,reject)=>{
+		const base = require('path').join(global.config.media.base, global.config.media.shows.path)
+		
+		// If a directory exists that has the *exact* same name as the show, assume it's the folder for this show
+		if (this.config.directory && require('fs-sync').existsSync(this.getDirectory())){
+			return resolve(this.config.directory)
+		}
+		
+		if (require('fs-extra').existsSync(require('path').join(base,this.title))){
+			this.config.directory = this.title
+			return resolve(this.config.directory)
+		}
+		reject()
+	})
+}
 showSchema.methods.scan = function(){
 	const directory = this.getDirectory()
 	
