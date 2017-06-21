@@ -10,6 +10,8 @@ const App = function(app){
 	// Express Setup
 	app.use(require('body-parser').json({limit:'25mb'}))
 	app.use(require('body-parser').urlencoded({extended:false,limit:'25mb'}))
+	app.use(require('cookie-parser')())
+	
 	app.use(require('compression')())
 	app.use(require('helmet')())
 	
@@ -26,6 +28,8 @@ const App = function(app){
 	// Enable layout templates
 	app.set('layout', 'layouts/classic')
 	app.use(require('express-ejs-layouts'))
+	
+	app.disable('view cache')
 	
 	// Define static paths
 	app.use('/static', require('express').static(require('path').join(process.cwd(),'app'),{etag:false}))

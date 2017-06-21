@@ -105,3 +105,34 @@ angular.module('nutv.users', ['nutv.core'])
 		}]
 	})
 	
+	.component('traktAuth', {
+		templateUrl: '/views/auth/trakt.html',
+		controller: ['$http','$socket','alertService',function($http,$socket,alertService){
+			this.disconnect = ()=>{
+				alertService.confirm({
+					title: 'Disconnect Trakt.tv?',
+					type: 'Question',
+					msg: 'Are you sure you want to disconnect from Trakt.tv?'
+				}).then(()=>{
+					$http.delete('/api/trakt/auth')
+					.then(()=>{
+						this.trakt = undefined
+					})
+				})
+			}
+			
+			// TODO: stop listening on statechange start
+			$socket.on('trakt.connected', (status)=>{
+				this.trakt.connected = status
+				if (!status) this.connect()
+			})
+			
+			this.connect = ()=>{
+				$http.get('/api/trakt/auth')
+					.then(res=>{
+						this.trakt = res.data
+					})
+			}
+			this.connect()
+		}]
+	})

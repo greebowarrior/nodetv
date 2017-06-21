@@ -40,12 +40,13 @@ require('./scheduler')
 
 // Create Web Server
 const app = require('express')()
+app.set('port', process.env.PORT || global.config.server.port || 3001)
 
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 
-server.listen(process.env.PORT || global.config.server.port || 3001, ()=>{
-	let port = process.env.PORT || global.config.server.port || 3001
+server.listen(app.get('port'), ()=>{
+	let port = app.get('port')
 	console.log(`Listening on port ${port}`)
 })
 

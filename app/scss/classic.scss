@@ -66,6 +66,20 @@ div.search {
 	margin-bottom: 10px;
 }
 
+.result-details {
+	align-content: flex-start;
+	display: flex;
+	flex-wrap: nowrap;
+	list-style: none;
+	padding: 0;
+	li {
+		color: $nodetv-grey;
+		font-size: 11px;
+		padding-right: 10px;
+		text-transform: capitalize;
+	}
+}
+
 footer {
 //	bottom: 0;
 //	left: 0;

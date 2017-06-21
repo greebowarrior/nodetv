@@ -1,20 +1,11 @@
-<div class="ng-cloak" ng-controller="TraktConnectController">
-	
-	<h1 class="title">Connect with Trakt.tv</h1>
-	<form class="form" name="traktForm" ng-show="trakt.url" ng-submit="submit()">
-		<div class="form-group">
-			<label for="ipt_trakt_pin">Trakt PIN</label>
-			<span class="input-group">
-				<span class="input-group-btn">
-					<a href="{{trakt.url}}" target="_blank" class="btn btn-primary">
-						<span class="fa fa-cloud"></span> Get PIN
-					</a>
-				</span>
-				<input type="text" id="ipt_trakt_pin" name="pin" class="form-control" placeholder="Trakt.tv PIN" required="true" ng-model="trakt.pin" />
-				<span class="input-group-btn">
-					<button type="submit" class="btn btn-success" ng-disabled="traktForm.$invalid">Connect</button>
-				</span>
-			</span>
-		</div>
-	</form>
+<div class="ng-cloak">
+	<div ng-show="$ctrl.trakt && $ctrl.trakt.connected">
+		<img src="/static/gfx/logo-trakt.png" style="max-width:40px;" />
+		Trakt.tv Connected - <a href="#" ng-click="$ctrl.disconnect()">Disconnect</a>
+	</div>
+	<div ng-show="$ctrl.trakt && !$ctrl.trakt.connected">
+		<img src="/static/gfx/logo-trakt.png" style="max-width:40px;" />
+		Device Code: <strong>{{$ctrl.trakt.user_code}}</strong> -
+		<a href="{{$ctrl.trakt.verification_url}}" target="_blank">Authorise</a>
+	</div>
 </div>

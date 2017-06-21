@@ -33,7 +33,7 @@
 			
 			<div class="row" ng-show="$ctrl.images.banners.length">
 				<div class="col-xs-12"><h6>Banners</h6></div>
-				<div class="col-md-3" ng-repeat="image in $ctrl.images.banners">
+				<div class="col-sm-3" ng-repeat="image in $ctrl.images.banners">
 					<show-artwork show="$ctrl.show" artwork="image" type="banner"></show-artwork>
 				</div>
 			</div>
@@ -47,7 +47,7 @@
 			
 			<div class="row" ng-show="$ctrl.images.backgrounds.length">
 				<div class="col-sm-12"><h6>Backgrounds</h6></div>
-				<div class="col-md-3" ng-repeat="image in $ctrl.images.backgrounds">
+				<div class="col-sm-3" ng-repeat="image in $ctrl.images.backgrounds">
 					<show-artwork show="$ctrl.show" artwork="image" type="background"></show-artwork>
 				</div>
 			</div>
@@ -56,15 +56,13 @@
 		<uib-tab heading="Tools">
 			<div class="row">
 				<div class="col-sm-12">
-					
-					<button class="btn btn-default" ng-click="$ctrl.match()">Match</button>
-					
-					<button class="btn btn-default">Rescan Folder</button>
-					<button class="btn btn-default">Download All</button>
-					
-					<button class="btn btn-danger">Remove Show</button>
+					<button class="btn btn-primary" ng-hide="$ctrl.show.config.directory" ng-click="$ctrl.match()">Match directory</button>
+					<button class="btn btn-warning" ng-show="$ctrl.show.config.directory" ng-click="$ctrl.rescan()">Rescan directory</button>
+<!-- 					<button class="btn btn-default">Download All</button> -->
+<!-- 					<button class="btn btn-danger" ng-click="$ctrl.remove()">Remove Show</button> -->
 				</div>
 			</div>
+			
 		</uib-tab>
 	</uib-tabset>
 </div>

@@ -5,7 +5,7 @@ const Show = require(require('path').join(process.env.MODELS,'show'))
 const router = require('express').Router()
 const helpers = require('nodetv-helpers')
 
-const ShowsAPI = app=>{
+const ShowsAPI = (app,io)=>{
 	console.debug('API loaded: Shows')
 	app.use('/api/shows', router)
 		
@@ -187,14 +187,20 @@ const ShowsAPI = app=>{
 		})
 	
 	router.route('/:slug/scan')
-		.get((req,res)=>{
+		.post((req,res)=>{
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
-					show.scan()
+					io.sockets.emit('notify', {type:'info',msg:`Rescan started: '${show.title}'`})
+					show.scan().then(()=>{
+						io.sockets.emit('notify', {type:'info',msg:`Rescan complete: '${show.title}'`})
+					})
+					.catch(()=>{
+						io.sockets.emit('notify', {type:'danger',msg:`Rescan failed: '${show.title}'`})
+					})
 					res.status(202).send({message: 'In Progress'})
 				})
 				.catch(error=>{
-					console.log(error)
+					console.error(error)
 					res.status(400).send(error)
 				})
 		})

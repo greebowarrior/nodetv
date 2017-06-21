@@ -76,6 +76,17 @@
 		"oT": 1,
 		"q": 100
 		},
+	"\/app\/gfx\/logo-trakt.png": {
+		"ft": 32768,
+		"iS": 79260,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/logo-trakt.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
 	"\/app\/js\/components\/artwork.js": {
 		"ft": 64,
 		"mi": 0,
@@ -621,6 +632,15 @@
 		"oA": 1,
 		"oAP": "\/server\/models\/min\/show-min.js",
 		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/models\/socket.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/models\/min\/socket.min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},

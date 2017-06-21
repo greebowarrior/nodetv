@@ -70,6 +70,16 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.users'])
 		}]
 	})
 	
+	.component('nutvNavigation', {
+		templateUrl: '',
+		controller: ['$localStorage','$socket','$transitions',function($localStorage,$socket,$transitions){
+			this.authenticated - false
+			this.collapsed = true
+			$transitions.onStart({}, ()=>{
+				this.collapsed = true
+			})
+		}]
+	})
 	
 	.controller('NavigationCtrl', ['$localStorage','$scope','$socket','$transitions',($localStorage,$scope,$socket,$transitions)=>{
 		$scope.collapsed = true

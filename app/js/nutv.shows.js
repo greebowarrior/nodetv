@@ -105,6 +105,22 @@ angular.module('nutv.shows', ['nutv.core'])
 						if (error) $log.error(error)
 					})
 			}
+			this.getDirectories = ()=>{
+				$http.get(`/api/shows/${this.show.ids.slug}/match`)
+					.then(response=>{
+						this.matches = response.data
+					})
+			}
+			
+			this.rescan = ()=>{
+				alertService.confirm({
+					title: 'Rescan Directory',
+					type: 'Question',
+					msg: 'Are you sure? This may take a while.'
+				}).then(()=>{
+					$http.post(`/api/shows/${this.show.ids.slug}/scan`)
+				})
+			}
 		}]
 	})
 	.component('nutvShowSeason', {

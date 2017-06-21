@@ -18,54 +18,52 @@
 	- ~~UI: Search and add shows~~
 	- ~~UI: Breadcrumb Service~~
 	- ~~UI: Alerts Service~~
-- ~~Scan existing folders & update document~~
 - ~~Remove *completed* torrents if they've be copied into media directory~~
 - ~~Grid pagination~~
-
-
-- Match folders to show
+- ~~Directory rescan~~
+- Upgrade to use Trakt.tv [device auth](http://docs.trakt.apiary.io/#reference/authentication-devices)
+- Manual show data update
+- R&D: Handle shows that now have less episodes in a season (i.e. Lucifer)
+	- Prune superfluous episode
 - Manual download functions per episode
-
-- Match folders to show document
+- Match existing folders to show document
 	- Might be better to have some level of manual assignment?
+- BUG! Ensure directories are created when adding a show 
 
-- Rebuild DNS system
 
-- Feed Parsing - seems to make things laggy
-	- Use child_process?
-	
 # Phase 3
 
+- Rebuild DNS system
 - Add proxy support
-- Full Show Sync *from* trakt
+- Full Show Sync *from* trakt?
 	- Use this to populate collections automatically?
 - Scheduled History Sync with Trakt?
 	- Unsubscribe if show is removed, but keep files
 - Support multiple feeds per show (e.g. ShowRSS & TVShowsApp)
 	- Optional, but TVSA *does* have more data
+- Feed Parsing - seems to make things laggy
+	- Use child_process?
+	
 
 
 
 # Phase 4
 
-- Ants
-- Better UI
-	- Theme support
-	- Create directory structure for themes?
-	- Create Express middleware to allow themes WITHOUT reloading
-
-# Phase 5
-
-- Re-implement `Movie` functionality
+- Ants!
+- The `Movies` Update
 	- Models
 	- API Endpoints
 	- Tasks
 - Re-implement YTS API (use proxy)
+- Better UI?
+	- Theme support
+	- Create directory structure for themes?
+	- Create Express middleware to allow themes WITHOUT reloading service
 
 
 # Eventually
 
-- Socket notifications
+- ~~Socket notifications~~
 - Git-based updater & scripts?
 
 

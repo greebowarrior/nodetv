@@ -26,12 +26,20 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 		socket.forward('alert')
 		return socket
 	})
-	.factory('alertService', ['$rootScope','SweetAlert',($rootScope,SweetAlert)=>{
+	.factory('alertService', ['$rootScope','$socket','SweetAlert',($rootScope,$socket,SweetAlert)=>{
 		let Alert = function(){
 			this.alerts = []
+			
 			$rootScope.$on('alert', (event,alert)=>{
 				this.add(alert)
 			})
+			$socket.on('alert', data=>{
+				this.alert(data)
+			})
+			$socket.on('notify', data=>{
+				this.notify(data)
+			})
+			
 			return this
 		}
 		
@@ -88,7 +96,7 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 				SweetAlert.swal({
 					title: data.title,
 					text: data.msg,
-					type: data.type || 'info',
+					type: 'warning',
 					showCancelButton: true,
 					confirmButtonColor: '#DD6B55',
 					confirmButtonText: 'Yes, do it',
@@ -194,11 +202,14 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 			this.pagination = {items:18,page:1}
 			
 			this.search = ()=>{
-				if (this.items.length > 1 || this.filter.title.length < 3) return
+				if (this.items.length > 1 || this.filter.title.length <= 1) return
 				$http.post(`/api/trakt/search/${this.type}`,{q:this.filter.title})
 					.then(res=>{
 						this.results = res.data
 					})
+			}
+			this.clearResults = ()=>{
+				this.results = []
 			}
 		}]
 	})

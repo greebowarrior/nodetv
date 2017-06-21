@@ -3,9 +3,10 @@
 const router = require('express').Router()
 const helpers = require('nodetv-helpers')
 
+const Socket = require(require('path').join(process.env.MODELS,'socket'))
 const User = require(require('path').join(process.env.MODELS,'user'))
 
-const TraktAPI = app=>{
+const TraktAPI = (app,io)=>{
 	console.debug('API loaded: Trakt')
 	app.use('/api/trakt', router)
 	
@@ -13,11 +14,7 @@ const TraktAPI = app=>{
 		.delete((req,res)=>{
 			User.findById(req.user._id)
 				.then(user=>{
-					user.trakt = {
-						access_token: null,
-						expires: new Date(),
-						refresh_token: null
-					}
+					user.trakt = undefined
 					return user.save()
 				})
 				.then(()=>{
@@ -28,8 +25,57 @@ const TraktAPI = app=>{
 				})
 		})
 		.get((req,res)=>{
-			res.send({url:helpers.trakt.get_url()})
+			if (req.user.trakt){
+				res.send({connected:true})
+			} else {
+				helpers.trakt().get_codes()
+					.then(poll=>{
+						res.send({
+							connected: false,
+							expires_in: poll.expires_in,
+							user_code: poll.user_code,
+							verification_url: poll.verification_url
+						})
+						return helpers.trakt().poll_access(poll)
+					})
+					.then(result=>{
+						let expires = new Date()
+						expires.setSeconds(expires.getSeconds()+result.expires_in)
+						result.expires = expires
+						
+						return User.findById(req.user._id)
+							.then(user=>{
+								user.trakt = {
+									access_token: result.access_token,
+									expires: result.expires,
+									refresh_token: result.refresh_token
+								}
+								return user.save()
+							})
+					})
+					.then(user=>{
+						return Socket.findByUser(user)
+						/*
+						io.to(req.cookies.io).emit('alert', {
+							type:'success',
+							msg:`Trakt Authentication complete`
+						})
+						*/
+					})
+					.then(sockets=>{
+						if (!sockets) throw new Error(`No sockets found`)
+						sockets.forEach(socket=>{
+							io.to(socket.id).emit('trakt.connected', true)
+						})
+					})
+					.catch(error=>{
+						console.error(error.message)
+						io.to(socket.id).emit('trakt.connected', false)
+					})
+			}
 		})
+		
+		/*
 		.post((req,res)=>{
 			User.findById(req.user._id,{password:false,tokens:false,trakt:false})
 				.then(user=>{
@@ -59,6 +105,7 @@ const TraktAPI = app=>{
 					res.status(400).send({error:error})
 				})
 		})
+		*/
 	
 	
 	router.route('/profile')

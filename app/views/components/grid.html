@@ -3,7 +3,8 @@
 		<div class="input-group">
 			<input type="text" class="form-control" ng-model="$ctrl.filter.title" placeholder="Search" />
 			<span class="input-group-btn">
-				<button type="submit" class="btn btn-success"><span class="fa fa-search"></span></button>
+				<button type="submit" class="btn btn-success" ng-hide="$ctrl.results.length"><span class="fa fa-search"></span></button>
+				<button type="button" class="btn btn-danger" ng-show="$ctrl.results.length" ng-click="$ctrl.clearResults()"><span class="fa fa-close"></span></button>
 			</span>
 		</div>
 	</form>

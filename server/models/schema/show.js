@@ -260,6 +260,9 @@ showSchema.methods.setUnwatched = function(){
 	return this
 }
 
+
+
+
 showSchema.methods.match = function(){
 	// ISSUES: Shows with reboots
 	// e.g. Doctor Who (1963/2005)
@@ -275,6 +278,11 @@ showSchema.methods.match = function(){
 		if (require('fs-extra').existsSync(require('path').join(base,this.title))){
 			this.config.directory = this.title
 			return resolve(this.config.directory)
+		} else {
+			require('fs-extra').ensureDir(require('path').join(base,this.title)).then(()=>{
+				this.config.directory = this.title
+				return resolve(this.config.directory)
+			})
 		}
 		reject()
 	})
@@ -291,6 +299,7 @@ showSchema.methods.scan = function(){
 			files.forEach(file=>{
 				let promise = helpers.utils.getEpisodeNumbers(file)
 					.then(data=>{
+						
 						let idx = this.episodes.findIndex(item=>{
 							return item.season == data.season && data.episodes.indexOf(item.episode) >= 0
 						})
@@ -298,22 +307,39 @@ showSchema.methods.scan = function(){
 						
 						const formatted = this.episodes[idx].getFilename()
 						
-						this.episodes[idx].file.filename = formatted
-						
-						if (file != formatted){
-							let source = require('path').join(directory, file)
-							let target = require('path').join(directory, formatted)
-							// Rename file
-							return helpers.files.move(source, target)
-						} else {
-							return true
-						}
+						return require('fs-extra').lstat(require('path').join(directory,file))
+							.then(stat=>{
+								this.episodes[idx].file.added = stat.birthtime
+								this.episodes[idx].file.filename = formatted
+								this.episodes[idx].file.filesize = stat.size
+								
+								if (file != formatted){
+									let source = require('path').join(directory, file)
+									let target = require('path').join(directory, formatted)
+									// Rename file
+									return helpers.files.move(source, target)
+										.then(()=>{
+											this.episodes[idx].file.filename = formatted
+											return formatted
+										})
+								} else {
+									return formatted
+								}
+							})
+							.catch(error=>{
+								console.error(error.message)
+							})
+					})
+					.catch(()=>{
+						console.warn(`${this.title}: '${file}' is not a valid episode filename`)
+						return null
 					})
 				promises.push(promise)
 			})
 			return Promise.all(promises)
 		})
-		.then(()=>{
+		.then(resolved=>{
+			console.debug('Scan Complete', resolved)
 			return this.save()
 		})
 }

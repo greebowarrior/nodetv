@@ -1,30 +1,24 @@
 <div class="row episode">
-	<div class="col-md-12">
-		<h4><span class="highlight">Episode {{$ctrl.episode.episode|zeroFill:2}}</span> - {{$ctrl.episode.title}}</h4>
+	<div class="col-sm-12">
+		<h4 uib-dropdown>
+			<span uib-dropdown-toggle>
+				<span class="highlight">Episode {{$ctrl.episode.episode|zeroFill:2}}</span> - {{$ctrl.episode.title}} <span class="caret"></span>
+			</span>
+			<ul class="dropdown-menu" uib-dropdown-menu>
+				<li ng-show="$ctrl.episode.hashes.length"><a href="#">Download SD</a></li>
+				<li ng-show="$ctrl.episode.hashes.length"><a href="#">Download HD</a></li>
+				<li ng-show="$ctrl.episode.hashes.length" role="separator" class="divider"></li>
+				<li><a href="#" ng-click="$ctrl.watched()">Mark as Watched</a></li>
+			</ul>
+		</h4>
 	</div>
 	<div class="col-md-12">
 		<p>{{$ctrl.episode.overview}}</p>
 	</div>
-</div>
-
-<div class="row">
-	<div class="col-sm-5">
-		<small class="help-block">Air date: {{$ctrl.episode.first_aired|date:'d MMMM yyyy, HH:mm'}}</small>
-	</div>
-	<div class="col-sm-5">
-		{{$ctrl.episode.hashes.length}}
-	</div>
-	<div class="col-sm-2 text-right">
-		<div class="btn-group" uib-dropdown>
-			<button type="button" class="btn btn-sm btn-default" uib-dropdown-toggle>
-				Actions <span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu" uib-dropdown-menu>
-				<li><a href="#">Download SD</a></li>
-				<li><a href="#">Download HD</a></li>
-				<li role="separator" class="divider"></li>
-				<li><a href="#" ng-click="$ctrl.watched()">Mark as Watched</a></li>
-			</ul>
-		</div>
+	<div class="col-sm-12">
+		<ul class="result-details">
+			<li>Broadcast: {{$ctrl.episode.first_aired|date:'d MMMM yyyy, HH:mm'}}</li>
+			<li>Downloaded: {{$ctrl.episode.file.added|date:'d MMMM yyyy, HH:mm'}}</li>
+		</ul>
 	</div>
 </div>
