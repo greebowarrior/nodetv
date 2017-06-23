@@ -51,14 +51,15 @@ server.listen(app.get('port'), ()=>{
 })
 
 // Configure Express
-require('./app')(app)
+require('./app')(app,io)
+
+// Load sockets
+require('./routes/sockets')(io)
 
 // Load routes
 require('./routes/auth')(app,io)
 require('./routes/api')(app,io)
 require('./routes/ui')(app,io)
-
-require('./routes/sockets')(app,io)
 
 // Default routes
 app.route('*')

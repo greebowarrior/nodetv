@@ -2,10 +2,9 @@
 
 const secret = 'Customer-Service-Immolation-Incident'
 
-const session = require('express-session')
-const MongoStore = require('connect-mongo')(session)
+const MongoStore = require('connect-mongo')(require('express-session'))
 
-const App = function(app){
+const App = function(app,io){
 	
 	// Express Setup
 	app.use(require('body-parser').json({limit:'25mb'}))
@@ -38,14 +37,18 @@ const App = function(app){
 	app.locals.config = global.config
 	
 	// Sessions
-	app.use(session({
+	const session =  require('express-session')({
 		resave: false,
 		saveUninitialized: true,
 		secret: secret,
 		store: new MongoStore({
 			mongooseConnection: require('mongoose').connection
 		})
-	}))
+	})
 	
+	app.use(session)
+	io.use(require('express-socket.io-session')(session, {
+		autoSave: true
+	}))
 }
 module.exports = App

@@ -123,6 +123,7 @@ angular.module('nutv.shows', ['nutv.core'])
 			}
 		}]
 	})
+	
 	.component('nutvShowSeason', {
 		bindings: {
 			episodes: '=',

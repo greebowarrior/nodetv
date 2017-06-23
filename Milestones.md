@@ -21,14 +21,16 @@
 - ~~Remove *completed* torrents if they've be copied into media directory~~
 - ~~Grid pagination~~
 - ~~Directory rescan~~
-- Upgrade to use Trakt.tv [device auth](http://docs.trakt.apiary.io/#reference/authentication-devices)
+- ~~Upgrade to use Trakt.tv [device auth](http://docs.trakt.apiary.io/#reference/authentication-devices)~~
+- ~~Authenticated sockets~~
+- Manual download functions per episode
 - Manual show data update
 - R&D: Handle shows that now have less episodes in a season (i.e. Lucifer)
 	- Prune superfluous episode
-- Manual download functions per episode
-- Match existing folders to show document
+
+- Match existing folders to show
 	- Might be better to have some level of manual assignment?
-- BUG! Ensure directories are created when adding a show 
+- ~~BUG! Ensure directories are created when adding a show~~
 
 
 # Phase 3
@@ -59,7 +61,7 @@
 	- Theme support
 	- Create directory structure for themes?
 	- Create Express middleware to allow themes WITHOUT reloading service
-
+- Integrated uPnP/DLNA server to replace minidlna dependency
 
 # Eventually
 

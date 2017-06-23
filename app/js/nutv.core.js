@@ -21,11 +21,11 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 		}
 	}])
 	
-	.factory('$socket', socketFactory=>{
+	.factory('$socket', ['socketFactory',socketFactory=>{
 		let socket = socketFactory({prefix:''})
 		socket.forward('alert')
 		return socket
-	})
+	}])
 	.factory('alertService', ['$rootScope','$socket','SweetAlert',($rootScope,$socket,SweetAlert)=>{
 		let Alert = function(){
 			this.alerts = []
@@ -150,11 +150,9 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 		}
 		Crumbs.prototype.generate = function(state){
 			if (state.parent) this.generate(state.parent)
-			
-			if (state.breadcrumb){
+			if (state.breadcrumb && state.breadcrumb.title){
 				let target = state.name
 				let title = $interpolate(state.breadcrumb.title)(this.resolved)
-				
 				if (state.self.abstract && (state.self.redirectTo || state.breadcrumb.state)) target = state.self.redirectTo || state.breadcrumb.state
 				this.add(title, target, state.params)
 			}

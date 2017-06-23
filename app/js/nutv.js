@@ -12,7 +12,7 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.users'])
 				url: '/login',
 				component: 'nutvLogin',
 				breadcrumb: {
-					label: 'Login'
+					title: 'Login'
 				}
 			})
 			.state('logout', {
@@ -70,8 +70,10 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.users'])
 		}]
 	})
 	
+	
+	
 	.component('nutvNavigation', {
-		templateUrl: '',
+		templateUrl: '/views/components/navigation.html',
 		controller: ['$localStorage','$socket','$transitions',function($localStorage,$socket,$transitions){
 			this.authenticated - false
 			this.collapsed = true
@@ -81,17 +83,31 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.users'])
 		}]
 	})
 	
-	.controller('NavigationCtrl', ['$localStorage','$scope','$socket','$transitions',($localStorage,$scope,$socket,$transitions)=>{
+	.controller('NavigationCtrl', ['$interval','$localStorage','$log','$scope','$socket','$transitions',($interval,$localStorage,$log,$scope,$socket,$transitions)=>{
 		$scope.collapsed = true
 		$scope.authenticated = false
 		
 		$scope.$watch(()=>$localStorage.token, (current)=>{
 			$scope.authenticated = current && current.token ? true : false
+			
+			$socket.emit('authenticate', $localStorage.token, ()=>{
+				console.debug('Socket authenticated')
+			})
 		},true)
+		
+		$socket.on('error',error=>{
+			$log.error(error)
+		})
+		
+		// Authenticate the socket
+		$socket.on('connect', ()=>{
+			if ($localStorage.token) $socket.emit('authenticate', $localStorage.token)
+		})
 		
 		$transitions.onStart({}, ()=>{
 			$scope.collapsed = true
 		})
+		
 	}])
 
 	.controller('DashboardCtrl', ['$http','$log','$scope',function($http,$log,$scope){

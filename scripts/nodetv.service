@@ -3,11 +3,11 @@ Description=NodeTV Media Library Manager
 After=syslog.target network.target
 
 [Service]
-ExecStart=/usr/bin/node /opt/nodetv/server.js
+ExecStart=/usr/bin/node /opt/nutv/server.js
 Restart=always
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=nodetv
+SyslogIdentifier=nutv
 Type=simple
 User=media
 Group=media

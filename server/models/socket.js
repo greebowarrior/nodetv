@@ -4,8 +4,9 @@ const mongoose = require('mongoose')
 
 const socketSchema = mongoose.Schema({
 	id: String,
-	heartbeat: {type:Date,expires:600},
-	user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+	heartbeat: {type: Date, default: new Date(), expires: 600},
+	user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+	created: {type: Date, default: new Date()}
 })
 
 socketSchema.statics.findByUser = function(user){
@@ -13,5 +14,8 @@ socketSchema.statics.findByUser = function(user){
 		user: mongoose.Types.ObjectId(user._id)
 	})
 }
+socketSchema.statics.findBySocket = function(socket){
+	return this.findOne({id:socket})
+}
 
-module.exports = mongoose.model('Show', socketSchema)
+module.exports = mongoose.model('Socket', socketSchema)
