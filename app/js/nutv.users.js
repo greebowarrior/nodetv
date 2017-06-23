@@ -28,7 +28,6 @@ angular.module('nutv.users', ['nutv.core'])
 		}
 		return new Users()
 	}])
-	
 	.config(['$stateProvider',($stateProvider)=>{
 		$stateProvider
 			.state('users', {
@@ -48,6 +47,16 @@ angular.module('nutv.users', ['nutv.core'])
 				component: 'users',
 				resolve: {
 					users: (userService)=>userService.list()
+				}
+			})
+			.state('users.profile', {
+				url: '/me',
+				component: 'user',
+				resolve: {
+					user: ($stateParams,userService)=>userService.get('me')
+				},
+				breadcrumb: {
+					title: 'Me'
 				}
 			})
 			.state('users.user', {
@@ -107,32 +116,47 @@ angular.module('nutv.users', ['nutv.core'])
 	
 	.component('traktAuth', {
 		templateUrl: '/views/auth/trakt.html',
-		controller: ['$http','$socket','alertService',function($http,$socket,alertService){
+		bindings: {
+			user: '='
+		},
+		controller: ['$http','$socket','$timeout','alertService',function($http,$socket,$timeout,alertService){
 			this.disconnect = ()=>{
 				alertService.confirm({
 					title: 'Disconnect Trakt.tv?',
 					type: 'Question',
 					msg: 'Are you sure you want to disconnect from Trakt.tv?'
-				}).then(()=>{
-					$http.delete('/api/trakt/auth')
-					.then(()=>{
-						this.trakt = undefined
-					})
+				})
+				.then(()=>{
+					return $http.delete('/api/trakt/auth', {params:{id:this.user._id}})
+				})
+				.then(()=>{
+					this.user.profile = undefined
+					this.connect()
+				})
+				.catch(error=>{
+					console.error(error)
 				})
 			}
 			
 			// TODO: stop listening on statechange start
-			$socket.on('trakt.connected', (status)=>{
-				this.trakt.connected = status
-				if (!status) this.connect()
+			$socket.on('trakt.connected', (profile)=>{
+				if (profile) this.user.profile = profile
+				if (!profile) this.connect()
 			})
 			
 			this.connect = ()=>{
-				$http.get('/api/trakt/auth')
+				$http.post('/api/trakt/auth', {id:this.user._id})
 					.then(res=>{
-						this.trakt = res.data
+						if (res.data.username) {
+							this.user.profile = res.data
+						} else {
+							this.trakt = res.data
+						}
 					})
 			}
-			this.connect()
+			
+			$timeout(()=>{
+				this.connect()
+			},0)
 		}]
 	})

@@ -12,104 +12,82 @@ const TraktAPI = (app,io)=>{
 	
 	router.route('/auth')
 		.delete((req,res)=>{
-			User.findById(req.user._id)
+			User.findById(req.query.id)
 				.then(user=>{
 					user.trakt = undefined
-					return user.save()
+					user.profile = undefined
+					return user.save({new:true})
 				})
-				.then(()=>{
+				.then(user=>{
+					Socket.findByUser(user)
+						.then(sockets=>{
+							sockets.forEach(socket=>{
+								io.to(socket.id).emit('trakt.connected', false)
+							})
+						})
 					res.status(204).end()
 				})
 				.catch(error=>{
 					res.status(400).send({error:error})
 				})
 		})
-		.get((req,res)=>{
-			if (req.user.trakt){
-				res.send({connected:true})
-			} else {
-				helpers.trakt().get_codes()
-					.then(poll=>{
-						res.send({
-							connected: false,
-							expires_in: poll.expires_in,
-							user_code: poll.user_code,
-							verification_url: poll.verification_url
-						})
-						return helpers.trakt().poll_access(poll)
-					})
-					.then(result=>{
-						let expires = new Date()
-						expires.setSeconds(expires.getSeconds()+result.expires_in)
-						result.expires = expires
-						
-						return User.findById(req.user._id)
-							.then(user=>{
-								user.trakt = {
-									access_token: result.access_token,
-									expires: result.expires,
-									refresh_token: result.refresh_token
-								}
-								return user.save()
-							})
-					})
-					.then(user=>{
-						return Socket.findByUser(user)
-						/*
-						io.to(req.cookies.io).emit('alert', {
-							type:'success',
-							msg:`Trakt Authentication complete`
-						})
-						*/
-					})
-					.then(sockets=>{
-						if (!sockets) throw new Error(`No sockets found`)
-						sockets.forEach(socket=>{
-							io.to(socket.id).emit('trakt.connected', true)
-						})
-					})
-					.catch(error=>{
-						console.error(error.message)
-						io.to(socket.id).emit('trakt.connected', false)
-					})
-			}
-		})
-		
-		/*
 		.post((req,res)=>{
-			User.findById(req.user._id,{password:false,tokens:false,trakt:false})
+			User.findById(req.body.id)
 				.then(user=>{
-					return req.trakt.exchange_code(req.body.pin)
-						.then(()=>{
-							let result = req.trakt.export_token() 
+					if (user.trakt.access_token) return res.send(user.profile)
+
+					return helpers.trakt().get_codes()
+						.then(poll=>{
+							res.send({
+								expires_in: poll.expires_in,
+								user_code: poll.user_code,
+								verification_url: poll.verification_url
+							})
+							return helpers.trakt().poll_access(poll)
+						})
+						.then(result=>{
+							let expires = new Date()
+							expires.setSeconds(expires.getSeconds()+result.expires_in)
+							result.expires = expires
+							
 							user.trakt = {
 								access_token: result.access_token,
-								expires: new Date(result.expires),
+								expires: result.expires,
 								refresh_token: result.refresh_token
 							}
-							return user
-						})
-						.then(()=>{
-							return req.trakt.users.settings({username:''})
+							
+							return helpers.trakt(user).users.settings()
 						})
 						.then(settings=>{
+							console.log(settings)
 							user.profile = settings.user
-							return user.save()
+							
+							return user.save({new:true})
 						})
 				})
 				.then(user=>{
-					res.send(user)
+					return Socket.findByUser(user)
+						.then(sockets=>{
+							sockets.forEach(socket=>{
+								io.to(socket.id).emit('trakt.connected', user.profile)
+							})
+						})
 				})
 				.catch(error=>{
-					console.error(error)
-					res.status(400).send({error:error})
+					console.error(error.message)
+					
+					Socket.findByUser(req.user)
+						.then(sockets=>{
+							sockets.forEach(socket=>{
+								io.to(socket.id).emit('trakt.connected', false)
+							})
+						})
 				})
 		})
-		*/
-	
-	
+		
 	router.route('/profile')
 		.get((req,res)=>{
+			/*
 			req.trakt.users.settings({username:''})
 				.then(settings=>{
 					return User.findById(req.user._id,{password:false,tokens:false,trakt:false})
@@ -124,6 +102,8 @@ const TraktAPI = (app,io)=>{
 				.catch(error=>{
 					res.status(400).send({error:error})
 				})
+			*/
+			res.send({})
 		})
 	
 	router.route('/search/:type')

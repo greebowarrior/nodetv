@@ -13,9 +13,13 @@ passport.serializeUser((user,done)=>{
 })
 
 passport.deserializeUser((id,done)=>{
-	User.findById(id, (error, user)=>{
-		done(error, user)
-	})
+	User.findById(id)
+		.then(user=>{
+			done(null, user)
+		})
+		.catch(error=>{
+			done(error, false)
+		})
 })
 
 passport.use('local', new LocalStrategy((username,password,done)=>{

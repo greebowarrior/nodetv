@@ -1,9 +1,16 @@
 <div class="ng-cloak">
-	<div ng-show="$ctrl.trakt && $ctrl.trakt.connected">
-		<img src="/static/gfx/logo-trakt.png" style="max-width:40px;" />
-		Trakt.tv Connected - <a href="#" ng-click="$ctrl.disconnect()">Disconnect</a>
+	<div ng-show="$ctrl.user.profile.username">
+		<div class="row">
+			<div class="col-sm-12">
+				<img src="/static/gfx/logo-trakt.png" style="max-width:40px;" />
+				Trakt.tv user:
+				<a ng-href="http://trakt.tv/users/{{$ctrl.user.profile.username}}" target="_blank">{{$ctrl.user.profile.username}}</a>
+				<button class="btn btn-danger pull-right" href="#" ng-click="$ctrl.disconnect()"><span class="fa fa-close"></span></button>
+			</div>
+		</div>
+		
 	</div>
-	<div ng-show="$ctrl.trakt && !$ctrl.trakt.connected">
+	<div ng-show="!$ctrl.user.profile.username">
 		<img src="/static/gfx/logo-trakt.png" style="max-width:40px;" />
 		Device Code: <strong>{{$ctrl.trakt.user_code}}</strong> -
 		<a href="{{$ctrl.trakt.verification_url}}" target="_blank">Authorise</a>

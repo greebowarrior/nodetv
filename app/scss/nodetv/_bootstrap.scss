@@ -27,6 +27,7 @@
 	justify-content: flex-start;
 	flex-wrap: wrap;
 	
+//	>[class*="col-sm"],>[class*="col-md"],>[class*="col-lg"]{
 	>[class*="col-"]{
 		display: block;
 		float: none;
