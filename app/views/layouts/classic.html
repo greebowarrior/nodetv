@@ -18,6 +18,7 @@
 	<link rel="manifest" href="/static/manifest.json" />
 	
 	<title>NodeTV</title>
+	
 	<base href="/" />
 </head>
 
@@ -38,8 +39,11 @@
 			<nav class="collapse navbar-collapse ng-cloak" uib-collapse="collapsed">
 				<ul class="nav navbar-nav navbar-left" ng-show="authenticated">
 					<li ui-sref-active="{active:'shows'}"><a ui-sref="shows.index"><span class="fa fa-tv"></span> Shows</a></li>
+					<li ui-sref-active="{active:'movies'}"><a ui-sref="movies.index"><span class="fa fa-film"></span> Movies</a></li>
+					
+					<li ui-sref-active="{active:'settings'}"><a ui-sref="system.settings"><span class="fa fa-cogs"></span> Settings</a></li>
 					<li ui-sref-active="{active:'users'}"><a ui-sref="users.list"><span class="fa fa-users"></span> Users</a></li>
-<!-- 				<li ui-sref-active="active"><a ui-sref="movies"><span class="fa fa-film"></span> Movies</a></li> -->
+					
 				</ul>
 				<ul class="nav navbar-nav navbar-right ng-cloak" ng-show="authenticated">
 					<li uib-dropdown is-open="!collapsed">

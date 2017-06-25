@@ -2,11 +2,11 @@
 	<div class="col-sm-12">
 		<h4 uib-dropdown>
 			<span uib-dropdown-toggle>
-				<span class="highlight">Episode {{$ctrl.episode.episode|zeroFill:2}}</span> - {{$ctrl.episode.title}} <span class="caret"></span>
+				<span class="highlight">Episode {{$ctrl.episode.episode|zeroFill:2}}</span> - {{$ctrl.episode.title}}
+				<span class="caret"></span>
 			</span>
 			<ul class="dropdown-menu" uib-dropdown-menu>
-				<li ng-show="$ctrl.episode.hashes.length"><a href="#">Download SD</a></li>
-				<li ng-show="$ctrl.episode.hashes.length"><a href="#">Download HD</a></li>
+				<li ng-show="$ctrl.episode.hashes.length"><a ng-click="$ctrl.download()">Download</a></li>
 				<li ng-show="$ctrl.episode.hashes.length" role="separator" class="divider"></li>
 				<li><a href="#" ng-click="$ctrl.watched()">Mark as Watched</a></li>
 			</ul>
@@ -18,7 +18,7 @@
 	<div class="col-sm-12">
 		<ul class="result-details">
 			<li>Broadcast: {{$ctrl.episode.first_aired|date:'d MMMM yyyy, HH:mm'}}</li>
-			<li>Downloaded: {{$ctrl.episode.file.added|date:'d MMMM yyyy, HH:mm'}}</li>
+			<li ng-show="$ctrl.episode.file.added">Downloaded: {{$ctrl.episode.file.added|date:'d MMMM yyyy, HH:mm'}}</li>
 		</ul>
 	</div>
 </div>

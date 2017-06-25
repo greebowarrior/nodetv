@@ -5,7 +5,7 @@ const router = require('express').Router()
 
 const UsersAPI = app=>{
 	console.debug('API loaded: Users')
-	app.use('/api/users/', router)
+	app.use('/users/', router)
 	
 	// Add ACL Middleware
 	

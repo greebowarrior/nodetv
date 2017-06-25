@@ -4,7 +4,7 @@ const secret = 'Customer-Service-Immolation-Incident'
 
 const MongoStore = require('connect-mongo')(require('express-session'))
 
-const App = function(app,io){
+const App = function(app){
 	
 	// Express Setup
 	app.use(require('body-parser').json({limit:'25mb'}))
@@ -47,8 +47,10 @@ const App = function(app,io){
 	})
 	
 	app.use(session)
+	/*
 	io.use(require('express-socket.io-session')(session, {
 		autoSave: true
 	}))
+	*/
 }
 module.exports = App

@@ -8,7 +8,7 @@ const User = require(require('path').join(process.env.MODELS,'user'))
 
 const TraktAPI = (app,io)=>{
 	console.debug('API loaded: Trakt')
-	app.use('/api/trakt', router)
+	app.use('/trakt', router)
 	
 	router.route('/auth')
 		.delete((req,res)=>{

@@ -2,5 +2,5 @@
 	<h6>Season {{$ctrl.season.season}}</h6>
 	<p>{{$ctrl.season.overview}}</p>
 	<hr />
-	<nutv-show-episode ng-repeat="episode in $ctrl.episodes" episode="episode"></nutv-show-episode>
+	<nutv-show-episode ng-repeat="episode in $ctrl.episodes" episode="episode" show="$ctrl.show"></nutv-show-episode>
 </div>

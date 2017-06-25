@@ -35,7 +35,10 @@ angular.module('nutv.shows', ['nutv.core'])
 			return $http.get(`/api/shows/${slug}/seasons/${season}/episodes`)
 				.then(res=>res.data)
 		}
-		
+		Shows.prototype.episodes = function(slug,season){
+			return $http.get(`/api/shows/${slug}/seasons/${season}/episodes`)
+				.then(res=>res.data)
+		}
 		
 		return new Shows()
 	}])
@@ -74,7 +77,8 @@ angular.module('nutv.shows', ['nutv.core'])
 				component: 'nutvShowSeason',
 				resolve: {
 					episodes: ($stateParams,showService)=>showService.episodes($stateParams.slug,$stateParams.season),
-					season: ($stateParams,showService)=>showService.season($stateParams.slug,$stateParams.season)
+					season: ($stateParams,showService)=>showService.season($stateParams.slug,$stateParams.season),
+					show: ($stateParams,showService)=>showService.get($stateParams.slug)
 				}
 			})
 	}])
@@ -121,121 +125,43 @@ angular.module('nutv.shows', ['nutv.core'])
 					$http.post(`/api/shows/${this.show.ids.slug}/scan`)
 				})
 			}
+			
+			this.sync = ()=>{
+				alertService.confirm({
+					title: 'Sync show data',
+					type: 'Question',
+					msg: 'Are you sure? This may take a while.'
+				}).then(()=>{
+					$http.post(`/api/shows/${this.show.ids.slug}/sync`)
+				})
+			}
 		}]
 	})
 	
 	.component('nutvShowSeason', {
 		bindings: {
-			episodes: '=',
-			season: '='
+			episodes: '<',
+			season: '<',
+			show: '<'
 		},
-		templateUrl: '/views/show/season.html',
-		controller: [function(){
-			/*
-			$http.get(`/api/shows/${$stateParams.slug}/seasons/${$stateParams.season}`)
-			.then(season=>{
-				$scope.season = season.data
-				return $http.get(`/api/shows/${$stateParams.slug}/seasons/${$stateParams.season}/episodes`)
-			})
-			.then(episodes=>{
-				$scope.episodes = episodes.data
-			})
-			.catch(error=>{
-				if (error) $log.error(error)
-			})
-			*/
-		}]
+		templateUrl: '/views/show/season.html'
 	})
 	.component('nutvShowEpisode', {
-		bindings: {episode:'='},
+		bindings: {episode:'<',show:'<'},
 		templateUrl: '/views/show/episode.html',
-		controller: ['$http','$log',function($http,$log){
+		controller: ['$http','$log','alertService',function($http,$log,alertService){
 			this.download = ()=>{
-				$log.debug('download episode')
+				$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/download`)
+					.then(()=>{
+						$log.debug('derp')
+						alertService.alert({
+							title: 'Download started',
+							type: 'success'
+						})
+					})
 			}
 			this.watched = ()=>{
 				$log.debug('set watched')
 			}
 		}]
 	})
-
-	
-	
-	
-	
-	/*
-	.controller('ShowCtrl', ['$http','$log','$scope','$state','$stateParams','alertService',function($http,$log,$scope,$state,$stateParams,alertService){
-		$scope.show = {}
-		$scope.images = []
-		
-		$scope.save = ()=>{
-			$http.patch(`/api/shows/${$scope.show.ids.slug}`, {config:$scope.show.config})
-				.then(()=>{
-					alertService.notify({type:'success',msg:`Show updated: '${$scope.show.title}'`})
-				})
-				.catch(error=>{
-					alertService.notify({type:'danger',msg:`Unable to update '${$scope.show.title}'`})
-					$log.error(error)
-				})
-		}
-		
-		$scope.match = ()=>{
-			$http.get(`/api/shows/${$stateParams.slug}/match`)
-				.then(res=>{
-					this.config.directory = res.data.directory
-				})
-				.catch(error=>{
-					$log.error(error)
-				})
-		}
-		
-		$scope.getArtwork = ()=>{
-			$http.get(`/api/shows/${$stateParams.slug}/artwork`)
-				.then(response=>{
-					$scope.images = response.data
-				})
-				.catch(error=>{
-					if (error) $log.error(error)
-				})
-		}
-		
-		if ($stateParams.slug){
-			$http.get(`/api/shows/${$stateParams.slug}`)
-				.then(response=>{
-					$scope.show = response.data
-				//	crumbService.current({title:response.data.title})
-					
-					if (!$scope.show.config.feed.length) $scope.show.config.feed.push({url:''})
-				})
-				.catch(error=>{
-					if (error) $log.error(error.message)
-				})
-		}
-		
-		$scope.setArtwork = (type)=>{
-			$http.post(`/api/shows/${$stateParams.slug}/artwork/${type}`)
-				.then(()=>{
-					alertService.notify({type:'success',msg:`${$scope.show.title} updated`})
-				})
-				.catch(()=>{
-					alertService.notify({type:'danger',msg:`${$scope.show.title} was not updated`})
-				})
-		}
-		
-	}])
-	.controller('SeasonCtrl', ['$http','$log','$scope','$stateParams',function($http,$log,$scope,$stateParams){
-		$scope.season = {}
-		
-		$http.get(`/api/shows/${$stateParams.slug}/seasons/${$stateParams.season}`)
-			.then(season=>{
-				$scope.season = season.data
-				return $http.get(`/api/shows/${$stateParams.slug}/seasons/${$stateParams.season}/episodes`)
-			})
-			.then(episodes=>{
-				$scope.episodes = episodes.data
-			})
-			.catch(error=>{
-				if (error) $log.error(error)
-			})
-	}])
-	*/

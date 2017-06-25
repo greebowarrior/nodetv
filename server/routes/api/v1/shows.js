@@ -1,13 +1,14 @@
 "use strict"
 
 const Show = require(require('path').join(process.env.MODELS,'show'))
+const Socket = require(require('path').join(process.env.MODELS,'socket'))
 
 const router = require('express').Router()
 const helpers = require('nodetv-helpers')
 
 const ShowsAPI = (app,io)=>{
 	console.debug('API loaded: Shows')
-	app.use('/api/shows', router)
+	app.use('/shows', router)
 		
 	router.route('/')
 		.get((req,res)=>{
@@ -96,7 +97,7 @@ const ShowsAPI = (app,io)=>{
 					})
 				})
 				.then(show=>{
-					return show.unsubscribe(req.user._id).save()
+					return show.unsubscribe(req.user._id).save({new:true})
 				})
 				.then(show=>{
 					return show.save()
@@ -190,7 +191,9 @@ const ShowsAPI = (app,io)=>{
 		.post((req,res)=>{
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
+					
 					io.sockets.emit('notify', {type:'info',msg:`Rescan started: '${show.title}'`})
+					
 					show.scan().then(()=>{
 						io.sockets.emit('notify', {type:'info',msg:`Rescan complete: '${show.title}'`})
 					})
@@ -204,6 +207,38 @@ const ShowsAPI = (app,io)=>{
 					res.status(400).send(error)
 				})
 		})
+
+	router.route('/:slug/sync')
+		.post((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					
+					res.status(202).status({message: 'Accepted'})
+					console.debug('Syncing show: %s', show.title)
+					return show.sync(req.user)
+						.then(()=>{
+							return show.save({new:true})
+						})
+				})
+				.then(show=>{
+					return Socket.findByUser(req.user)
+						.then(sockets=>{
+							sockets.forEach(socket=>{
+								io.to(socket.id).emit('alert', {
+									title: show.title,
+									type: 'success',
+									msg: 'Show data updated'
+								})
+							})
+						})
+				})
+				.catch(error=>{
+					console.error(error)
+					res.status(404).send({error: 'Not Found'})
+				})
+		})
+
 	
 	router.route('/:slug/seasons')
 		.get((req,res)=>{
@@ -356,17 +391,20 @@ const ShowsAPI = (app,io)=>{
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
 					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
-					let idx = show.episodes.findIndex(item=>{
-						return item.season == req.params.season && item.episode == req.params.episode
+					
+					let ids = []
+					show.episodes.forEach(item=>{
+						if (item.season == req.params.season && item.episode == req.params.episode) ids.push(item._id)
 					})
-					if (!idx) throw new Error(`Episode not found:`)
+					if (!ids.length) throw new Error(`Episode not found`)
 					
-					// Could be better...
-					
-					return this.episodes[idx].getMagnet()
-						.then(magnet=>helpers.torrents.add(magnet))
+					let episode = show.episodes.id(ids[0])
+					return episode.getMagnet()
+						.then(magnet=>{
+							return helpers.torrents.add(magnet)
+						})
 						.then(hash=>{
-							return this.episodes[idx].setDownloading(hash)
+							return episode.setDownloading(hash)
 						})
 						.then(()=>{
 							return show.save()

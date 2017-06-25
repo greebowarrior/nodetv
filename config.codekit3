@@ -666,41 +666,35 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/routes\/api\/latest.js~": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/server\/routes\/api\/latest.js~",
-		"oF": 0
-		},
 	"\/server\/routes\/api\/movies.js~": {
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/server\/routes\/api\/movies.js~",
 		"oF": 0
 		},
-	"\/server\/routes\/api\/shows.js": {
+	"\/server\/routes\/api\/v1\/shows.js": {
 		"ft": 64,
 		"mi": 0,
 		"oA": 1,
-		"oAP": "\/server\/routes\/api\/min\/shows-min.js",
+		"oAP": "\/server\/routes\/api\/v1\/min\/shows.min.js",
 		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/routes\/api\/trakt.js": {
+	"\/server\/routes\/api\/v1\/trakt.js": {
 		"ft": 64,
 		"mi": 0,
 		"oA": 1,
-		"oAP": "\/server\/routes\/api\/min\/trakt-min.js",
+		"oAP": "\/server\/routes\/api\/v1\/min\/trakt.min.js",
 		"oF": 1,
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/routes\/api\/users.js": {
+	"\/server\/routes\/api\/v1\/users.js": {
 		"ft": 64,
 		"mi": 0,
 		"oA": 1,
-		"oAP": "\/server\/routes\/api\/min\/users.min.js",
+		"oAP": "\/server\/routes\/api\/v1\/min\/users.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0

@@ -21,20 +21,27 @@
 - ~~Remove *completed* torrents if they've be copied into media directory~~
 - ~~Grid pagination~~
 - ~~Directory rescan~~
-- ~~Upgrade to use Trakt.tv [device auth](http://docs.trakt.apiary.io/#reference/authentication-devices)~~
+- ~~Upgrade to use Trakt.tv device auth~~
 - ~~Authenticated sockets~~
-- Manual download functions per episode
-- Manual show data update
-- R&D: Handle shows that now have less episodes in a season (i.e. Lucifer)
-	- Prune superfluous episode
-
-- Match existing folders to show
-	- Might be better to have some level of manual assignment?
 - ~~BUG! Ensure directories are created when adding a show~~
-
 
 # Phase 3
 
+- ~~Manual download option per episode~~
+- ~~Manual show data update~~
+
+## Setup & Installation update
+
+- Database: Use .env?
+- Guided setup page? Script?
+- Better config option than a global.config object?
+
+- Add URIs to returned documents?
+	- Enabled on Shows
+- R&D: Handle shows that now have less episodes in a season (i.e. Lucifer)
+	- How to prune superfluous episode
+- Match existing folders to show
+	- Might be better to have some level of manual assignment?
 - Rebuild DNS system
 - Add proxy support
 - Full Show Sync *from* trakt?
@@ -43,15 +50,15 @@
 	- Unsubscribe if show is removed, but keep files
 - Support multiple feeds per show (e.g. ShowRSS & TVShowsApp)
 	- Optional, but TVSA *does* have more data
-- Feed Parsing - seems to make things laggy
+- R&D: Feed Parsing - seems to make things laggy
 	- Use child_process?
-	
-
-
 
 # Phase 4
 
 - Ants!
+- User settings page improvements
+- User creation flow
+	- Would be nice to create a user & connect to trakt at the same time
 - The `Movies` Update
 	- Models
 	- API Endpoints

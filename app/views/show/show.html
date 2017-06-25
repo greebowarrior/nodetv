@@ -56,10 +56,21 @@
 		<uib-tab heading="Tools">
 			<div class="row">
 				<div class="col-sm-12">
-					<button class="btn btn-primary" ng-hide="$ctrl.show.config.directory" ng-click="$ctrl.match()">Match directory</button>
-					<button class="btn btn-warning" ng-show="$ctrl.show.config.directory" ng-click="$ctrl.rescan()">Rescan directory</button>
-<!-- 					<button class="btn btn-default">Download All</button> -->
-<!-- 					<button class="btn btn-danger" ng-click="$ctrl.remove()">Remove Show</button> -->
+					<!--<button class="btn btn-primary" ng-hide="$ctrl.show.config.directory" ng-click="$ctrl.match()">Match directory</button>-->
+					
+					<button class="btn btn-info" ng-click="$ctrl.sync()">
+						<span class="fa fa-refresh"></span> Sync show data
+					</button>
+					<button class="btn btn-primary">
+						<span class="fa fa-cloud-download"></span> Download all
+					</button>
+					<button class="btn btn-warning" ng-show="$ctrl.show.config.directory" ng-click="$ctrl.rescan()">
+						<span class="fa fa-hdd-o"></span> Rescan directory
+					</button>
+					<button class="btn btn-danger">
+						<span class="fa fa-trash-o"></span> Remove show
+					</button>
+					
 				</div>
 			</div>
 			
