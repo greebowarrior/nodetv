@@ -1,10 +1,10 @@
 "use strict"
 
-const Show = require(require('path').join(process.env.MODELS,'show'))
-const Socket = require(require('path').join(process.env.MODELS,'socket'))
-
-const router = require('express').Router()
 const helpers = require('nodetv-helpers')
+const router = require('express').Router()
+
+const Show = helpers.model('show')
+const Socket = helpers.model('socket')
 
 const ShowsAPI = (app,io)=>{
 	console.debug('API loaded: Shows')

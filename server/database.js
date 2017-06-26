@@ -3,16 +3,16 @@
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 
-const Database = config=>{
+const Database = ()=>{
 	
 	let conn = 'mongodb://'
 	
-	if (config.auth) conn += `${config.user}:${config.pass}@`
-	conn += `${config.host}:${config.port}/${config.name}`
+	if (process.env.DB_USER && process.env.DB_PASS) conn += `${process.env.DB_USER}:${process.env.DB_PASS}@`
+	conn += `${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
 	
 	mongoose.connect(conn)
 		.then(()=>{
-			console.info('Connected to MongoDB: %s', config.host)
+			console.info('Connected to MongoDB: %s:%d/%s', process.env.DB_HOST, process.env.DB_PORT, process.env.DB_NAME)
 		})
 		.catch(error=>{
 			console.error(error.message)
@@ -23,4 +23,4 @@ const Database = config=>{
 		process.exit(0)
 	})
 }
-module.exports = Database
+module.exports = Database()

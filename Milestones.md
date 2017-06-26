@@ -32,10 +32,11 @@
 
 ## Setup & Installation update
 
-- Database: Use .env?
-- Guided setup page? Script?
-- Better config option than a global.config object?
-
+- ~~Database: Use dotenv~~
+- Better config option than the global.config object?
+	- helper method?
+- Installation guide
+	- Guided setup page? Script?
 - Add URIs to returned documents?
 	- Enabled on Shows
 - R&D: Handle shows that now have less episodes in a season (i.e. Lucifer)

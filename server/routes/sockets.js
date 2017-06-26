@@ -1,7 +1,10 @@
 "use strict"
 
-const Socket = require(require('path').join(process.env.MODELS,'socket'))
-const User = require(require('path').join(process.env.MODELS,'user'))
+const helpers = require('nodetv-helpers')
+
+
+const Socket = helpers.model('socket')
+const User = helpers.model('user')
 
 module.exports = io=>{
 	io.on('connection', client=>{

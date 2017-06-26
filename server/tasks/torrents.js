@@ -2,7 +2,7 @@
 
 const helpers = require('nodetv-helpers')
 
-const Show = require(require('path').join(process.env.MODELS,'show'))
+const Show = helpers.model('show')
 
 require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 	console.debug('Checking for completed downloads')

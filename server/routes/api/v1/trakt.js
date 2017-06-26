@@ -1,10 +1,10 @@
 "use strict"
 
-const router = require('express').Router()
 const helpers = require('nodetv-helpers')
+const router = require('express').Router()
 
-const Socket = require(require('path').join(process.env.MODELS,'socket'))
-const User = require(require('path').join(process.env.MODELS,'user'))
+const Socket = helpers.model('socket')
+const User = helpers.model('user')
 
 const TraktAPI = (app,io)=>{
 	console.debug('API loaded: Trakt')

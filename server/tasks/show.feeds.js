@@ -1,7 +1,7 @@
 "use strict"
 
 const helpers = require('nodetv-helpers')
-const Show = require(require('path').join(process.env.MODELS, 'show'))
+const Show = helpers.model('show')
 
 // Runs at 10 past the hour
 

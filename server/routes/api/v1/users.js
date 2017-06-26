@@ -1,7 +1,9 @@
 "use strict"
 
-const User = require(require('path').join(process.env.MODELS,'user'))
+const helpers = require('nodetv-helpers')
 const router = require('express').Router()
+
+const User = helpers.model('user')
 
 const UsersAPI = app=>{
 	console.debug('API loaded: Users')

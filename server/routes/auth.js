@@ -1,12 +1,13 @@
 "use strict"
 
+const helpers = require('nodetv-helpers')
 const passport = require('passport')
 
 const LocalStrategy = require('passport-local').Strategy
 const TokenStrategy = require('passport-token').Strategy
 const TraktStrategy = require('passport-trakt').Strategy
 
-const User = require(require('path').join(process.env.MODELS,'user'))
+const User = helpers.model('user')
 
 passport.serializeUser((user,done)=>{
 	done(null, user._id)

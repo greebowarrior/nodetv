@@ -24,13 +24,13 @@ try {
 	console.error(e)
 }
 
-process.env.MODELS = path.join(__dirname, 'models')
+//const helpers = require('nodetv-helpers')
 
 /************************************************************************/
 console.info('NodeTV v%s - %s', nutv.version, process.env.NODE_ENV)
 
 // Initialise database
-require('./database')(global.config.database)
+require('./database')
 
 // Load scheduler
 require('./scheduler')
@@ -40,14 +40,13 @@ require('./scheduler')
 
 // Create Web Server
 const app = require('express')()
-app.set('port', process.env.PORT || global.config.server.port || 3001)
+app.set('port', process.env.PORT || 3001)
 
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 
 server.listen(app.get('port'), ()=>{
-	let port = app.get('port')
-	console.log(`Listening on port ${port}`)
+	console.log(`Listening on port ${app.get('port')}`)
 })
 
 // Configure Express
