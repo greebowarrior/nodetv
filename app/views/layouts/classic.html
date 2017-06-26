@@ -41,7 +41,9 @@
 					<li ui-sref-active="{active:'shows'}"><a ui-sref="shows.index"><span class="fa fa-tv"></span> Shows</a></li>
 					<li ui-sref-active="{active:'movies'}"><a ui-sref="movies.index"><span class="fa fa-film"></span> Movies</a></li>
 					
+					<!--
 					<li ui-sref-active="{active:'settings'}"><a ui-sref="system.settings"><span class="fa fa-cogs"></span> Settings</a></li>
+					-->
 					<li ui-sref-active="{active:'users'}"><a ui-sref="users.list"><span class="fa fa-users"></span> Users</a></li>
 					
 				</ul>
@@ -52,7 +54,6 @@
 						</a>
 						<ul class="dropdown-menu" uib-dropdown-menu>
 							<li><a ui-sref="users.profile"><span class="fa fa-user"></span> My Profile</a></li>
-							<li><a ui-sref="system.settings"><span class="fa fa-cog"></span> System Settings</a></li>
 							<li role="separator" class="divider"></li>
 							<li><a ui-sref="logout"><span class="fa fa-sign-out"></span> Logout</a></li>
 						</ul>
@@ -93,6 +94,7 @@
 	
 	<script src="/static/js/nutv.core.js?v=<%- nutv.version %>"></script>
 	<script src="/static/js/nutv.shows.js?v=<%- nutv.version %>"></script>
+	<script src="/static/js/nutv.movies.js?v=<%- nutv.version %>"></script>
 	<script src="/static/js/nutv.users.js?v=<%- nutv.version %>"></script>
 	
 	<script src="/static/js/components/artwork.js?v=<%- nutv.version %>"></script>

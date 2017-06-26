@@ -1,6 +1,6 @@
 {
   "name": "nutv",
-  "version": "1.0.0-alpha",
+  "version": "1.0.0-beta",
   "author": "Martin Purcell <martin.purcell@gmail.com>",
   "description": "NodeTV - TV Library Manager",
   "private": true,

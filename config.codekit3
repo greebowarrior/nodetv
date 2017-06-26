@@ -183,6 +183,15 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/app\/js\/nutv.movies.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/app\/js\/min\/nutv.movies.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/app\/js\/nutv.shows.js": {
 		"ft": 64,
 		"mi": 0,
@@ -347,12 +356,6 @@
 		"oAP": "\/app\/views\/dashboard\/index.html",
 		"oF": 0
 		},
-	"\/app\/views\/grid.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/app\/views\/grid.html",
-		"oF": 0
-		},
 	"\/app\/views\/home.html": {
 		"ft": 8192,
 		"oA": 1,
@@ -369,6 +372,18 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/layouts\/modern.html",
+		"oF": 0
+		},
+	"\/app\/views\/movie\/movie.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/movie\/movie.html",
+		"oF": 0
+		},
+	"\/app\/views\/movie\/search.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/movie\/search.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/add.html": {
@@ -546,6 +561,14 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/server\/config\/_example.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "\/server\/config\/_example-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"\/server\/config\/development.json": {
 		"ft": 524288,
 		"oA": 1,
@@ -666,11 +689,14 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/routes\/api\/movies.js~": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/server\/routes\/api\/movies.js~",
-		"oF": 0
+	"\/server\/routes\/api\/v1\/movies.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/routes\/api\/v1\/min\/movies.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		},
 	"\/server\/routes\/api\/v1\/shows.js": {
 		"ft": 64,

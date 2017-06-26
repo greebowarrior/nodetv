@@ -19,7 +19,7 @@ So, use it, or don't. I don't care. But if you do, there's a few things to be aw
 ## Requirements
 
 - Developed on: macOS 10.12
-- Tested on: Ubuntu Linux 16.4 LTS
+- Tested on: Ubuntu Linux 16.04 LTS
 
 It should work on any *nix-compatible system that can run NodeJS.
 Totally untested on Windows, but I can't think of any reason it wouldn't.

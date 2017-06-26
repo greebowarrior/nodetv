@@ -48,19 +48,15 @@ const UsersAPI = app=>{
 		})
 		.post((req,res)=>{
 			// Update me
-			User.findById(req.user._id)
+			User.findOneAndUpdate({id:req.user._id},{$set:req.body}, {new:true})
 				.then(user=>{
-					Object.assign(user, req.body)
-					return user.save()
-				})
-				.then(user=>{
-					res.send(user)
+					console.log(user)
+					res.status(201).end()
 				})
 				.catch(error=>{
 					console.error(error)
 					res.status(400).end()
 				})
-			res.send()
 		})
 	
 	router.route('/:id')
@@ -88,9 +84,10 @@ const UsersAPI = app=>{
 		})
 		.post((req,res)=>{
 			// Update user
-			
-			
-			res.send({})
+			User.findOneAndUpdate({_id:req.params.id}, {$set:req.body})
+				.then(()=>{
+					res.status(201).end()
+				})
 		})
 
 }

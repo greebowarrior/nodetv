@@ -1,0 +1,14 @@
+	<div class="col-sm-12">
+		<h4><span class="highlight">{{result.movie.title}}</span> ({{result.movie.year}})</h4>
+	</div>
+	<div class="col-sm-10">
+		<h5>{{result.movie.overview}}</h5>
+		<ul class="result-details">
+			<li ng-show="result.show.runtime">Runtime: {{result.movie.runtime}}</li>
+			<li ng-show="result.show.genres.length">Genres: {{result.movie.genres.join(', ').replace('-',' ')}}</li>
+		</ul>
+	</div>
+	
+	<div class="col-sm-2 text-right">
+		<button class="btn btn-success" ng-click="$ctrl.add(result.movie)">Add movie</button>
+	</div>

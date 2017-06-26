@@ -1,0 +1,27 @@
+{
+	"transmission":{
+		"host":"127.0.0.1",
+		"port":"9091"
+	},
+	"proxy": {
+		"enabled": true,
+		"apikey": "[PROXYSPIDER_API_KEY]"
+	},
+	"trakt": {
+		"client_id": "[TRAKT_CLIENT_ID]",
+		"client_secret": "[TRAKT_CLIENT_SECRET]",
+		"redirect_uri": "urn:ietf:wg:oauth:2.0:oob"
+	},
+	"guidebox":{
+		"apikey": "[GUIDEBOX_API_KEY]"
+	},
+	"media": {
+		"base": "/path/to/media/dir",
+		"shows": {
+			"path": "TV Shows"
+		},
+		"movies": {
+			"path": "Movies"
+		}
+	}
+}

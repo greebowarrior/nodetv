@@ -175,7 +175,6 @@ episodeSchema.methods.getMagnet = function(){
 			if (a.added > b.added || a.repack == true) return -1
 			return 0
 		})
-		
 		helpers.torrents.createMagnet(hashes[0].btih).then(magnet=>resolve(magnet))
 	})
 }
