@@ -1,0 +1,38 @@
+<header class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" ng-click="$ctrl.collapsed=!$ctrl.collapsed">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="fa fa-bars"></span>
+			</button>
+			<a class="navbar-brand" ui-sref="dashboard.home">
+				NodeTV
+			</a>
+		</div>
+		
+		<nav class="collapse navbar-collapse ng-cloak" uib-collapse="$ctrl.collapsed">
+			<ul class="nav navbar-nav navbar-left" ng-show="$ctrl.authenticated">
+				<li ui-sref-active="{active:'shows'}"><a ui-sref="shows.index"><span class="fa fa-tv"></span> Shows</a></li>
+				<li ui-sref-active="{active:'movies'}"><a ui-sref="movies.index"><span class="fa fa-film"></span> Movies</a></li>
+				
+				<!--
+				<li ui-sref-active="{active:'settings'}"><a ui-sref="system.settings"><span class="fa fa-cogs"></span> Settings</a></li>
+				-->
+				<li ui-sref-active="{active:'users'}"><a ui-sref="users.list"><span class="fa fa-users"></span> Users</a></li>
+				
+			</ul>
+			<ul class="nav navbar-nav navbar-right ng-cloak" ng-show="$ctrl.authenticated">
+				<li uib-dropdown is-open="!$ctrl.collapsed">
+					<a class="dropdown-toggle" uib-dropdown-toggle>
+						<span class="fa fa-bars"></span>
+					</a>
+					<ul class="dropdown-menu" uib-dropdown-menu>
+						<li><a ui-sref="users.profile"><span class="fa fa-user"></span> My Profile</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a ui-sref="logout"><span class="fa fa-sign-out"></span> Logout</a></li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</header>

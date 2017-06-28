@@ -1,5 +1,7 @@
 "use strict"
 
+// Keep all the auth mechanisms in one place
+
 const helpers = require('nodetv-helpers')
 const passport = require('passport')
 
@@ -12,7 +14,6 @@ const User = helpers.model('user')
 passport.serializeUser((user,done)=>{
 	done(null, user._id)
 })
-
 passport.deserializeUser((id,done)=>{
 	User.findById(id)
 		.then(user=>{
@@ -51,9 +52,14 @@ passport.use('trakt', new TraktStrategy(
 		callbackURL: global.config.trakt.redirect_uri
 	},
 	(accessToken, refreshToken, params, profile, done)=>{
-		User.findOne({'trakt.id': profile.id}, (error, user)=>{
-			return done(error, user)
-		})
+		User.findOne({'trakt.id': profile.id})
+			.then(user=>{
+				if (!user) throw new Error('Invalid user')
+				done(null, user)
+			})
+			.catch(error=>{
+				done(error, false)
+			})
 	}
 ))
 
@@ -90,6 +96,8 @@ const Auth = app=>{
 				User.findById(req.user._id)
 					.then(user=>{
 						let token = user.apiToken()
+						res.header('X-Username', user.username)
+						res.header('X-Token', token)
 						res.send({username:user.username,token:token})
 					})
 					.catch(()=>{
@@ -103,7 +111,7 @@ const Auth = app=>{
 	app.route('/auth/logout')
 		.all((req,res)=>{
 			req.logout()
-			res.status(200).end()
+			res.status(200).send({success:true})
 		})
 		
 	app.route('/auth/token')

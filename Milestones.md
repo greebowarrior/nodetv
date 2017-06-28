@@ -1,4 +1,4 @@
-# Phase 1
+# Phase 1 - Alpha
 
 - ~~Authentication~~
 - ~~Database design~~
@@ -25,14 +25,23 @@
 - ~~Authenticated sockets~~
 - ~~BUG! Ensure directories are created when adding a show~~
 
-# Phase 3
+# Phase 3 - Beta
 
 - ~~Manual download option per episode~~
 - ~~Manual show data update~~
-
-## Setup & Installation update
-
 - ~~Database: Use dotenv~~
+- ~~When adding a show or movie, add it to the trakt watchlist~~
+- ~~Remove show: Unsubscribe, and remove from Trakt collection~~
+- ~~Rebuild DNS system~~
+
+- Add proxy support
+
+- Full Show Sync *from* trakt?
+	- ~~Fetch shows & create directories~~
+	- Synchronise watch history
+
+- Watch progress
+
 - Better config option than the global.config object?
 	- helper method?
 - Installation guide
@@ -40,15 +49,11 @@
 - Add URIs to returned documents?
 	- Enabled on Shows
 - R&D: Handle shows that now have less episodes in a season (i.e. Lucifer)
-	- How to prune superfluous episode
-- Match existing folders to show
-	- Might be better to have some level of manual assignment?
-- Rebuild DNS system
-- Add proxy support
-- Full Show Sync *from* trakt?
-	- Use this to populate collections automatically?
+	- How to prune superfluous episodes?
+
+
 - Scheduled History Sync with Trakt?
-	- Unsubscribe if show is removed, but keep files
+	- Hourly, only get changes since x?
 - Support multiple feeds per show (e.g. ShowRSS & TVShowsApp)
 	- Optional, but TVSA *does* have more data
 - R&D: Feed Parsing - seems to make things laggy
@@ -59,9 +64,9 @@
 - Ants!
 - User settings page improvements
 - User creation flow
-	- Would be nice to create a user & connect to trakt at the same time
+	- Would be nice to create a user & connect to Trakt at the same time
 - The `Movies` Update
-	- Models
+	- ~~Model~~
 	- API Endpoints
 	- Tasks
 - Re-implement YTS API (use proxy)

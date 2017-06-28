@@ -1,6 +1,12 @@
 "use strict"
 
-const UI = function(app,io){
+const UI = (app,io)=>{
+
+	app.route('*')
+		.all((req,res,next)=>{
+			if (req.user) res.locals.user = req.user
+			next()
+		})
 	
 	// Load UI modules
 	require('fs-extra').readdir(require('path').join(__dirname,'ui'))
@@ -14,7 +20,7 @@ const UI = function(app,io){
 			})
 		})
 		.finally(()=>{
-			// Get media files (Better to use an nginx location)
+			// Get media files (It's better to use nginx for this)
 			app.route(/^\/media\/(?:shows|movies)\/(.+)/)
 				.get((req,res)=>{
 					new Promise((resolve,reject)=>{
@@ -34,14 +40,14 @@ const UI = function(app,io){
 					})
 				})
 			
+			// Render views
 			app.route('/views/*')
 				.get((req,res)=>{
 					let template = require('path').join(process.cwd(),'app', req.url)
-					
 					res.render(template, {layout:false}, (error,html)=>{
 						if (error){
 							console.error(error)
-							res.sendStatus(404)
+							return res.sendStatus(404).end()
 						}
 						if (html) res.send(html)
 					})
@@ -49,7 +55,7 @@ const UI = function(app,io){
 			
 			// Send the dashboard by default
 			app.use((req,res)=>{
-				res.render(require('path').join(process.cwd(),'app','views','dashboard','index.html'))
+				res.render('dashboard/index.html')
 			})
 		})
 }

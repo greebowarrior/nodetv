@@ -22,8 +22,8 @@ angular.module('nutv.users', ['nutv.core'])
 			return $http.get(this.api)
 				.then(res=>res.data)
 		}
-		Users.prototype.update = function(id){
-			return $http.post(`${this.api}/${id}`)
+		Users.prototype.update = function(user){
+			return $http.post(`${this.api}/${user._id}`, user)
 				.then(res=>res.data)
 		}
 		return new Users()
@@ -83,7 +83,7 @@ angular.module('nutv.users', ['nutv.core'])
 		bindings: {
 			user: '='
 		},
-		controller: ['$log','$state','alertService','userService',function($log,$state,alertService,userService){
+		controller: ['$http','$log','$state','alertService','userService',function($http,$log,$state,alertService,userService){
 			this.delete = ()=>{
 				
 				alertService.confirm({
@@ -103,12 +103,34 @@ angular.module('nutv.users', ['nutv.core'])
 					}
 				})
 			}
+
+			this.sync = ()=>{
+				alertService.confirm({
+					title: 'Are you sure?',
+					msg: 'Sync all shows from Trakt.tv? This may take a while',
+					type: 'Question'
+				}).then(confirmed=>{
+					if (confirmed){
+						$http.post(`/api/users/${this.user._id}/sync`)
+							.then(()=>{
+								alertService.notify({type:'info',msg:`Sync in progress`})
+							})
+						/*
+						userService.delete(this.user._id)
+							.then(()=>{
+								alertService.alert({type:'success',title:`User '${this.user.username}' deleted`})
+								$state.go('^.list')
+							})
+						*/
+					}
+				})
+			}
 			
 			this.save = ()=>{
-				userService.update(this.user._id)
+				userService.update(this.user)
 					.then(()=>{
 						alertService.notify({type:'success',msg:`User '${this.user.username}' updated`})
-						$state.go('^.list')
+						//$state.go('^.list')
 					})
 			}
 		}]

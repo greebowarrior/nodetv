@@ -344,6 +344,12 @@
 		"oAP": "\/app\/views\/components\/grid.html",
 		"oF": 0
 		},
+	"\/app\/views\/components\/navigation.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/navigation.html",
+		"oF": 0
+		},
 	"\/app\/views\/components\/search.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -355,12 +361,6 @@
 		"oA": 2,
 		"oAP": "\/app\/views\/dashboard\/index.html",
 		"oF": 0
-		},
-	"\/app\/views\/home.html": {
-		"ft": 8192,
-		"oA": 1,
-		"oAP": "\/app\/views\/home.html",
-		"oF": 1
 		},
 	"\/app\/views\/layouts\/classic.html": {
 		"ft": 8192,
@@ -735,8 +735,8 @@
 		"ft": 64,
 		"mi": 0,
 		"oA": 1,
-		"oAP": "\/server\/routes\/min\/auth-min.js",
-		"oF": 1,
+		"oAP": "\/server\/routes\/min\/auth.min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},

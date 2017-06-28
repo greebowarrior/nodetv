@@ -1,6 +1,6 @@
 "use strict"
 
-angular.module('nutv', ['nutv.core','nutv.shows','nutv.users'])
+angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	
 	.config(['$stateProvider','$urlRouterProvider',($stateProvider,$urlRouterProvider)=>{
 		$urlRouterProvider.when('/', $state=>{
@@ -26,8 +26,7 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.users'])
 			})
 			.state('dashboard.home', {
 				url: '/',
-				controller: 'DashboardCtrl',
-				templateUrl: 'views/dashboard/index.html'
+				component: 'nutvDashboard'
 			})
 	}])
 	
@@ -70,16 +69,73 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.users'])
 		}]
 	})
 	
-	
-	
 	.component('nutvNavigation', {
 		templateUrl: '/views/components/navigation.html',
-		controller: ['$localStorage','$socket','$transitions',function($localStorage,$socket,$transitions){
+		controller: ['$localStorage','$log','$socket','$rootScope','$transitions',function($localStorage,$log,$socket,$rootScope,$transitions){
 			this.authenticated - false
 			this.collapsed = true
+			
 			$transitions.onStart({}, ()=>{
 				this.collapsed = true
 			})
+			
+			$socket.on('error',error=>{
+				$log.error(error)
+			})
+			$socket.on('connect', ()=>{
+				if ($localStorage.token) $socket.emit('authenticate', $localStorage.token)
+			})
+			
+			$rootScope.$watch(()=>$localStorage.token, (current)=>{
+				this.authenticated = current && current.token ? true : false
+			
+				$socket.emit('authenticate', $localStorage.token, ()=>{
+					console.debug('Socket authenticated')
+				})
+			}, true)
+		}]
+	})
+
+	.component('nutvDashboard', {
+		templateUrl: '/views/dashboard/index.html',
+		controller: ['$http',function($http){
+			
+			this.episodes = {
+				recent: [], upcoming: []
+			}
+			this.count = {
+				recent: null, upcoming: null
+			}
+			
+			/*
+			$http.get('/api/shows/ondeck')
+				.then(res=>{
+					this.deck = res.data.shows
+				})
+			*/
+			$http.get('/api/shows/latest')
+				.then(response=>{
+					this.episodes.recent = response.data
+					this.episodes.recent.forEach(show=>{
+						this.count.recent += show.episodes.length
+					})
+				})
+				.catch(()=>{
+				//	$log.error(error.message)
+				})
+			
+			$http.get('/api/shows/upcoming')
+				.then(response=>{
+					this.episodes.upcoming = response.data
+					this.episodes.upcoming.forEach(show=>{
+						this.count.upcoming += show.episodes.length
+					})
+				})
+				.catch(()=>{
+				//	$log.error(error.message)
+				})
+
+			
 		}]
 	})
 	
@@ -109,63 +165,4 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.users'])
 		})
 		
 	}])
-
-	.controller('DashboardCtrl', ['$http','$log','$scope',function($http,$log,$scope){
-		$scope.episodes = {
-			latest: [],
-			upcoming: []
-		}
-		$scope.count = {
-			recent: null,
-			upcoming: null
-		}
-		
-		$http.get('/api/shows/latest')
-			.then(response=>{
-				$scope.episodes.latest = response.data
-				$scope.episodes.latest.forEach(show=>{
-					$scope.count.recent += show.episodes.length
-				})
-			})
-			.catch(()=>{
-			//	$log.error(error.message)
-			})
-			
-		$http.get('/api/shows/upcoming')
-			.then(response=>{
-				$scope.episodes.upcoming = response.data
-				$scope.episodes.upcoming.forEach(show=>{
-					$scope.count.upcoming += show.episodes.length
-				})
-			})
-			.catch(()=>{
-			//	$log.error(error.message)
-			})
-	}])
 	
-	.controller('TraktConnectController', ['$http','$log','$scope',($http,$log,$scope)=>{
-		$scope.trakt = {
-			connected: false,
-			url: null,
-			pin: null
-		}
-		
-		$http.get('/api/auth/trakt')
-			.then(response=>{
-				$scope.trakt.url = response.data.url
-			})
-			.catch(error=>{
-				$log.error(error)
-			})
-			
-		$scope.submit = ()=>{
-			$http.post('/api/auth/trakt', {pin:$scope.trakt.pin})
-				.then(response=>{
-					$log.info(response)
-					$scope.trakt.connected = true
-				})
-				.catch(error=>{
-					$log.error(error)
-				})
-		}
-	}])

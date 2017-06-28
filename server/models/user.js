@@ -3,16 +3,11 @@
 const bcrypt = require('bcrypt-nodejs')
 const mongoose = require('mongoose')
 
+const helpers = require('nodetv-helpers')
 const userSchema = new mongoose.Schema({
-	username: {
-		type: String, required: true, trim: true
-	},
-	password: {
-		type: String, required: true
-	},
-	email: {
-		type: String, lowercase: true, trim: true
-	},
+	username: {type: String, required: true, trim: true},
+	password: {type: String, required: true},
+	email: {type: String, lowercase: true, trim: true},
 	tokens: [{
 		_id: false,
 		created: {type: Date, default: new Date()},
@@ -24,12 +19,9 @@ const userSchema = new mongoose.Schema({
 		refresh_token: String
 	},
 	profile: mongoose.Schema.Types.Mixed,
-	added: {
-		type: Date, default: new Date()
-	},
-	updated: {
-		type: Date, default: new Date()
-	}
+	added: {type: Date, default: new Date()},
+	synced: Date,
+	updated: {type: Date, default: new Date()}
 })
 
 userSchema.statics.findByToken = function(username,token){
@@ -71,6 +63,18 @@ userSchema.methods.refreshToken = function(){
 	return
 }
 
+userSchema.methods.sync = function(){
+	// TODO: get WHOLE collection and return
+	return helpers.trakt(this).sync.collection.get({type:'shows'})
+		.then(results=>{
+			let promise = []
+			results.forEach(result=>{
+				promise.push(result)
+			})
+			return Promise.all(promise)
+		})
+}
+
 userSchema.pre('save', function(next){
 	this.updated = new Date()
 	next()
@@ -84,10 +88,7 @@ userSchema.pre('remove', function(next){
 			let promises = []
 			
 			shows.forEach(show=>{
-				console.log(show.title)
-				let promise = show.unsubscribe(this).then(()=>{
-					return show.save()
-				})
+				let promise = show.unsubscribe(this).save()
 				promises.push(promise)
 			})
 			
@@ -96,6 +97,11 @@ userSchema.pre('remove', function(next){
 					if (typeof next === 'function') next()
 				})
 		})
+})
+
+userSchema.post('findOne', function(doc,next){
+	//doc.uri = `/api/users/${doc._id}`
+	next()
 })
 
 module.exports = mongoose.model('User', userSchema)

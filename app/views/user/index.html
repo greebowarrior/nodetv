@@ -15,9 +15,10 @@
 		
 		<div class="form-group">
 			<button type="submit" class="btn btn-success" ng-disabled="userForm.$invalid || userForm.$pristine" >Save</button>
-			<button type="button" class="btn btn-default" ui-sref="^.list">Cancel</button>
+			<button type="button" class="btn btn-default" ui-sref="^.list">Back</button>
 			
-			<button type="button" class="btn btn-danger pull-right" ng-click="$ctrl.delete()">Delete</button>
+			<button type="button" class="btn btn-warning pull-right" ng-click="$ctrl.sync()"><span class="fa fa-refresh"></span></button>
+			<!--button type="button" class="btn btn-danger pull-right" ng-click="$ctrl.delete()">Delete</button-->
 		</div>
 	</form>
 </div>

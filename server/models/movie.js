@@ -16,6 +16,7 @@ let movieSchema = new mongoose.Schema({
 	},
 	subscribers: [{
 		_id: false,
+		rating: Number,
 		subscriber: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 		watches: [{
 			_id: false,
@@ -70,17 +71,16 @@ movieSchema.methods.subscribe = function(user){
 		return item.subscriber.equals(user._id)
 	})
 	if (idx === -1) this.subscribers.push({subscriber:user._id})
+	helpers.trakt(user).sync.watchlist.add({movies:[{ids:{trakt:this.ids.trakt}}]})
 	return this
 }
 movieSchema.methods.unsubscribe = function(user){
-	return new Promise(resolve=>{
-		let idx = this.subscribers.findIndex(item=>{
-			return item.subscriber.equals(user._id)
-		})
-		if (idx >= 0) this.subscribers.splice(idx,1)
-		
-		resolve(this)
+	let idx = this.subscribers.findIndex(item=>{
+		return item.subscriber.equals(user._id)
 	})
+	if (idx >= 0) this.subscribers.splice(idx,1)
+	helpers.trakt(user).sync.watchlist.remove({movies:[{ids:{trakt:this.ids.trakt}}]})	
+	return this
 }
 
 movieSchema.methods.setWatched = function(user){

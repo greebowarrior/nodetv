@@ -32,7 +32,7 @@ const ShowsAPI = (app,io)=>{
 				})
 				.then(show=>{
 					// Subscribe to show
-					return show.subscribe(req.user._id).save()
+					return show.subscribe(req.user).save()
 				})
 				.then(show=>{
 					return show.save()
@@ -63,10 +63,10 @@ const ShowsAPI = (app,io)=>{
 					res.send(results)
 				})
 				.catch(error=>{
+					console.error(error)
 					res.status(404).send({error:error})
 				})
 		})
-
 	router.route('/upcoming')
 		.get((req,res)=>{
 			Show.upcomingEpisodes()
@@ -81,7 +81,18 @@ const ShowsAPI = (app,io)=>{
 					res.status(404).send({error:error})
 				})
 		})
-
+	
+	router.route('/ondeck')
+		.get((req,res)=>{
+			helpers.trakt(req.user).ondeck.getAll()
+				.then(deck=>{
+					res.send(deck)
+				})
+				.catch(error=>{
+					console.error(error)
+					res.status(400).end()
+				})
+		})
 	
 	// Show
 	router.route('/:slug')
@@ -97,7 +108,7 @@ const ShowsAPI = (app,io)=>{
 					})
 				})
 				.then(show=>{
-					return show.unsubscribe(req.user._id).save({new:true})
+					return show.unsubscribe(req.user).save({new:true})
 				})
 				.then(show=>{
 					return show.save()
@@ -171,6 +182,19 @@ const ShowsAPI = (app,io)=>{
 					console.error(error)
 					res.status(404).end()
 				})
+		})
+	
+	router.route('/:slug/feeds')
+		.patch((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					return show.parseFeed()
+				})
+				.catch(error=>{
+					console.error(error)
+				})
+			res.status(202).end()
 		})
 	
 	router.route('/:slug/match')

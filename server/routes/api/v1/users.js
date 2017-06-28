@@ -3,11 +3,13 @@
 const helpers = require('nodetv-helpers')
 const router = require('express').Router()
 
+const Movie = helpers.model('movie')
+const Show = helpers.model('show')
 const User = helpers.model('user')
 
 const UsersAPI = app=>{
 	console.debug('API loaded: Users')
-	app.use('/users/', router)
+	app.use('/users', router)
 	
 	// Add ACL Middleware
 	
@@ -89,6 +91,46 @@ const UsersAPI = app=>{
 					res.status(201).end()
 				})
 		})
-
+	
+	router.route('/:id/sync')
+		.post((req,res)=>{
+			// Sync the user's movies, shows, and watch history
+			User.findById(req.params.id)
+				.then(user=>{
+					return user.sync()
+						.then(results=>{
+							results.forEach(result=>{
+								
+								if (result.movie){
+									Movie.findBySlug(result.movie.ids.slug)
+										.then(movie=>{
+											if (!movie) movie = new Movie(result.movie)
+											return movie.subscribe(user).sync(user)
+										})
+										.then(movie=>{
+											movie.save()
+										})
+								}
+								
+								if (result.show) {
+									Show.findBySlug(result.show.ids.slug)
+										.then(show=>{
+											if (!show) show = new Show(result.show)
+											return show.sync(user)
+										})
+										.then(show=>{
+											show.subscribe(user)
+											show.save()
+										})
+								}
+							})
+						})
+				})
+				.catch(error=>{
+					console.error(error)
+				})
+				
+			res.status(202).end()
+		})
 }
 module.exports = UsersAPI

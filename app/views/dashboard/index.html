@@ -1,27 +1,40 @@
+<!--div class="row" ng-show="$ctrl.deck">
+	<div class="col-sm-2" ng-repeat="item in $ctrl.deck">
+		{{item.show.title}}
+		<span class="highlight">{{item.next_episode.season|zeroFill:2}}x{{item.next_episode.number|zeroFill:2}}</span>
+		{{item.next_episode.title}}
+	</div>
+</div-->
+
 <div class="row">
-	<div class="col-md-6" ng-show="episodes.latest.length">
+	<div class="col-md-6" ng-show="$ctrl.episodes.recent.length">
 		<h3>
-			{{count.recent}} Recent
-			<ng-pluralize count="count.recent" when="{'0':'episodes','one':'episode','other':'episodes'}"></ng-pluralize>
+			{{$ctrl.count.recent}} Recent
+			<ng-pluralize count="$ctrl.count.recent" when="{'0':'episodes','one':'episode','other':'episodes'}"></ng-pluralize>
 		</h3>
 		<div class="row">
-			<div class="col-md-12" ng-repeat="item in episodes.latest">
+			<div class="col-md-12" ng-repeat="item in $ctrl.episodes.recent">
 				<h4><a ui-sref="shows.detail({slug:item.ids.slug})">{{item.title}}</a></h4>
 				<div ng-repeat="episode in item.episodes">
-					<h5><span class="highlight">{{episode.season|zeroFill:2}}x{{episode.episode|zeroFill:2}}</span> {{episode.title}}</h5>
+					<h5>
+						<a ui-sref="shows.detail.season({slug:item.ids.slug,season:episode.season})">
+							{{episode.season|zeroFill:2}}x{{episode.episode|zeroFill:2}}
+						</a> {{episode.title}}
+					</h5>
 					<h6 ng-show="!episode.file.filename">Broadcast: {{episode.first_aired|date:'EEEE MMMM d, HH:mm'}}</h6>
 					<h6 ng-show="episode.file.filename">Downloaded: {{episode.file.added|date:'EEEE MMMM d, HH:mm'}}</h6>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-6" ng-show="episodes.upcoming.length">
+	
+	<div class="col-md-6" ng-show="$ctrl.episodes.upcoming.length">
 		<h3>
-			{{count.upcoming}} Upcoming
-			<ng-pluralize count="count.upcoming" when="{'0':'episodes','one':'episode','other':'episodes'}"></ng-pluralize>
+			{{$ctrl.count.upcoming}} Upcoming
+			<ng-pluralize count="$ctrl.count.upcoming" when="{'0':'episodes','one':'episode','other':'episodes'}"></ng-pluralize>
 		</h3>
 		<div class="row">
-			<div class="col-md-12" ng-repeat="item in episodes.upcoming">
+			<div class="col-md-12" ng-repeat="item in $ctrl.episodes.upcoming">
 				<h4><a ui-sref="shows.detail({slug:item.ids.slug})">{{item.title}}</a></h4>
 				<div ng-repeat="episode in item.episodes">
 					<h5><span class="highlight">{{episode.season|zeroFill:2}}x{{episode.episode|zeroFill:2}}</span> {{episode.title}}</h5>

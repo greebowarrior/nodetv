@@ -1,97 +1,90 @@
 "use strict"
 
-angular.module('nutv.shows', ['nutv.core'])
+angular.module('nutv.movies', ['nutv.core'])
 
-	.factory('showService', ['$http',($http)=>{
-		const Shows = function(){
-			this.api = '/api/shows'
+	.factory('movieService', ['$http',($http)=>{
+		const Movies = function(){
+			this.api = '/api/movies'
 			return this
 		}
 		
-		Shows.prototype.add = function(show){
+		Movies.prototype.add = function(show){
 			return $http.post(this.api, show)
 		}
-		Shows.prototype.delete = function(id){
+		Movies.prototype.delete = function(id){
 			return $http.delete(`${this.api}/${id}`)
 		}
-		Shows.prototype.get = function(id){
+		Movies.prototype.get = function(id){
 			return $http.get(`${this.api}/${id}`)
 				.then(res=>res.data)
 		}
-		Shows.prototype.list = function(){
+		Movies.prototype.list = function(){
 			return $http.get(this.api)
 				.then(res=>res.data)
 		}
-		Shows.prototype.update = function(id){
+		Movies.prototype.update = function(id){
 			return $http.post(`${this.api}/${id}`)
 				.then(res=>res.data)
 		}
 		
-		Shows.prototype.season = function(slug,season){
-			return $http.get(`/api/shows/${slug}/seasons/${season}`)
-				.then(res=>res.data)
-		}
-		Shows.prototype.episodes = function(slug,season){
-			return $http.get(`/api/shows/${slug}/seasons/${season}/episodes`)
-				.then(res=>res.data)
-		}
-		Shows.prototype.episodes = function(slug,season){
-			return $http.get(`/api/shows/${slug}/seasons/${season}/episodes`)
-				.then(res=>res.data)
-		}
-		
-		return new Shows()
+		return new Movies()
 	}])
 	
 	.config(['$stateProvider',($stateProvider)=>{
 		$stateProvider
-			.state('shows', {
+			.state('movies', {
 				abstract: true,
-				url: '/shows',
+				url: '/movies',
 				template: '<ui-view />',
-				redirectTo: 'shows.index',
+				redirectTo: 'movies.index',
 				breadcrumb: {
-					title: 'Shows'
+					title: 'Movies'
 				}
 			})
-			.state('shows.index', {
+			.state('movies.index', {
 				url: '/',
 				component: 'nutvGrid',
 				resolve: {
-					list: (showService)=>showService.list(),
-					type: ()=>'show'
+					list: (movieService)=>movieService.list(),
+					type: ()=>'movie'
 				}
 			})
-			.state('shows.detail', {
+			.state('movies.detail', {
 				url: '/:slug',
-				component: 'nutvShow',
+				component: 'nutvMovie',
 				resolve: {
-					show: ($stateParams,showService)=>showService.get($stateParams.slug)
+					movie: ($stateParams,movieService)=>movieService.get($stateParams.slug)
 				},
 				breadcrumb: {
-					title: '{{show.title}}'
-				}
-			})
-			.state('shows.detail.season', {
-				url: '/seasons/:season',
-				component: 'nutvShowSeason',
-				resolve: {
-					episodes: ($stateParams,showService)=>showService.episodes($stateParams.slug,$stateParams.season),
-					season: ($stateParams,showService)=>showService.season($stateParams.slug,$stateParams.season),
-					show: ($stateParams,showService)=>showService.get($stateParams.slug)
+					title: '{{movie.title}}'
 				}
 			})
 	}])
 	
+	.component('nutvMovie', {
+		bindings: {movie: '='},
+		templateUrl: '/views/movie/movie.html',
+		controller: ['$http','$log','alertService',function($http,$log,alertService){
+			this.images = []
+			
+			this.save = ()=>{
+				alertService.alert()
+			}
+			this.getArtwork = ()=>{
+				
+			}
+			this.sync = ()=>{
+				
+			}
+		}]
+	})
+	
+	/*
 	.component('nutvShow', {
 		bindings:{show:'='},
 		templateUrl: '/views/show/show.html',
-		controller: ['$http','$log','$timeout','alertService',function($http,$log,$timeout,alertService){
+		controller: ['$http','$log','alertService',function($http,$log,alertService){
 			this.images = []
-			
-			$timeout(()=>{
-				if (!this.show.config.feed.length) this.show.config.feed = [{url:''}]
-			},0)
 			
 			this.save = ()=>{
 				$http.patch(`/api/shows/${this.show.ids.slug}`, {config:this.show.config})
@@ -100,16 +93,6 @@ angular.module('nutv.shows', ['nutv.core'])
 					})
 					.catch(error=>{
 						alertService.notify({type:'danger',msg:`Unable to update '${this.show.title}'`})
-						$log.error(error)
-					})
-			}
-			
-			this.feeds = ()=>{
-				$http.patch(`/api/shows/${this.show.ids.slug}/feeds`)
-					.then(()=>{
-						alertService.notify({type:'success',msg:`Feeds updated for '${this.show.title}'`})
-					})
-					.catch(error=>{
 						$log.error(error)
 					})
 			}
@@ -151,7 +134,6 @@ angular.module('nutv.shows', ['nutv.core'])
 			}
 		}]
 	})
-	
 	.component('nutvShowSeason', {
 		bindings: {
 			episodes: '<',
@@ -179,3 +161,4 @@ angular.module('nutv.shows', ['nutv.core'])
 			}
 		}]
 	})
+	*/

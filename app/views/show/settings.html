@@ -42,9 +42,9 @@
 	
 	<div class="form-group" ng-show="$ctrl.show.config.enabled">
 		<label>RSS Feed</label>
-		<div class="input-group">
+		<div class="input-group" ng-repeat="feed in $ctrl.show.config.feed">
 			<span class="input-group-addon"><span class="fa fa-rss"></span></span>
-			<input type="url" class="form-control" ng-repeat="feed in $ctrl.show.config.feed" ng-model="feed.url" />
+			<input type="url" class="form-control" ng-model="feed.url" />
 		</div>
 		<small class="help-block text-right">We recommend <a href="https://showrss.info" target="_blank">ShowRSS</a></small>
 	</div>

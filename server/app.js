@@ -4,7 +4,7 @@ const secret = 'Customer-Service-Immolation-Incident'
 
 const MongoStore = require('connect-mongo')(require('express-session'))
 
-const App = function(app){
+const App = app=>{
 	
 	// Express Setup
 	app.use(require('body-parser').json({limit:'25mb'}))
@@ -28,8 +28,6 @@ const App = function(app){
 	app.set('layout', 'layouts/classic')
 	app.use(require('express-ejs-layouts'))
 	
-	app.disable('view cache')
-	
 	// Define static paths
 	app.use('/static', require('express').static(require('path').join(process.cwd(),'app'),{etag:false}))
 	
@@ -45,12 +43,6 @@ const App = function(app){
 			mongooseConnection: require('mongoose').connection
 		})
 	})
-	
 	app.use(session)
-	/*
-	io.use(require('express-socket.io-session')(session, {
-		autoSave: true
-	}))
-	*/
 }
 module.exports = App

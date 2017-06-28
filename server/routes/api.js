@@ -2,7 +2,7 @@
 
 const router = require('express').Router()
 
-const API = function(app,io){
+const API = (app,io)=>{
 	app.use('/api', router)
 	
 	router.route('/ping')
@@ -25,7 +25,7 @@ const API = function(app,io){
 			// Send '501 Not Implemented' for requests to undefined endpoints
 			router.route('/*')
 				.all((req,res)=>{
-					res.status(501).send({error:'Not Implemented',url:req.url})
+					res.status(501).send({status:501,error:'Not Implemented',url:req.url})
 				})
 		})
 }

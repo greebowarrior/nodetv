@@ -32,6 +32,7 @@ const showSchema = new mongoose.Schema({
 	year: {type: Number, required: true},
 	subscribers: [{
 		_id: false,
+		rating: Number,
 		subscriber: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 	}],
 	status: String,
@@ -55,6 +56,8 @@ const showSchema = new mongoose.Schema({
 	},
 	seasons: [seasonSchema],
 	episodes: [episodeSchema],
+	
+	uri: String,
 	
 	added: {type: Date, default: new Date()},
 	synced: {type: Date, default: null}, 
@@ -94,28 +97,61 @@ showSchema.statics.recentEpisodes = function(days=7){
 	let since = new Date()
 	since.setDate(since.getDate()-days)
 	
-	return this.find({
-		'config.enabled': true,
-		'episodes.first_aired': {$gte:since, $lte:now}
-	},{
-		episodes: {$elemMatch:{'first_aired':{$gte:since,$lt:now}}},
-		ids: true,
-		title: true
-	}).sort({title: 1})
+	return this.aggregate([
+		{
+			$match: {
+				'config.enabled': true,
+				$or: [
+					{'episodes.file.added': {$gte:since, $lt:now}},
+					{'episodes.first_aired': {$gte:since, $lt:now}}
+				]
+			}
+		},{
+			$unwind: '$episodes'
+		},{
+			$match: {
+				$or: [
+					{'episodes.file.added': {$gte:since, $lt:now}},
+					{'episodes.first_aired': {$gte:since, $lt:now}}
+				]
+			}
+		},{
+			$group: {
+				_id: '$_id',
+				title: {$first: '$title'},
+				ids: {$first: '$ids'},
+				episodes: {$push: '$episodes'}
+			}
+		}
+	]).sort({title:1})
 }
 showSchema.statics.upcomingEpisodes = function(days=7){
 	let now = new Date()
 	let until = new Date()
 	until.setDate(until.getDate()+days)
 	
-	return this.find({
-		'config.enabled': true,
-		'episodes.first_aired': {$gte:now, $lte:until}
-	},{
-		episodes: {$elemMatch:{'first_aired':{$gte:now,$lt:until}}},
-		ids: true,
-		title: true
-	}).sort({title:1})
+	return this.aggregate([
+		{
+			$match: {
+				'config.enabled': true,
+				'episodes.first_aired': {$gte:now, $lt:until}
+			}
+		},{
+			$unwind: '$episodes'
+		},{
+			$match: {
+				'episodes.first_aired': {$gte:now, $lt:until},
+				'episodes.file': {$exists: false}
+			}
+		},{
+			$group: {
+				_id: '$_id',
+				title: {$first: '$title'},
+				ids: {$first: '$ids'},
+				episodes: {$push: '$episodes'}
+			}
+		}
+	]).sort({title:1})
 }
 
 // Methods
@@ -170,28 +206,29 @@ showSchema.methods.parseFeed = function(){
 		return Promise.all(promises)
 	})
 	.then(()=>{
-		return this.save()
+		return this.save({new:true})
 	})
 	.catch(error=>{
 		if (error) console.error(`${this.title}`, error)
 	})
 }
-showSchema.methods.subscribe = function(user_id){
+showSchema.methods.subscribe = function(user){
 	let idx = this.subscribers.findIndex(item=>{
-		return item.subscriber.equals(user_id)
+		return item.subscriber.equals(user._id)
 	})
-	if (idx === -1) this.subscribers.push({subscriber:user_id})
+	if (idx === -1) this.subscribers.push({subscriber:user._id})
+	// Add to watchlist
+	helpers.trakt(user).sync.watchlist.add({shows:[{ids:{trakt:this.ids.trakt}}]})
 	return this
 }
 showSchema.methods.unsubscribe = function(user){
-	return new Promise(resolve=>{
-		let idx = this.subscribers.findIndex(item=>{
-			return item.subscriber.equals(user._id)
-		})
-		if (idx >= 0) this.subscribers.splice(idx,1)
-		
-		resolve(this)
+	let idx = this.subscribers.findIndex(item=>{
+		return item.subscriber.equals(user._id)
 	})
+	if (idx >= 0) this.subscribers.splice(idx,1)
+	// Remove from watchlist
+	helpers.trakt(user).sync.watchlist.remove({shows:[{ids:{trakt:this.ids.trakt}}]})
+	return this
 }
 
 showSchema.methods.getDirectory = function(){
@@ -259,9 +296,6 @@ showSchema.methods.setUnwatched = function(){
 	})
 	return this
 }
-
-
-
 
 showSchema.methods.match = function(){
 	// ISSUES: Shows with reboots
@@ -343,7 +377,7 @@ showSchema.methods.scan = function(){
 			return this.save()
 		})
 }
-showSchema.methods.sync = function(user){
+showSchema.methods.sync = function(user={}){
 	// Sync data from Trakt
 	
 	//  TODO: skip syncing if it's been done 'recently'
@@ -355,8 +389,8 @@ showSchema.methods.sync = function(user){
 			if (!this.config.directory){
 				// Create a directory based on the name
 				this.config.directory = summary.title
-				require('fs-extra').ensureDir(this.getDirectory())
 			}
+			require('fs-extra').ensureDir(this.getDirectory())
 			
 			if (this.synced < new Date(summary.updated_at)){
 				this.ids = Object.assign({}, this.ids, summary.ids)
@@ -435,7 +469,12 @@ showSchema.methods.sync = function(user){
 }
 
 showSchema.pre('save', function(next){
+	if (this.ids) this.uri = `/api/shows/${this.ids.slug}`
 	this.updated = new Date()
+	next()
+})
+showSchema.post('findOne', function(doc,next){
+	if (doc) doc.uri = `/api/shows/${doc.ids.slug}`
 	next()
 })
 

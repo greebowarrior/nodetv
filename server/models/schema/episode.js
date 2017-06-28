@@ -18,8 +18,8 @@ const episodeSchema = new mongoose.Schema({
 	updated_at: {type: Date, default: null},
 	watchers: [{
 		_id: false,
+		rating: Number,
 		watcher: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-		count: {type: Number, default: 0},
 		watches: [{
 			_id: false,
 			date: {type: Date, default: new Date()}
