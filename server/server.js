@@ -1,32 +1,9 @@
 "use strict"
 
-global.Promise = require('bluebird').Promise
-Promise.config({warnings:false})
-
-const path = require('path')
 const nutv = require('../package.json')
 
-try {
-	switch (process.env.NODE_ENV){
-		case 'production':
-			global.config = require(path.join(process.cwd(),'server','config','production.json'))
-			require('log4js').getLogger('console').setLevel('INFO')
-			break
-		case 'testing':
-			global.config = require(path.join(process.cwd(),'server','config','testing.json'))
-			require('log4js').getLogger('console').setLevel('DEBUG')
-			break
-		default:
-			global.config = require(path.join(process.cwd(),'server','config','development.json'))
-			require('log4js').getLogger('console').setLevel('ALL')
-	}
-} catch(e){
-	console.error(e)
-}
-
-//const helpers = require('nodetv-helpers')
-
 /************************************************************************/
+
 console.info('NodeTV v%s - %s', nutv.version, process.env.NODE_ENV)
 
 // Initialise database

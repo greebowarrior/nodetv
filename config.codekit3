@@ -15,6 +15,12 @@
 		"oAP": "\/.env",
 		"oF": 0
 		},
+	"\/.env.defaults": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/.env.defaults",
+		"oF": 0
+		},
 	"\/.gitignore": {
 		"ft": 8192,
 		"oA": 2,
@@ -296,12 +302,6 @@
 		"oS": 3,
 		"uL": 1
 		},
-	"\/app\/views\/404.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/app\/views\/404.html",
-		"oF": 0
-		},
 	"\/app\/views\/auth\/login.html": {
 		"ft": 8192,
 		"oA": 1,
@@ -420,12 +420,6 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/show.html",
-		"oF": 0
-		},
-	"\/app\/views\/test.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/app\/views\/test.html",
 		"oF": 0
 		},
 	"\/app\/views\/user\/index.html": {
@@ -836,11 +830,14 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/tasks\/sync.history.js~": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/server\/tasks\/sync.history.js~",
-		"oF": 0
+	"\/server\/tasks\/sync.history.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/sync.history.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		},
 	"\/server\/tasks\/sync.shows.js~": {
 		"ft": 8192,

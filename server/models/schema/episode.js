@@ -22,6 +22,7 @@ const episodeSchema = new mongoose.Schema({
 		watcher: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 		watches: [{
 			_id: false,
+			id: String,
 			date: {type: Date, default: new Date()}
 		}]
 	}],
@@ -60,10 +61,7 @@ episodeSchema.methods.setCollected = function(file=false){
 	return this.parent().getSubscribers()
 		.then(subscribers=>{
 			subscribers.forEach(user=>{
-				helpers.trakt(user).sync.collection.add({episodes:[{ids:this.ids}]})
-					.then(result=>{
-						console.debug(this.parent().title, this.title, result)
-					})
+				helpers.trakt(user).sync.collection.add({episodes:[{ids:{trakt:this.ids.trakt}}]})
 			})
 		})
 		.finally(()=>{
@@ -77,34 +75,40 @@ episodeSchema.methods.setCollected = function(file=false){
 episodeSchema.methods.setWatched = function(user, date=null){
 	if (!date) date = new Date()
 	
-	return new Promise((resolve,reject)=>{
-		
+	return new Promise(resolve=>{
 		let idx = (this.watchers || []).findIndex(item=>item.watcher.equals(user._id))
+		
 		if (idx >= 0){
-			this.watchers[idx].count += 1
-			
 			let check = this.watchers[idx].watches.findIndex(item=>{
 				return item.date == date
 			})
 			if (check == -1){
-				this.watchers[idx].watches.push({date: date})
-				resolve(this)
+				this.watchers[idx].watches.push({date:date})
+				helpers.trakt(user).sync.history.add({
+					episodes: [{ids:{trakt:this.ids.trakt},watched_at:date}]
+				})
 			}
-			reject()
+			resolve()
 		} else {
 			this.watchers.push({
-				watcher:user._id,
-				count:1,
-				watches: [{date: date}]
+				watcher: user._id,
+				watches: [{date:date}]
 			})
-			resolve(this)
+			helpers.trakt(user).sync.history.add({
+				episodes: [{ids:{trakt:this.ids.trakt},watched_at:date}]
+			})
+			resolve()
 		}
+	})
+	.then(()=>{
+		return this
 	})
 }
 episodeSchema.methods.setUnwatched = function(user){
 	return new Promise(resolve=>{
 		let idx = (this.watchers || []).findIndex(item=>item.watcher.equals(user._id))
 		if (idx >= 0){
+			helpers.trakt(user).sync.history.remove({episodes:[{ids:{trakt:this.ids.trakt}}]})
 			this.watchers[idx] = undefined
 		}
 		resolve()

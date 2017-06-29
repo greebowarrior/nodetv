@@ -47,9 +47,9 @@ passport.use('token', new TokenStrategy((username,token,done)=>{
 
 passport.use('trakt', new TraktStrategy(
 	{
-		clientID: global.config.trakt.client_id,
-		clientSecret: global.config.trakt.client_secret,
-		callbackURL: global.config.trakt.redirect_uri
+		clientID: process.env.TRAKT_CLIENT_ID,
+		clientSecret: process.env.TRAKT_CLIENT_SECRET,
+		callbackURL: process.env.TRAKT_REDIRECT_URI || 'urn:ietf:wg:oauth:2.0:oob'
 	},
 	(accessToken, refreshToken, params, profile, done)=>{
 		User.findOne({'trakt.id': profile.id})

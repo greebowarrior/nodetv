@@ -26,7 +26,7 @@ const UI = (app,io)=>{
 					new Promise((resolve,reject)=>{
 						req.params.file = req.params[0]
 						if (req.params.file){
-							let file = require('path').join(global.config.media.base,global.config.media.shows.path,req.params.file)
+							let file = require('path').join(process.env.MEDIA_ROOT,process.env.MEDIA_SHOWS,req.params.file)
 							if (require('fs-extra').existsSync(file)) resolve(file)
 						}
 						reject()

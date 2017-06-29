@@ -100,23 +100,13 @@ const ShowsAPI = (app,io)=>{
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
 					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
-					return req.trakt.sync.collection.remove({
-						shows: [{id:show.ids}]
-					})
-					.then(()=>{
-						return show
-					})
-				})
-				.then(show=>{
 					return show.unsubscribe(req.user).save({new:true})
-				})
-				.then(show=>{
-					return show.save()
 				})
 				.then(()=>{
 					res.status(204).end()
 				})
 				.catch(error=>{
+					console.error(error)
 					res.status(400).send({error:error})
 				})
 		})
@@ -327,10 +317,10 @@ const ShowsAPI = (app,io)=>{
 		.get((req,res)=>{
 			Show.findBySlug(req.params.slug)
 				.then(show=>{
-					let episodes = show.episodes.filter(item=>{
-						return item.season == req.params.season && item.episode == req.params.episode
-					})
-					if (episodes) res.send(episodes[0])
+					return show.getEpisode(req.params.season, req.params.episode)
+						.then(episode=>{
+							res.send(episode)
+						})
 				})
 				.catch(error=>{
 					res.status(404).send({error:error})
@@ -384,30 +374,22 @@ const ShowsAPI = (app,io)=>{
 				.then(show=>{
 					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
 					
-					let idx = show.episodes.findIndex(item=>{
-						return item.season == req.params.season && item.episode == req.params.episode
-					})
-					
-					if (idx){
-						show.episodes[idx].setWatched(req.user)
-							.then(()=>{
-								return show.save()
-							})
-							.then(()=>{
-								res.send(show.episodes[idx])
-							})
-							.catch(error=>{
-								res.status(400).send({error:error.message})
-							})
-					} else {
-						res.status(404).end()
-					}
+					return show.getEpisode(req.params.season,req.params.episode)
+						.then(episode=>{
+							return episode.setWatched(req.user)
+						})
+						.then(()=>{
+							return show.save()
+						})
+						.then(()=>{
+							res.send({status:true})
+						})
 				})
 				.catch(error=>{
-					res.status(400).send({error:error.message})
+					console.error(error)
+					res.status(404).end()
 				})
 		})
-	
 	
 	// SHOW - DOWNLOAD
 	router.route('/:slug/seasons/:season/episodes/:episode/download')
@@ -416,19 +398,15 @@ const ShowsAPI = (app,io)=>{
 				.then(show=>{
 					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
 					
-					let ids = []
-					show.episodes.forEach(item=>{
-						if (item.season == req.params.season && item.episode == req.params.episode) ids.push(item._id)
-					})
-					if (!ids.length) throw new Error(`Episode not found`)
-					
-					let episode = show.episodes.id(ids[0])
-					return episode.getMagnet()
-						.then(magnet=>{
-							return helpers.torrents.add(magnet)
-						})
-						.then(hash=>{
-							return episode.setDownloading(hash)
+					return show.getEpisode(req.params.season, req.params.episode)
+						.then(episode=>{
+							return episode.getMagnet()
+								.then(magnet=>{
+									return helpers.torrents.add(magnet)
+								})
+								.then(hash=>{
+									return episode.setDownloading(hash)
+								})
 						})
 						.then(()=>{
 							return show.save()
@@ -438,7 +416,8 @@ const ShowsAPI = (app,io)=>{
 					res.send({success:true})
 				})
 				.catch(error=>{
-					res.status(400).send({error:error})
+					console.error(error)
+					res.status(400).end()
 				})
 		})
 	

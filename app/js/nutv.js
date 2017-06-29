@@ -95,7 +95,6 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 			}, true)
 		}]
 	})
-
 	.component('nutvDashboard', {
 		templateUrl: '/views/dashboard/index.html',
 		controller: ['$http',function($http){
@@ -107,12 +106,6 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 				recent: null, upcoming: null
 			}
 			
-			/*
-			$http.get('/api/shows/ondeck')
-				.then(res=>{
-					this.deck = res.data.shows
-				})
-			*/
 			$http.get('/api/shows/latest')
 				.then(response=>{
 					this.episodes.recent = response.data
@@ -138,31 +131,4 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 			
 		}]
 	})
-	
-	.controller('NavigationCtrl', ['$interval','$localStorage','$log','$scope','$socket','$transitions',($interval,$localStorage,$log,$scope,$socket,$transitions)=>{
-		$scope.collapsed = true
-		$scope.authenticated = false
-		
-		$scope.$watch(()=>$localStorage.token, (current)=>{
-			$scope.authenticated = current && current.token ? true : false
-			
-			$socket.emit('authenticate', $localStorage.token, ()=>{
-				console.debug('Socket authenticated')
-			})
-		},true)
-		
-		$socket.on('error',error=>{
-			$log.error(error)
-		})
-		
-		// Authenticate the socket
-		$socket.on('connect', ()=>{
-			if ($localStorage.token) $socket.emit('authenticate', $localStorage.token)
-		})
-		
-		$transitions.onStart({}, ()=>{
-			$scope.collapsed = true
-		})
-		
-	}])
 	

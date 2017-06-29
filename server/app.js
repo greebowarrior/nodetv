@@ -32,7 +32,6 @@ const App = app=>{
 	app.use('/static', require('express').static(require('path').join(process.cwd(),'app'),{etag:false}))
 	
 	app.locals.nutv = require('../package.json')
-	app.locals.config = global.config
 	
 	// Sessions
 	const session =  require('express-session')({

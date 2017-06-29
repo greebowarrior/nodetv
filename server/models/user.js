@@ -4,6 +4,10 @@ const bcrypt = require('bcrypt-nodejs')
 const mongoose = require('mongoose')
 
 const helpers = require('nodetv-helpers')
+
+const Show = require('./show')
+
+
 const userSchema = new mongoose.Schema({
 	username: {type: String, required: true, trim: true},
 	password: {type: String, required: true},
@@ -64,15 +68,30 @@ userSchema.methods.refreshToken = function(){
 }
 
 userSchema.methods.sync = function(){
-	// TODO: get WHOLE collection and return
-	return helpers.trakt(this).sync.collection.get({type:'shows'})
+	let promises = []
+	/*
+	helpers.trakt(this).sync.watchlist.get()
 		.then(results=>{
-			let promise = []
+			results.forEach(result=>{
+				promises.push(result)
+			})
+		})
+	*/
+	helpers.trakt(this).sync.collection.get({type:'shows'})
+		.then(results=>{
 			results.forEach(result=>{
 				promise.push(result)
 			})
-			return Promise.all(promise)
 		})
+		
+	return Promise.all(promise)
+	/*
+		.then(results=>{
+			results.forEach(result=>{
+			
+			})
+		})
+	*/
 }
 
 userSchema.pre('save', function(next){
@@ -81,8 +100,6 @@ userSchema.pre('save', function(next){
 })
 userSchema.pre('remove', function(next){
 	// Remove user from shows
-	const Show = require('./show')
-	
 	Show.findByUser(this._id)
 		.then(shows=>{
 			let promises = []

@@ -3,7 +3,6 @@
 const request = require('request-promise')
 
 // Update DDNS service hourly
-
 require('node-schedule').scheduleJob('0 * * * *', ()=>{
 	try {
 		if (!process.env.DDNS_USER || !process.env.DDNS_TOKEN) return
@@ -42,7 +41,7 @@ require('node-schedule').scheduleJob('0 * * * *', ()=>{
 				return updateDNS(ips)
 			})
 			.then(()=>{
-				console.log('DDNS Updated')
+				console.info('DDNS Updated')
 			})
 			.catch(()=>{
 				console.error('DynDNS update failed')

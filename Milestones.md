@@ -9,6 +9,7 @@
 - ~~Automatic transcoding of new episodes~~
 - ~~Mark as Collected in Trakt **per user**~~
 
+
 # Phase 2
 
 - ~~Rebuild REST API endpoints~~
@@ -25,6 +26,7 @@
 - ~~Authenticated sockets~~
 - ~~BUG! Ensure directories are created when adding a show~~
 
+
 # Phase 3 - Beta
 
 - ~~Manual download option per episode~~
@@ -33,35 +35,22 @@
 - ~~When adding a show or movie, add it to the trakt watchlist~~
 - ~~Remove show: Unsubscribe, and remove from Trakt collection~~
 - ~~Rebuild DNS system~~
+- ~~Sync shows from Trakt & create directories~~
+- ~~Episode Watched functionality~~
+- ~~Use .env for all configuration values~~
 
-- Add proxy support
-
-- Full Show Sync *from* trakt?
-	- ~~Fetch shows & create directories~~
-	- Synchronise watch history
-
-- Watch progress
-
-- Better config option than the global.config object?
-	- helper method?
-- Installation guide
-	- Guided setup page? Script?
-- Add URIs to returned documents?
-	- Enabled on Shows
-- R&D: Handle shows that now have less episodes in a season (i.e. Lucifer)
-	- How to prune superfluous episodes?
-
-
-- Scheduled History Sync with Trakt?
-	- Hourly, only get changes since x?
-- Support multiple feeds per show (e.g. ShowRSS & TVShowsApp)
-	- Optional, but TVSA *does* have more data
-- R&D: Feed Parsing - seems to make things laggy
-	- Use child_process?
 
 # Phase 4
 
 - Ants!
+
+- Sync from Trakt to local
+	- Collection
+	- Watchlist
+	- History
+- Watch progress
+
+- Import Trakt CSV?
 - User settings page improvements
 - User creation flow
 	- Would be nice to create a user & connect to Trakt at the same time
@@ -69,6 +58,7 @@
 	- ~~Model~~
 	- API Endpoints
 	- Tasks
+- Add proxy support
 - Re-implement YTS API (use proxy)
 - Better UI?
 	- Theme support
@@ -76,10 +66,22 @@
 	- Create Express middleware to allow themes WITHOUT reloading service
 - Integrated uPnP/DLNA server to replace minidlna dependency
 
+
 # Eventually
 
 - ~~Socket notifications~~
 - Git-based updater & scripts?
+- Installation guide
+	- Guided setup page? Script?
+- Add URIs to returned documents?
+	- Enabled on Shows
+- R&D: Handle shows that now have less episodes in a season (i.e. Lucifer)
+	- How to prune superfluous episodes?
+
+- Support multiple feeds per show (e.g. ShowRSS & TVShowsApp)
+	- Optional, but TVSA *does* have more data
+- R&D: Feed Parsing - seems to make things laggy
+	- Use child_process?
 
 
 

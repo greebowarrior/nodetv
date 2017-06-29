@@ -140,6 +140,16 @@ angular.module('nutv.shows', ['nutv.core'])
 				})
 			}
 			
+			this.remove = ()=>{
+				alertService.confirm({
+					title: 'Remove show',
+					type: 'warning',
+					msg: 'Are you sure?'
+				}).then(()=>{
+					$http.delete(`/api/shows/${this.show.ids.slug}`)
+				})
+			}
+			
 			this.sync = ()=>{
 				alertService.confirm({
 					title: 'Sync show data',
@@ -161,13 +171,12 @@ angular.module('nutv.shows', ['nutv.core'])
 		templateUrl: '/views/show/season.html'
 	})
 	.component('nutvShowEpisode', {
-		bindings: {episode:'<',show:'<'},
+		bindings: {episode:'=',show:'<'},
 		templateUrl: '/views/show/episode.html',
 		controller: ['$http','$log','alertService',function($http,$log,alertService){
 			this.download = ()=>{
 				$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/download`)
 					.then(()=>{
-						$log.debug('derp')
 						alertService.alert({
 							title: 'Download started',
 							type: 'success'
@@ -175,7 +184,13 @@ angular.module('nutv.shows', ['nutv.core'])
 					})
 			}
 			this.watched = ()=>{
-				$log.debug('set watched')
+				$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/watched`)
+					.then(episode=>{
+						alertService.alert({
+							title: 'Episode watched',
+							type: 'success'
+						})
+					})
 			}
 		}]
 	})

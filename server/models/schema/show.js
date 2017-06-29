@@ -4,8 +4,6 @@ const mongoose = require('mongoose')
 const seasonSchema = require('./season')
 const episodeSchema = require('./episode')
 
-//const guidebox = new (require('guidebox'))(global.config.guidebox.apikey,'GB')
-
 const helpers = require('nodetv-helpers')
 const request = require('request-promise')
 
@@ -226,7 +224,9 @@ showSchema.methods.unsubscribe = function(user){
 		return item.subscriber.equals(user._id)
 	})
 	if (idx >= 0) this.subscribers.splice(idx,1)
-	// Remove from watchlist
+	
+	// Remove from watchlist & collection
+	helpers.trakt(user).sync.collection.remove({shows:[{ids:{trakt:this.ids.trakt}}]})
 	helpers.trakt(user).sync.watchlist.remove({shows:[{ids:{trakt:this.ids.trakt}}]})
 	return this
 }
@@ -234,10 +234,20 @@ showSchema.methods.unsubscribe = function(user){
 showSchema.methods.getDirectory = function(){
 	// TODO: Sanitize filepaths
 	if (this.config.directory){
-		return require('path').join(global.config.media.base, global.config.media.shows.path, this.config.directory)
+		return require('path').join(process.env.MEDIA_ROOT, process.env.MEDIA_SHOWS, this.config.directory)
 	}
 	return false
 }
+showSchema.methods.getEpisode = function(season,episode){
+	return new Promise((resolve,reject)=>{
+		let idx = this.episodes.findIndex(item=>{
+			return item.season == parseInt(season,10) && item.episode == parseInt(episode,10)
+		})
+		if (idx == -1) return reject(new Error(`Episode not found`))
+		resolve(this.episodes.id(this.episodes[idx]._id))
+	})
+}
+
 showSchema.methods.getLatestEpisodes = function(days=7){
 	return new Promise(resolve=>{
 		let since = new Date()
@@ -274,25 +284,26 @@ showSchema.methods.setArtwork = function(data){
 			.catch(reject)
 	})
 }
+showSchema.methods.setDirectory = function(){
+	// Use to rename an existing directory
+	// or create one if it doesn't already exist
+}
+
 showSchema.methods.setCollected = function(){
 	this.episodes.forEach(episode=>{
 		episode.setCollected()
 	})
 	return this
 }
-showSchema.methods.setDirectory = function(){
-	// Use to rename an existing directory
-	// or create one if it doesn't already exist
-}
-showSchema.methods.setWatched = function(){
+showSchema.methods.setWatched = function(user){
 	this.episodes.forEach(episode=>{
-		episode.setWatched()
+		episode.setWatched(user)
 	})
 	return this
 }
-showSchema.methods.setUnwatched = function(){
+showSchema.methods.setUnwatched = function(user){
 	this.episodes.forEach(episode=>{
-		episode.setUnwatched()
+		episode.setUnwatched(user)
 	})
 	return this
 }
@@ -302,7 +313,7 @@ showSchema.methods.match = function(){
 	// e.g. Doctor Who (1963/2005)
 	
 	return new Promise((resolve,reject)=>{
-		const base = require('path').join(global.config.media.base, global.config.media.shows.path)
+		const base = require('path').join(process.env.MEDIA_BASE, process.env.MEDIA_SHOWS)
 		
 		// If a directory exists that has the *exact* same name as the show, assume it's the folder for this show
 		if (this.config.directory && require('fs-sync').existsSync(this.getDirectory())){
@@ -321,6 +332,7 @@ showSchema.methods.match = function(){
 		reject()
 	})
 }
+
 showSchema.methods.scan = function(){
 	const directory = this.getDirectory()
 	
@@ -377,6 +389,7 @@ showSchema.methods.scan = function(){
 			return this.save()
 		})
 }
+
 showSchema.methods.sync = function(user={}){
 	// Sync data from Trakt
 	
@@ -450,22 +463,14 @@ showSchema.methods.sync = function(user={}){
 		.catch(error=>{
 			if (error) console.error(this.title, error.message)	
 		})
-		/*
-		.finally(()=>{
-			// Get Guidebox ID
-			return new Promise(resolve=>{
-				if (this.ids.imdb && !this.ids.guidebox){
-					guidebox.search.shows({field:'id',id_type:'imdb',query:this.ids.imdb})
-						.then(result=>{
-							this.ids.guidebox = result.id
-							resolve(this)
-						})
-				} else {
-					resolve(this)
-				}
-			})
+}
+
+showSchema.methods.syncHistory = function(user){
+	return helpers.trakt(user).sync.history.get({type:'shows',id:this.ids.trakt})
+		.then(results=>{
+			console.debug(results)
+			
 		})
-		*/
 }
 
 showSchema.pre('save', function(next){
