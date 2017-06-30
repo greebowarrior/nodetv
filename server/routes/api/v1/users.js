@@ -97,33 +97,9 @@ const UsersAPI = app=>{
 			// Sync the user's movies, shows, and watch history
 			User.findById(req.params.id)
 				.then(user=>{
-					return user.sync()
-						.then(results=>{
-							results.forEach(result=>{
-								
-								if (result.movie){
-									Movie.findBySlug(result.movie.ids.slug)
-										.then(movie=>{
-											if (!movie) movie = new Movie(result.movie)
-											return movie.subscribe(user).sync(user)
-										})
-										.then(movie=>{
-											movie.save()
-										})
-								}
-								
-								if (result.show) {
-									Show.findBySlug(result.show.ids.slug)
-										.then(show=>{
-											if (!show) show = new Show(result.show)
-											return show.sync(user)
-										})
-										.then(show=>{
-											show.subscribe(user)
-											show.save()
-										})
-								}
-							})
+					return user.syncCollection()
+						.then(()=>{
+							return user.syncHistory()
 						})
 				})
 				.catch(error=>{

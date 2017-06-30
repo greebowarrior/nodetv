@@ -1,7 +1,9 @@
 "use strict"
 
 const mongoose = require('mongoose')
+require('mongoose-long')(mongoose)
 mongoose.Promise = global.Promise
+
 
 const Database = ()=>{
 	
@@ -10,7 +12,7 @@ const Database = ()=>{
 	if (process.env.DB_USER && process.env.DB_PASS) conn += `${process.env.DB_USER}:${process.env.DB_PASS}@`
 	conn += `${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
 	
-	mongoose.connect(conn) //, {useMongoClient:true})
+	mongoose.connect(conn)
 		.then(()=>{
 			console.info('Connected to MongoDB: %s:%d/%s', process.env.DB_HOST, process.env.DB_PORT, process.env.DB_NAME)
 		})

@@ -797,59 +797,71 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/tasks\/ddns.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/tasks\/min\/ddns.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/tasks\/guidebox.js~": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/server\/tasks\/guidebox.js~",
-		"oF": 0
-		},
-	"\/server\/tasks\/show.feeds.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/tasks\/min\/show.feeds.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/tasks\/show.sync.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/tasks\/min\/show.sync.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/tasks\/sync.history.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/tasks\/min\/sync.history.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/server\/tasks\/sync.shows.js~": {
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/server\/tasks\/sync.shows.js~",
 		"oF": 0
 		},
-	"\/server\/tasks\/torrents.js": {
+	"\/server\/tasks\/system.ddns.js": {
 		"ft": 64,
 		"mi": 0,
 		"oA": 1,
-		"oAP": "\/server\/tasks\/min\/torrents.min.js",
+		"oAP": "\/server\/tasks\/min\/system.ddns.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/tasks\/system.show.feeds.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/system.show.feeds.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/tasks\/system.show.sync.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/system.show.sync.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/tasks\/system.torrents.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/system.torrents.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/tasks\/user.sync.collection.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/user.sync.collection.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/tasks\/user.sync.history.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/user.sync.history.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/tasks\/user.sync.watchlist.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/user.sync.watchlist.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0

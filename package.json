@@ -33,6 +33,7 @@
     "log4js": "^1.1.1",
     "mime-types": "^2.1.15",
     "mongoose": "^4.11.0",
+    "mongoose-long": "^0.1.1",
     "mquery": "^2.3.1",
     "node-schedule": "^1.2.3",
     "passport": "^0.3.2",

@@ -1,9 +1,10 @@
 "use strict"
 
+// Refresh show feed data
+// Runs at 10 past the hour
+
 const helpers = require('nodetv-helpers')
 const Show = helpers.model('show')
-
-// Runs at 10 past the hour
 
 require('node-schedule').scheduleJob('10 * * * *', ()=>{
 	console.debug('Updating from RSS feeds')

@@ -5,8 +5,8 @@ const mongoose = require('mongoose')
 
 const helpers = require('nodetv-helpers')
 
+const Movie = require('./movie')
 const Show = require('./show')
-
 
 const userSchema = new mongoose.Schema({
 	username: {type: String, required: true, trim: true},
@@ -67,31 +67,52 @@ userSchema.methods.refreshToken = function(){
 	return
 }
 
-userSchema.methods.sync = function(){
-	let promises = []
-	/*
-	helpers.trakt(this).sync.watchlist.get()
+userSchema.methods.syncCollection = function(){
+	return helpers.trakt(this).sync.collection.get({type:'shows'})
 		.then(results=>{
-			results.forEach(result=>{
-				promises.push(result)
-			})
-		})
-	*/
-	helpers.trakt(this).sync.collection.get({type:'shows'})
-		.then(results=>{
-			results.forEach(result=>{
-				promise.push(result)
-			})
-		})
-		
-	return Promise.all(promise)
-	/*
-		.then(results=>{
-			results.forEach(result=>{
+			if (!results) throw new Error(`No shows in Trakt collection`)
 			
+			let promises = []
+			results.forEach(result=>{
+				if (result.movie){
+					let promise = Movie.findBySlug(result.movie.ids.slug)
+						.then(movie=>{
+							if (!movie) movie = new Movie(result.movie)
+							return movie.subscribe(this).save({new:true})
+						})
+						.then(movie=>{
+							return movie.sync()
+						})
+					promises.push(promise)
+				}
+				if (result.show){
+					let promise = Show.findBySlug(result.show.ids.slug)
+						.then(show=>{
+							if (!show) show = new Show(result.show)
+							return show.subscribe(this).save({new:true})
+						})
+						.then(show=>{
+							return show.sync()
+						})
+					promises.push(promise)
+				}
+			})
+			
+			return Promise.all(promises)
+		})
+}
+userSchema.methods.syncHistory = function(){
+	return Show.findByUser(this._id)
+		.then(shows=>{
+			if (!shows) throw new Error(`${this.username} has not subscribed to any shows`)
+			
+			shows.forEach(show=>{
+				show.syncHistory(this)
 			})
 		})
-	*/
+		.catch(error=>{
+			console.error(error.message)
+		})
 }
 
 userSchema.pre('save', function(next){

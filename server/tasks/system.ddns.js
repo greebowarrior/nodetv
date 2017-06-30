@@ -1,8 +1,9 @@
 "use strict"
 
+// Update DDNS service hourly
+
 const request = require('request-promise')
 
-// Update DDNS service hourly
 require('node-schedule').scheduleJob('0 * * * *', ()=>{
 	try {
 		if (!process.env.DDNS_USER || !process.env.DDNS_TOKEN) return

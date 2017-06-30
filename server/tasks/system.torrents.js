@@ -1,5 +1,7 @@
 "use strict"
 
+// Check for completed torrents every 5 minutes
+
 const helpers = require('nodetv-helpers')
 
 const Show = helpers.model('show')

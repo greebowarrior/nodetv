@@ -45,10 +45,13 @@
 - Ants!
 
 - Sync from Trakt to local
-	- Collection
+	- ~~Collection~~
+	- ~~History~~
 	- Watchlist
-	- History
 - Watch progress
+
+
+
 
 - Import Trakt CSV?
 - User settings page improvements
@@ -64,8 +67,9 @@
 	- Theme support
 	- Create directory structure for themes?
 	- Create Express middleware to allow themes WITHOUT reloading service
-- Integrated uPnP/DLNA server to replace minidlna dependency
 
+
+# Phase 5
 
 # Eventually
 
@@ -82,6 +86,6 @@
 	- Optional, but TVSA *does* have more data
 - R&D: Feed Parsing - seems to make things laggy
 	- Use child_process?
-
+- Integrated uPnP/DLNA server to replace minidlna dependency
 
 

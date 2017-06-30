@@ -214,9 +214,10 @@ showSchema.methods.subscribe = function(user){
 	let idx = this.subscribers.findIndex(item=>{
 		return item.subscriber.equals(user._id)
 	})
-	if (idx === -1) this.subscribers.push({subscriber:user._id})
-	// Add to watchlist
-	helpers.trakt(user).sync.watchlist.add({shows:[{ids:{trakt:this.ids.trakt}}]})
+	if (idx === -1){
+		this.subscribers.push({subscriber:user._id})
+		helpers.trakt(user).sync.watchlist.add({shows:[{ids:{trakt:this.ids.trakt}}]})
+	}
 	return this
 }
 showSchema.methods.unsubscribe = function(user){
@@ -466,10 +467,31 @@ showSchema.methods.sync = function(user={}){
 }
 
 showSchema.methods.syncHistory = function(user){
-	return helpers.trakt(user).sync.history.get({type:'shows',id:this.ids.trakt})
-		.then(results=>{
-			console.debug(results)
+	
+	return helpers.trakt(user).sync.history.get({type:'episodes', id:this.ids.trakt}) //,start_at:user.synced})
+		.then(history=>{
+			if (!history) return
 			
+			let promises = []
+			history.forEach(watch=>{
+				let promise = this.getEpisode(watch.episode.season, watch.episode.number)
+					.then(episode=>{
+						return episode.setWatched(user, new Date(watch.watched_at), watch.id)
+					})
+					.then(()=>{
+						return this.save({new:true})
+					})
+					.catch(error=>{
+						console.error(error.message)
+					})
+				
+				promises.push(promise)
+			})
+			
+			return Promise.all(promises)
+		})
+		.catch(error=>{
+			console.error(error.message)
 		})
 }
 

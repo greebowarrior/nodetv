@@ -22,7 +22,7 @@ const episodeSchema = new mongoose.Schema({
 		watcher: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 		watches: [{
 			_id: false,
-			id: String,
+			id: mongoose.Schema.Types.Long,
 			date: {type: Date, default: new Date()}
 		}]
 	}],
@@ -72,7 +72,7 @@ episodeSchema.methods.setCollected = function(file=false){
 			return this
 		})
 }
-episodeSchema.methods.setWatched = function(user, date=null){
+episodeSchema.methods.setWatched = function(user, date=null, id=null){
 	if (!date) date = new Date()
 	
 	return new Promise(resolve=>{
@@ -82,25 +82,26 @@ episodeSchema.methods.setWatched = function(user, date=null){
 			let check = this.watchers[idx].watches.findIndex(item=>{
 				return item.date == date
 			})
-			if (check == -1){
-				this.watchers[idx].watches.push({date:date})
-				helpers.trakt(user).sync.history.add({
-					episodes: [{ids:{trakt:this.ids.trakt},watched_at:date}]
-				})
+			if (check >= 0){
+				if (id) this.watchers[idx].watches[check].id = id
+			} else {
+				this.watchers[idx].watches.push({date:date,id:id})
 			}
-			resolve()
+			resolve(id)
 		} else {
 			this.watchers.push({
 				watcher: user._id,
-				watches: [{date:date}]
+				watches: [{date:date,id:id}]
 			})
+			resolve(id)
+		}
+	})
+	.then(id=>{
+		if (!id){
 			helpers.trakt(user).sync.history.add({
 				episodes: [{ids:{trakt:this.ids.trakt},watched_at:date}]
 			})
-			resolve()
 		}
-	})
-	.then(()=>{
 		return this
 	})
 }
