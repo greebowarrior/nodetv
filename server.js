@@ -1,9 +1,9 @@
 "use strict"
 
-require('dotenv-extended').load()
-
 process.title = 'NuTV'
 process.chdir(__dirname)
+
+require('dotenv-extended').load()
 
 require('log4js').configure({
 	appenders:[{type:'stdout',layout:{type:'pattern',pattern:'[%[%p%]]\t- %m'}}],
