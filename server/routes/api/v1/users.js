@@ -3,8 +3,6 @@
 const helpers = require('nodetv-helpers')
 const router = require('express').Router()
 
-const Movie = helpers.model('movie')
-const Show = helpers.model('show')
 const User = helpers.model('user')
 
 const UsersAPI = app=>{
@@ -27,9 +25,13 @@ const UsersAPI = app=>{
 			// Add new user
 			let user = new User(req.body)
 			
-			user.password = user.generateHash(req.body.password)
+			if (req.body.password && req.body.password == req.body.passconf){
+				user.password = user.generateHash(req.body.password)
+			} else {
+				user.password = undefined
+			}
 			
-			user.save()
+			user.save({new:true})
 				.then(user=>{
 					res.send(user)
 				})
@@ -50,10 +52,19 @@ const UsersAPI = app=>{
 		})
 		.post((req,res)=>{
 			// Update me
-			User.findOneAndUpdate({id:req.user._id},{$set:req.body}, {new:true})
+			User.findById(req.user._id)
 				.then(user=>{
-					console.log(user)
-					res.status(201).end()
+					if (req.body.password && req.body.passconf && req.body.password == req.body.passconf){
+						req.body.password = user.generateHash(req.body.password)
+					} else {
+						delete req.body.password
+					}
+					delete req.body.passconf
+					
+					return User.update({_id:req.user._id},{$set:req.body})
+				})
+				.then(()=>{
+					res.send({success:true})
 				})
 				.catch(error=>{
 					console.error(error)

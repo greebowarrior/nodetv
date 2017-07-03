@@ -1,5 +1,16 @@
 <form method="post" ng-submit="$ctrl.save()">
 	<div class="form-group">
+		<label>Show Directory</label>
+		<div class="input-group">
+			<span class="input-group-addon" uib-tooltip="<%- media.root %>">
+				<%- media.shows %>
+			</span>
+			<input type="text" class="form-control" ng-model="$ctrl.show.config.directory" />
+			<span class="input-group-addon">/</span>
+		</div>
+	</div>
+	
+	<div class="form-group">
 		<label for="ipt_format">Filename Format</label>
 		
 		<div class="input-group">
@@ -12,16 +23,6 @@
 			<strong>%T</strong>: Title,
 			<strong>%X</strong>: File extension
 		</small>
-	</div>
-	
-	<div class="form-group">
-		<label>Show Directory</label>
-		<div class="input-group">
-			<span class="input-group-addon" uib-tooltip="<%- config.media.base %>/">
-				<%- config.media.shows.path %>/
-			</span>
-			<input type="text" class="form-control" ng-model="$ctrl.show.config.directory" />
-		</div>
 	</div>
 	
 	<div class="checkbox">

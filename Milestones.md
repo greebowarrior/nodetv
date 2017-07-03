@@ -43,13 +43,15 @@
 # Phase 4
 
 - Ants!
-
+- ~~Prune superfluous episodes~~
 - Sync from Trakt to local
 	- ~~Collection~~
 	- ~~History~~
 	- Watchlist
-- Watch progress
-
+- Change password
+- Create user
+- Watch status on episodes?
+- Watch progress?
 
 
 

@@ -32,6 +32,11 @@ const App = app=>{
 	app.use('/static', require('express').static(require('path').join(process.cwd(),'app'),{etag:false}))
 	
 	app.locals.nutv = require('../package.json')
+	app.locals.media = {
+		root: process.env.MEDIA_ROOT,
+		shows: process.env.MEDIA_SHOWS,
+		movies: process.env.MEDIA_MOVIES,
+	}
 	
 	// Sessions
 	const session =  require('express-session')({

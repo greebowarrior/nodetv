@@ -183,6 +183,23 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 		}
 	}])
 	
+	.directive('compareTo', ()=>{
+		return {
+			require: 'ngModel',
+			scope: {
+				compare: '=compareTo'
+			},
+			link: [function(scope,element,attr, ngModel){
+				ngModel.$validators.compareTo = (value)=>{
+	                return value === scope.compare
+	            }
+	            scope.$watch('compare', ()=>{
+	                ngModel.$validate()
+	            })
+			}]
+		}
+	})
+	
 	.component('nutvBreadcrumbs', {
 		// Automatically generate breadcrumbs from the router
 		templateUrl: 'views/components/breadcrumbs.html',

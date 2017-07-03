@@ -230,7 +230,7 @@ const ShowsAPI = (app,io)=>{
 					
 					res.status(202).status({message: 'Accepted'})
 					console.debug('Syncing show: %s', show.title)
-					return show.sync(req.user)
+					return show.sync()
 						.then(()=>{
 							return show.save({new:true})
 						})

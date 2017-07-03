@@ -314,7 +314,7 @@ showSchema.methods.match = function(){
 	// e.g. Doctor Who (1963/2005)
 	
 	return new Promise((resolve,reject)=>{
-		const base = require('path').join(process.env.MEDIA_BASE, process.env.MEDIA_SHOWS)
+		const base = require('path').join(process.env.MEDIA_ROOT, process.env.MEDIA_SHOWS)
 		
 		// If a directory exists that has the *exact* same name as the show, assume it's the folder for this show
 		if (this.config.directory && require('fs-sync').existsSync(this.getDirectory())){
@@ -391,13 +391,9 @@ showSchema.methods.scan = function(){
 		})
 }
 
-showSchema.methods.sync = function(user={}){
+showSchema.methods.sync = function(){
 	// Sync data from Trakt
-	
-	//  TODO: skip syncing if it's been done 'recently'
-	// (TODO: define recently)
-	
-	return helpers.trakt(user).shows.summary({id:this.ids.slug, extended:'full'})
+	return helpers.trakt().shows.summary({id:this.ids.slug, extended:'full'})
 		.then(summary=>{
 			
 			if (!this.config.directory){
@@ -419,10 +415,19 @@ showSchema.methods.sync = function(user={}){
 		
 		.then(seasons=>{
 			if (!seasons.length) throw new Error(`No seasons found`)
+			
 			seasons.forEach(season=>{
+				
 				let idx = this.seasons.findIndex(item=>{
 					return item.season == season.number
 				})
+				
+				this.episodes.forEach(item=>{
+					if (item.season == season.number && item.episode > season.episode_count){
+						item.remove()
+					}
+				})
+				
 				if (idx == -1){
 					this.seasons.push({
 						season: season.number,
@@ -435,7 +440,7 @@ showSchema.methods.sync = function(user={}){
 				
 				(season.episodes || []).forEach(episode=>{
 					let idx = this.episodes.findIndex(item=>{
-						return item.season == season.number && item.episode == episode.number
+						return item && item.season == season.number && item.episode == episode.number
 					})
 					if (idx == -1){
 						this.episodes.push({
@@ -448,21 +453,22 @@ showSchema.methods.sync = function(user={}){
 							updated_at: episode.updated_at ? new Date(episode.updated_at) : null
 						})
 					} else {
-						if (this.episodes[idx].updated_at < new Date(episode.updated_at)){
-							this.episodes[idx].title = episode.title || 'TBA'
-							this.episodes[idx].updated_at = new Date(episode.updated_at)
-							
-							if (episode.first_aired) this.episodes[idx].first_aired = new Date(episode.first_aired)
-							if (!episode.first_aired) this.episodes[idx].first_aired = undefined
-							if (episode.overview) this.episodes[idx].overview = episode.overview
-						}
+						this.getEpisode(season.number,episode.number)
+							.then(ep=>{
+								ep.title = episode.title || 'TBA'
+								ep.updated_at = new Date(episode.updated_at)
+								
+								if (episode.first_aired) ep.first_aired = new Date(episode.first_aired)
+								if (!episode.first_aired) ep.first_aired = undefined
+								if (episode.overview) ep.overview = episode.overview
+							})
 					}
 				})
 			})
 			return this
 		})
 		.catch(error=>{
-			if (error) console.error(this.title, error.message)	
+			if (error) console.error(this.title, error)	
 		})
 }
 

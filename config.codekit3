@@ -821,14 +821,11 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/tasks\/system.show.sync.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/tasks\/min\/system.show.sync.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
+	"\/server\/tasks\/system.show.sync.js~": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/server\/tasks\/system.show.sync.js~",
+		"oF": 0
 		},
 	"\/server\/tasks\/system.torrents.js": {
 		"ft": 64,
