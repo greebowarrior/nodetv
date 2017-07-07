@@ -24,6 +24,7 @@
     "ejs": "^2.5.6",
     "express": "^4.15.3",
     "express-ejs-layouts": "^2.3.0",
+    "express-rate-limit": "^2.8.0",
     "express-session": "^1.15.3",
     "fs-extra": "^3.0.1",
     "glob": "^7.1.2",

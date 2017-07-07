@@ -2,8 +2,11 @@
 
 // Keep all the auth mechanisms in one place
 
+const RateLimit = require('express-rate-limit')
+
 const helpers = require('nodetv-helpers')
 const passport = require('passport')
+const router = require('express').Router()
 
 const LocalStrategy = require('passport-local').Strategy
 const TokenStrategy = require('passport-token').Strategy
@@ -67,30 +70,26 @@ const Auth = app=>{
 	app.use(passport.initialize())
 	app.use(passport.session())
 	
-	/*
-	app.route('/login')
-		.all((req,res,next)=>{
-			if (req.user){
-				return res.redirect('/')
-			}
-			return next()
-		})
-		.get((req,res)=>{
-			res.render('auth/login', {layout:'layouts/classic'})
-		})
-		.post(passport.authenticate('local', {failureRedirect:'/login'}), (req,res)=>{
-			res.redirect('/')
-		})
-	*/
+	app.use('/auth', router)
 	
+	// Secure all API routes with token authentication
+	app.route('/api/*')
+		.all(passport.authenticate('token'))
+		
 	app.route('/logout')
 		.get((req,res)=>{
 			req.logout()
 			res.redirect('/login')
 		})
 	
+	// Limit auth attempts to 1 every 5 seconds
+	router.use(new RateLimit({
+		windowMs: 5000,
+		max: 1,
+		delayMs: 0
+	}))
 	
-	app.route('/auth/login')
+	router.route('/login')
 		.post(passport.authenticate('local'), (req,res)=>{
 			if (req.user){
 				User.findById(req.user._id)
@@ -108,13 +107,13 @@ const Auth = app=>{
 			}
 		})
 		
-	app.route('/auth/logout')
+	router.route('/logout')
 		.all((req,res)=>{
 			req.logout()
 			res.status(200).send({success:true})
 		})
 		
-	app.route('/auth/token')
+	router.route('/token')
 		.get((req,res)=>{
 			if (req.user){
 				User.findById(req.user._id)
@@ -131,10 +130,6 @@ const Auth = app=>{
 				res.status(401).send({error:'Unauthorized'})
 			}
 		})
-	
-	// Secure all API routes with token authentication
-	app.route('/api/*')
-		.all(passport.authenticate('token'))
 }
 
 module.exports = Auth

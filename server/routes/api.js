@@ -1,9 +1,18 @@
 "use strict"
 
+const RateLimit = require('express-rate-limit')
+
 const router = require('express').Router()
 
 const API = (app,io)=>{
 	app.use('/api', router)
+	
+	// API Request rate limiter
+	router.use(new RateLimit({
+		windowMs: 10000,
+		max: 100,
+		delayMs: 0
+	}))
 	
 	router.route('/ping')
 		.all((req,res)=>{

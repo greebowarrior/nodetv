@@ -11,6 +11,19 @@ const UsersAPI = app=>{
 	
 	// Add ACL Middleware
 	
+	// TODO: Add some serious auth middleware
+	
+	router.route('*')
+		.post((req,res,next)=>{
+			delete req.body.added
+			delete req.body.profile
+			delete req.body.synced
+			delete req.body.tokens
+			delete req.body.trakt
+			delete req.body.updated
+			next()
+		})
+	
 	router.route('/')
 		.get((req,res)=>{
 			User.find({},{password:false,trakt:false})
@@ -25,21 +38,24 @@ const UsersAPI = app=>{
 			// Add new user
 			let user = new User(req.body)
 			
-			if (req.body.password && req.body.password == req.body.passconf){
-				user.password = user.generateHash(req.body.password)
-			} else {
-				user.password = undefined
+			// Set password
+			if (req.body.password && req.body.passconf){
+				user.setPassword(req.body.password,req.body.passconf)
 			}
+			// Create a user token
+			user.apiToken()
 			
 			user.save({new:true})
 				.then(user=>{
-					res.send(user)
+					res.status(201).send({_id:user._id})
 				})
 				.catch(error=>{
-					res.status(400).send({error:error})
+					console.error(error)
+					res.status(400).end()
 				})
 		})
-
+	
+	
 	router.route('/me')
 		.get((req,res)=>{
 			User.findById(req.user._id,{password:false,trakt:false})
@@ -54,14 +70,13 @@ const UsersAPI = app=>{
 			// Update me
 			User.findById(req.user._id)
 				.then(user=>{
-					if (req.body.password && req.body.passconf && req.body.password == req.body.passconf){
-						req.body.password = user.generateHash(req.body.password)
-					} else {
-						delete req.body.password
+					if (req.body.password && req.body.passconf){
+						user.setPassword(req.body.password,req.body.passconf)
 					}
-					delete req.body.passconf
+					delete req.body.password
+					Object.assign(user, req.body)
 					
-					return User.update({_id:req.user._id},{$set:req.body})
+					return user.save({new:true})
 				})
 				.then(()=>{
 					res.send({success:true})
@@ -97,9 +112,22 @@ const UsersAPI = app=>{
 		})
 		.post((req,res)=>{
 			// Update user
-			User.findOneAndUpdate({_id:req.params.id}, {$set:req.body})
+			User.findById(req.params.id)
+				.then(user=>{
+					if (req.body.password && req.body.passconf){
+						user.setPassword(req.body.password, req.body.passconf)
+					}
+					delete req.body.password
+					Object.assign(user, req.body)
+					
+					return user.save({new:true})
+				})
 				.then(()=>{
-					res.status(201).end()
+					res.status(200).send({success:true})
+				})
+				.catch(error=>{
+					console.error(error)
+					res.status(404).end()
 				})
 		})
 	
@@ -108,6 +136,8 @@ const UsersAPI = app=>{
 			// Sync the user's movies, shows, and watch history
 			User.findById(req.params.id)
 				.then(user=>{
+					res.status(202).end()
+					
 					return user.syncCollection()
 						.then(()=>{
 							return user.syncHistory()
@@ -115,9 +145,8 @@ const UsersAPI = app=>{
 				})
 				.catch(error=>{
 					console.error(error)
+					res.status(404).end()
 				})
-				
-			res.status(202).end()
 		})
 }
 module.exports = UsersAPI

@@ -344,6 +344,12 @@
 		"oAP": "\/app\/views\/components\/grid.html",
 		"oF": 0
 		},
+	"\/app\/views\/components\/messages.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/messages.html",
+		"oF": 0
+		},
 	"\/app\/views\/components\/navigation.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -596,6 +602,121 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/server\/local_modules\/nodetv-helpers\/index.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/min\/index.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-helpers\/lib\/files.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/min\/files.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-helpers\/lib\/torrents.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/min\/torrents.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-helpers\/lib\/trakt.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/min\/trakt.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-helpers\/lib\/utils.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/min\/utils.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-helpers\/lib\/workers\/file.copy.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/workers\/min\/file.copy.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-helpers\/lib\/workers\/file.delete.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/workers\/min\/file.delete.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-helpers\/lib\/workers\/file.download.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/workers\/min\/file.download.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-helpers\/lib\/workers\/file.move.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/workers\/min\/file.move.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-helpers\/lib\/workers\/file.transcode.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/workers\/min\/file.transcode.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-helpers\/package.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/package-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"\/server\/local_modules\/trakt.tv-artwork\/index.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/trakt.tv-artwork\/min\/index.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/trakt.tv-artwork\/package.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/trakt.tv-artwork\/package-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"\/server\/models\/log.js": {
 		"ft": 64,
 		"mi": 0,
@@ -668,12 +789,6 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/node_modules": {
-		"ft": 65536,
-		"oA": 2,
-		"oAP": "\/build\/server\/node_modules",
-		"oF": 0
-		},
 	"\/server\/routes\/api.js": {
 		"ft": 64,
 		"mi": 0,
@@ -724,6 +839,15 @@
 		"oA": 1,
 		"oAP": "\/server\/routes\/api\/watchlist.js~",
 		"oF": 1
+		},
+	"\/server\/routes\/auth.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/routes\/min\/auth.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		},
 	"\/server\/routes\/sockets.js": {
 		"ft": 64,

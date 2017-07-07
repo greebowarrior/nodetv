@@ -9,9 +9,9 @@ const Movie = require('./movie')
 const Show = require('./show')
 
 const userSchema = new mongoose.Schema({
-	username: {type: String, required: true, trim: true},
-	password: {type: String, required: true},
-	email: {type: String, lowercase: true, trim: true},
+	username: {type:String, required:true, trim:true, unique:true},
+	password: {type:String, required: true},
+	email: {type:String, lowercase:true, trim:true, unique:true},
 	tokens: [{
 		_id: false,
 		created: {type: Date, default: new Date()},
@@ -49,10 +49,15 @@ userSchema.methods.apiToken = function(){
 	}
 	return this.tokens[this.tokens.length-1].token
 }
+
 userSchema.methods.generateHash = function(password){
 	return bcrypt.hashSync(password, bcrypt.genSaltSync(8))
 }
-
+userSchema.methods.setPassword = function(password,passconf){
+	if (password && passconf && password === passconf){
+		this.password = this.generateHash(password)
+	}
+}
 userSchema.methods.verifyPassword = function(password){
 	try {
 		return bcrypt.compareSync(password, this.password)
@@ -61,6 +66,7 @@ userSchema.methods.verifyPassword = function(password){
 		return false
 	}
 }
+
 userSchema.methods.refreshToken = function(){
 	if (this.trakt.expires <= new Date()){
 		// refresh the access_token

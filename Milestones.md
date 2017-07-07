@@ -1,4 +1,6 @@
-# Phase 1 - Alpha
+# NodeTV Roadmap
+
+## Phase 1 - Pre-Alpha
 
 - ~~Authentication~~
 - ~~Database design~~
@@ -10,7 +12,7 @@
 - ~~Mark as Collected in Trakt **per user**~~
 
 
-# Phase 2
+## Phase 2 - Alpha
 
 - ~~Rebuild REST API endpoints~~
 - ~~Get it running on the server~~
@@ -27,7 +29,7 @@
 - ~~BUG! Ensure directories are created when adding a show~~
 
 
-# Phase 3 - Beta
+## Phase 3 - Beta
 
 - ~~Manual download option per episode~~
 - ~~Manual show data update~~
@@ -40,38 +42,43 @@
 - ~~Use .env for all configuration values~~
 
 
-# Phase 4
+## Phase 4 - Release Candidate
 
 - Ants!
 - ~~Prune superfluous episodes~~
-- Sync from Trakt to local
+- ~~Sync from Trakt to local~~
 	- ~~Collection~~
 	- ~~History~~
-	- Watchlist
-- Change password
-- Create user
-- Watch status on episodes?
-- Watch progress?
+- ~~Transcoding now sets title metadata~~
+- ~~User settings page improvements~~
+	- ~~Create user~~
+	- ~~Update password~~
+- Initial user creation?
+	- Last hurdle before Primetime
 
 
+## Phase 5 - Version 1.1
 
-- Import Trakt CSV?
-- User settings page improvements
-- User creation flow
-	- Would be nice to create a user & connect to Trakt at the same time
 - The `Movies` Update
 	- ~~Model~~
 	- API Endpoints
 	- Tasks
+	- Where should we save artwork?
+- Update artwork module for movie support
+- Watch progress?
+- Watch status on episodes
+- Movie symlinking for Genres folder
 - Add proxy support
 - Re-implement YTS API (use proxy)
 - Better UI?
 	- Theme support
 	- Create directory structure for themes?
 	- Create Express middleware to allow themes WITHOUT reloading service
+- Import Trakt CSV?
+- Trakt Watchlist syncing
+- JSON Web Token Auth?
+	- Generate a unique RSA key per install?
 
-
-# Phase 5
 
 # Eventually
 

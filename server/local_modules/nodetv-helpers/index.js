@@ -1,7 +1,5 @@
 "use strict"
 
-// TODO: add to /package.json: "nodetv-helpers": "file:server/local_modules/nodetv-helpers",
-
 exports.files = require('./lib/files')
 exports.utils = require('./lib/utils')
 exports.torrents = require('./lib/torrents')
