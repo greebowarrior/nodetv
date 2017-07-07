@@ -11,9 +11,14 @@ process.on('message', (msg)=>{
 		if (mime.lookup(msg.source) === 'video/x-matroska' && mime.lookup(msg.target) === 'video/mp4'){
 			args.push('-sn')
 		}
+		let file = require('path').parse(msg.target)
 		
+		// Set the metadata title to match the filename (without filext)
+		args.push('-metadata', `title="${file.name}"`)
+		
+		// TODO: Metadata magic
+		/*
 		if (msg.metadata){
-			/*
 			let type = null
 			case (mime.lookup(msg.target)){
 				case 'video/x-matroska':
@@ -23,21 +28,20 @@ process.on('message', (msg)=>{
 					type = 'mp4'
 					break
 			}
-			*/
 			let meta = []
 			if (msg.metadata.title) meta['title'] = msg.metadata.title
 		//	if (msg.metadata.overview) meta['description'] = msg.metadata.overview
 			
 			msg.metadata.forEach(meta=>{
 				args.push('-metadata', meta.name+'="'+meta.value+'"')
-				/*
 				if (meta.name == 'poster'){
 					args.push('-attach', meta.value)
 					args.push('-metadata:s:t', 'mimetype='+mime.lookup(meta.value))
 				}
-				*/
 			})
 		}
+		*/
+		
 		args.push(msg.target)
 		
 		const remux = require('child_process').spawn('ffmpeg', args)
