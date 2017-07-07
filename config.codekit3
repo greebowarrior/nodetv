@@ -725,15 +725,6 @@
 		"oAP": "\/server\/routes\/api\/watchlist.js~",
 		"oF": 1
 		},
-	"\/server\/routes\/auth.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/routes\/min\/auth.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/server\/routes\/sockets.js": {
 		"ft": 64,
 		"mi": 0,

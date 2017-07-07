@@ -26,7 +26,7 @@ const MoviesAPI = (api)=>{
 				.then(movie=>{
 					if (movie) return movie
 					movie = new Movie({ids:{slug:req.body.slug}})
-					return movie.sync(req.user)
+					return movie.sync()
 				})
 				.then(movie=>{
 					// Subscribe to show
@@ -65,7 +65,25 @@ const MoviesAPI = (api)=>{
 					res.status(400).send({error:'Bad Request'})
 				})
 		})
-
+	
+	router.route('/:slug/sync')
+		.post((req,res)=>{
+			Movie.findBySlug(req.params.slug)
+				.then(movie=>{
+					return movie.sync()
+				})
+				.then(movie=>{
+					return movie.save()
+				})
+				.then(()=>{
+					res.send({success:true})
+				})
+				.catch(error=>{
+					console.error(error)
+					res.status(400).send({error:'Bad request'})
+				})
+		})
+	
 	router.route('/:slug/artwork')
 		.get((req,res)=>{
 			Movie.findBySlug(req.params.slug)
@@ -74,6 +92,10 @@ const MoviesAPI = (api)=>{
 				})
 				.then(images=>{
 					res.send(images)
+				})
+				.catch(error=>{
+					console.error(error)
+					res.status(400).send({error:'Bad request'})
 				})
 		})
 		.post((req,res)=>{

@@ -74,7 +74,12 @@ angular.module('nutv.movies', ['nutv.core'])
 				
 			}
 			this.sync = ()=>{
-				
+				alertService.confirm({
+					title: 'Sync movie data?',
+					type: 'Question'
+				}).then(()=>{
+					$http.post(`/api/movies/${this.movie.ids.slug}/sync`)
+				})
 			}
 		}]
 	})

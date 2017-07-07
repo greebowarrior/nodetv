@@ -49,6 +49,16 @@ angular.module('nutv.users', ['nutv.core'])
 					users: (userService)=>userService.list()
 				}
 			})
+			.state('users.add', {
+				url: '/add',
+				component: 'user',
+				resolve: {
+					user: ()=>{return {new:true}}
+				},
+				breadcrumb: {
+					title: 'Add User'
+				}
+			})
 			.state('users.profile', {
 				url: '/me',
 				component: 'user',
@@ -115,23 +125,29 @@ angular.module('nutv.users', ['nutv.core'])
 							.then(()=>{
 								alertService.notify({type:'info',msg:`Sync in progress`})
 							})
-						/*
-						userService.delete(this.user._id)
-							.then(()=>{
-								alertService.alert({type:'success',title:`User '${this.user.username}' deleted`})
-								$state.go('^.list')
-							})
-						*/
 					}
 				})
 			}
 			
 			this.save = ()=>{
-				userService.update(this.user)
-					.then(()=>{
+				new Promise(resolve=>{
+					if (this.user._id){
+						resolve(userService.update(this.user))
+					} else {
+						resolve(resolve(userService.add(this.user)))
+					}
+				}).then(user=>{
+					if (this.user.new){
+						alertService.alert({type:'success',title:`User Added`})
+						$state.go('^.detail',{id:user._id})
+					} else {
 						alertService.notify({type:'success',msg:`User '${this.user.username}' updated`})
-						//$state.go('^.list')
-					})
+					}
+					//$state.go('^.list')
+				})
+				.catch(()=>{
+					
+				})
 			}
 		}]
 	})
@@ -178,7 +194,7 @@ angular.module('nutv.users', ['nutv.core'])
 			}
 			
 			$timeout(()=>{
-				this.connect()
+				if (this.user._id) this.connect()
 			},0)
 		}]
 	})

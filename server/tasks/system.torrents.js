@@ -35,7 +35,7 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 						let source = require('path').join(torrent.downloadDir, files[0].name)
 						let target = require('path').join(directory, filename)
 						
-						return helpers.files.copy(source, target, show.config.transcode)
+						return helpers.files.copy(source, target, show.config.transcode, episode)
 							.then(()=>{
 								return episode.setCollected(filename)
 							})

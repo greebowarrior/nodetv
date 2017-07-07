@@ -189,14 +189,14 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 			scope: {
 				compare: '=compareTo'
 			},
-			link: [function(scope,element,attr, ngModel){
+			link: function(scope,element,attr,ngModel){
 				ngModel.$validators.compareTo = (value)=>{
 	                return value === scope.compare
 	            }
 	            scope.$watch('compare', ()=>{
 	                ngModel.$validate()
 	            })
-			}]
+			}
 		}
 	})
 	

@@ -2,7 +2,8 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<img ng-show="$ctrl.show.images.banner.enabled" ng-src="/media/shows/{{$ctrl.show.config.directory}}/{{$ctrl.show.images.banner.filename}}" class="img-responsive" />
-			<h1 ng-hide="$ctrl.show.images.banner.enabled">{{$ctrl.movie.title}}</h1>
+			<h1 ng-hide="$ctrl.show.images.banner.enabled">{{$ctrl.movie.title}} <small>{{$ctrl.movie.year}}</small></h1>
+			<h6 ng-show="$ctrl.movie.runtime">Runtime: {{$ctrl.movie.runtime}} mins</h6>
 		</div>
 		<div class="col-sm-12">
 			<p>{{$ctrl.movie.overview}}</p>
@@ -10,8 +11,8 @@
 	</div>
 	
 	<uib-tabset>
-		<uib-tab heading="Settings">
-			<!--ng-include src="'/views/show/settings.html'"></ng-include-->
+		<uib-tab heading="Downloads">
+			<!--ng-include src="'/views/movies/settings.html'"></ng-include-->
 		</uib-tab>
 		
 		<uib-tab heading="Artwork">

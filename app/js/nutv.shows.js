@@ -86,7 +86,7 @@ angular.module('nutv.shows', ['nutv.core'])
 	.component('nutvShow', {
 		bindings:{show:'='},
 		templateUrl: '/views/show/show.html',
-		controller: ['$http','$log','$timeout','alertService',function($http,$log,$timeout,alertService){
+		controller: ['$http','$log','$state','$timeout','alertService',function($http,$log,$state,$timeout,alertService){
 			this.images = []
 			
 			$timeout(()=>{
@@ -147,6 +147,9 @@ angular.module('nutv.shows', ['nutv.core'])
 					msg: 'Are you sure?'
 				}).then(()=>{
 					$http.delete(`/api/shows/${this.show.ids.slug}`)
+						.then(()=>{
+							$state.go('^.index')
+						})
 				})
 			}
 			
