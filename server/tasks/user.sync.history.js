@@ -16,8 +16,8 @@ require('node-schedule').scheduleJob('0,30 * * * *', function(){
 			
 			users.forEach(user=>{
 				Show.findByUser(user._id)
-					.then(show=>{
-						return show.syncHistory(user)
+					.then(shows=>{
+						shows.forEach(show=>show.syncHistory(user))
 					})
 					.catch(error=>{
 						console.error(error.message)
@@ -25,6 +25,6 @@ require('node-schedule').scheduleJob('0,30 * * * *', function(){
 			})
 		})
 		.catch(error=>{
-			if (error) console.error(error)
+			if (error) console.error(error.message)
 		})
 })
