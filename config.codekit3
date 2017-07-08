@@ -368,6 +368,12 @@
 		"oAP": "\/app\/views\/dashboard\/index.html",
 		"oF": 0
 		},
+	"\/app\/views\/dashboard\/install.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/dashboard\/install.html",
+		"oF": 0
+		},
 	"\/app\/views\/layouts\/classic.html": {
 		"ft": 8192,
 		"oA": 1,
@@ -876,23 +882,14 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/routes\/ui\/shows.js~": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/server\/routes\/ui\/shows.js~",
-		"oF": 0
-		},
-	"\/server\/routes\/ui\/trakt.js~": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/server\/routes\/ui\/trakt.js~",
-		"oF": 0
-		},
-	"\/server\/routes\/ui\/user.js~": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/server\/routes\/ui\/user.js~",
-		"oF": 0
+	"\/server\/routes\/ui\/install.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/routes\/ui\/min\/install.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		},
 	"\/server\/scheduler.js": {
 		"ft": 64,

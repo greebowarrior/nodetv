@@ -83,12 +83,13 @@ const Auth = app=>{
 		})
 	
 	// Limit auth attempts to 1 every 5 seconds
+	/*
 	router.use(new RateLimit({
 		windowMs: 5000,
 		max: 1,
 		delayMs: 0
 	}))
-	
+	*/
 	router.route('/login')
 		.post(passport.authenticate('local'), (req,res)=>{
 			if (req.user){
@@ -129,6 +130,35 @@ const Auth = app=>{
 			} else {
 				res.status(401).send({error:'Unauthorized'})
 			}
+		})
+		
+	router.route('/install')
+		.all((req,res,next)=>{
+			// Check if already installed
+			User.count()
+				.then(count=>{
+					if (count) throw new Error(`Forbidden`)
+					next()
+				})
+				.catch(error=>{
+					console.error(error)
+					res.status(403).send({error:'Forbidden'})
+				})
+		})
+		.get((req,res)=>{
+			res.status(200).send({installed:false})
+		})
+		.post((req,res)=>{
+			let user = new User(req.body)
+			user.setPassword(req.body.password,req.body.passconf)
+			user.save()
+				.then(()=>{
+					res.status(201).send({installed:true})
+				})
+				.catch(error=>{
+					console.error(error)
+					res.status(400).end()
+				})
 		})
 }
 

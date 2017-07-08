@@ -28,6 +28,26 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 				url: '/',
 				component: 'nutvDashboard'
 			})
+			
+			.state('install', {
+				url: '/install',
+				component: 'nutvInstall',
+				breadcrumb: {
+					title: 'Install'
+				},
+				resolve: {
+					installed: ['$http','$state',($http,$state)=>{
+						return $http.get('/auth/install')
+							.then(res=>{
+								if (res.data.installed) throw new Error('Installation already completed')
+								return false
+							})
+							.catch(()=>{
+								$state.go('login')
+							})
+					}]
+				}
+			})
 	}])
 	
 	.component('nutvAlerts', {
@@ -66,6 +86,25 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 				.catch(()=>{
 					$log.debug('Error while logging out')
 				})
+		}]
+	})
+	
+	.component('nutvInstall', {
+		templateUrl: 'views/dashboard/install.html',
+		controller: ['$http','$log','$state','alertService',function($http,$log,$state,alertService){
+			
+			this.submit = ()=>{
+				$http.post('/auth/install', this.user)
+					.then(res=>{
+						if (res.data.installed){
+							alertService.notify({type:'success',msg:'Installation complete. Please log in.'})
+							$state.go('login')
+						}
+					})
+					.catch(()=>{
+						alertService.notify({type:'danger',msg:'An error occured. Please try again'})
+					})
+			}
 		}]
 	})
 	
