@@ -567,38 +567,6 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/config\/_example.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "\/server\/config\/_example-min.json",
-		"oF": 0,
-		"oO": 0,
-		"oS": 1
-		},
-	"\/server\/config\/development.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "\/server\/config\/development-min.json",
-		"oF": 1,
-		"oO": 0,
-		"oS": 1
-		},
-	"\/server\/config\/production.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "\/server\/config\/production-min.json",
-		"oF": 1,
-		"oO": 0,
-		"oS": 1
-		},
-	"\/server\/config\/testing.json": {
-		"ft": 524288,
-		"oA": 1,
-		"oAP": "\/server\/config\/testing-min.json",
-		"oF": 1,
-		"oO": 0,
-		"oS": 1
-		},
 	"\/server\/database.js": {
 		"ft": 64,
 		"mi": 0,
