@@ -53,8 +53,11 @@
 - ~~User settings page improvements~~
 	- ~~Create user~~
 	- ~~Update password~~
-- Initial user creation?
-	- Last hurdle before Primetime
+- ~~Initial user creation~~
+
+
+## Phase 4.5 - Bug squashing
+
 
 
 ## Phase 5 - Version 1.1

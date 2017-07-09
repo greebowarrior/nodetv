@@ -489,7 +489,7 @@ showSchema.methods.syncHistory = function(user){
 						return this.save({new:true})
 					})
 					.catch(error=>{
-						console.error(error.message)
+						console.debug(error)
 					})
 				
 				promises.push(promise)
@@ -498,7 +498,7 @@ showSchema.methods.syncHistory = function(user){
 			return Promise.all(promises)
 		})
 		.catch(error=>{
-			console.error(error.message)
+			console.debug(error)
 		})
 }
 

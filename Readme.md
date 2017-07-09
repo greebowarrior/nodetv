@@ -28,16 +28,31 @@ Totally untested on Windows, but I can't think of any reason it wouldn't.
 
 - [Node.js](https://nodejs.org) 6.10
 - [MongoDB](https://mongodb.org) 2.6.x
-- [Transmission](https://transmissionbt.com) with RPC Enabled
+- [Transmission](https://transmissionbt.com) 2.92 with RPC Enabled
 
 I'd recommend using nginx with SSL as a reverse proxy. Example config to be added at a later date.
 
 ### Third-party dependencies
 
-- [Trakt](https://trakt.tv) (This is the only required one)
-- [ShowRSS](https://showrss.com)
+- [Trakt](https://trakt.tv) - Provides all Show, Episode, and Movie metadata
+- [FanArt.tv](https://fanart.tc) - Show & Movie artwork
+- [ShowRSS](https://showrss.com) - RSS Feeds for Shows
 - [Proxy Spider](https://trakt.tv)
 
+# Install
+
+Create a user `media`
+
+> git clone https://github.com/greebowarrior/nodetv.git /opt/nutv  
+> cd /opt/nutv  
+> npm install  
+
+Install the systemd service
+
+> sudo cp /opt/nutv/scripts/nutv.service /etc/systemd/system/  
+> sudo systemctl reload-daemon  
+> sudo systemctl enable nutv.service  
+> sudo systemctl start nutv.service  
 
 # Running
 

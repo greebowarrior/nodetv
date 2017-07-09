@@ -20,11 +20,11 @@ require('node-schedule').scheduleJob('0,30 * * * *', function(){
 						shows.forEach(show=>show.syncHistory(user))
 					})
 					.catch(error=>{
-						console.error(error.message)
+						console.debug(error)
 					})
 			})
 		})
 		.catch(error=>{
-			if (error) console.error(error.message)
+			console.debug(error)
 		})
 })

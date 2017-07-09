@@ -159,11 +159,11 @@ episodeSchema.methods.getFilename = function(){
 episodeSchema.methods.getMagnet = function(){
 	// Generate the magnet URL for the file
 	
-	// is the episode already downloaded?
-	// is it downloading now?
-	
 	return new Promise((resolve,reject)=>{
 		let config = this.parent().config
+		
+		// TODO: a better method of getting the best available torrent
+		
 		let hashes = this.hashes.filter(item=>{
 			 return item.hd === config.hd
 		})

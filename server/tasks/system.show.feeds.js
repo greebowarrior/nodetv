@@ -22,9 +22,9 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 					.then(()=>show.getLatestEpisodes())
 					.then(results=>{
 						let promises = []
-						
 						results.forEach(result=>{
 							let episode = show.episodes.id(result._id)
+							
 							// Don't get latest episode if it's already downloading or downloaded
 							if (episode.file.download.active || episode.file.added) return
 							// Get magnet for preferred format
@@ -32,13 +32,9 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 								// Send to transmission
 								.then(magnet=>helpers.torrents.add(magnet))
 								// Mark episode as downloading
-								.then(hash=>{
-									return episode.setDownloading(hash)
-								})
-							
+								.then(hash=>episode.setDownloading(hash))
 							promises.push(process)
 						})
-						
 						return Promise.all(promises)
 					})
 					.then(()=>{

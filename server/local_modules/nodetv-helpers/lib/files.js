@@ -25,9 +25,9 @@ exports.copy = function(source, target, transcode = false){
 	return fs.ensureDir(path.dirname(target))
 		.then(()=>{
 			if (transcode) {
-				return forked('file.transcode', {source:source,target:target,metadata:show})
+				return forked('file.transcode', {source:source,target:target})
 			} else {
-				return forked('file.copy', {source:source,target:target,metadata:show})
+				return forked('file.copy', {source:source,target:target})
 			}
 		})
 		.then(()=>{

@@ -148,7 +148,7 @@ angular.module('nutv.shows', ['nutv.core'])
 				}).then(()=>{
 					$http.delete(`/api/shows/${this.show.ids.slug}`)
 						.then(()=>{
-							$state.go('^.index')
+							$state.go('shows.index')
 						})
 				})
 			}
@@ -188,9 +188,10 @@ angular.module('nutv.shows', ['nutv.core'])
 			}
 			this.watched = ()=>{
 				$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/watched`)
-					.then(episode=>{
+					.then(()=>{
 						alertService.alert({
 							title: 'Episode watched',
+							msg: `${this.episode.title}`,
 							type: 'success'
 						})
 					})

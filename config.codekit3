@@ -517,7 +517,7 @@
 		"oAP": "\/package-min.json",
 		"oF": 0,
 		"oO": 0,
-		"oS": 0
+		"oS": 1
 		},
 	"\/Readme.md": {
 		"cS": 0,
@@ -878,15 +878,6 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/routes\/min\/ui.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/routes\/ui\/install.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/routes\/ui\/min\/install.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0

@@ -50,12 +50,12 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 						}
 					})
 					.catch(error=>{
-						if (error) console.error(error.message)
+						console.error(error.message)
 					})
 			})
 		//	return Promise.all(promises)
 		})
 		.catch(error=>{
-			console.error(error)
+			console.error(error.message)
 		})
 })
