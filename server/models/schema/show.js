@@ -244,7 +244,7 @@ showSchema.methods.getEpisode = function(season,episode){
 		let idx = this.episodes.findIndex(item=>{
 			return item.season == parseInt(season,10) && item.episode == parseInt(episode,10)
 		})
-		if (idx == -1) return reject(new Error(`Episode not found`))
+		if (idx == -1) return reject(new Error(`Episode not found: ${this.title} ${season}x${episode}`))
 		resolve(this.episodes.id(this.episodes[idx]._id))
 	})
 }
