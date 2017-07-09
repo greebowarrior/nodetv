@@ -254,7 +254,8 @@ showSchema.methods.getLatestEpisodes = function(days=7){
 		let since = new Date()
 		since.setDate(since.getDate()-days)
 		let results = this.episodes.filter(episode=>{
-			if (episode.first_aired >= since && episode.first_aired <= new Date()) return true
+		//	if (episode.first_aired >= since && episode.first_aired <= new Date()) return true
+			if (episode.first_aired >= since && episode.hashes.length) return true
 		})
 		resolve(results)
 	})
