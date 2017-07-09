@@ -475,7 +475,7 @@ showSchema.methods.sync = function(){
 
 showSchema.methods.syncHistory = function(user){
 	
-	return helpers.trakt(user).sync.history.get({type:'episodes', id:this.ids.trakt}) //,start_at:user.synced})
+	return helpers.trakt(user).sync.history.get({type:'shows', id:this.ids.trakt}) //,start_at:user.synced})
 		.then(history=>{
 			if (!history) return
 			
