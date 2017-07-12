@@ -357,7 +357,7 @@ showSchema.methods.scan = function(){
 						
 						return require('fs-extra').lstat(require('path').join(directory,file))
 							.then(stat=>{
-								this.episodes[idx].file.added = stat.birthtime
+								this.episodes[idx].file.added = stat.mtime
 								this.episodes[idx].file.filename = formatted
 								this.episodes[idx].file.filesize = stat.size
 								
