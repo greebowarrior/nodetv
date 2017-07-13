@@ -263,7 +263,6 @@ showSchema.methods.getLatestEpisodes = function(days=7){
 showSchema.methods.getSubscribers = function(){
 	let subscribers = []
 	this.subscribers.forEach(subscriber=>{
-	//	console.log(subscriber)
 		subscribers.push(require('../user').findById(subscriber.subscriber))
 	})
 	return Promise.all(subscribers)

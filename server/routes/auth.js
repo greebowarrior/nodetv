@@ -2,7 +2,7 @@
 
 // Keep all the auth mechanisms in one place
 
-const RateLimit = require('express-rate-limit')
+//const RateLimit = require('express-rate-limit')
 
 const helpers = require('nodetv-helpers')
 const passport = require('passport')
@@ -28,7 +28,7 @@ passport.deserializeUser((id,done)=>{
 })
 
 passport.use('local', new LocalStrategy((username,password,done)=>{
-	User.findOne({$or:[{username:username},{email:username}]})
+	User.findOne({$or:[{username:username.toLowerCase()},{email:username.toLowerCase()}]})
 		.then(user=>{
 			if (!user.verifyPassword(password)) throw new Error('Invalid password')
 			done(null, user)
@@ -38,7 +38,7 @@ passport.use('local', new LocalStrategy((username,password,done)=>{
 		})
 }))
 passport.use('token', new TokenStrategy((username,token,done)=>{
-	User.findOne({username:username,'tokens.token':token})
+	User.findOne({username:username.toLowerCase(),'tokens.token':token})
 		.then(user=>{
 			if (!user) throw new Error('Invalid user')
 			done(null, user)

@@ -9,7 +9,7 @@ const Movie = require('./movie')
 const Show = require('./show')
 
 const userSchema = new mongoose.Schema({
-	username: {type:String, required:true, trim:true, unique:true},
+	username: {type:String, required:true, lowercase:true, trim:true, unique:true},
 	password: {type:String, required: true},
 	email: {type:String, lowercase:true, trim:true, unique:true},
 	tokens: [{
