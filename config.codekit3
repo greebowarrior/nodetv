@@ -488,15 +488,6 @@
 		"rFN": 0,
 		"uCM": 0
 		},
-	"\/newrelic.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/min\/newrelic.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/node_modules": {
 		"ft": 65536,
 		"oA": 2,
@@ -510,6 +501,15 @@
 		"oF": 0,
 		"oO": 0,
 		"oS": 1
+		},
+	"\/opbeat.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/min\/opbeat.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		},
 	"\/package.json": {
 		"ft": 524288,
@@ -537,16 +537,25 @@
 		"rFN": 0,
 		"uCM": 0
 		},
+	"\/rollbar.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/min\/rollbar.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/scripts\/nginx.conf": {
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/scripts\/nginx.conf",
 		"oF": 0
 		},
-	"\/scripts\/nodetv.service": {
+	"\/scripts\/nutv.service": {
 		"ft": 8192,
 		"oA": 2,
-		"oAP": "\/scripts\/nodetv.service",
+		"oAP": "\/scripts\/nutv.service",
 		"oF": 0
 		},
 	"\/server.js": {

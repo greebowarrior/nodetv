@@ -35,7 +35,7 @@ const App = app=>{
 	app.locals.media = {
 		root: process.env.MEDIA_ROOT,
 		shows: process.env.MEDIA_SHOWS,
-		movies: process.env.MEDIA_MOVIES,
+		movies: process.env.MEDIA_MOVIES
 	}
 	
 	// Sessions

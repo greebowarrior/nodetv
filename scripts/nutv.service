@@ -11,7 +11,6 @@ SyslogIdentifier=nutv
 Type=simple
 User=media
 Group=media
-Environment=NODE_ENV=production
 
 [Install]
 WantedBy=multi-user.target
