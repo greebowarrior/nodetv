@@ -71,15 +71,24 @@ module.exports = io=>{
 		
 		/**************************************************/
 		
-		require('fs-extra').readdir(require('path').join(__dirname,'sockets'))
-			.then(files=>{
-				files.forEach(file=>{
-					try {
-						if (file.match(/\.js$/)) require('./sockets/'+file)(client)
-					} catch(e){
-						console.error(e.message)
-					}
-				})
-			})	
+		let socketRoutes = require('path').join(__dirname,'sockets')
+		
+		require('fs-extra').exists(socketRoutes)
+			.then(exists=>{
+				if (!exists) throw new Error(`Socket routes directory does not exist`)
+				require('fs-extra').readdir(socketRoutes)
+					.then(files=>{
+						files.forEach(file=>{
+							try {
+								if (file.match(/\.js$/)) require('./sockets/'+file)(client)
+							} catch(e){
+								console.error(e.message)
+							}
+						})
+					})	
+			})
+			.catch(error=>{
+				console.debug(error.message)
+			})
 	})
 }

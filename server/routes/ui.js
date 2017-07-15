@@ -9,15 +9,22 @@ const UI = (app,io)=>{
 		})
 	
 	// Load UI modules
-	require('fs-extra').readdir(require('path').join(__dirname,'ui'))
-		.then(files=>{
-			files.forEach(file=>{
-				try {
-					if (file.match(/\.js$/)) require('./ui/'+file)(app,io)
-				} catch(e){
-					console.error(e.message)
-				}
-			})
+	let uiRoutes = require('path').join(__dirname,'ui')
+	
+	require('fs-extra').exists(uiRoutes)
+		.then(exists=>{
+			if (!exists) throw new Error(`UI Routes directory does not exist`)
+			
+			require('fs-extra').readdir(uiRoutes)
+				.then(files=>{
+					files.forEach(file=>{
+						try {
+							if (file.match(/\.js$/)) require('./ui/'+file)(app,io)
+						} catch(e){
+							console.error(e.message)
+						}
+					})
+				})
 		})
 		.finally(()=>{
 			// Get media files (It's better to use nginx for this)
@@ -57,6 +64,9 @@ const UI = (app,io)=>{
 			app.use((req,res)=>{
 				res.render('dashboard/index.html')
 			})
+		})
+		.catch(error=>{
+			console.debug(error.message)
 		})
 }
 module.exports = UI
