@@ -65,8 +65,24 @@ exports.getInfoHash = (item)=>{
 	return false
 }
 
+exports.sanitizeFilename = (filename)=>{
+	// unescape special characters
+	filename = require('unescape-js')(filename)
+	
+	// Deal with slashes
+	filename = filename.replace(/\//, '\/')
+	
+	// platform-specific changes
+	if (process.platform == 'darwin'){
+		// do we need to do something? Or is macOS better these days?
+	}
+	
+	
+	return filename
+}
+
 exports.walkDir = (directory)=>{
-	const path = require('path')
+//	const path = require('path')
 	
 	return require('glob-promise')('**/*',{cwd:directory,nodir:true})
 		.then(files=>{

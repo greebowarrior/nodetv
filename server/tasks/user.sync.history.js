@@ -13,15 +13,15 @@ const Show = helpers.model('show')
 require('node-schedule').scheduleJob('0,30 * * * *', function(){	
 	console.debug('Syncing watch history with Trakt.tv')
 	
-	let since = new Date()
-	since.setHours(since.getHours()-1)
+//	let since = new Date()
+//	since.setDays(since.getDays()-14)
 	
 	User.find({trakt:{$exists:true}})
 		.then(users=>{
 			if (!users) throw new Error('No users are connected to Trakt.tv')
 			
 			users.forEach(user=>{
-				helpers.trakt(user).sync.history.get({type:'shows',start_at:since})
+				helpers.trakt(user).sync.history.get({type:'shows'}) //,start_at:since})
 					.then(history=>{
 						history.forEach(item=>{
 							if (item.episode){

@@ -13,7 +13,7 @@ const UI = (app,io)=>{
 	
 	require('fs-extra').exists(uiRoutes)
 		.then(exists=>{
-			if (!exists) throw new Error(`UI Routes directory does not exist`)
+			if (!exists) throw new Error(`routes/ui directory does not exist`)
 			
 			require('fs-extra').readdir(uiRoutes)
 				.then(files=>{
