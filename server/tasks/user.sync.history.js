@@ -14,7 +14,7 @@ require('node-schedule').scheduleJob('0,30 * * * *', function(){
 	console.debug('Syncing watch history with Trakt.tv')
 	
 	let since = new Date()
-	since.setHours(since.getHours() - 1)
+	since.setHours(since.getHours()-1)
 	
 	User.find({trakt:{$exists:true}})
 		.then(users=>{

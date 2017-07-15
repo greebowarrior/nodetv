@@ -37,7 +37,7 @@ require('node-schedule').scheduleJob('0 * * * *', ()=>{
 			})
 		]
 		
-		Promise.all(promises)
+		Promise.any(promises)
 			.then(ips=>{
 				return updateDNS(ips)
 			})

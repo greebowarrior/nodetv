@@ -446,24 +446,6 @@
 		"oAP": "\/app\/views\/user\/list.html",
 		"oF": 0
 		},
-	"\/derp.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "\/min\/derp-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/karma.conf.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/min\/karma.conf-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/LICENCE.txt": {
 		"ft": 8192,
 		"oA": 2,
@@ -901,11 +883,14 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/tasks\/system.show.sync.js~": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/server\/tasks\/system.show.sync.js~",
-		"oF": 0
+	"\/server\/tasks\/system.show.sync.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/system.show.sync.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		},
 	"\/server\/tasks\/system.torrents.js": {
 		"ft": 64,
@@ -948,54 +933,6 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/min\/upnp.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/tests\/api\/movies.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "\/tests\/api\/min\/movies-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/tests\/api\/shows.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "\/tests\/api\/min\/shows-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/tests\/authentication.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "\/tests\/min\/authentication-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/tests\/derp": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/tests\/derp",
-		"oF": 0
-		},
-	"\/tests\/S02E02.mkv": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/tests\/S02E02.mkv",
-		"oF": 0
-		},
-	"\/tests\/settings.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "\/tests\/min\/settings-min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
