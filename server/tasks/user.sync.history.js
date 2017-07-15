@@ -5,6 +5,7 @@
 // Is this causing CPU spikes and the non-responsiveness?
 // limit to changes in the past 60 mins
 
+/*
 const helpers = require('nodetv-helpers')
 
 const User = helpers.model('user')
@@ -21,7 +22,7 @@ require('node-schedule').scheduleJob('0,30 * * * *', function(){
 			if (!users) throw new Error('No users are connected to Trakt.tv')
 			
 			users.forEach(user=>{
-				helpers.trakt(user).sync.history.get({type:'shows'}) //,start_at:since})
+				helpers.trakt(user).sync.history.get({type:'shows'})
 					.then(history=>{
 						history.forEach(item=>{
 							if (item.episode){
@@ -50,3 +51,4 @@ require('node-schedule').scheduleJob('0,30 * * * *', function(){
 			console.debug(error.message)
 		})
 })
+/**/
