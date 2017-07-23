@@ -76,14 +76,15 @@ episodeSchema.methods.setWatched = function(user, date=null, id=null){
 	if (!date) date = new Date()
 	
 	return new Promise(resolve=>{
-		let idx = (this.watchers || []).findIndex(item=>item.watcher.equals(user._id))
-		
+		let idx = this.watchers.findIndex(item=>{
+			return item.watcher.equals(user._id)
+		})
 		if (idx >= 0){
-			let check = this.watchers[idx].watches.findIndex(item=>{
-				return item.date == date
+			let checkin = this.watchers[idx].watches.findIndex(item=>{
+				return item.id == id || item.date == new Date(date)
 			})
-			if (check >= 0){
-				if (id) this.watchers[idx].watches[check].id = id
+			if (checkin >= 0){
+				if (id) this.watchers[idx].watches[checkin].id = id
 			} else {
 				this.watchers[idx].watches.push({date:date,id:id})
 			}
@@ -116,14 +117,14 @@ episodeSchema.methods.setUnwatched = function(user){
 	})
 }
 
-episodeSchema.methods.getFilename = function(){
+episodeSchema.methods.getFilename = function(file){
 	let config = this.parent().config
 	
 	let vars = {
-		S: require('zero-fill')(2,this.season),		// Number
-		E: require('zero-fill')(2,this.episode),	// Number or Array
-		T: '',										// String or Array
-		X: 'mkv'
+		S: require('zero-fill')(2, this.season),
+		E: require('zero-fill')(2, this.episode),
+		T: '',
+		X: require('path').extname(file) || 'mkv'
 	}
 	
 	if (this.hashes.linked && this.hashes.linked.length > 1){
@@ -148,7 +149,7 @@ episodeSchema.methods.getFilename = function(){
 		].join('-')
 		*/
 	} else {
-		vars.T = this.title
+		vars.T = helpers.utils.normalize(this.title)
 	}
 	
 	let filename = config.format.replace(/%(\w)/g, function(match, key){

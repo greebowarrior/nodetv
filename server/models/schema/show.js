@@ -101,7 +101,7 @@ showSchema.statics.recentEpisodes = function(days=7){
 	return this.aggregate([
 		{
 			$match: {
-				'config.enabled': true,
+		//		'config.enabled': true,
 				$or: [
 					{'episodes.file.added': {$gte:since, $lt:now}},
 					{'episodes.first_aired': {$gte:since, $lt:now}}
@@ -135,7 +135,7 @@ showSchema.statics.upcomingEpisodes = function(days=7){
 	return this.aggregate([
 		{
 			$match: {
-				'config.enabled': true,
+		//		'config.enabled': true,
 				'episodes.first_aired': {$gte:now, $lt:until}
 			}
 		},{
@@ -406,8 +406,7 @@ showSchema.methods.scan = function(){
 							return item.season == data.season && data.episodes.indexOf(item.episode) >= 0
 						})
 						if (idx == -1) return
-						
-						const formatted = this.episodes[idx].getFilename()
+						const formatted = this.episodes[idx].getFilename(file)
 						
 						return require('fs-extra').lstat(require('path').join(directory,file))
 							.then(stat=>{
@@ -451,21 +450,22 @@ showSchema.methods.sync = function(){
 	return helpers.trakt().shows.summary({id:this.ids.slug, extended:'full'})
 		.then(summary=>{
 			
+			if (this.synced < new Date(summary.updated_at)){
+				this.ids = Object.assign({}, this.ids, summary.ids)
+				this.year = summary.year
+				this.status = summary.status
+				this.synced = new Date(summary.updated_at)
+			}
+			this.title = helpers.utils.normalize(summary.title)
+			this.overview = helpers.utils.normalize(summary.overview)
+			this.first_aired = new Date(summary.first_aired)
+
 			if (!this.config.directory){
 				// Create a directory based on the name
-				this.config.directory = summary.title
+				this.config.directory = this.title
 			}
 			require('fs-extra').ensureDir(this.getDirectory())
 			
-			if (this.synced < new Date(summary.updated_at)){
-				this.ids = Object.assign({}, this.ids, summary.ids)
-				this.overview = summary.overview
-				this.year = summary.year
-				this.first_aired = new Date(summary.first_aired)
-				this.status = summary.status
-				this.synced = new Date(summary.updated_at)
-				this.title = summary.title
-			}
 			return helpers.trakt().seasons.summary({id:this.ids.slug,extended:'episodes,full'})
 		})
 		
@@ -488,35 +488,38 @@ showSchema.methods.sync = function(){
 					this.seasons.push({
 						season: season.number,
 						ids: season.ids,
-						overview: season.overview || null
+						overview: helpers.utils.normalize(season.overview || null)
 					})
 				} else {
-					if (season.overview) this.seasons[idx].overview = season.overview
+					if (season.overview) this.seasons[idx].overview = helpers.utils.normalize(season.overview)
 				}
 				
 				(season.episodes || []).forEach(episode=>{
 					let idx = this.episodes.findIndex(item=>{
 						return item && item.season == season.number && item.episode == episode.number
 					})
+					
 					if (idx == -1){
 						this.episodes.push({
 							season: season.number,
 							episode: episode.number,
 							ids: episode.ids,
-							title: episode.title || 'TBA',
-							overview: episode.overview || 'TBA',
+							title: helpers.utils.normalize(episode.title || 'TBA'),
+							overview: helpers.utils.normalize(episode.overview || 'TBA'),
 							first_aired: episode.first_aired ? new Date(episode.first_aired) : null,
 							updated_at: episode.updated_at ? new Date(episode.updated_at) : null
 						})
+						
+						helpers.utils.normalize(episode.title)
 					} else {
 						this.getEpisode(season.number,episode.number)
 							.then(ep=>{
-								ep.title = episode.title || 'TBA'
+								ep.title = helpers.utils.normalize(episode.title || 'TBA')
 								ep.updated_at = new Date(episode.updated_at)
 								
 								if (episode.first_aired) ep.first_aired = new Date(episode.first_aired)
 								if (!episode.first_aired) ep.first_aired = undefined
-								if (episode.overview) ep.overview = episode.overview
+								if (episode.overview) ep.overview = helpers.utils.normalize(episode.overview)
 							})
 					}
 				})
@@ -529,7 +532,7 @@ showSchema.methods.sync = function(){
 }
 showSchema.methods.syncHistory = function(user){
 	// Sync full episode history
-	return helpers.trakt(user).sync.history.get({type:'shows', id:this.ids.trakt,start_at:this.first_aired})
+	return helpers.trakt(user).sync.history.get({type:'shows', id:this.ids.trakt, start_at:this.first_aired , limit:200})
 		.then(history=>{
 			if (!history) return
 			

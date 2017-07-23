@@ -28,7 +28,7 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 						})
 						
 						let directory = show.getDirectory()
-						let filename = episode.getFilename()
+						let filename = episode.getFilename(files[0].name)
 						
 						if (!directory) throw new Error(`${show.title}: Directory not defined`)
 						
