@@ -25,12 +25,13 @@
     "express": "^4.15.3",
     "express-ejs-layouts": "^2.3.0",
     "express-rate-limit": "^2.8.0",
-    "express-session": "^1.15.3",
+    "express-session": "^1.15.4",
     "fs-extra": "^3.0.1",
     "glob": "^7.1.2",
     "glob-promise": "^3.1.0",
     "guidebox": "^1.1.1",
-    "helmet": "^3.6.1",
+    "helmet": "^3.8.0",
+    "html-entities": "^1.2.1",
     "log4js": "^1.1.1",
     "mime-types": "^2.1.15",
     "mongoose": "^4.11.3",
@@ -52,7 +53,6 @@
     "trakt.tv-matcher": "^5.0.0",
     "trakt.tv-ondeck": "^5.0.1",
     "transmission": "^0.4.9",
-    "unescape-js": "^1.0.8",
     "uuid": "^3.1.0",
     "zero-fill": "^2.2.3"
   },
@@ -60,7 +60,7 @@
     "node": "^6.10.3"
   },
   "devDependencies": {
-    "opbeat": "^4.14.1",
+    "opbeat": "^4.14.2",
     "rollbar": "^2.1.0"
   }
 }

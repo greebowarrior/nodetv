@@ -28,6 +28,7 @@ const showSchema = new mongoose.Schema({
 	title: {type: String, required: true},
 	overview: String,
 	year: {type: Number, required: true},
+	first_aired: {type: Date},
 	subscribers: [{
 		_id: false,
 		rating: Number,
@@ -95,6 +96,8 @@ showSchema.statics.recentEpisodes = function(days=7){
 	let since = new Date()
 	since.setDate(since.getDate()-days)
 	
+	// TODO: Skip watched episodes
+	
 	return this.aggregate([
 		{
 			$match: {
@@ -111,7 +114,8 @@ showSchema.statics.recentEpisodes = function(days=7){
 				$or: [
 					{'episodes.file.added': {$gte:since, $lt:now}},
 					{'episodes.first_aired': {$gte:since, $lt:now}}
-				]
+				],
+				'episodes.season': {$ne: 0}
 			}
 		},{
 			$group: {
@@ -233,18 +237,23 @@ showSchema.methods.unsubscribe = function(user){
 }
 
 showSchema.methods.getDirectory = function(){
-	// TODO: Sanitize filepaths
 	if (this.config.directory){
-		return require('path').join(process.env.MEDIA_ROOT, process.env.MEDIA_SHOWS, this.config.directory)
+		return require('path').join(
+			process.env.MEDIA_ROOT,
+			process.env.MEDIA_SHOWS,
+			helpers.utils.normalize(this.config.directory)
+		)
 	}
 	return false
 }
+
 showSchema.methods.getEpisode = function(season,episode){
 	return new Promise((resolve,reject)=>{
 		let idx = this.episodes.findIndex(item=>{
 			return item.season == parseInt(season,10) && item.episode == parseInt(episode,10)
 		})
 		if (idx == -1) return reject(new Error(`Episode not found: ${this.title} ${season}x${episode}`))
+		
 		resolve(this.episodes.id(this.episodes[idx]._id))
 	})
 }
@@ -269,10 +278,53 @@ showSchema.methods.getSubscribers = function(){
 }
 
 showSchema.methods.setArtwork = function(data){
-	// Fetch artwork, save to show directory
+	let promises = []
+	
+	if (data.url){
+		let promise = new Promise((resolve,reject)=>{
+			let target = require('path').join(this.getDirectory(), `${data.type}` + require('path').extname(data.url))
+			helpers.files.download(data.url, target)
+				.then(()=>{
+					this.images[data.type] = {
+						enabled: true,
+						filename: require('path').basename(target),
+						source: data.url
+					}
+					resolve()
+				})
+				.catch(error=>{
+					console.error(error)
+					reject(error)
+				})
+		})
+		promises.push(promise)
+	}
+	
+	if (data.preview){
+		let promise = new Promise((resolve,reject)=>{
+			let target = require('path').join(this.getDirectory(), `${data.type}-sml` + require('path').extname(data.preview))
+			helpers.files.download(data.preview, target)
+				.then(()=>{
+					this.images[data.type] = {
+						enabled: true,
+						filename: require('path').basename(target),
+						source: data.url
+					}
+					resolve()
+				})
+				.catch(error=>{
+					console.error(error)
+					reject(error)
+				})
+		})
+		promises.push(promise)
+	}
+	
+	return Promise.all(promises)
+	
+	/*
 	return new Promise((resolve,reject)=>{
 		let target = require('path').join(this.getDirectory(), data.type + require('path').extname(data.url))
-		
 		helpers.files.download(data.url, target)
 			.then(()=>{
 				this.images[data.type] = {
@@ -282,8 +334,11 @@ showSchema.methods.setArtwork = function(data){
 				}
 				resolve()
 			})
-			.catch(reject)
+			.catch(error=>{
+				reject(error)
+			})
 	})
+	*/
 }
 showSchema.methods.setDirectory = function(){
 	// Use to rename an existing directory
@@ -378,7 +433,7 @@ showSchema.methods.scan = function(){
 							})
 					})
 					.catch(()=>{
-						console.warn(`${this.title}: '${file}' is not a valid episode filename`)
+						console.debug(`${this.title}: '${file}' is not a valid episode filename`)
 						return null
 					})
 				promises.push(promise)
@@ -406,6 +461,7 @@ showSchema.methods.sync = function(){
 				this.ids = Object.assign({}, this.ids, summary.ids)
 				this.overview = summary.overview
 				this.year = summary.year
+				this.first_aired = new Date(summary.first_aired)
 				this.status = summary.status
 				this.synced = new Date(summary.updated_at)
 				this.title = summary.title
@@ -471,30 +527,28 @@ showSchema.methods.sync = function(){
 			if (error) console.error(this.title, error)	
 		})
 }
-
 showSchema.methods.syncHistory = function(user){
-	
-	return helpers.trakt(user).sync.history.get({type:'shows', id:this.ids.trakt}) //,start_at:user.synced})
+	// Sync full episode history
+	return helpers.trakt(user).sync.history.get({type:'shows', id:this.ids.trakt,start_at:this.first_aired})
 		.then(history=>{
 			if (!history) return
 			
 			let promises = []
+			
 			history.forEach(watch=>{
 				let promise = this.getEpisode(watch.episode.season, watch.episode.number)
 					.then(episode=>{
 						return episode.setWatched(user, new Date(watch.watched_at), watch.id)
 					})
-					.then(()=>{
-						return this.save({new:true})
-					})
 					.catch(error=>{
 						console.debug(error)
 					})
-				
 				promises.push(promise)
 			})
-			
-			return Promise.all(promises)
+			return Promise.all(promises).then(()=>{
+				console.log(`Saving ${this.title}`)
+				return this.save({new:true})
+			})
 		})
 		.catch(error=>{
 			console.debug(error)

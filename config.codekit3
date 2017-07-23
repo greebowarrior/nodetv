@@ -928,6 +928,15 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/test.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/min\/test.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/yarn.lock": {
 		"ft": 8192,
 		"oA": 2,

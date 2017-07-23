@@ -90,6 +90,9 @@ userSchema.methods.syncCollection = function(){
 						.then(movie=>{
 							return movie.sync()
 						})
+						.then(movie=>{
+							return movie.save()
+						})
 					promises.push(promise)
 				}
 				if (result.show){
@@ -101,24 +104,14 @@ userSchema.methods.syncCollection = function(){
 						.then(show=>{
 							return show.sync()
 						})
+						.then(show=>{
+							return show.save()
+						})
 					promises.push(promise)
 				}
 			})
 			
 			return Promise.all(promises)
-		})
-}
-userSchema.methods.syncHistory = function(){
-	return Show.findByUser(this._id)
-		.then(shows=>{
-			if (!shows) throw new Error(`${this.username} has not subscribed to any shows`)
-			
-			shows.forEach(show=>{
-				show.syncHistory(this)
-			})
-		})
-		.catch(error=>{
-			console.error(error.message)
 		})
 }
 

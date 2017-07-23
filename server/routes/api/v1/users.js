@@ -139,8 +139,8 @@ const UsersAPI = app=>{
 					res.status(202).end()
 					
 					return user.syncCollection()
-						.then(()=>{
-							return user.syncHistory()
+						.map(show=>{
+							return show.syncHistory(user)
 						})
 				})
 				.catch(error=>{

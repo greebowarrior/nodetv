@@ -67,18 +67,24 @@ exports.getInfoHash = (item)=>{
 
 exports.sanitizeFilename = (filename)=>{
 	// unescape special characters
-	filename = require('unescape-js')(filename)
+	const Entities = require('html-entities').AllHtmlEntities
+	const entity = new Entities()
 	
-	// Deal with slashes
-	filename = filename.replace(/\//, '\/')
+	filename = entity.decode(filename).replace(/\//g, '\/')
 	
 	// platform-specific changes
 	if (process.platform == 'darwin'){
-		// do we need to do something? Or is macOS better these days?
+		// do we need to do something? Or is macOS better with colons these days?
 	}
 	
-	
 	return filename
+}
+
+exports.normalize = (string)=>{
+	const Entities = require('html-entities').AllHtmlEntities
+	const entity = new Entities()
+	
+	return entity.decode(string) //.replace(/\//g, '\/')
 }
 
 exports.walkDir = (directory)=>{

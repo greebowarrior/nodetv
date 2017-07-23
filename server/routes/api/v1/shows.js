@@ -111,7 +111,7 @@ const ShowsAPI = (app,io)=>{
 				})
 		})
 		.get((req,res)=>{
-			Show.findBySlug(req.params.slug)
+			Show.findBySlug(req.params.slug,{episodes:false})
 				.then(show=>{
 					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
 					res.send(show)
@@ -282,6 +282,11 @@ const ShowsAPI = (app,io)=>{
 					
 					season[0].getEpisodes()
 						.then(episodes=>{
+							episodes.forEach(episode=>{
+								episode.watchers = episode.watchers.filter(watcher=>{
+									return watcher.watcher.equals(req.user._id)
+								})
+							})
 							season[0].episodes = episodes
 							res.send(season.length ? season[0] : {})
 						})
@@ -301,14 +306,22 @@ const ShowsAPI = (app,io)=>{
 					let episodes = show.episodes.filter(item=>{
 						return item.season == req.params.season
 					})
+					
 					episodes.sort((a,b)=>{
 						if (a.episode > b.episode) return 1
 						if (a.episode < b.episode) return -1
 						return 0
 					})
+					
+					episodes.forEach(episode=>{
+						episode.watchers = episode.watchers.filter(watcher=>{
+							return watcher.watcher.equals(req.user._id)
+						})
+					})
 					res.send(episodes)
 				})
 				.catch(error=>{
+					console.debug(error.message)
 					res.status(404).send({error:error})
 				})
 		})
@@ -319,6 +332,9 @@ const ShowsAPI = (app,io)=>{
 				.then(show=>{
 					return show.getEpisode(req.params.season, req.params.episode)
 						.then(episode=>{
+							episode.watchers = episode.watchers.filter(item=>{
+								return item.watcher.equals(req.user._id)
+							})
 							res.send(episode)
 						})
 				})

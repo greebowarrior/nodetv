@@ -10,11 +10,11 @@ Artwork.prototype.init = function(trakt,options){
 	this.options = options
 }
 
-Artwork.prototype.prune = function(input){
+Artwork.prototype.prune = function(input,limit=12){
 	let list = []
 	
 	list = (input || []).filter(item=>{
-		return (item.lang === 'en' || item.lang === '') // && item.likes > 0
+		return item.lang === 'en' || item.lang === ''
 	})
 	
 	list.sort((a,b)=>{
@@ -24,28 +24,34 @@ Artwork.prototype.prune = function(input){
 	})
 	return list.map(item=>{
 		item.url = item.url.replace(/^http:/, 'https:')
-		//.replace(/\/fanart\//,'/preview/')
+		item.preview = item.url.replace(/\/fanart\//,'/preview/')
 		return item
-	}).slice(0,10)
-	
-//	return list.slice(0,10)
+	}).slice(0, limit)
 }
 
-Artwork.prototype.get = function(ids){
+Artwork.prototype.get = function(ids,type='show'){
 	return new Promise((resolve,reject)=>{
 		
-		console.log(ids)
+		let api_url = null
+		switch (type){
+			case 'show':
+				api_url = `https://webservice.fanart.tv/v3/tv/${ids.tvdb}`
+				break
+			case 'movie':
+				api_url = `https://webservice.fanart.tv/v3/movies/${ids.tmdb}`
+				break
+		}
 		
 		require('request').get({
-			url: `https://webservice.fanart.tv/v3/tv/${ids.tvdb}?api_key=${this.options.apikey}`,
+			url: `${api_url}?api_key=${this.options.apikey}`,
 			json: true
 		}, (error,res,body)=>{
 			if (error || body.status == 'error') return reject()
 			if (body){
 				let response = {
-					banners: this.prune(body.tvbanner),
-					backgrounds: this.prune(body.showbackground),
-					posters: this.prune(body.tvposter)
+					banners: this.prune(body.tvbanner || body.moviebanner),
+					backgrounds: this.prune(body.showbackground || body.moviebackground),
+					posters: this.prune(body.tvposter || body.movieposter)
 				}
 				resolve(response)
 			}

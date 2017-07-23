@@ -58,6 +58,8 @@
 
 ## Phase 4.5 - Bug squashing
 
+- Start listing bugs and enhancements in [Github issue tracker](https://github.com/greebowarrior/nodetv/issues)
+
 
 
 ## Phase 5 - Version 1.1
@@ -67,12 +69,16 @@
 	- API Endpoints
 	- Tasks
 	- Where should we save artwork?
-- Update artwork module for movie support
+- ~~Update artwork module for movie support~~
+- Add proxy spider support
+- Re-implement YTS API (use proxy)
+- Movie symlinking for Genres folder
+
+
+## Phase 6 - Version 1.2
+
 - Watch progress?
 - Watch status on episodes
-- Movie symlinking for Genres folder
-- Add proxy support
-- Re-implement YTS API (use proxy)
 - Better UI?
 	- Theme support
 	- Create directory structure for themes?
@@ -82,7 +88,6 @@
 - JSON Web Token Auth?
 	- Generate a unique RSA key per install?
 
-
 # Eventually
 
 - ~~Socket notifications~~
@@ -90,9 +95,7 @@
 - Installation guide
 	- Guided setup page? Script?
 - Add URIs to returned documents?
-	- Enabled on Shows
-- R&D: Handle shows that now have less episodes in a season (i.e. Lucifer)
-	- How to prune superfluous episodes?
+	- Enabled on Shows for testing
 
 - Support multiple feeds per show (e.g. ShowRSS & TVShowsApp)
 	- Optional, but TVSA *does* have more data
