@@ -12,13 +12,17 @@
 			</ul>
 		</h4>
 	</div>
-	<div class="col-md-12">
+	<div class="col-md-12" ng-show="$ctrl.episode.overview">
 		<p>{{$ctrl.episode.overview}}</p>
 	</div>
+	
+<!-- 	{{$ctrl.episode.watchers[0].watches}} -->
+	
 	<div class="col-sm-12">
 		<ul class="result-details">
 			<li>Broadcast: {{$ctrl.episode.first_aired|date:'d MMMM yyyy, HH:mm'}}</li>
 			<li ng-show="$ctrl.episode.file.added">Downloaded: {{$ctrl.episode.file.added|date:'d MMMM yyyy, HH:mm'}}</li>
+			<li ng-show="$ctrl.episode.watchers[0].watches.length">Watched: {{$ctrl.episode.watchers[0].watches[0].date|date:'d MMMM yyyy, HH:mm'}}</li>
 		</ul>
 	</div>
 </div>

@@ -198,15 +198,6 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/app\/js\/nutv.shows.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/app\/js\/min\/nutv.shows.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/app\/js\/nutv.users.js": {
 		"ft": 64,
 		"mi": 0,
@@ -545,16 +536,7 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/min\/server.min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/app.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/min\/app-min.js",
-		"oF": 1,
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -936,12 +918,6 @@
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
-		},
-	"\/yarn.lock": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/yarn.lock",
-		"oF": 0
 		}
 	},
 "hooks": [

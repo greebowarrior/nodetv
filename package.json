@@ -29,7 +29,6 @@
     "fs-extra": "^3.0.1",
     "glob": "^7.1.2",
     "glob-promise": "^3.1.0",
-    "guidebox": "^1.1.1",
     "helmet": "^3.8.0",
     "html-entities": "^1.2.1",
     "log4js": "^1.1.1",
@@ -59,8 +58,5 @@
   "engines": {
     "node": "^6.10.3"
   },
-  "devDependencies": {
-    "opbeat": "^4.14.2",
-    "rollbar": "^2.1.0"
-  }
+  "devDependencies": {}
 }
