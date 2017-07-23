@@ -124,7 +124,7 @@ episodeSchema.methods.getFilename = function(file){
 		S: require('zero-fill')(2, this.season),
 		E: require('zero-fill')(2, this.episode),
 		T: '',
-		X: require('path').extname(file) || 'mkv'
+		X: require('path').extname(file).replace(/^\./,'') || 'mkv'
 	}
 	
 	if (this.hashes.linked && this.hashes.linked.length > 1){
