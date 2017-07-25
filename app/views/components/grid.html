@@ -13,16 +13,7 @@
 <div class="row nutv-grid">
 	<div class="col-sm-4 col-md-2 cover" ng-repeat="item in $ctrl.items = ($ctrl.list|filter:$ctrl.filter) | limitTo:$ctrl.pagination.items:$ctrl.pagination.items*($ctrl.pagination.page-1)">
 		<a ui-sref="^.detail({slug: item.ids.slug})">
-			<div class="visible-xs visible-sm">
-				<img src="/static/gfx/default-cover.png" ng-if="item.images.banner.enabled && item.images.banner.filename" ng-src="/media/shows/{{item.config.directory}}/{{item.images.banner.filename}}" class="img-responsive" />
-				<img ng-hide="item.images.banner.enabled && item.images.banner.filename" ng-src="/static/gfx/default-banner.png" class="img-responsive" />
-				<span ng-hide="item.images.banner.enabled" class="title">{{item.title}}</span>
-			</div>
-			<div class="hidden-xs hidden-sm">
-				<img src="/static/gfx/default-cover.png" ng-if="item.images.poster.enabled && item.images.poster.filename" ng-src="/media/shows/{{item.config.directory}}/{{item.images.poster.filename}}" class="img-responsive" />
-				<img ng-hide="item.images.poster.enabled && item.images.poster.filename" ng-src="/static/gfx/default-cover.png" class="img-responsive" />
-				<span ng-hide="item.images.poster.enabled" class="title">{{item.title}}</span>
-			</div>
+			<nutv-artwork item="item" type="$ctrl.type"></nutv-artwork>
 		</a>
 	</div>
 	

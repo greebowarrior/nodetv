@@ -58,6 +58,11 @@ const ShowsAPI = (app,io)=>{
 							if (a.episode < b.episode) return -1
 							return 0
 						})
+						show.episodes.forEach(episode=>{
+							episode.watchers = episode.watchers.filter(watcher=>{
+								return watcher.watcher.equals(req.user._id)
+							})
+						})
 						results.push(show)
 					})
 					res.send(results)

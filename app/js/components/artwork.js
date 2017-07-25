@@ -23,3 +23,36 @@ angular.module('nutv.core')
 			}
 		}]
 	})
+	
+	.component('nutvArtwork', {
+		// component for displaying artwork
+		templateUrl: '/views/components/poster.html',
+		bindings: {item:'<', type:'<'},
+		controller: ['$timeout',function($timeout){
+			let sources = []
+			this.title = {banner:false,poster:false,text:null}
+			
+			$timeout(()=>{
+				let directory = this.item.config.directory.replace(/\s/g,'%20')
+				
+				if (this.item.images.banner.enabled){
+					sources.push(`/media/${this.type}s/${directory}/${this.item.images.banner.filename} 992w`)
+				} else {
+					sources.push(`/static/gfx/default-banner.png 992w`)
+					this.title.text = this.item.title
+					this.title.banner = true
+				}
+				
+				if (this.item.images.poster.enabled){
+					sources.push(`/media/${this.type}s/${directory}/${this.item.images.poster.filename} 132w`)
+				} else {
+					sources.push(`/static/gfx/default-cover.png 132w`)
+					this.title.text = this.item.title
+					this.title.poster = true
+				}
+				
+				this.srcset = sources.join(', ')
+			},0)
+			
+		}]
+	})
