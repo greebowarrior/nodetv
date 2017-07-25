@@ -216,6 +216,10 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 			this.filter = {title:''}
 			this.pagination = {items:18,page:1}
 			
+			this.definiteArticle = (item)=>{
+				return item.title.replace(/^The\s/i, '')
+			}
+			
 			this.search = ()=>{
 				if (this.items.length > 1 || this.filter.title.length <= 1) return
 				$http.post(`/api/trakt/search/${this.type}`,{q:this.filter.title})
