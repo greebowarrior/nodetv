@@ -101,16 +101,20 @@ movieSchema.methods.setCollected = function(){
 	return this
 }
 
-movieSchema.methods.sync = function(user={}){
-	return helpers.trakt(user).movies.summary({id:this.ids.slug, extended:'full'})
+movieSchema.methods.sync = function(){
+	console.debug('sync', this.title)
+	return helpers.trakt().movies.summary({id:this.ids.slug, extended:'full'})
 		.then(summary=>{
-			if (!this.synced || this.synced < new Date(summary.updated_at)){
+			console.debug(summary)
+		//	if (!this.synced || this.synced < new Date(summary.updated_at)){
 				this.ids = Object.assign({}, this.ids, summary.ids)
-				this.overview = summary.overview
-				this.year = summary.year
+				if (summary.genres) this.runtime = summary.genres
+				if (summary.overview) this.overview = summary.overview
+				if (summary.runtime) this.runtime = summary.runtime
 				this.synced = new Date(summary.updated_at)
 				this.title = summary.title
-			}
+				this.year = summary.year
+		//	}
 			return this
 		})
 }
