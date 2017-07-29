@@ -12,7 +12,7 @@ const MoviesAPI = (api)=>{
 	
 	router.route('/')
 		.get((req,res)=>{
-			Movie.findByUser(req.user._id)
+			Movie.findByUser(req.user)
 				.then(movies=>{
 					movies.sort((a,b)=>a.title.toLowerCase().localeCompare(b.title.toLowerCase()))
 					res.send(movies)
