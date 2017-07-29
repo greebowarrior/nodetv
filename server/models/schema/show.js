@@ -94,9 +94,9 @@ showSchema.statics.findByTrakt = function(trakt,projection={},options={}){
 		'ids.trakt': parseInt(trakt,10)
 	},projection,options)
 }
-showSchema.statics.findByUser = function(user_id,projection={},options={}){
+showSchema.statics.findByUser = function(user,projection={},options={}){
 	return this.find({
-		'subscribers.subscriber': mongoose.Types.ObjectId(user_id)
+		'subscribers.subscriber': mongoose.Types.ObjectId(user._id)
 	},projection,options)
 }
 showSchema.statics.findEnabled = function(projection={},options={}){

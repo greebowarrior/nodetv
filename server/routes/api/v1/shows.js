@@ -12,7 +12,7 @@ const ShowsAPI = (app,io)=>{
 		
 	router.route('/')
 		.get((req,res)=>{
-			Show.findByUser(req.user._id, {episodes:false,seasons:false},{sort:{title:1}})
+			Show.findByUser(req.user, {episodes:false,seasons:false},{sort:{title:1}})
 				.then(shows=>{
 					shows.sort((a,b)=>a.title.toLowerCase().localeCompare(b.title.toLowerCase()))
 					res.send(shows)
