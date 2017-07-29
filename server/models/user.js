@@ -121,7 +121,7 @@ userSchema.pre('save', function(next){
 })
 userSchema.pre('remove', function(next){
 	// Remove user from shows
-	Show.findByUser(this._id)
+	Show.findByUser(this)
 		.then(shows=>{
 			let promises = []
 			

@@ -39,16 +39,31 @@ const showSchema = new mongoose.Schema({
 	images: {
 		background: {
 			enabled: {type: Boolean, default: false},
+			files: [{
+				_id: false,
+				width: String,
+				filename: String
+			}],
 			filename: String,
 			source: String
 		},
 		banner: {
 			enabled: {type: Boolean, default: false},
+			files: [{
+				_id: false,
+				width: String,
+				filename: String
+			}],
 			filename: String,
 			source: String
 		},
 		poster: {
 			enabled: {type: Boolean, default: false},
+			files: [{
+				_id: false,
+				width: String,
+				filename: String
+			}],
 			filename: String,
 			source: String
 		}
@@ -79,9 +94,9 @@ showSchema.statics.findByTrakt = function(trakt,projection={},options={}){
 		'ids.trakt': parseInt(trakt,10)
 	},projection,options)
 }
-showSchema.statics.findByUser = function(user_id,projection={},options={}){
+showSchema.statics.findByUser = function(user,projection={},options={}){
 	return this.find({
-		'subscribers.subscriber': mongoose.Types.ObjectId(user_id)
+		'subscribers.subscriber': mongoose.Types.ObjectId(user._id)
 	},projection,options)
 }
 showSchema.statics.findEnabled = function(projection={},options={}){
@@ -91,17 +106,19 @@ showSchema.statics.findEnabled = function(projection={},options={}){
 	},projection,options)
 }
 
-showSchema.statics.recentEpisodes = function(days=7){
+showSchema.statics.recentEpisodes = function(user,days=7){
 	let now = new Date()
 	let since = new Date()
 	since.setDate(since.getDate()-days)
 	
 	// TODO: Skip watched episodes
+	// TODO: Limit by user
 	
 	return this.aggregate([
 		{
 			$match: {
 		//		'config.enabled': true,
+				'subscribers.subscriber': user._id,
 				$or: [
 					{'episodes.file.added': {$gte:since, $lt:now}},
 					{'episodes.first_aired': {$gte:since, $lt:now}}
@@ -127,7 +144,7 @@ showSchema.statics.recentEpisodes = function(days=7){
 		}
 	]).sort({title:1})
 }
-showSchema.statics.upcomingEpisodes = function(days=7){
+showSchema.statics.upcomingEpisodes = function(user,days=7){
 	let now = new Date()
 	let until = new Date()
 	until.setDate(until.getDate()+days)
@@ -136,6 +153,7 @@ showSchema.statics.upcomingEpisodes = function(days=7){
 		{
 			$match: {
 		//		'config.enabled': true,
+				'subscribers.subscriber': user._id,
 				'episodes.first_aired': {$gte:now, $lt:until}
 			}
 		},{
@@ -278,67 +296,64 @@ showSchema.methods.getSubscribers = function(){
 }
 
 showSchema.methods.setArtwork = function(data){
-	let promises = []
-	
-	if (data.url){
-		let promise = new Promise((resolve,reject)=>{
-			let target = require('path').join(this.getDirectory(), `${data.type}` + require('path').extname(data.url))
-			helpers.files.download(data.url, target)
-				.then(()=>{
-					this.images[data.type] = {
-						enabled: true,
-						filename: require('path').basename(target),
-						source: data.url
-					}
-					resolve()
-				})
-				.catch(error=>{
-					console.error(error)
-					reject(error)
-				})
-		})
-		promises.push(promise)
-	}
-	
-	if (data.preview){
-		let promise = new Promise((resolve,reject)=>{
-			let target = require('path').join(this.getDirectory(), `${data.type}-sml` + require('path').extname(data.preview))
-			helpers.files.download(data.preview, target)
-				.then(()=>{
-					this.images[data.type] = {
-						enabled: true,
-						filename: require('path').basename(target),
-						source: data.url
-					}
-					resolve()
-				})
-				.catch(error=>{
-					console.error(error)
-					reject(error)
-				})
-		})
-		promises.push(promise)
-	}
-	
-	return Promise.all(promises)
-	
-	/*
 	return new Promise((resolve,reject)=>{
-		let target = require('path').join(this.getDirectory(), data.type + require('path').extname(data.url))
+		if (!data.url) return reject()
+		
+		let target = require('path').join(this.getDirectory(), `${data.type}-original` + require('path').extname(data.url))
 		helpers.files.download(data.url, target)
 			.then(()=>{
+				// Resize image
+				let files = []
+				let sizes = []
+				
+				switch (data.type){
+					case 'poster':
+						sizes = [{
+							width: 250,
+							suffix: 'small'
+						},{
+							width: 500,
+							suffix: 'medium'
+						},{
+							width: 1000,
+							suffix: 'large'
+						}]
+						break
+					case 'banner':
+						sizes = [{
+							width: 575,
+							suffix: 'small'
+						},{
+							width: 800,
+							suffix: 'medium'
+						},{
+							width: 940,
+							suffix: 'large'
+						}]
+						break
+				}
+				
+				sizes.forEach(size=>{
+					let filename = target.replace(/-original/,`-${size.suffix}`)
+					require('sharp')(target).resize(size.width, null).toFile(filename)
+					files.push({
+						filename: require('path').basename(filename),
+						width: size.width
+					})
+				})
+				
 				this.images[data.type] = {
 					enabled: true,
-					filename: require('path').basename(target),
+					files: files,
 					source: data.url
 				}
 				resolve()
 			})
 			.catch(error=>{
+				console.error(error)
 				reject(error)
 			})
 	})
-	*/
 }
 showSchema.methods.setDirectory = function(){
 	// Use to rename an existing directory
@@ -456,6 +471,7 @@ showSchema.methods.sync = function(){
 				this.status = summary.status
 				this.synced = new Date(summary.updated_at)
 			}
+			
 			this.title = helpers.utils.normalize(summary.title)
 			this.overview = helpers.utils.normalize(summary.overview)
 			this.first_aired = new Date(summary.first_aired)

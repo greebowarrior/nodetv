@@ -12,7 +12,7 @@ const ShowsAPI = (app,io)=>{
 		
 	router.route('/')
 		.get((req,res)=>{
-			Show.findByUser(req.user._id, {episodes:false,seasons:false},{sort:{title:1}})
+			Show.findByUser(req.user, {episodes:false,seasons:false},{sort:{title:1}})
 				.then(shows=>{
 					shows.sort((a,b)=>a.title.toLowerCase().localeCompare(b.title.toLowerCase()))
 					res.send(shows)
@@ -48,7 +48,7 @@ const ShowsAPI = (app,io)=>{
 
 	router.route('/latest')
 		.get((req,res)=>{
-			Show.recentEpisodes()
+			Show.recentEpisodes(req.user)
 				.then(shows=>{
 					let results = []
 					shows.forEach(show=>{
@@ -74,7 +74,7 @@ const ShowsAPI = (app,io)=>{
 		})
 	router.route('/upcoming')
 		.get((req,res)=>{
-			Show.upcomingEpisodes()
+			Show.upcomingEpisodes(req.user)
 				.then(shows=>{
 					let results = []
 					shows.forEach(show=>{

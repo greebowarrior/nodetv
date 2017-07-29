@@ -1,6 +1,5 @@
 <div>
-	<img class="img-responsive" srcset="{{$ctrl.srcset}}" sizes="(max-width: 991px) 100vw, 132px">
-	
+	<img class="img-responsive" ng-srcset="{{$ctrl.srcset}}" sizes="(max-width: 575px) 575px, (max-width: 767px) 800px, 250px" />
 	<span ng-hide="!$ctrl.title.text" class="title" ng-class="{'visible-xs visible-sm':$ctrl.title.banner,'visible-md visible-lg':$ctrl.title.poster}">
 		{{$ctrl.title.text}}
 	</span>
