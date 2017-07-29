@@ -1,8 +1,12 @@
 <div>
 	<div class="row">
 		<div class="col-sm-12">
-			<img ng-show="$ctrl.show.images.banner.enabled" ng-src="/media/shows/{{$ctrl.show.config.directory}}/{{$ctrl.show.images.banner.filename}}" class="img-responsive" />
+			<nutv-banner item="$ctrl.show" type="show"></nutv-banner>
+			
+			<!--
+			<img ng-show="$ctrl.show.images.banner.enabled" ng-src="/media/shows/{{$ctrl.show.config.directory}}/{{$ctrl.show.images.banner.filename}}" class="img-responsive" /> 
 			<h1 ng-hide="$ctrl.show.images.banner.enabled">{{$ctrl.show.title}}</h1>
+			-->
 		</div>
 		<div class="col-sm-12" ng-show="$ctrl.show.overview">
 			<p class="well">{{$ctrl.show.overview}}</p>

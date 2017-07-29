@@ -332,6 +332,12 @@
 		"oAP": "\/app\/views\/components\/artwork.html",
 		"oF": 0
 		},
+	"\/app\/views\/components\/banner.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/banner.html",
+		"oF": 0
+		},
 	"\/app\/views\/components\/breadcrumbs.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -702,15 +708,6 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/models\/schema\/min\/season.min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/models\/schema\/show.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/models\/schema\/min\/show.min.js",
 		"oF": 1,
 		"sC": 3,
 		"tS": 0
