@@ -91,17 +91,19 @@ showSchema.statics.findEnabled = function(projection={},options={}){
 	},projection,options)
 }
 
-showSchema.statics.recentEpisodes = function(days=7){
+showSchema.statics.recentEpisodes = function(user,days=7){
 	let now = new Date()
 	let since = new Date()
 	since.setDate(since.getDate()-days)
 	
 	// TODO: Skip watched episodes
+	// TODO: Limit by user
 	
 	return this.aggregate([
 		{
 			$match: {
 		//		'config.enabled': true,
+				'subscribers.subscriber': user._id,
 				$or: [
 					{'episodes.file.added': {$gte:since, $lt:now}},
 					{'episodes.first_aired': {$gte:since, $lt:now}}
@@ -127,7 +129,7 @@ showSchema.statics.recentEpisodes = function(days=7){
 		}
 	]).sort({title:1})
 }
-showSchema.statics.upcomingEpisodes = function(days=7){
+showSchema.statics.upcomingEpisodes = function(user,days=7){
 	let now = new Date()
 	let until = new Date()
 	until.setDate(until.getDate()+days)
@@ -136,6 +138,7 @@ showSchema.statics.upcomingEpisodes = function(days=7){
 		{
 			$match: {
 		//		'config.enabled': true,
+				'subscribers.subscriber': user._id,
 				'episodes.first_aired': {$gte:now, $lt:until}
 			}
 		},{

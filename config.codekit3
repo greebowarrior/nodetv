@@ -452,24 +452,6 @@
 		"oAP": "\/app\/views\/user\/list.html",
 		"oF": 0
 		},
-	"\/Install.md": {
-		"cS": 0,
-		"eF": 1,
-		"eL": 1,
-		"eLB": 0,
-		"ema": 1,
-		"eSQ": 1,
-		"ft": 4096,
-		"oA": 1,
-		"oAP": "\/Install.html",
-		"oF": 0,
-		"oFM": 0,
-		"oS": 0,
-		"pHT": 0,
-		"pME": 1,
-		"rFN": 0,
-		"uCM": 0
-		},
 	"\/LICENCE.txt": {
 		"ft": 8192,
 		"oA": 2,
@@ -508,15 +490,6 @@
 		"oO": 0,
 		"oS": 1
 		},
-	"\/opbeat.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/min\/opbeat.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/package.json": {
 		"ft": 524288,
 		"oA": 1,
@@ -542,15 +515,6 @@
 		"pME": 1,
 		"rFN": 0,
 		"uCM": 0
-		},
-	"\/rollbar.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/min\/rollbar.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
 		},
 	"\/scripts\/nginx.conf": {
 		"ft": 8192,
@@ -948,15 +912,6 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/min\/upnp.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/test.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/min\/test.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0

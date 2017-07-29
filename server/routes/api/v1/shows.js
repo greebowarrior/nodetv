@@ -48,7 +48,7 @@ const ShowsAPI = (app,io)=>{
 
 	router.route('/latest')
 		.get((req,res)=>{
-			Show.recentEpisodes()
+			Show.recentEpisodes(req.user)
 				.then(shows=>{
 					let results = []
 					shows.forEach(show=>{
@@ -74,7 +74,7 @@ const ShowsAPI = (app,io)=>{
 		})
 	router.route('/upcoming')
 		.get((req,res)=>{
-			Show.upcomingEpisodes()
+			Show.upcomingEpisodes(req.user)
 				.then(shows=>{
 					let results = []
 					shows.forEach(show=>{
