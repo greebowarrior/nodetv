@@ -212,9 +212,12 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 	.component('nutvGrid', {
 		bindings: {list:'=',type:'='},
 		templateUrl: 'views/components/grid.html',
-		controller: ['$http',function($http){
-			this.filter = {title:''}
-			this.pagination = {items:18,page:1}
+		controller: ['$http','$sessionStorage',function($http,$sessionStorage){
+			if (!$sessionStorage.filter) $sessionStorage.filter = {title: ''}
+			if (!$sessionStorage.paginate) $sessionStorage.paginate = {items:18,page:1}
+			
+			this.filter = $sessionStorage.filter
+			this.pagination = $sessionStorage.paginate
 			
 			this.definiteArticle = (item)=>{
 				return item.title.replace(/^The\s/i, '')
@@ -249,9 +252,11 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 		}]
 	})
 	
-	.config(['$localStorageProvider','$locationProvider','$httpProvider',($localStorageProvider,$locationProvider,$httpProvider)=>{
-		$locationProvider.html5Mode(true)
-		$localStorageProvider.setKeyPrefix('NodeTV-')
-		$httpProvider.interceptors.push('httpIntercept')
-	}])
+	.config(['$localStorageProvider','$locationProvider','$httpProvider','$sessionStorageProvider',
+			($localStorageProvider,$locationProvider,$httpProvider,$sessionStorageProvider)=>{
+				$locationProvider.html5Mode(true)
+				$localStorageProvider.setKeyPrefix('NodeTV-')
+				$httpProvider.interceptors.push('httpIntercept')
+				$sessionStorageProvider.setKeyPrefix('NodeTV-')
+			}])
 	
