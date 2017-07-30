@@ -99,6 +99,15 @@
 		"oT": 1,
 		"q": 100
 		},
+	"\/app\/js\/components\/artwork.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/app\/js\/components\/min\/artwork.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/app\/js\/components\/nutv.show.js": {
 		"ft": 64,
 		"mi": 0,
@@ -345,6 +354,12 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/messages.html",
+		"oF": 0
+		},
+	"\/app\/views\/components\/navigation.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/navigation.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/poster.html": {
@@ -661,6 +676,15 @@
 		"oO": 0,
 		"oS": 1
 		},
+	"\/server\/models\/movie.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/models\/min\/movie.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/server\/models\/schema\/episode.js": {
 		"ft": 64,
 		"mi": 0,
@@ -721,6 +745,15 @@
 		"oA": 1,
 		"oAP": "\/server\/routes\/min\/api-min.js",
 		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/routes\/api\/v1\/movies.js": {
+		"ft": 64,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/routes\/api\/v1\/min\/movies.min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},

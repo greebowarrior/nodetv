@@ -59,9 +59,11 @@ angular.module('nutv.core')
 					let directory = this.item.config.directory.replace(/\s/g,'%20')
 					
 					sources = []
+					
 					if (this.item.images.banner.enabled){
 						if (this.item.images.banner.files.length){
 							this.item.images.banner.files.forEach(file=>{
+								if (file.width > 800) return
 								sources.push(`/media/${this.type}s/${directory}/${file.filename} ${file.width}w`)
 							})
 						} else {
@@ -77,6 +79,7 @@ angular.module('nutv.core')
 					if (this.item.images.poster.enabled){
 						if (this.item.images.poster.files.length){
 							this.item.images.poster.files.forEach(file=>{
+								if (file.width > 800) return
 								sources.push(`/media/${this.type}s/${directory}/${file.filename} ${file.width}w`)
 							})
 						} else {

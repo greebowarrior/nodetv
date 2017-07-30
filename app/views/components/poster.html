@@ -1,5 +1,5 @@
 <div>
-	<img class="img-responsive" ng-srcset="{{$ctrl.srcset}}" sizes="(max-width: 575px) 575px, (max-width: 767px) 800px, 250px" />
+	<img class="img-responsive" ng-srcset="{{$ctrl.srcset}}" sizes="(max-width: 767px) 100vw, 150px" width="100%" /> <!-- sizes="(max-width: 575px) 575px, (max-width: 767px) 100vw, (min-width: 992px) 250px" /> -->
 	<span ng-show="$ctrl.title.poster || $ctrl.title.banner" class="title" ng-class="{'visible-xs visible-sm':$ctrl.title.banner,'visible-md visible-lg':$ctrl.title.poster}">
 		{{$ctrl.title.text}}
 	</span>
