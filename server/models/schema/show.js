@@ -23,6 +23,7 @@ const showSchema = new mongoose.Schema({
 		feed: [{_id:false,url:String}],
 		format: {type: String, default: 'Season %S/Episode %E - %T.%X'},
 		hd: {type: Boolean, default: false},
+		quality: {type: String, enum: ['SD','720p','1080p']},
 		transcode: {type: Boolean, default: false}
 	},
 	title: {type: String, required: true},
@@ -580,7 +581,10 @@ showSchema.pre('save', function(next){
 	next()
 })
 showSchema.post('findOne', function(doc,next){
-	if (doc) doc.uri = `/api/shows/${doc.ids.slug}`
+	if (doc){
+		if (!doc.config.quality) doc.config.quality = doc.config.hd ? '720p' : 'SD'
+		doc.uri = `/api/shows/${doc.ids.slug}`
+	}
 	next()
 })
 

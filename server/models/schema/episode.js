@@ -34,7 +34,8 @@ const episodeSchema = new mongoose.Schema({
 		hd: {type: Boolean, default: false},
 		linked: [Number],
 		quality: {type: String, enum: ['SD','720p','1080p']},
-		repack: {type: Boolean, default: false}
+		repack: {type: Boolean, default: false},
+		proper: {type: Boolean, default: false}
 	}],
 	file: {
 		added: Date,
@@ -127,6 +128,8 @@ episodeSchema.methods.getFilename = function(file){
 		X: require('path').extname(file).replace(/^\./,'') || 'mkv'
 	}
 	
+	// TODO: Use the filename E01-02, etc to get the multi-episode filename
+	
 	if (this.hashes.linked && this.hashes.linked.length > 1){
 		/*
 		// Multi-episode file - get all parts to generate the filename/title
@@ -159,29 +162,31 @@ episodeSchema.methods.getFilename = function(file){
 }
 episodeSchema.methods.getMagnet = function(){
 	// Generate the magnet URL for the file
+	let config = this.parent().config
 	
-	return new Promise((resolve,reject)=>{
-		let config = this.parent().config
-		
-		// TODO: a better method of getting the best available torrent
-		
-		let hashes = this.hashes.filter(item=>{
-			 return item.hd === config.hd
-		})
-		if (!hashes.length) return reject()
-		// Get REPACK/PROPER only
-		
-		
-		// Sort by date DESC
-		
-		// Return first result
-		
-		hashes.sort((a,b)=>{
-			if (a.added < b.added || a.repack == false) return 1
-			if (a.added > b.added || a.repack == true) return -1
+	return new Promise(resolve=>{
+		// Sort array by quality
+		this.hashes.sort((a,b)=>{
+			if (a.quality == b.quality){
+				if (a.repack && !b.repack) return -1
+				if (!a.repack && b.repack) return 1
+				return 0
+			}
+			if (a.quality == '1080p' && b.quality != '1080p') return -1
+			if (a.quality == '720p'){
+				if (b.quality == '1080p') return 1
+				if (b.quality == 'SD') return -1
+			}
+			if (a.quality == 'SD') return 1
 			return 0
 		})
-		helpers.torrents.createMagnet(hashes[0].btih).then(magnet=>resolve(magnet))
+		let filtered = this.hashes.filter(hash=>{
+			return hash.quality == config.quality
+		})
+		if (filtered.length) resolve(filtered[0])
+		
+	}).then(hash=>{
+		return helpers.torrents.createMagnet(hash.btih)
 	})
 }
 

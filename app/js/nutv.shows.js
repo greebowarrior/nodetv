@@ -88,6 +88,7 @@ angular.module('nutv.shows', ['nutv.core'])
 		templateUrl: '/views/show/show.html',
 		controller: ['$http','$log','$state','$timeout','alertService',function($http,$log,$state,$timeout,alertService){
 			this.images = []
+			this.qualities = ['1080p','720p','SD']
 			
 			$timeout(()=>{
 				if (!this.show.config.feed.length) this.show.config.feed = [{url:''}]
