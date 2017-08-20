@@ -215,6 +215,7 @@ showSchema.methods.parseFeed = function(){
 								linked: result.episodes,
 								quality: helpers.utils.getQuality(entry.title),
 								repack: helpers.utils.isRepack(entry.title),
+								proper: helpers.utils.isProper(entry.title),
 								added: new Date(entry.pubDate)
 							})
 						})

@@ -51,8 +51,13 @@ exports.isHD = (filename)=>{
 exports.isRepack = (filename)=>{
 	return filename.match(/final|proper|repack|rerip/i) ? true : false
 }
+exports.isProper = (filename)=>{
+	return filename.match(/proper/i) ? true : false
+}
 
 exports.getInfoHash = (item)=>{
+	// tv:info_hash namespace?
+	
 	if (item.link.match(/btih\:([\w]{32,40})/i)){
 		// ShowRSS
 		let match = item.link.match(/btih\:([\w]{32,40})/i)

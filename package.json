@@ -44,7 +44,7 @@
     "passport-trakt": "^1.0.4",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
-    "rss-parser": "^2.10.1",
+    "rss-parser": "^2.10.2",
     "sharp": "^0.18.2",
     "socket.io": "^2.0.3",
     "syserrno": "^1.0.1",

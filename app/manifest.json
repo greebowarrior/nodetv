@@ -1,4 +1,8 @@
 {
 	"name": "NodeTV",
-	"description": "Media library Manager"
+	"short_name": "NodeTV",
+	"description": "Media library Manager",
+	
+	"display": "minimal-ui",
+	"theme_color": "#101010"
 }
