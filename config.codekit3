@@ -339,6 +339,18 @@
 		"oAP": "\/app\/views\/components\/alerts.html",
 		"oF": 0
 		},
+	"\/app\/views\/components\/artwork.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/artwork.html",
+		"oF": 0
+		},
+	"\/app\/views\/components\/banner.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/banner.html",
+		"oF": 0
+		},
 	"\/app\/views\/components\/breadcrumbs.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -361,6 +373,12 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/navigation.html",
+		"oF": 0
+		},
+	"\/app\/views\/components\/poster.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/poster.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/search.html": {
@@ -387,6 +405,12 @@
 		"oAP": "\/app\/views\/layouts\/classic.html",
 		"oF": 1
 		},
+	"\/app\/views\/layouts\/modern.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/layouts\/modern.html",
+		"oF": 0
+		},
 	"\/app\/views\/movie\/movie.html": {
 		"ft": 8192,
 		"oA": 2,
@@ -403,6 +427,12 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/add.html",
+		"oF": 0
+		},
+	"\/app\/views\/show\/download.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/show\/download.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/episode.html": {

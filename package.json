@@ -57,7 +57,7 @@
     "zero-fill": "^2.2.3"
   },
   "engines": {
-    "node": "^6.10.3"
+    "node": "^8.4.0"
   },
   "devDependencies": {}
 }
