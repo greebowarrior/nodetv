@@ -177,15 +177,26 @@ angular.module('nutv.shows', ['nutv.core'])
 	.component('nutvShowEpisode', {
 		bindings: {episode:'=',show:'<'},
 		templateUrl: '/views/show/episode.html',
-		controller: ['$http','$log','alertService',function($http,$log,alertService){
+		controller: ['$http','$log','$uibModal','alertService',function($http,$log,$uibModal,alertService){
 			this.download = ()=>{
-				$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/download`)
-					.then(()=>{
-						alertService.alert({
-							title: 'Download started',
-							type: 'success'
+				$uibModal.open({
+					component: 'nutvShowDownload',
+					resolve: {
+						show: ()=>this.show,
+						episode: ()=>this.episode
+					}
+				}).result.then(result=>{
+					$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/download`, {hash:result})
+						.then(()=>{
+							alertService.alert({
+								title: 'Download started',
+								type: 'success'
+							})
 						})
-					})
+				})
+				.catch(()=>{
+					console.debug('No download selected')
+				})
 			}
 			this.watched = ()=>{
 				$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/watched`)
@@ -199,3 +210,45 @@ angular.module('nutv.shows', ['nutv.core'])
 			}
 		}]
 	})
+	
+	.component('nutvShowDownload', {
+		templateUrl: '/views/show/download.html',
+		bindings: {
+			resolve: '<',
+			close: '&',
+			dismiss: '&'
+		},
+		controller: [function(){
+			this.$onInit = ()=>{
+				this.selected = false
+				
+				this.show = this.resolve.show
+				this.episode = this.resolve.episode
+				
+				this.episode.hashes.sort((a,b)=>{
+					if (a.quality == b.quality){
+						if (a.repack && !b.repack) return -1
+						if (!a.repack && b.repack) return 1
+						return 0
+					}
+					if (a.quality == '1080p' && b.quality != '1080p') return -1
+					if (a.quality == '720p'){
+						if (b.quality == '1080p') return 1
+						if (b.quality == 'SD') return -1
+					}
+					if (a.quality == 'SD') return 1
+					return 0
+				})
+			}
+			this.select = (hash)=>{
+				this.selected = hash
+			}
+			this.download = ()=>{
+				this.close({$value:this.selected.btih})
+			}
+			this.cancel = ()=>{
+				this.dismiss({$value:'cancel'})
+			}
+		}]
+	})
+	

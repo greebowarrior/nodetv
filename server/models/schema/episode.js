@@ -40,8 +40,9 @@ const episodeSchema = new mongoose.Schema({
 	file: {
 		added: Date,
 		download: {
-			active: Boolean,
-			hashString: String
+			active: {type: Boolean},
+			btih: {type: String, uppercase: true},
+			hashString: {type: String}
 		},
 		filename: String,
 		filesize: Number,
@@ -55,6 +56,32 @@ episodeSchema.methods.setInfoHash = function(data){
 		if (!data.btih) return reject({error:`No Info Hash`})
 		if (this.hashes.findIndex(item=>{return item.btih == data.btih}) == -1) this.hashes.push(data)
 		resolve(this)
+	})
+}
+episodeSchema.methods.getInfoHash = function(){
+	let config = this.parent().config
+	
+	return new Promise(resolve=>{
+		// Sort array by quality
+		this.hashes.sort((a,b)=>{
+			if (a.quality == b.quality){
+				if (a.repack && !b.repack) return -1
+				if (!a.repack && b.repack) return 1
+				return 0
+			}
+			if (a.quality == '1080p' && b.quality != '1080p') return -1
+			if (a.quality == '720p'){
+				if (b.quality == '1080p') return 1
+				if (b.quality == 'SD') return -1
+			}
+			if (a.quality == 'SD') return 1
+			return 0
+		})
+		let filtered = this.hashes.filter(hash=>{
+			return hash.quality == config.quality
+		})
+		if (filtered.length) resolve(filtered[0])
+		
 	})
 }
 
@@ -160,32 +187,9 @@ episodeSchema.methods.getFilename = function(file){
 	})
 	return filename
 }
+
 episodeSchema.methods.getMagnet = function(){
-	// Generate the magnet URL for the file
-	let config = this.parent().config
-	
-	return new Promise(resolve=>{
-		// Sort array by quality
-		this.hashes.sort((a,b)=>{
-			if (a.quality == b.quality){
-				if (a.repack && !b.repack) return -1
-				if (!a.repack && b.repack) return 1
-				return 0
-			}
-			if (a.quality == '1080p' && b.quality != '1080p') return -1
-			if (a.quality == '720p'){
-				if (b.quality == '1080p') return 1
-				if (b.quality == 'SD') return -1
-			}
-			if (a.quality == 'SD') return 1
-			return 0
-		})
-		let filtered = this.hashes.filter(hash=>{
-			return hash.quality == config.quality
-		})
-		if (filtered.length) resolve(filtered[0])
-		
-	}).then(hash=>{
+	return this.getInfoHash().then(hash=>{
 		return helpers.torrents.createMagnet(hash.btih)
 	})
 }
@@ -193,7 +197,7 @@ episodeSchema.methods.getMagnet = function(){
 episodeSchema.methods.setDownloading = function(hash){
 	return new Promise(resolve=>{
 		this.file.download.active = true
-		this.file.download.hashString = hash
+		this.file.download.hashString = hash.toUpperCase()
 		resolve()
 	})
 }

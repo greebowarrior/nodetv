@@ -20,24 +20,6 @@
 	max-width: 970px;
 }
 
-/*
-.row {
-	// Add flex capabilities to bootstrap3 grid
-	display: flex;
-	align-items: flex-start;
-	justify-content: flex-start;
-	flex-wrap: wrap;
-	
-//	>[class*="col-sm"],>[class*="col-md"],>[class*="col-lg"]{
-	>[class*="col-"]{
-		display: block;
-		float: none;
-		@media (max-width: 991px){
-			width: 100%;
-		}
-	}
-}
-*/
 .pagination {
 	li {
 		a {

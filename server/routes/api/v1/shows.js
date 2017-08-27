@@ -421,13 +421,38 @@ const ShowsAPI = (app,io)=>{
 					
 					return show.getEpisode(req.params.season, req.params.episode)
 						.then(episode=>{
-							return episode.getMagnet()
+							if (req.body.hash){
+								// Download a specific torrent
+								
+								return new Promise((resolve,reject)=>{
+									let idx = episode.hashes.findIndex(hash=>{
+										return hash.btih === req.body.hash
+									})
+									if (idx >= 0){
+										resolve(episode.hashes[idx])
+									} else {
+										reject()
+									}
+								})
+								.then(hash=>{
+									return helpers.torrents.createMagnet(hash.btih)
+								})
 								.then(magnet=>{
 									return helpers.torrents.add(magnet)
 								})
 								.then(hash=>{
 									return episode.setDownloading(hash)
 								})
+							} else {
+								// Find torrent by standard method
+								return episode.getMagnet()
+									.then(magnet=>{
+										return helpers.torrents.add(magnet)
+									})
+									.then(hash=>{
+										return episode.setDownloading(hash)
+									})
+							}
 						})
 						.then(()=>{
 							return show.save()

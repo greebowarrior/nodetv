@@ -6,7 +6,7 @@
 				<span class="caret"></span>
 			</span>
 			<ul class="dropdown-menu" uib-dropdown-menu>
-				<li ng-show="$ctrl.episode.hashes.length && !$ctrl.episode.file.added">
+				<li ng-show="$ctrl.episode.hashes.length">
 					<a ng-click="$ctrl.download()"><span class="fa fa-download"></span> Download</a>
 				</li>
 				<li ng-hide="$ctrl.episode.watchers[0].watches.length">
