@@ -17,7 +17,7 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 						if (!show) return null
 						
 						let idx = show.episodes.findIndex(item=>{
-							return item.file.download.hashString == torrent.hashString
+							return item.file.download.hashString.toUpperCase() == torrent.hashString.toUppserCase()
 						})
 						let episode  = show.episodes[idx]
 						

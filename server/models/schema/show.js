@@ -82,7 +82,7 @@ const showSchema = new mongoose.Schema({
 // Statics
 showSchema.statics.findByHashString = function(hash,projection={},options={}){
 	return this.findOne({
-		'episodes.file.download.hashString':hash
+		'episodes.file.download.hashString': {$regex: new RegExp(hash, 'i')}
 	},projection,options)
 }
 showSchema.statics.findBySlug = function(slug,projection={}){

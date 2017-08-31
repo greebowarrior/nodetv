@@ -24,7 +24,7 @@ require('node-schedule').scheduleJob('0 * * * *', ()=>{
 					return body
 				})
 				.catch(error=>{
-					console.error(error)
+					console.debug(error.message)
 				})
 		}
 		
