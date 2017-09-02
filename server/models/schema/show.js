@@ -113,12 +113,11 @@ showSchema.statics.recentEpisodes = function(user,days=7){
 	since.setDate(since.getDate()-days)
 	
 	// TODO: Skip watched episodes
-	// TODO: Limit by user
 	
 	return this.aggregate([
 		{
 			$match: {
-		//		'config.enabled': true,
+				'config.enabled': true,
 				'subscribers.subscriber': user._id,
 				$or: [
 					{'episodes.file.added': {$gte:since, $lt:now}},
