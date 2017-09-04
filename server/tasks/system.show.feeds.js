@@ -44,7 +44,7 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 					.map(result=>{
 						let episode = show.episodes.id(result._id)
 						
-						return this.getInfoHash()
+						return episode.getInfoHash()
 							.then(hash=>{
 								return new Promise((resolve,reject)=>{
 									if (!episode.file.download.active) return resolve(hash)
@@ -73,11 +73,11 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 						return show.save()
 					})
 					.catch(error=>{
-						console.error(`${show.title}: `, error)
+						console.error(`${show.title}: `, error.message)
 					})
 			})
 		})
 		.catch(error=>{
-			if (error) console.error(error)
+			if (error) console.error(error.message)
 		})
 })
