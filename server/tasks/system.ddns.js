@@ -42,7 +42,7 @@ require('node-schedule').scheduleJob('0 * * * *', ()=>{
 				return updateDNS(ips)
 			})
 			.then(()=>{
-				console.info('DDNS Updated')
+				console.info('DynDNS Updated')
 			})
 			.catch(()=>{
 				console.error('DynDNS update failed')

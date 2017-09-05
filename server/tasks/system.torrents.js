@@ -40,10 +40,11 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 							return episode.setCollected(filename)
 						})
 						.then(()=>{
+							console.debug(`Downloaded - ${show.title}: ${filename}`)
 							return show.save()
 						})
 				})
-				.then(()=>{
+				.finally(()=>{
 					// Check seed ratio, if >= limit, remove torrent
 					if (torrent.uploadLimit >= torrent.seedRatioLimit || torrent.isFinished){
 						helpers.torrents.delete(torrent.id)

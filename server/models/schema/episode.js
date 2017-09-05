@@ -91,12 +91,14 @@ episodeSchema.methods.setCollected = function(file=false){
 			subscribers.forEach(user=>{
 				helpers.trakt(user).sync.collection.add({episodes:[{ids:{trakt:this.ids.trakt}}]})
 			})
+			return null
 		})
 		.finally(()=>{
-			if (file) this.file.filename = file
-			this.file.added = new Date()
-			this.file.download.active = undefined
-			
+			if (file){
+				this.file.filename = file
+				this.file.added = new Date()
+				this.file.download.active = undefined
+			}
 			return this
 		})
 }
