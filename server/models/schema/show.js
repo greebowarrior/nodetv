@@ -190,13 +190,13 @@ showSchema.methods.parseFeed = function(){
 					})
 				})
 				.catch(error=>{
-					console.error(error)
 					reject(error)
 				})
 		} else {
 			reject({error: `Show not enabled: ${this.title}`})
 		}
 	})
+	// change to .map(entry=>{...})
 	.then(json=>{
 		let promises = []
 		
