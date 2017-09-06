@@ -48,17 +48,21 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 							.then(hash=>{
 								return new Promise((resolve,reject)=>{
 									if (!episode.file.download.active) return resolve(hash)
-									
 									if (episode.file.download.hashString.toUpperCase() != hash.btih.toUpperCase()){
+										
+										console.debug(`Downloading: ${show.title} - ${episode.title}`)
+										
 										// Remove the current download (if it's still active)
 										helpers.torrents.findByHash(episode.file.download.hashString)
 											.then(torrent=>{
 												return helpers.torrents.delete(torrent.id)
 											})
+											.finally(()=>{
+												resolve(hash)
+											})
 											.catch(error=>{
 												console.debug(error.message)
 											})
-										resolve(hash)
 									}
 									reject()
 								})
@@ -73,7 +77,7 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 						return show.save()
 					})
 					.catch(error=>{
-						console.error(`${show.title}: `, error.message)
+						if (error) console.error(`${show.title}: `, error.message)
 					})
 			})
 		})

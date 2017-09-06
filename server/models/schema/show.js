@@ -185,7 +185,7 @@ showSchema.methods.parseFeed = function(){
 			request(this.config.feed[0].url, {proxy:false})
 				.then(xml=>{
 					require('rss-parser').parseString(xml, (error,json)=>{
-						if (json) resolve(json)
+						if (json) resolve(json.feed.entries)
 						if (error) reject(error)
 					})
 				})
@@ -193,44 +193,36 @@ showSchema.methods.parseFeed = function(){
 					reject(error)
 				})
 		} else {
-			reject({error: `Show not enabled: ${this.title}`})
+			reject(new Error(`Show not enabled: ${this.title}`))
 		}
 	})
-	// change to .map(entry=>{...})
-	.then(json=>{
-		let promises = []
-		
-		json.feed.entries.forEach(entry=>{
-			let promise = helpers.utils.getEpisodeNumbers(entry.title)
-				.then(result=>{
-					result.episodes.forEach(ep=>{
-						let episodes = this.episodes.filter(item=>{
-							return item.season == result.season && item.episode == ep
-						})
-						episodes.forEach(episode=>{
-							episode.setInfoHash({
-								btih: helpers.utils.getInfoHash(entry),
-								hd: helpers.utils.isHD(entry.title),
-								linked: result.episodes,
-								quality: helpers.utils.getQuality(entry.title),
-								repack: helpers.utils.isRepack(entry.title),
-								proper: helpers.utils.isProper(entry.title),
-								added: new Date(entry.pubDate)
-							})
+	.map(entry=>{
+		return helpers.utils.getEpisodeNumbers(entry.title)
+			.then(result=>{
+				result.episodes.forEach(ep=>{
+					let episodes = this.episodes.filter(item=>{
+						return item.season == result.season && item.episode == ep
+					})
+					episodes.forEach(episode=>{
+						episode.setInfoHash({
+							btih: helpers.utils.getInfoHash(entry),
+							hd: helpers.utils.isHD(entry.title),
+							linked: result.episodes,
+							quality: helpers.utils.getQuality(entry.title),
+							repack: helpers.utils.isRepack(entry.title),
+							proper: helpers.utils.isProper(entry.title),
+							added: new Date(entry.pubDate)
 						})
 					})
-					return null
 				})
-			promises.push(promise)
-		})
-		
-		return Promise.all(promises)
+				return null
+			})
 	})
 	.then(()=>{
 		return this.save({new:true})
 	})
 	.catch(error=>{
-		if (error) console.error(`${this.title}`, error)
+		if (error) console.error(`${this.title}: `, error.message)
 	})
 }
 showSchema.methods.subscribe = function(user){
