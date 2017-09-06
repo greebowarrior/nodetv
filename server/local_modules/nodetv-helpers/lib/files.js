@@ -8,14 +8,21 @@ const forked = function(worker, data){
 		require('child_process')
 			.fork(__dirname+'/workers/'+worker)
 			.on('message', (msg)=>{
-				if (msg.errno){
+				if (msg.errno && msg.code){
 					let error = require('syserrno').errorForCode(msg.code)
 					if (msg.path) error.message += `: ${msg.path}`
 					reject(error)
 				}
 			})
+			.on('error', error=>{
+				reject(new Error(error))
+			})
 			.on('exit', (code)=>{
-				if (code == 0) resolve()
+				if (code == 0){
+					resolve()
+				} else {
+					reject()
+				}
 			})
 			.send(data)
 	})
@@ -24,7 +31,7 @@ const forked = function(worker, data){
 exports.copy = function(source, target, transcode = false){
 	return fs.ensureDir(path.dirname(target))
 		.then(()=>{
-			if (transcode) {
+			if (transcode){
 				return forked('file.transcode', {source:source,target:target})
 			} else {
 				return forked('file.copy', {source:source,target:target})
@@ -34,7 +41,7 @@ exports.copy = function(source, target, transcode = false){
 			return target
 		})
 }
-exports.download = function(url, target){
+exports.download = function(url,target){
 	return fs.ensureDir(path.dirname(target))
 		.then(()=>{
 			return forked('file.download', {source:url,target:target})
@@ -52,7 +59,7 @@ exports.link = function(source,target){
 			return fs.ensureSymlink(source,target)
 		})
 }
-exports.move = function(source, target){
+exports.move = function(source,target){
 	return fs.ensureDir(path.dirname(target))
 		.then(()=>{
 			return forked('file.move', {source:source,target:target})

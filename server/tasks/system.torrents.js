@@ -43,6 +43,9 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 							console.debug(`Downloaded - ${show.title}: ${filename}`)
 							return show.save()
 						})
+						.catch(error=>{
+							if (error) console.error(error.message)
+						})
 				})
 				.finally(()=>{
 					// Check seed ratio, if >= limit, remove torrent
@@ -51,10 +54,10 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 					}
 				})
 				.catch(error=>{
-					console.error(error.message)
+					if (error) console.error(error.message)
 				})
 		})
 		.catch(error=>{
-			console.error(error.message)
+			if (error) console.error(error.message)
 		})
-})
+//})

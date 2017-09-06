@@ -1,9 +1,18 @@
 "use strict"
 
+const fs = require('fs-extra')
 const mime = require('mime-types')
 
 process.on('message', (msg)=>{
 	try {
+		if (!fs.existsSync(msg.source)){
+			let error = new Error(`${msg.source}: No such file`)
+			error.errno = 34
+			error.code = 'ENOENT'
+			error.path = msg.source
+			throw error
+		}
+		
 		msg.target = msg.target.replace(/\.([\w]+)$/,'.mp4')
 		
 		let args = ['-i', msg.source,'-c:v', 'copy','-c:a', 'copy','-y']
@@ -48,7 +57,6 @@ process.on('message', (msg)=>{
 		remux.on('close', (code)=>{
 			process.exit(code)
 		})
-		
 		remux.stdout.on('data', (data)=>{
 			process.send(data.toString())
 		})

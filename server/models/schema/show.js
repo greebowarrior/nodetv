@@ -6,6 +6,11 @@ const episodeSchema = require('./episode')
 
 const helpers = require('nodetv-helpers')
 const request = require('request-promise')
+request.defaults({
+	headers: {
+		'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
+	}
+})
 
 const showSchema = new mongoose.Schema({
 	ids: {
@@ -182,7 +187,7 @@ showSchema.methods.parseFeed = function(){
 			// TODO: Support multiple feeds
 			// TODO: Support proxying (for YTS, etc)
 			
-			request(this.config.feed[0].url, {proxy:false})
+			request({url:this.config.feed[0].url, proxy:false})
 				.then(xml=>{
 					require('rss-parser').parseString(xml, (error,json)=>{
 						if (json) resolve(json.feed.entries)
