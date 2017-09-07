@@ -20,34 +20,32 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 				
 				return show.parseFeed()
 					.then(()=>show.getLatestEpisodes())
-					/*
-					.then(results=>{
-						let promises = []
-						
-						results.forEach(result=>{
-							let episode = show.episodes.id(result._id)
-							
-							// Don't get latest episode if it's already downloading or downloaded
-							if (episode.file.download.active || episode.file.added) return
-							// Get magnet for preferred format
-							let process = episode.getMagnet()
-								// Send to transmission
-								.then(magnet=>helpers.torrents.add(magnet))
-								// Mark episode as downloading
-								.then(hash=>episode.setDownloading(hash))
-							
-							promises.push(process)
-						})
-						return Promise.all(promises)
-					})
-					*/
 					.map(result=>{
 						let episode = show.episodes.id(result._id)
 						
 						return episode.getInfoHash()
 							.then(hash=>{
 								return new Promise((resolve,reject)=>{
-									if (!episode.file.download.active) return resolve(hash)
+									if (episode.file.download.hashString.toUpperCase() == hash.btih.toUpperCase()){
+									//	console.debug(`Already downloading: ${show.title} - ${episode.title}`)
+										return reject()
+									} else {
+										// Remove the current download (if it's still active)
+										helpers.torrents.findByHash(episode.file.download.hashString)
+											.then(torrent=>{
+												return helpers.torrents.delete(torrent.id)
+											})
+											.finally(()=>{
+												console.log('Set downloading')
+												resolve(hash)
+											})
+											.catch(error=>{
+												if (error) console.debug(error.message)
+											})
+									}
+									/*
+									if (!episode.file.download.hashString) return resolve(hash)
+									
 									if (episode.file.download.hashString.toUpperCase() != hash.btih.toUpperCase()){
 										
 										console.debug(`Downloading: ${show.title} - ${episode.title}`)
@@ -65,9 +63,11 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 											})
 									}
 									reject()
+									*/
 								})
 							})
 							.then(hash=>{
+								console.debug(`Starting Download: ${show.title} - ${episode.title}`)
 								return helpers.torrents.createMagnet(hash.btih)
 							})
 							.then(magnet=>helpers.torrents.add(magnet))
