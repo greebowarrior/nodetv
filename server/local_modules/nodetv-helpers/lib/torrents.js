@@ -57,11 +57,15 @@ exports.findByHash = (btih)=>{
 			if (error) return reject(error)
 			if (args){
 				args.torrents.forEach(torrent=>{
-					if (torrent.hashString.toUpperCase() == btih.toUpperCase()){
-						resolve({
-							id: torrent.id,
-							hashString: torrent.hashString
-						})
+					try {
+						if (torrent.hashString.toUpperCase() == btih.toUpperCase()){
+							resolve({
+								id: torrent.id,
+								hashString: torrent.hashString
+							})
+						}
+					} catch(e){
+						console.debug(e)
 					}
 				})
 				reject()

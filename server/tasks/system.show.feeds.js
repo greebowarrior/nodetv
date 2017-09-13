@@ -26,7 +26,7 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 						return episode.getInfoHash()
 							.then(hash=>{
 								return new Promise((resolve,reject)=>{
-									if (episode.file.download.hashString.toUpperCase() == hash.btih.toUpperCase()){
+									if (episode.file.download.hashString && episode.file.download.hashString.toUpperCase() == hash.btih.toUpperCase()){
 									//	console.debug(`Already downloading: ${show.title} - ${episode.title}`)
 										return reject()
 									} else {
