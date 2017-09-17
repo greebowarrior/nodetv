@@ -1,8 +1,23 @@
 {
-	"name": "NodeTV",
-	"short_name": "NodeTV",
-	"description": "Media library Manager",
+	"manifest_version": 2,
+	"name": "NodeTV - Media Library Manager",
+	"version": "1.0.3",
+	"short_name": "NuTV",
+	"description": "Media Library Manager",
+	"homepage_url": "https://github.com/greebowarrior/nodetv",
+	"offline_enabled": true,
+	"display": "standalone",
+	"theme_color": "#101010",
 	
-	"display": "minimal-ui",
-	"theme_color": "#101010"
+	"start_url": "/",
+	"icons": [{
+		"src": "/static/gfx/touch-icon.png",
+		"sizes": "152x152",
+		"type": "image/png"
+	}],
+	"serviceworker": {
+		"src": "/static/js/nutv.service-worker.js",
+		"scope": "/",
+		"use_cache": false
+	}
 }

@@ -24,11 +24,18 @@ const App = app=>{
 	app.set('view engine', 'html')
 	app.set('views', require('path').join(process.cwd(),'app','views'))
 	
+	if (process.env.NODE_ENV == 'development') app.disable('view cache')
+	
 	// Enable layout templates
 	app.set('layout', 'layouts/classic')
 	app.use(require('express-ejs-layouts'))
 	
-	// Define static paths
+	// Define headers and static paths
+	app.use((req,res,next)=>{
+	//	res.setHeader('Link', `</static/js/nutv.service-worker.js>; rel="serviceworker"; scope="/"`)
+		res.setHeader('Service-Worker-Allowed', '/')
+		next()
+	})
 	app.use('/static', require('express').static(require('path').join(process.cwd(),'app'),{etag:false}))
 	
 	app.locals.nutv = require('../package.json')

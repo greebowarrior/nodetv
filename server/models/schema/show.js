@@ -166,7 +166,8 @@ showSchema.statics.upcomingEpisodes = function(user,days=7){
 		},{
 			$match: {
 				'episodes.first_aired': {$gte:now, $lt:until},
-				'episodes.file': {$exists: false}
+				'episodes.file': {$exists: false},
+				'episodes.season': {$ne: 0}
 			}
 		},{
 			$group: {

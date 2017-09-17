@@ -149,16 +149,6 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/app\/js\/libs\/ui-bootstrap-tpls-2.2.0.min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/app\/js\/libs\/min\/ui-bootstrap-tpls-2.2.0.min-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/app\/js\/libs\/ui-bootstrap-tpls-2.5.0.min.js": {
 		"ft": 64,
 		"ma": 0,
@@ -205,6 +195,16 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/min\/nutv.movies.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/app\/js\/nutv.service-worker.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/app\/js\/min\/nutv.service-worker.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -957,16 +957,6 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/tasks\/min\/user.sync.watchlist.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/upnp.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/min\/upnp.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0

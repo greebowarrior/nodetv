@@ -1,6 +1,6 @@
 "use strict"
 
-angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert','ngTouch','btford.socket-io','ui.bootstrap','ui.router'])
+angular.module('nutv.core', ['ngAnimate','ngSanitize','ngStorage','ngSweetAlert','ngTouch','btford.socket-io','ui.bootstrap','ui.router'])
 		
 	.factory('httpIntercept', ['$localStorage','$location','$q',($localStorage,$location,$q)=>{
 		return {
