@@ -1,7 +1,5 @@
 "use strict"
 
-const secret = 'Customer-Service-Immolation-Incident'
-
 const MongoStore = require('connect-mongo')(require('express-session'))
 
 const App = app=>{
@@ -49,7 +47,7 @@ const App = app=>{
 	const session =  require('express-session')({
 		resave: false,
 		saveUninitialized: true,
-		secret: secret,
+		secret: process.env.SECRET_KEY,
 		store: new MongoStore({
 			mongooseConnection: require('mongoose').connection
 		})

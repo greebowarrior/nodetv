@@ -77,6 +77,17 @@
 		"oAP": "\/app\/gfx\/icons\/favicon.ico",
 		"oF": 0
 		},
+	"\/app\/gfx\/icons\/touch-icon-192.png": {
+		"ft": 32768,
+		"iS": 18304,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/touch-icon-192.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
 	"\/app\/gfx\/icons\/touch-icon.png": {
 		"ft": 32768,
 		"iS": 9290,

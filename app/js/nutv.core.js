@@ -1,10 +1,12 @@
 "use strict"
 
-angular.module('nutv.core', ['ngAnimate','ngSanitize','ngStorage','ngSweetAlert','ngTouch','btford.socket-io','ui.bootstrap','ui.router'])
+angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','ngSweetAlert','ngTouch','btford.socket-io','ui.bootstrap','ui.router'])
 		
-	.factory('httpIntercept', ['$localStorage','$location','$q',($localStorage,$location,$q)=>{
+	.factory('httpIntercept', ['$cookies','$localStorage','$location','$q',($cookies,$localStorage,$location,$q)=>{
 		return {
 			request: config=>{
+				if ($cookies.get('jwt')) config.headers['Authorization'] = 'Bearer '+$cookies.get('jwt')
+				
 				if ($localStorage.token){
 					if ($localStorage.token.username) config.headers['X-Username'] = $localStorage.token.username
 					if ($localStorage.token.username) config.headers['X-Token'] = $localStorage.token.token
@@ -252,8 +254,8 @@ angular.module('nutv.core', ['ngAnimate','ngSanitize','ngStorage','ngSweetAlert'
 		}]
 	})
 	
-	.config(['$localStorageProvider','$locationProvider','$httpProvider','$sessionStorageProvider',
-			($localStorageProvider,$locationProvider,$httpProvider,$sessionStorageProvider)=>{
+	.config(['$httpProvider','$localStorageProvider','$locationProvider','$sessionStorageProvider',
+			($httpProvider,$localStorageProvider,$locationProvider,$sessionStorageProvider)=>{
 				$locationProvider.html5Mode(true)
 				$localStorageProvider.setKeyPrefix('NodeTV-')
 				$httpProvider.interceptors.push('httpIntercept')

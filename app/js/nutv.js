@@ -77,10 +77,11 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	})
 	.component('nutvLogout', {
 		templateUrl: 'views/auth/logout.html',
-		controller: ['$http','$localStorage','$log','$state',function($http,$localStorage,$log,$state){
+		controller: ['$cookies','$http','$localStorage','$log','$state',function($cookies,$http,$localStorage,$log,$state){
 			$http.get('/auth/logout')
 				.then(()=>{
 					delete $localStorage.token
+					$cookies.remove('jwt')
 					$state.go('dashboard.home')
 				})
 				.catch(()=>{

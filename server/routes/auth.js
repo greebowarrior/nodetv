@@ -8,6 +8,7 @@ const helpers = require('nodetv-helpers')
 const passport = require('passport')
 const router = require('express').Router()
 
+const JwtStrategy = require('passport-jwt').Strategy
 const LocalStrategy = require('passport-local').Strategy
 const TokenStrategy = require('passport-token').Strategy
 const TraktStrategy = require('passport-trakt').Strategy
@@ -37,6 +38,23 @@ passport.use('local', new LocalStrategy((username,password,done)=>{
 			done(error, false)
 		})
 }))
+
+passport.use('jwt', new JwtStrategy({
+		secretOrKey: process.env.SECRET_KEY,
+		jwtFromRequest: require('passport-jwt').ExtractJwt.fromAuthHeaderAsBearerToken()
+	},
+	(payload, done)=>{
+		User.findOne({_id:payload.id})
+			.then(user=>{
+				if (!user) throw new Error('Invalid user')
+				done(null, user)
+			})
+			.catch(error=>{
+				done(error, false)
+			})
+	}
+))
+
 passport.use('token', new TokenStrategy((username,token,done)=>{
 	User.findOne({username:username.toLowerCase(),'tokens.token':token})
 		.then(user=>{
@@ -48,8 +66,7 @@ passport.use('token', new TokenStrategy((username,token,done)=>{
 		})
 }))
 
-passport.use('trakt', new TraktStrategy(
-	{
+passport.use('trakt', new TraktStrategy({
 		clientID: process.env.TRAKT_CLIENT_ID,
 		clientSecret: process.env.TRAKT_CLIENT_SECRET,
 		callbackURL: process.env.TRAKT_REDIRECT_URI || 'urn:ietf:wg:oauth:2.0:oob'
@@ -74,7 +91,7 @@ const Auth = app=>{
 	
 	// Secure all API routes with token authentication
 	app.route('/api/*')
-		.all(passport.authenticate('token'))
+		.all(passport.authenticate(['jwt','token']))
 		
 	app.route('/logout')
 		.get((req,res)=>{
@@ -98,6 +115,10 @@ const Auth = app=>{
 						let token = user.apiToken()
 						res.header('X-Username', user.username)
 						res.header('X-Token', token)
+						
+						let jwt = require('jsonwebtoken').sign({id:req.user._id,username:req.user.username}, process.env.SECRET_KEY)
+						res.cookie('jwt', jwt)
+						
 						res.send({username:user.username,token:token})
 					})
 					.catch(()=>{
