@@ -7,7 +7,7 @@ const App = app=>{
 	// Express Setup
 	app.use(require('body-parser').json({limit:'25mb'}))
 	app.use(require('body-parser').urlencoded({extended:false,limit:'25mb'}))
-	app.use(require('cookie-parser')())
+	app.use(require('cookie-parser')(process.env.SECRET_KEY))
 	
 	app.use(require('compression')())
 	app.use(require('helmet')())

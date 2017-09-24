@@ -28,6 +28,21 @@ passport.deserializeUser((id,done)=>{
 		})
 })
 
+passport.use('jwt', new JwtStrategy({
+		secretOrKey: process.env.SECRET_KEY,
+		jwtFromRequest: require('passport-jwt').ExtractJwt.fromAuthHeaderAsBearerToken()
+	},
+	(payload, done)=>{
+		User.findOne({_id:payload.id}) // {_id:payload.id,username:payload.username,'tokens.token':payload.token}
+			.then(user=>{
+				if (!user) throw new Error('Invalid user')
+				done(null, user)
+			})
+			.catch(error=>{
+				done(error, false)
+			})
+	}
+))
 passport.use('local', new LocalStrategy((username,password,done)=>{
 	User.findOne({$or:[{username:username.toLowerCase()},{email:username.toLowerCase()}]})
 		.then(user=>{
@@ -38,23 +53,6 @@ passport.use('local', new LocalStrategy((username,password,done)=>{
 			done(error, false)
 		})
 }))
-
-passport.use('jwt', new JwtStrategy({
-		secretOrKey: process.env.SECRET_KEY,
-		jwtFromRequest: require('passport-jwt').ExtractJwt.fromAuthHeaderAsBearerToken()
-	},
-	(payload, done)=>{
-		User.findOne({_id:payload.id})
-			.then(user=>{
-				if (!user) throw new Error('Invalid user')
-				done(null, user)
-			})
-			.catch(error=>{
-				done(error, false)
-			})
-	}
-))
-
 passport.use('token', new TokenStrategy((username,token,done)=>{
 	User.findOne({username:username.toLowerCase(),'tokens.token':token})
 		.then(user=>{
@@ -65,7 +63,6 @@ passport.use('token', new TokenStrategy((username,token,done)=>{
 			done(error, false)
 		})
 }))
-
 passport.use('trakt', new TraktStrategy({
 		clientID: process.env.TRAKT_CLIENT_ID,
 		clientSecret: process.env.TRAKT_CLIENT_SECRET,
@@ -116,12 +113,13 @@ const Auth = app=>{
 						res.header('X-Username', user.username)
 						res.header('X-Token', token)
 						
-						let jwt = require('jsonwebtoken').sign({id:req.user._id,username:req.user.username}, process.env.SECRET_KEY)
-						res.cookie('jwt', jwt)
+						let jwt = require('jsonwebtoken').sign({id:req.user._id,username:req.user.username,token:token}, process.env.SECRET_KEY)
+						res.cookie('jwt', jwt, {httpOnly:true,maxAge:60*60*24*7*1000,signed:true})
 						
 						res.send({username:user.username,token:token})
 					})
-					.catch(()=>{
+					.catch(error=>{
+						console.debug(error)
 						res.status(401).send({error:'Unauthorized'})
 					})
 			} else {
@@ -143,6 +141,7 @@ const Auth = app=>{
 						let token = user.apiToken()
 						res.header('X-Username', user.username)
 						res.header('X-Token', token)
+						// JWT?
 						res.send({username:user.username,token:token})
 					})
 					.catch(()=>{

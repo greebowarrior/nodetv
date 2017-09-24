@@ -85,8 +85,7 @@
 	- Create Express middleware to allow themes WITHOUT reloading service
 - Import Trakt CSV?
 - Trakt Watchlist syncing
-- JSON Web Token Auth?
-	- Generate a unique RSA key per install?
+- ~~JSON Web Token Auth~~
 
 # Eventually
 

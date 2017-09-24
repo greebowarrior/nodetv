@@ -26,6 +26,27 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 						return episode.getInfoHash()
 							.then(hash=>{
 								return new Promise((resolve,reject)=>{
+									if (!episode.file.download.hashString){
+										return resolve(hash)
+									} else {
+										if (episode.file.download.hashString.toUpperCase() == hash.btih.toUpperCase()){
+											return reject()
+										} else {
+											helpers.torrents.findByHash(episode.file.download.hashString)
+												.then(torrent=>{
+													return helpers.torrents.delete(torrent.id)
+												})
+												.finally(()=>{
+													console.log('Set downloading')
+													resolve(hash)
+												})
+												.catch(error=>{
+													if (error) console.debug(error.message)
+												})
+										}
+									}
+									
+									/*
 									if (episode.file.download.hashString && episode.file.download.hashString.toUpperCase() == hash.btih.toUpperCase()){
 									//	console.debug(`Already downloading: ${show.title} - ${episode.title}`)
 										return reject()
@@ -43,6 +64,7 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 												if (error) console.debug(error.message)
 											})
 									}
+									*/
 									/*
 									if (!episode.file.download.hashString) return resolve(hash)
 									
