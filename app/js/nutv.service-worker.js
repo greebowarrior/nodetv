@@ -49,13 +49,15 @@ self.addEventListener('fetch', (event)=>{
 		return new Promise(resolve=>{
 			fetch(event.request)
 				.then(response=>{
-					if (response.status === 200 && event.request.method === 'GET' && !event.request.url.match(/socket\.io\/?EIO/)){
+					resolve(response)
+					
+					if (response.status === 200 && event.request.method === 'GET' && !event.request.url.match(/socket\.io\/\?EIO/)){
 						cache.put(event.request.clone(), response.clone())
 					}
-					resolve(response)
+					
 				})
 				.catch(()=>{
-					if (event.request.url.match(/socket\.io\/?EIO/)){
+					if (event.request.url.match(/socket\.io\/\?EIO/)){
 						return resolve(new Response('', {
 							status: 408,
 							statusText: 'Request timed out.'
