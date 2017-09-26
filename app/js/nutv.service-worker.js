@@ -26,6 +26,7 @@ self.addEventListener('install', (event)=>{
 		return cache.addAll(CACHE_RESOURCE)
 	}))
 })
+
 /*
 self.addEventListener('activate', (event)=>{
 	event.waitUntil(caches.keys().then((keys)=>{
@@ -43,60 +44,32 @@ self.addEventListener('activate', (event)=>{
 */
 
 self.addEventListener('fetch', (event)=>{
-	event.respondWith(caches.match(event.request)
-		.then(res=>{
-			if (event.request.method === 'POST' || event.request.url.match(/socket\.io\/?EIO/)){
-				return fetch(event.request).then(direct=>direct)
-			} else {
-				if (res) return res
-				
-				let req = event.request.clone()
-				return fetch(req)
-					.then(res=>{
-						if (!res || res.status !== 200 || res.type !== 'basic') return res
-						if (req.url.match(/socket\.io/)) return res
+	event.respondWith(caches.open(CACHE_NAME).then(cache=>{
+		
+		return new Promise(resolve=>{
+			fetch(event.request)
+				.then(response=>{
+					if (response.status === 200 && event.request.method === 'GET' && !event.request.url.match(/socket\.io\/?EIO/)){
+						cache.put(event.request.clone(), response.clone())
+					}
+					resolve(response)
+				})
+				.catch(()=>{
+					if (event.request.url.match(/socket\.io\/?EIO/)){
+						return resolve(new Response('', {
+							status: 408,
+							statusText: 'Request timed out.'
+						}))
+					}
+					cache.match(event.request).then(response=>{
+						if (response) return resolve(response)
 						
-						let obj = res.clone()
-						caches.open(CACHE_NAME).then((cache)=>{
-							cache.put(event.request, obj)
-						})
-						return res
-					})
-			}
-		})
-		.catch(error=>{
-			if (error) console.error(`${error.message}: ${event.request.url}`)
-		})
-	)
-	/*
-	event.waitUntil(
-		caches.open(CACHE_NAME)
-			.then(cache=>{
-				return fetch(event.request).then(res=>{
-					return cache.put(event.request, res.clone())
-				})
-				.then(res=>{
-					return res
-				})
-			})
-			.then(res=>{
-				return self.clients.matchAll().then(clients=>{
-					clients.forEach(client=>{
-						let message = {
-							type: 'refresh',
-							url: res.url,
-							eTag: res.headers.get('ETag')
-						}
-						client.postMessage(JSON.stringify(message))
+						resolve(new Response('', {
+							status: 408,
+							statusText: 'Request timed out.'
+						}))
 					})
 				})
 			})
-			.catch(error=>{
-				console.error(error.message)
-			})
-	)
-	*/
+	}))
 })
-
-
-

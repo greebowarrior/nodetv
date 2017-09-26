@@ -172,3 +172,18 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 		}]
 	})
 	
+	.run(['$transitions','alertService',($transitions,alertService)=>{
+		$transitions.onError({}, ()=>{
+			alertService.notify({type:'danger',msg:'Offline'})
+		})
+		
+		if ('serviceWorker' in navigator){
+			navigator.serviceWorker.register('/static/js/nutv.service-worker.js', {scope:'/'})
+				.then(()=>{
+					console.debug('[NuTV] Service Worker registered')
+				})
+				.catch((error)=>{
+					console.error('[NuTV] Service Worker registration failed: ', error.message)
+				})
+		}
+	}])
