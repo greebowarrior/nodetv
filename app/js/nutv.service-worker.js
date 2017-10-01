@@ -11,24 +11,35 @@ const CACHE_RESOURCE = [
 	
 	// JavaScript
 	'https://code.jquery.com/jquery-3.2.1.min.js',
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js',
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-animate.min.js',
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-cookies.min.js',
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-sanitize.min.js',
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-touch.min.js',
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js',
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-animate.min.js',
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-cookies.min.js',
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-sanitize.min.js',
+	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-touch.min.js',
 	
 	'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js',
 	'/socket.io/socket.io.js'
 ]
 
 self.addEventListener('install', (event)=>{
-	event.waitUntil(caches.open(CACHE_NAME).then(cache=>{
-		return cache.addAll(CACHE_RESOURCE)
-	}))
+	event.waitUntil(caches.open(CACHE_NAME)
+		.then(cache=>{
+			return cache.addAll(CACHE_RESOURCE)
+		})
+		.then(()=>{
+			 return self.skipWaiting()
+		})
+		.catch(error=>{
+			console.error(error.message)
+		})
+	)
 })
 
-/*
+
 self.addEventListener('activate', (event)=>{
+	event.waitUntil(self.clients.claim())
+	
+	/*
 	event.waitUntil(caches.keys().then((keys)=>{
 		return Promise.all(keys.filter((key)=>{
 			return !key.startsWith(version)
@@ -38,10 +49,11 @@ self.addEventListener('activate', (event)=>{
 		}))
 	})
 	.then(()=>{
-		console.log('[NuTV] Service Worker activated')
+		
 	}))
+	*/
 })
-*/
+
 
 self.addEventListener('fetch', (event)=>{
 	event.respondWith(caches.open(CACHE_NAME).then(cache=>{

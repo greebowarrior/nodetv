@@ -30,7 +30,6 @@ const App = app=>{
 	
 	// Define headers and static paths
 	app.use((req,res,next)=>{
-	//	res.setHeader('Link', `</static/js/nutv.service-worker.js>; rel="serviceworker"; scope="/"`)
 		res.setHeader('Service-Worker-Allowed', '/')
 		next()
 	})

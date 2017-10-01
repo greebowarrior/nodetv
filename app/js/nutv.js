@@ -178,12 +178,14 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 		})
 		
 		if ('serviceWorker' in navigator){
-			navigator.serviceWorker.register('/static/js/nutv.service-worker.js', {scope:'/'})
-				.then(()=>{
-					console.debug('[NuTV] Service Worker registered')
-				})
-				.catch((error)=>{
-					console.error('[NuTV] Service Worker registration failed: ', error.message)
-				})
+			if (!navigator.serviceWorker.controller){
+				navigator.serviceWorker.register('/static/js/nutv.service-worker.js', {scope:'/'})
+					.then(()=>{
+						console.debug('[NuTV] Service Worker registered')
+					})
+					.catch((error)=>{
+						console.error('[NuTV] Service Worker registration failed: ', error.message)
+					})
+			}
 		}
 	}])
