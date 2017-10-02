@@ -12,12 +12,12 @@
 			</tr>
 		</thead>
 		<tr ng-repeat="hash in $ctrl.episode.hashes" ng-click="$ctrl.select(hash)" ng-class="{success:$ctrl.selected == hash}">
-			<td>{{hash.quality}}</td>
+			<td>{{::hash.quality}}</td>
 			<td>
 				<span ng-show="hash.repack">REPACK</span>
 				<span ng-show="hash.proper">PROPER</span>
 			</td>
-			<td>{{hash.added|date:'short'}}</td>
+			<td>{{::hash.added|date:'short'}}</td>
 		</tr>
 	</table>
 </div>

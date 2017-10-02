@@ -37,7 +37,6 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 													return helpers.torrents.delete(torrent.id)
 												})
 												.finally(()=>{
-													console.log('Set downloading')
 													resolve(hash)
 												})
 												.catch(error=>{
@@ -45,47 +44,6 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 												})
 										}
 									}
-									
-									/*
-									if (episode.file.download.hashString && episode.file.download.hashString.toUpperCase() == hash.btih.toUpperCase()){
-									//	console.debug(`Already downloading: ${show.title} - ${episode.title}`)
-										return reject()
-									} else {
-										// Remove the current download (if it's still active)
-										helpers.torrents.findByHash(episode.file.download.hashString)
-											.then(torrent=>{
-												return helpers.torrents.delete(torrent.id)
-											})
-											.finally(()=>{
-												console.log('Set downloading')
-												resolve(hash)
-											})
-											.catch(error=>{
-												if (error) console.debug(error.message)
-											})
-									}
-									*/
-									/*
-									if (!episode.file.download.hashString) return resolve(hash)
-									
-									if (episode.file.download.hashString.toUpperCase() != hash.btih.toUpperCase()){
-										
-										console.debug(`Downloading: ${show.title} - ${episode.title}`)
-										
-										// Remove the current download (if it's still active)
-										helpers.torrents.findByHash(episode.file.download.hashString)
-											.then(torrent=>{
-												return helpers.torrents.delete(torrent.id)
-											})
-											.finally(()=>{
-												resolve(hash)
-											})
-											.catch(error=>{
-												console.debug(error.message)
-											})
-									}
-									reject()
-									*/
 								})
 							})
 							.then(hash=>{

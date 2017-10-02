@@ -228,7 +228,7 @@ showSchema.methods.parseFeed = function(){
 		return this.save({new:true})
 	})
 	.catch(error=>{
-		if (error) console.error(`${this.title}: `, error.message)
+		if (error) console.error(`${this.title}: `, error.statusCode)
 	})
 }
 showSchema.methods.subscribe = function(user){

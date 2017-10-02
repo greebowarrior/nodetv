@@ -7,8 +7,8 @@
 	</thead>
 	<tbody>
 		<tr ng-repeat="user in $ctrl.users" ui-sref="^.user({id:user._id})">
-			<td>{{user.username}}</td>
-			<td>{{user.email}}</td>
+			<td>{{::user.username}}</td>
+			<td>{{::user.email}}</td>
 		</tr>
 	</tbody>
 </table>

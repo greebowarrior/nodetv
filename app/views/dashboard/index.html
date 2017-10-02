@@ -15,15 +15,15 @@
 		<div class="row">
 			<div class="col-md-12">
 				<uib-accordion>
-					<div uib-accordion-group class="panel-default" ng-repeat="item in $ctrl.episodes.recent" heading="{{item.title}}">
+					<div uib-accordion-group class="panel-default" ng-repeat="item in $ctrl.episodes.recent" heading="{{::item.title}}">
 						<div ng-repeat="episode in item.episodes">
 							<h5>
 								<a ui-sref="shows.detail.season({slug:item.ids.slug,season:episode.season})">
-									{{episode.season|zeroFill:2}}x{{episode.episode|zeroFill:2}}
-								</a> {{episode.title}}
+									{{::episode.season|zeroFill:2}}x{{::episode.episode|zeroFill:2}}
+								</a> {{::episode.title}}
 							</h5>
-							<h6 ng-show="!episode.file.filename">Broadcast: {{episode.first_aired|date:'EEEE MMMM d, HH:mm'}}</h6>
-							<h6 ng-show="episode.file.filename">Downloaded: {{episode.file.added|date:'EEEE MMMM d, HH:mm'}}</h6>
+							<h6 ng-show="!episode.file.filename">Broadcast: {{::episode.first_aired|date:'EEEE MMMM d, HH:mm'}}</h6>
+							<h6 ng-show="episode.file.filename">Downloaded: {{::episode.file.added|date:'EEEE MMMM d, HH:mm'}}</h6>
 						</div>
 					</div>
 				</uib-accordion>
@@ -50,14 +50,14 @@
 		<div class="row">
 			<div class="col-md-12">
 				<uib-accordion>
-					<div uib-accordion-group class="panel-default" ng-repeat="item in $ctrl.episodes.upcoming" heading="{{item.title}}">
+					<div uib-accordion-group class="panel-default" ng-repeat="item in $ctrl.episodes.upcoming" heading="{{::item.title}}">
 						<div ng-repeat="episode in item.episodes">
 							<h5>
 								<a ui-sref="shows.detail.season({slug:item.ids.slug,season:episode.season})">
-									{{episode.season|zeroFill:2}}x{{episode.episode|zeroFill:2}}
-								</a> {{episode.title}}
+									{{::episode.season|zeroFill:2}}x{{::episode.episode|zeroFill:2}}
+								</a> {{::episode.title}}
 							</h5>
-							<h6>Airs: {{episode.first_aired|date:'EEEE MMMM d, HH:mm'}}</h6>
+							<h6>Airs: {{::episode.first_aired|date:'EEEE MMMM d, HH:mm'}}</h6>
 						</div>
 					</div>
 				</uib-accordion>
