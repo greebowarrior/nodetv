@@ -7,7 +7,7 @@
 	"homepage_url": "https://github.com/greebowarrior/nodetv",
 	"offline_enabled": true,
 	"display": "standalone",
-	"theme_color": "#101010",
+	"theme_color": "#FFFFFF",
 	"background_color": "#FFFFFF",
 	
 	"start_url": "/",
