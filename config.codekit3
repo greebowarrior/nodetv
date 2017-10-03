@@ -71,31 +71,75 @@
 		"oT": 1,
 		"q": 100
 		},
+	"\/app\/gfx\/icon-source.png": {
+		"ft": 32768,
+		"iS": 163331,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icon-source.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
 	"\/app\/gfx\/icons\/favicon.ico": {
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/gfx\/icons\/favicon.ico",
 		"oF": 0
 		},
-	"\/app\/gfx\/icons\/touch-icon-192.png": {
+	"\/app\/gfx\/icons\/icon-128.png": {
 		"ft": 32768,
-		"iS": 18304,
+		"iS": 21154,
 		"oA": 0,
-		"oAP": "\/app\/gfx\/icons\/touch-icon-192.png",
+		"oAP": "\/app\/gfx\/icons\/icon-128.png",
 		"oF": 0,
 		"oIPL": 0,
 		"opt": 0,
 		"oT": 1,
 		"q": 100
 		},
-	"\/app\/gfx\/icons\/touch-icon.png": {
+	"\/app\/gfx\/icons\/icon-152.png": {
 		"ft": 32768,
-		"iS": 9290,
+		"iS": 27258,
 		"oA": 0,
-		"oAP": "\/app\/gfx\/icons\/touch-icon.png",
+		"oAP": "\/app\/gfx\/icons\/icon-152.png",
 		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/icon-192.png": {
+		"ft": 32768,
+		"iS": 30325,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/icon-192.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/icon-256.png": {
+		"ft": 32768,
+		"iS": 44347,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/icon-256.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/icon-512.png": {
+		"ft": 32768,
+		"iS": 171127,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/icon-512.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
 		"oT": 1,
 		"q": 100
 		},
@@ -486,6 +530,12 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/user\/list.html",
+		"oF": 0
+		},
+	"\/dash.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/dash.html",
 		"oF": 0
 		},
 	"\/LICENCE.txt": {
