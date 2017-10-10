@@ -59,13 +59,13 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	})
 	.component('nutvLogin', {
 		templateUrl: 'views/auth/login.html',
-		controller: ['$http','$localStorage','$log','$state','alertService',function($http,$localStorage,$log,$state,alertService){
+		controller: ['$cookies','$http','$log','$socket','$state','alertService',function($cookies,$http,$log,$socket,$state,alertService){
 			this.auth = {}
 			
 			this.login = ()=>{
 				$http.post('/auth/login', this.auth)
-					.then(response=>{
-						$localStorage.token = response.data
+					.then(()=>{
+						$socket.emit('authenticate', $cookies.get('jwt'))
 						$state.go('dashboard.home')
 					})
 					.catch(()=>{
@@ -77,10 +77,10 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	})
 	.component('nutvLogout', {
 		templateUrl: 'views/auth/logout.html',
-		controller: ['$cookies','$http','$localStorage','$log','$state',function($cookies,$http,$localStorage,$log,$state){
+		controller: ['$cookies','$http','$log','$socket','$state',function($cookies,$http,$log,$socket,$state){
 			$http.get('/auth/logout')
 				.then(()=>{
-					delete $localStorage.token
+					$socket.emit('logout')
 					$cookies.remove('jwt')
 					$state.go('dashboard.home')
 				})
@@ -111,7 +111,7 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	
 	.component('nutvNavigation', {
 		templateUrl: '/views/components/navigation.html',
-		controller: ['$localStorage','$log','$socket','$rootScope','$transitions',function($localStorage,$log,$socket,$rootScope,$transitions){
+		controller: ['$cookies','$log','$socket','$transitions',function($cookies,$log,$socket,$transitions){
 			this.authenticated - false
 			this.collapsed = true
 			
@@ -122,17 +122,10 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 			$socket.on('error',error=>{
 				$log.error(error)
 			})
-			$socket.on('connect', ()=>{
-				if ($localStorage.token) $socket.emit('authenticate', $localStorage.token)
+			
+			$socket.on('authenticated', (data)=>{
+				this.authenticated = data.status
 			})
-			
-			$rootScope.$watch(()=>$localStorage.token, (current)=>{
-				this.authenticated = current && current.token ? true : false
-			
-				$socket.emit('authenticate', $localStorage.token, ()=>{
-					console.debug('Socket authenticated')
-				})
-			}, true)
 		}]
 	})
 	.component('nutvDashboard', {
@@ -172,7 +165,7 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 		}]
 	})
 	
-	.run(['$transitions','alertService',($transitions,alertService)=>{
+	.run(['$cookies','$socket','$log','$transitions','alertService',($cookies,$socket,$log,$transitions,alertService)=>{
 		$transitions.onError({}, ()=>{
 			alertService.notify({type:'danger',msg:'Offline'})
 		})
@@ -188,4 +181,8 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 					})
 			}
 		}
+		
+		$socket.on('connect', ()=>{
+			if ($cookies.get('jwt')) $socket.emit('authenticate', $cookies.get('jwt'))
+		})
 	}])

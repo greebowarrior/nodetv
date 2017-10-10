@@ -110,13 +110,11 @@ const Auth = app=>{
 				User.findById(req.user._id)
 					.then(user=>{
 						let token = user.apiToken()
-						res.header('X-Username', user.username)
-						res.header('X-Token', token)
 						
 						let jwt = require('jsonwebtoken').sign({id:req.user._id,username:req.user.username,token:token}, process.env.SECRET_KEY)
 						res.cookie('jwt', jwt, {maxAge:60*60*24*7*1000})
 						
-						res.send({username:user.username,token:token})
+						res.status(200).end()
 					})
 					.catch(error=>{
 						console.debug(error)
@@ -139,13 +137,11 @@ const Auth = app=>{
 				User.findById(req.user._id)
 					.then(user=>{
 						let token = user.apiToken()
-						res.header('X-Username', user.username)
-						res.header('X-Token', token)
-						// JWT?
+						
 						let jwt = require('jsonwebtoken').sign({id:req.user._id,username:req.user.username,token:token}, process.env.SECRET_KEY)
 						res.cookie('jwt', jwt, {maxAge:60*60*24*7*1000})
 						
-						res.send({username:user.username,token:token})
+						res.send(jwt)
 					})
 					.catch(()=>{
 						res.status(401).send({error:'Unauthorized'})

@@ -37,7 +37,7 @@ module.exports = io=>{
 		// Socket authentication middleware
 		client.use((packet,next)=>{
 			// Always allow authentication requests
-			if (['authenticate'].indexOf(packet[0]) >= 0) return next()
+			if (['authenticate','login','logout'].indexOf(packet[0]) >= 0) return next()
 			
 			Socket.findBySocket(client.id)
 				.then(socket=>{
@@ -52,21 +52,34 @@ module.exports = io=>{
 		/**************************************************/
 				
 		client.on('authenticate', (auth,callback)=>{
-			if (!auth || !auth.username || !auth.token) return
+			if (!auth) return
 			
-			return User.findByToken(auth.username, auth.token)
-				.then(user=>{
-					if (!user) throw new Error(`User not found`)
-				//	client.user = user
-					console.debug('Socket (%s) authenticated: %s', client.id, user.username)
-					return Socket.findOneAndUpdate({id:client.id},{$set:{user:user._id}})
+			new Promise((resolve,reject)=>{
+				require('jsonwebtoken').verify(auth, process.env.SECRET_KEY, (error,data)=>{
+					if (error) return reject(error)
+					if (data) return resolve(data)
 				})
-				.then(()=>{
-					if (typeof callback === 'function') callback()
-				})
-				.catch(error=>{
-					console.error(error)
-				})
+			})
+			.then(data=>{
+				return User.findByToken(data.username,data.token)
+			})
+			.then(user=>{
+				if (!user) throw new Error(`User not found`)
+			//	client.user = user
+				console.debug('Socket (%s) authenticated: %s', client.id, user.username)
+				return Socket.update({id:client.id},{user:user._id})
+			})
+			.then(()=>{
+				if (typeof callback === 'function') callback()
+				client.emit('authenticated', {status:true})
+			})
+			.catch(error=>{
+				console.error(error)
+			})
+		})
+		
+		client.on('logout', ()=>{
+			client.emit('authenticated', {status:false})
 		})
 		
 		/**************************************************/
