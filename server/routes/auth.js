@@ -88,7 +88,7 @@ const Auth = app=>{
 	
 	// Secure all API routes with token authentication
 	app.route('/api/*')
-		.all(passport.authenticate(['jwt','token']))
+		.all(passport.authenticate(['jwt','token'],{session:false}))
 		
 	app.route('/logout')
 		.get((req,res)=>{
@@ -114,7 +114,7 @@ const Auth = app=>{
 						res.header('X-Token', token)
 						
 						let jwt = require('jsonwebtoken').sign({id:req.user._id,username:req.user.username,token:token}, process.env.SECRET_KEY)
-						res.cookie('jwt', jwt, {httpOnly:true,maxAge:60*60*24*7*1000,signed:true})
+						res.cookie('jwt', jwt, {maxAge:60*60*24*7*1000})
 						
 						res.send({username:user.username,token:token})
 					})
@@ -142,6 +142,9 @@ const Auth = app=>{
 						res.header('X-Username', user.username)
 						res.header('X-Token', token)
 						// JWT?
+						let jwt = require('jsonwebtoken').sign({id:req.user._id,username:req.user.username,token:token}, process.env.SECRET_KEY)
+						res.cookie('jwt', jwt, {maxAge:60*60*24*7*1000})
+						
 						res.send({username:user.username,token:token})
 					})
 					.catch(()=>{
