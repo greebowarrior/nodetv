@@ -12,7 +12,9 @@ module.exports = io=>{
 		
 		new Socket({
 			id: client.id,heartbeat: new Date()
-		}).save()
+		}).save().catch(error=>{
+			if (error) console.error(error.message)
+		})
 		
 		client.on('disconnect', ()=>{
 			Socket.findOneAndRemove({id:client.id})
@@ -37,7 +39,7 @@ module.exports = io=>{
 		// Socket authentication middleware
 		client.use((packet,next)=>{
 			// Always allow authentication requests
-			if (['authenticate','login','logout'].indexOf(packet[0]) >= 0) return next()
+			if (packet[0].match(/^auth\./) || ['authenticate','login','logout'].indexOf(packet[0]) >= 0) return next()
 			
 			Socket.findBySocket(client.id)
 				.then(socket=>{

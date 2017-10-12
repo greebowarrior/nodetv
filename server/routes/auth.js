@@ -93,6 +93,7 @@ const Auth = app=>{
 	app.route('/logout')
 		.get((req,res)=>{
 			req.logout()
+			res.clearCookie('jwt')
 			res.redirect('/login')
 		})
 	
@@ -114,7 +115,7 @@ const Auth = app=>{
 						let jwt = require('jsonwebtoken').sign({id:req.user._id,username:req.user.username,token:token}, process.env.SECRET_KEY)
 						res.cookie('jwt', jwt, {maxAge:60*60*24*7*1000})
 						
-						res.status(200).end()
+						res.status(200).send(jwt)
 					})
 					.catch(error=>{
 						console.debug(error)
@@ -127,7 +128,9 @@ const Auth = app=>{
 		
 	router.route('/logout')
 		.all((req,res)=>{
+			// TODO: find socket, emit deauth
 			req.logout()
+			res.clearCookie('jwt')
 			res.status(200).send({success:true})
 		})
 		

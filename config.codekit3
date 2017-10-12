@@ -33,6 +33,12 @@
 		"oAP": "\/.npmrc",
 		"oF": 0
 		},
+	"\/app\/browserconfig.xml": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/browserconfig.xml",
+		"oF": 0
+		},
 	"\/app\/css\/classic.css": {
 		"aP": 0,
 		"bl": 0,
@@ -79,6 +85,39 @@
 		"oF": 0,
 		"oIPL": 1,
 		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/apple-touch-icon.png": {
+		"ft": 32768,
+		"iS": 19607,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/apple-touch-icon.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/favicon-16x16.png": {
+		"ft": 32768,
+		"iS": 1260,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/favicon-16x16.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/favicon-32x32.png": {
+		"ft": 32768,
+		"iS": 2189,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/favicon-32x32.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
 		"oT": 1,
 		"q": 100
 		},
@@ -132,6 +171,17 @@
 		"oT": 1,
 		"q": 100
 		},
+	"\/app\/gfx\/icons\/icon-32.png": {
+		"ft": 32768,
+		"iS": 2017,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/icon-32.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
 	"\/app\/gfx\/icons\/icon-512.png": {
 		"ft": 32768,
 		"iS": 171127,
@@ -143,14 +193,35 @@
 		"oT": 1,
 		"q": 100
 		},
+	"\/app\/gfx\/icons\/mstile-150x150.png": {
+		"ft": 32768,
+		"iS": 20044,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/mstile-150x150.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/safari-pinned-tab.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "\/app\/gfx\/icons\/safari-pinned-tab.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
+		},
 	"\/app\/gfx\/logo-trakt.png": {
 		"ft": 32768,
 		"iS": 79260,
 		"oA": 0,
 		"oAP": "\/app\/gfx\/logo-trakt.png",
 		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
+		"oIPL": 1,
+		"opt": 1,
 		"oT": 1,
 		"q": 100
 		},
@@ -837,6 +908,16 @@
 		"oA": 1,
 		"oAP": "\/server\/models\/min\/user-min.js",
 		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/plugins\/app.datadog.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/plugins\/min\/app.datadog.min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},

@@ -81,7 +81,6 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 			$http.get('/auth/logout')
 				.then(()=>{
 					$socket.emit('logout')
-					$cookies.remove('jwt')
 					$state.go('dashboard.home')
 				})
 				.catch(()=>{
