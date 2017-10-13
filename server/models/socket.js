@@ -12,10 +12,10 @@ const socketSchema = mongoose.Schema({
 socketSchema.statics.findByUser = function(user){
 	return this.find({
 		user: mongoose.Types.ObjectId(user._id)
-	})
+	}).populate('user').exec()
 }
 socketSchema.statics.findBySocket = function(socket){
-	return this.findOne({id:socket})
+	return this.findOne({id:socket}).populate('user').exec()
 }
 
 module.exports = mongoose.model('Socket', socketSchema)

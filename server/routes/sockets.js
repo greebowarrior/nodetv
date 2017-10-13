@@ -41,6 +41,10 @@ module.exports = io=>{
 			// Always allow authentication requests
 			if (packet[0].match(/^auth\./) || ['authenticate','login','logout'].indexOf(packet[0]) >= 0) return next()
 			
+			if (!client.user) next(new Error('Unauthorized'))
+			next()
+			
+			/*
 			Socket.findBySocket(client.id)
 				.then(socket=>{
 					if (!socket.user) throw new Error('Unauthorized')
@@ -49,6 +53,7 @@ module.exports = io=>{
 				.catch(error=>{
 					next(error)
 				})
+			*/
 		})
 		
 		/**************************************************/
@@ -67,20 +72,20 @@ module.exports = io=>{
 			})
 			.then(user=>{
 				if (!user) throw new Error(`User not found`)
-			//	client.user = user
-				console.debug('Socket (%s) authenticated: %s', client.id, user.username)
+				client.user = user
 				return Socket.update({id:client.id},{user:user._id})
 			})
 			.then(()=>{
-				if (typeof callback === 'function') callback()
 				client.emit('authenticated', {status:true})
+				if (typeof callback === 'function') callback({status:true})
 			})
 			.catch(error=>{
-				console.error(error)
+				if (error) console.error(error.message)
 			})
 		})
 		
-		client.on('logout', ()=>{
+		client.on('auth.logout', ()=>{
+			delete client.user
 			client.emit('authenticated', {status:false})
 		})
 		

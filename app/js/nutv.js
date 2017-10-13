@@ -77,14 +77,14 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	})
 	.component('nutvLogout', {
 		templateUrl: 'views/auth/logout.html',
-		controller: ['$cookies','$http','$log','$socket','$state',function($cookies,$http,$log,$socket,$state){
+		controller: ['$http','$log','$socket','$state',function($http,$log,$socket,$state){
 			$http.get('/auth/logout')
 				.then(()=>{
-					$socket.emit('logout')
+					$socket.emit('auth.logout')
 					$state.go('dashboard.home')
 				})
 				.catch(()=>{
-					$log.debug('Error while logging out')
+					$log.debug('An error occured while logging out')
 				})
 		}]
 	})
@@ -111,8 +111,12 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	.component('nutvNavigation', {
 		templateUrl: '/views/components/navigation.html',
 		controller: ['$cookies','$log','$socket','$transitions',function($cookies,$log,$socket,$transitions){
-			this.authenticated - false
 			this.collapsed = true
+			this.enabled = false
+			
+			this.$onInit = ()=>{
+				if ($cookies.get('jwt')) this.enabled = true
+			}
 			
 			$transitions.onStart({}, ()=>{
 				this.collapsed = true
@@ -123,7 +127,7 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 			})
 			
 			$socket.on('authenticated', (data)=>{
-				this.authenticated = data.status
+				this.enabled = data.status
 			})
 		}]
 	})

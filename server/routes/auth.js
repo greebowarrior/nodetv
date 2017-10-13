@@ -106,7 +106,7 @@ const Auth = app=>{
 	}))
 	*/
 	router.route('/login')
-		.post(passport.authenticate('local'), (req,res)=>{
+		.post(passport.authenticate('local'),(req,res)=>{
 			if (req.user){
 				User.findById(req.user._id)
 					.then(user=>{
@@ -128,7 +128,6 @@ const Auth = app=>{
 		
 	router.route('/logout')
 		.all((req,res)=>{
-			// TODO: find socket, emit deauth
 			req.logout()
 			res.clearCookie('jwt')
 			res.status(200).send({success:true})
