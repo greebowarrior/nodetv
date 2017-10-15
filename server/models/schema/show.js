@@ -35,6 +35,11 @@ const showSchema = new mongoose.Schema({
 	overview: String,
 	year: {type: Number, required: true},
 	first_aired: {type: Date},
+	airs: {
+		day: String,
+		time: String,
+		timezone: String
+	},
 	subscribers: [{
 		_id: false,
 		rating: Number,
@@ -474,6 +479,7 @@ showSchema.methods.sync = function(){
 			this.title = helpers.utils.normalize(summary.title)
 			this.overview = helpers.utils.normalize(summary.overview)
 			this.first_aired = new Date(summary.first_aired)
+			this.airs = summary.airs
 
 			if (!this.config.directory){
 				// Create a directory based on the name

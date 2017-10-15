@@ -8,7 +8,9 @@ const CACHE_RESOURCE = [
 	'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
 	'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css',
 	'https://fonts.googleapis.com/css?family=Open+Sans:300,400,800',
-	
+	// ICONS
+	'/static/gfx/icons/icon-32.png',
+	'/static/gfx/icons/icon-192.png',
 	// JavaScript
 	'https://code.jquery.com/jquery-3.2.1.min.js',
 	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js',

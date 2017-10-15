@@ -24,12 +24,12 @@ const App = app=>{
 	
 	if (process.env.NODE_ENV == 'development') app.disable('view cache')
 	
-	// Enable layout templates
-	app.set('layout', 'layouts/classic')
 	app.use(require('express-ejs-layouts'))
+	app.set('layout', 'layouts/classic')
 	
 	// Define headers and static paths
 	app.use((req,res,next)=>{
+		
 		res.setHeader('Service-Worker-Allowed', '/')
 		next()
 	})
@@ -44,13 +44,26 @@ const App = app=>{
 	
 	// Sessions
 	const session =  require('express-session')({
+		cookie: {
+	//		secure: process.env.NODE_ENV==='production' ? true : false
+		},
+		proxy: true,
 		resave: false,
 		saveUninitialized: true,
 		secret: process.env.SECRET_KEY,
 		store: new MongoStore({
-			mongooseConnection: require('mongoose').connection
+			mongooseConnection: require('mongoose').connection,
+			ttl: 60*60*24
 		})
 	})
 	app.use(session)
+	
+	app.use((req,res,next)=>{
+		// TODO: load layout/theme based on session data
+	//	app.set('layout', 'layouts/classic')
+		
+		next()
+	})
+	
 }
 module.exports = App
