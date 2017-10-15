@@ -11,16 +11,26 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 	
 	Show.findEnabled()
 		.then(shows=>{
-			shows.forEach(show=>{
+			
+			shows.forEach((show,idx)=>{
 				if (!show.subscribers.length){
 					// Disable shows with no subscribers
 					show.config.enabled = false
+					// TODO: Disable ended/cancelled shows
 					return show.save()
 				}
 				
-				return show.parseFeed()
+				show.getLatestEpisodes()
+					.then(results=>{
+						if (!results.length) throw new Error(`No recent episodes`)
+						setTimeout(()=>{
+							return show.parseFeed()
+						},idx*200)
+					})
 					.then(()=>show.getLatestEpisodes())
 					.map(result=>{
+						if (!result) throw new Error(`No recent episodes`)
+						
 						let episode = show.episodes.id(result._id)
 						
 						return episode.getInfoHash()
@@ -47,8 +57,10 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 								})
 							})
 							.then(hash=>{
-								console.debug(`Starting Download: ${show.title} - ${episode.title}`)
-								return helpers.torrents.createMagnet(hash.btih)
+								if (hash){
+									console.debug(`Starting Download: ${show.title} - ${episode.title}`)
+									return helpers.torrents.createMagnet(hash.btih)
+								}
 							})
 							.then(magnet=>helpers.torrents.add(magnet))
 							.then(hash=>episode.setDownloading(hash))
@@ -57,7 +69,7 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 						return show.save()
 					})
 					.catch(error=>{
-						if (error) console.error(`${show.title}: `, error.message)
+						if (error) console.info(`${show.title}: `, error.message)
 					})
 			})
 		})
