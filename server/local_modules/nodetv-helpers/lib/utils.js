@@ -40,6 +40,25 @@ exports.getEpisodeNumbers = function(filename){
 		}
 	})
 }
+exports.getProxy = (options={})=>{
+	const defaults = {
+		allowHttps: 1,
+		protocol: 'http'
+	}
+	let qs = Object.assign({}, defaults, options)
+	
+	return new Promise((resolve)=>{
+		require('request-promise')({
+			url:'https://api.getproxylist.com/proxy',qs:qs,json:true
+		}).then(json=>{
+				if (!json.ip) throw new Error(`No proxy returned from getproxylist`)
+				resolve(`${json.protocol}://${json.ip}:${json.port}`)
+			})
+			.catch(()=>{
+				resolve(false)
+			})
+	})
+}
 exports.getQuality = (filename)=>{
 	let match = filename.match(/([0-9]+p)/i)
 	if (match && match[1]) return match[1].toLowerCase()
