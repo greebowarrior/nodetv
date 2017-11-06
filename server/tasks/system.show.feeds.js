@@ -20,16 +20,16 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 					return show.save()
 				}
 				
-				show.getLatestEpisodes()
+				show.hasRecentEpisodes()
 					.then(results=>{
-						if (!results.length) throw new Error(`No recent episodes`)
+						if (!results.length) throw new Error(`No recently aired episodes`)
 						setTimeout(()=>{
 							return show.parseFeed()
 						},idx*200)
 					})
 					.then(()=>show.getLatestEpisodes())
 					.map(result=>{
-						if (!result) throw new Error(`No recent episodes`)
+						if (!result) throw new Error(`No recently available episodes`)
 						
 						let episode = show.episodes.id(result._id)
 						

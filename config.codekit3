@@ -7,33 +7,38 @@
 		"uuidString": "18A536C4-F3C0-4048-81AF-7D5149E0AE13"
 		}
 	],
-"creatorBuild": "25900",
+"creatorBuild": "26097",
 "files": {
 	"\/.env": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/.env",
 		"oF": 0
 		},
 	"\/.env.defaults": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/.env.defaults",
 		"oF": 0
 		},
 	"\/.gitignore": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/.gitignore",
 		"oF": 0
 		},
 	"\/.npmrc": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/.npmrc",
 		"oF": 0
 		},
 	"\/app\/browserconfig.xml": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/browserconfig.xml",
@@ -50,6 +55,7 @@
 		"oS": 0
 		},
 	"\/app\/css\/classic.css.map": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/css\/classic.css.map",
@@ -122,6 +128,7 @@
 		"q": 100
 		},
 	"\/app\/gfx\/icons\/favicon.ico": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/gfx\/icons\/favicon.ico",
@@ -442,184 +449,206 @@
 		"uL": 1
 		},
 	"\/app\/views\/auth\/login.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 1,
 		"oAP": "\/app\/views\/auth\/login.html",
 		"oF": 1
 		},
 	"\/app\/views\/auth\/logout.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/auth\/logout.html",
 		"oF": 0
 		},
 	"\/app\/views\/auth\/trakt.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/auth\/trakt.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/alerts.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/alerts.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/artwork.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/artwork.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/banner.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/banner.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/breadcrumbs.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/breadcrumbs.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/grid.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/grid.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/messages.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/messages.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/navigation.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/navigation.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/poster.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/poster.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/search.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/search.html",
 		"oF": 0
 		},
 	"\/app\/views\/dashboard\/index.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/dashboard\/index.html",
 		"oF": 0
 		},
 	"\/app\/views\/dashboard\/install.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/dashboard\/install.html",
 		"oF": 0
 		},
 	"\/app\/views\/layouts\/classic.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 1,
 		"oAP": "\/app\/views\/layouts\/classic.html",
 		"oF": 1
 		},
 	"\/app\/views\/layouts\/modern.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/layouts\/modern.html",
 		"oF": 0
 		},
 	"\/app\/views\/movie\/movie.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/movie\/movie.html",
 		"oF": 0
 		},
 	"\/app\/views\/movie\/search.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/movie\/search.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/add.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/add.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/download.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/download.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/episode.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/episode.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/search.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/search.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/season.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/season.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/settings.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/settings.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/show.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/show.html",
 		"oF": 0
 		},
 	"\/app\/views\/user\/index.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/user\/index.html",
 		"oF": 0
 		},
 	"\/app\/views\/user\/list.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/user\/list.html",
 		"oF": 0
 		},
-	"\/dash.html": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/dash.html",
-		"oF": 0
-		},
 	"\/LICENCE.txt": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/LICENCE.txt",
 		"oF": 0
 		},
 	"\/Milestones.md": {
+		"cB": 0,
 		"cS": 0,
 		"eF": 1,
 		"eL": 1,
-		"eLB": 0,
 		"ema": 1,
 		"eSQ": 1,
 		"ft": 4096,
@@ -656,10 +685,10 @@
 		"oS": 1
 		},
 	"\/Readme.md": {
+		"cB": 0,
 		"cS": 0,
 		"eF": 1,
 		"eL": 1,
-		"eLB": 0,
 		"ema": 1,
 		"eSQ": 1,
 		"ft": 4096,
@@ -674,12 +703,14 @@
 		"uCM": 0
 		},
 	"\/scripts\/nginx.conf": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/scripts\/nginx.conf",
 		"oF": 0
 		},
 	"\/scripts\/nutv.service": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/scripts\/nutv.service",
@@ -972,6 +1003,7 @@
 		"tS": 0
 		},
 	"\/server\/routes\/api\/watchlist.js~": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 1,
 		"oAP": "\/server\/routes\/api\/watchlist.js~",
@@ -1028,6 +1060,7 @@
 		"tS": 0
 		},
 	"\/server\/tasks\/sync.shows.js~": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/server\/tasks\/sync.shows.js~",
@@ -1099,16 +1132,6 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/tasks\/min\/user.sync.watchlist.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/test.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/min\/test.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -1707,7 +1730,7 @@
 			"optionString": "{'beforeBlockComment': true}"
 			},
 		"lines-around-directive": {
-			"active": 0,
+			"active": false,
 			"optionString": "{'before': 'always', 'after': 'always'}"
 			},
 		"max-depth": {
@@ -1751,11 +1774,11 @@
 			"optionString": ""
 			},
 		"newline-after-var": {
-			"active": 0,
+			"active": false,
 			"optionString": "'always'"
 			},
 		"newline-before-return": {
-			"active": 0,
+			"active": false,
 			"optionString": ""
 			},
 		"newline-per-chained-call": {
@@ -2838,7 +2861,8 @@
 		"createSourceMap": 0,
 		"minifyOutput": 1,
 		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 1,
+		"transpilerStyle": 1
 		},
 	"languageDefaultsCSS": {
 		"autoOutputAction": 2,
@@ -2871,6 +2895,7 @@
 		"noEscapeInAttributes": 0,
 		"outputFormat": 2,
 		"outputStyle": 0,
+		"shouldRunCacheBuster": 0,
 		"useCDATA": 0,
 		"useDoubleQuotes": 0,
 		"useUnixNewlines": 0
@@ -2912,7 +2937,8 @@
 		"autoOutputPathRelativePath": "",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
-		"autoOutputPathStyle": 0
+		"autoOutputPathStyle": 0,
+		"shouldRunCacheBuster": 0
 		},
 	"languageDefaultsLESS": {
 		"allowInsecureImports": 0,
@@ -2944,13 +2970,13 @@
 		"enableFootnotes": 1,
 		"enableLabels": 1,
 		"enableSmartQuotes": 1,
-		"escapeLineBreaks": 0,
 		"maskEmailAddresses": 1,
 		"outputFormat": 0,
 		"outputStyle": 0,
 		"parseMetadata": 1,
 		"processHTML": 0,
 		"randomFootnoteNumbers": 0,
+		"shouldRunCacheBuster": 0,
 		"useCompatibilityMode": 0
 		},
 	"languageDefaultsOTHER": {
@@ -2959,7 +2985,8 @@
 		"autoOutputPathRelativePath": "",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
-		"autoOutputPathStyle": 0
+		"autoOutputPathStyle": 0,
+		"shouldRunCacheBuster": 0
 		},
 	"languageDefaultsPNG": {
 		"autoOutputAction": 0,
@@ -2979,7 +3006,8 @@
 		"autoOutputPathReplace2": "",
 		"autoOutputPathStyle": 0,
 		"compileDebug": 1,
-		"outputStyle": 0
+		"outputStyle": 0,
+		"shouldRunCacheBuster": 0
 		},
 	"languageDefaultsSASS": {
 		"autoOutputAction": 0,
@@ -3007,7 +3035,8 @@
 		"logicless": 0,
 		"outputFormat": 0,
 		"outputStyle": 1,
-		"railsCompatible": 0
+		"railsCompatible": 0,
+		"shouldRunCacheBuster": 0
 		},
 	"languageDefaultsSTYLUS": {
 		"autoOutputAction": 0,

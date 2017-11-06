@@ -258,6 +258,19 @@ showSchema.methods.unsubscribe = function(user){
 	return this
 }
 
+showSchema.methods.hasRecentEpisodes = function(days=7){
+	return new Promise(resolve=>{
+		let since = new Date()
+		since.setDate(since.getDate()-days)
+		let results = this.episodes.filter(episode=>{
+			if (episode.first_aired >= since && episode.first_aired <= new Date()) return true
+		//	if (episode.first_aired >= since) return true
+		})
+		resolve(results)
+	})
+}
+
+
 showSchema.methods.getDirectory = function(){
 	if (this.config.directory){
 		return require('path').join(
