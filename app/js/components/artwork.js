@@ -28,8 +28,8 @@ angular.module('nutv.core')
 	.component('nutvBanner', {
 		templateUrl: '/views/components/banner.html',
 		bindings: {item:'<', type:'@'},
-		controller: ['$log','$timeout',function($log,$timeout){
-			$timeout(()=>{
+		controller: ['$log',function($log){
+			this.$onInit = ()=>{
 				let sources = []
 				let directory = this.item.config.directory.replace(/\s/g,'%20')
 				
@@ -40,8 +40,13 @@ angular.module('nutv.core')
 				} else if (this.item.images.banner.filename){
 					sources.push(`/media/${this.type}s/${directory}/${this.item.images.banner.filename} 800w`)
 				}
+				
 				this.srcset = sources.join(', ')
-			},0)
+				
+				this.background = `background-image: url("/media/${this.type}s/${directory}/${this.item.images.background.files[0].filename}")`
+				
+				$log.debug(this.background)
+			}
 		}]
 	})
 	
@@ -49,14 +54,14 @@ angular.module('nutv.core')
 		// component for displaying artwork
 		templateUrl: '/views/components/poster.html',
 		bindings: {item:'<', type:'<'},
-		controller: ['$log','$timeout',function($log,$timeout){
+		controller: ['$log',function($log){
 			let sources = [`/static/gfx/default-banner.png 800w`,`/static/gfx/default-cover.png 250w`]
 			
-			$timeout(()=>{
+			this.$onInit = ()=>{
 				this.title = {banner:true,poster:true,text:this.item.title}
 				
 				try {
-					let directory = this.item.config.directory.replace(/\s/g,'%20')
+					let directory = this.item.config.directory.replace(/\s/g,'%20').replace(':','\\')
 					
 					sources = []
 					
@@ -97,7 +102,6 @@ angular.module('nutv.core')
 				}
 				
 				this.srcset = sources.join(', ')
-			},0)
-			
+			}
 		}]
 	})

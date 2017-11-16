@@ -5,20 +5,23 @@
 @import "nodetv/variables";
 @import "nodetv/common";
 @import "nodetv/bootstrap";
+@import "nodetv/artwork";
 
 html {
-	background-color: $nodetv-white;
+	background-color: #FFFFFF;
 	margin: 0;
 	min-height: 100vh;
 	position: relative;
 	
 	body {
+		background-color: transparent;
 		color: $nodetv-black;
 		font-family: 'Open Sans', sans-serif;
 		font-weight: 400;
 		margin: 0;
 		min-height: inherit;
 	}
+	
 	h1,h2,h3,h4,h5,h6 {
 		color: $nodetv-black;
 		font-weight: 400;
@@ -45,26 +48,6 @@ main {
 	color: $nodetv-red;
 }
 
-.cover {
-	margin-bottom: 10px;
-	text-align: center;
-	position: relative;
-	
-	a {
-		display: block;
-	}
-	img {
-		border: 1px solid $nodetv-grey;
-	}
-	.title {
-		display: block;
-		left: 50%;
-		position: absolute;
-		top: 50%;
-		transform: translate(-50%,-50%);
-		width: 85%;
-	}
-}
 
 div.search {
 	margin-bottom: 10px;

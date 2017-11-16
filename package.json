@@ -34,9 +34,8 @@
     "jsonwebtoken": "^8.1.0",
     "log4js": "^1.1.1",
     "mime-types": "^2.1.17",
-    "mongoose": "^4.13.0",
+    "mongoose": "^4.13.3",
     "mongoose-long": "^0.1.1",
-    "mquery": "^2.3.2",
     "node-schedule": "^1.2.5",
     "nodetv-helpers": "file:server/local_modules/nodetv-helpers",
     "passport": "^0.3.2",
@@ -50,16 +49,16 @@
     "sharp": "^0.18.4",
     "socket.io": "^2.0.4",
     "syserrno": "^1.0.1",
-    "trakt.tv": "^5.1.0",
+    "trakt.tv": "^6.0.2",
     "trakt.tv-artwork": "file:server/local_modules/trakt.tv-artwork",
     "trakt.tv-matcher": "^5.1.0",
-    "trakt.tv-ondeck": "^5.0.1",
+    "trakt.tv-ondeck": "^5.1.0",
     "transmission": "^0.4.9",
     "uuid": "^3.1.0",
     "zero-fill": "^2.2.3"
   },
   "engines": {
-    "node": "^8.4.0"
+    "node": "^8.9.0"
   },
   "devDependencies": {}
 }

@@ -169,9 +169,9 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	})
 	
 	.run(['$cookies','$socket','$log','$transitions','alertService',($cookies,$socket,$log,$transitions,alertService)=>{
-		$transitions.onError({}, ()=>{
-			alertService.notify({type:'danger',msg:'Unable to load this content. Sorry'})
-		})
+	//	$transitions.onError({}, ()=>{
+	//		alertService.notify({type:'danger',msg:'Unable to load this content. Sorry'})
+	//	})
 		
 		if ('serviceWorker' in navigator){
 			if (!navigator.serviceWorker.controller){

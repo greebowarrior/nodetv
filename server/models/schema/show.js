@@ -336,6 +336,12 @@ showSchema.methods.setArtwork = function(data){
 							suffix: 'large'
 						}]
 						break
+					case 'background':
+						sizes = [{
+							width: 1920,
+							suffix: 'large'
+						}]
+						break
 					case 'banner':
 						sizes = [{
 							width: 575,
