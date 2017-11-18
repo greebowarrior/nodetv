@@ -1,5 +1,3 @@
-
-
 .nutv-banner {
 	img {
 		border-top-left-radius: 4px;
@@ -24,8 +22,15 @@
 	}
 }
 
+.nutv-artwork {
+	picture {
+		
+	}
+}
+
 .cover {
 	margin-bottom: 10px;
+	
 	text-align: center;
 	position: relative;
 	
@@ -34,6 +39,12 @@
 	}
 	img {
 		border: 1px solid $nodetv-grey;
+		@media (max-width: 767px){
+			min-height: 63px;
+		}
+		@media (min-width: 768px){
+			min-height: 134px;
+		}
 	}
 	.title {
 		display: block;

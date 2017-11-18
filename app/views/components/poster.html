@@ -1,6 +1,12 @@
-<div>
-	<img class="img-responsive" ng-srcset="{{$ctrl.srcset}}" sizes="(max-width: 767px) 100vw, 150px" width="100%" /> <!-- sizes="(max-width: 575px) 575px, (max-width: 767px) 100vw, (min-width: 992px) 250px" /> -->
-	<span ng-show="$ctrl.title.poster || $ctrl.title.banner" class="title" ng-class="{'visible-xs visible-sm':$ctrl.title.banner,'visible-md visible-lg':$ctrl.title.poster}">
+<div class="nutv-artwork">
+	<picture>
+		<source srcset="{{$ctrl.sources.banner.join(',')}}" media="(max-width: 767px)"></source>
+		<source srcset="{{$ctrl.sources.poster.join(',')}}" media="(min-width: 768px)"></source>
+		<img class="img-responsive" width="100%" />
+	</picture>
+	
+	<span ng-show="$ctrl.title.poster || $ctrl.title.banner" class="title"
+		ng-class="{'visible-xs visible-sm':$ctrl.title.banner,'visible-md visible-lg':$ctrl.title.poster}">
 		{{::$ctrl.title.text}}
 	</span>
 </div>

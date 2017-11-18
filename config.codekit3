@@ -7,7 +7,7 @@
 		"uuidString": "18A536C4-F3C0-4048-81AF-7D5149E0AE13"
 		}
 	],
-"creatorBuild": "26097",
+"creatorBuild": "26148",
 "files": {
 	"\/.env": {
 		"cB": 0,
@@ -392,6 +392,19 @@
 		"ma": 1,
 		"oA": 0,
 		"oAP": "\/app\/css\/modern.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/app\/scss\/nodetv\/_artwork.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 1,
+		"oA": 1,
+		"oAP": "\/app\/scss\/css\/_artwork.css",
 		"oF": 0,
 		"oS": 3,
 		"uL": 1

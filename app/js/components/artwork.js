@@ -55,7 +55,10 @@ angular.module('nutv.core')
 		templateUrl: '/views/components/poster.html',
 		bindings: {item:'<', type:'<'},
 		controller: ['$log',function($log){
-			let sources = [`/static/gfx/default-banner.png 800w`,`/static/gfx/default-cover.png 250w`]
+		//	let sources = [`/static/gfx/default-banner.png 800w`,`/static/gfx/default-cover.png 250w`]
+		//	this.defaults = [`/static/gfx/default-banner.png 800w`,`/static/gfx/default-cover.png 250w`]}
+			
+			this.sources = {banner:[`/static/gfx/default-banner.png 800w`],poster:[`/static/gfx/default-cover.png 250w`]}
 			
 			this.$onInit = ()=>{
 				this.title = {banner:true,poster:true,text:this.item.title}
@@ -63,36 +66,30 @@ angular.module('nutv.core')
 				try {
 					let directory = this.item.config.directory.replace(/\s/g,'%20').replace(':','\\')
 					
-					sources = []
-					
 					if (this.item.images.banner.enabled){
 						if (this.item.images.banner.files.length){
+							this.sources.banner = []
 							this.item.images.banner.files.forEach(file=>{
 								if (file.width > 800) return
-								sources.push(`/media/${this.type}s/${directory}/${file.filename} ${file.width}w`)
+								this.sources.banner.push(`/media/${this.type}s/${directory}/${file.filename} ${file.width}w`)
 							})
-						} else {
-							sources.push(`/media/${this.type}s/${directory}/${this.item.images.banner.filename} 800w`)
 						}
 						this.title.banner = false
 					} else {
-						sources.push(`/static/gfx/default-banner.png 800w`)
 						this.title.text = this.item.title
 						this.title.banner = true
 					}
 					
 					if (this.item.images.poster.enabled){
 						if (this.item.images.poster.files.length){
+							this.sources.poster = []
 							this.item.images.poster.files.forEach(file=>{
 								if (file.width > 800) return
-								sources.push(`/media/${this.type}s/${directory}/${file.filename} ${file.width}w`)
+								this.sources.poster.push(`/media/${this.type}s/${directory}/${file.filename} ${file.width}w`)
 							})
-						} else {
-							sources.push(`/media/${this.type}s/${directory}/${this.item.images.poster.filename} 250w`)
 						}
 						this.title.poster = false
 					} else {
-						sources.push(`/static/gfx/default-cover.png 250w`)
 						this.title.text = this.item.title
 						this.title.poster = true
 					}
@@ -100,8 +97,6 @@ angular.module('nutv.core')
 				} catch(e){
 					$log.error(e.message)
 				}
-				
-				this.srcset = sources.join(', ')
 			}
 		}]
 	})
