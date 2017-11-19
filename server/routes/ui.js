@@ -42,7 +42,7 @@ const UI = (app,io)=>{
 						res.sendFile(file)
 					})
 					.catch(error=>{
-						console.error(error)
+						if (error) console.error(error.message)
 						res.sendStatus(404)
 					})
 				})
@@ -66,7 +66,7 @@ const UI = (app,io)=>{
 			})
 		})
 		.catch(error=>{
-			console.debug(error.message)
+			if (error) console.debug(error.message)
 		})
 }
 module.exports = UI
