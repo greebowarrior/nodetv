@@ -55,9 +55,6 @@ angular.module('nutv.core')
 		templateUrl: '/views/components/poster.html',
 		bindings: {item:'<', type:'<'},
 		controller: ['$log',function($log){
-		//	let sources = [`/static/gfx/default-banner.png 800w`,`/static/gfx/default-cover.png 250w`]
-		//	this.defaults = [`/static/gfx/default-banner.png 800w`,`/static/gfx/default-cover.png 250w`]}
-			
 			this.sources = {banner:[`/static/gfx/default-banner.png 800w`],poster:[`/static/gfx/default-cover.png 250w`]}
 			
 			this.$onInit = ()=>{
@@ -76,7 +73,6 @@ angular.module('nutv.core')
 						}
 						this.title.banner = false
 					} else {
-						this.title.text = this.item.title
 						this.title.banner = true
 					}
 					
@@ -90,7 +86,6 @@ angular.module('nutv.core')
 						}
 						this.title.poster = false
 					} else {
-						this.title.text = this.item.title
 						this.title.poster = true
 					}
 					

@@ -324,18 +324,6 @@ showSchema.methods.setArtwork = function(data){
 				let sizes = []
 				
 				switch (data.type){
-					case 'poster':
-						sizes = [{
-							width: 250,
-							suffix: 'small'
-						},{
-							width: 500,
-							suffix: 'medium'
-						},{
-							width: 1000,
-							suffix: 'large'
-						}]
-						break
 					case 'background':
 						sizes = [{
 							width: 1920,
@@ -351,6 +339,18 @@ showSchema.methods.setArtwork = function(data){
 							suffix: 'medium'
 						},{
 							width: 940,
+							suffix: 'large'
+						}]
+						break
+					case 'poster':
+						sizes = [{
+							width: 250,
+							suffix: 'small'
+						},{
+							width: 500,
+							suffix: 'medium'
+						},{
+							width: 1000,
 							suffix: 'large'
 						}]
 						break

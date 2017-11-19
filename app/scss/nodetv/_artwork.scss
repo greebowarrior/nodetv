@@ -23,27 +23,40 @@
 }
 
 .nutv-artwork {
-	picture {
-		
-	}
-}
-
-.cover {
-	margin-bottom: 10px;
-	
-	text-align: center;
+	overflow: hidden;
 	position: relative;
 	
-	a {
-		display: block;
-	}
-	img {
-		border: 1px solid $nodetv-grey;
-		@media (max-width: 767px){
-			min-height: 63px;
-		}
-		@media (min-width: 768px){
-			min-height: 134px;
+	picture {
+		img {
+			border: 1px solid $nodetv-grey;
+			@media (max-width: 767px){
+				min-height: 63px;
+			}
+			@media (min-width: 768px){
+				min-height: 134px;
+			}
+			
+			&:before {
+				background-size: contain;
+				background-position: center center;
+				background-repeat: no-repeat;
+				bottom: 0;
+				content: '';
+				display: block;
+				height: 100%;
+				left: 0;
+				position: absolute;
+				right: 0;
+				top: 0;
+				width: 100%;
+				
+				@media (max-width: 767px){
+					background-image: url('../gfx/default-banner.png');
+				}
+				@media (min-width: 768px){
+					background-image: url('../gfx/default-cover.png');
+				}
+			}
 		}
 	}
 	.title {
@@ -53,5 +66,14 @@
 		top: 50%;
 		transform: translate(-50%,-50%);
 		width: 85%;
+	}
+}
+
+.cover {
+	margin-bottom: 10px;
+	text-align: center;
+	position: relative;
+	a {
+		display: block;
 	}
 }
