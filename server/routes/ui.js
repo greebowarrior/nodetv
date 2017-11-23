@@ -28,6 +28,7 @@ const UI = (app,io)=>{
 		})
 		.finally(()=>{
 			// Get media files (It's better to use nginx for this)
+			/*
 			app.route(/^\/media\/(?:shows|movies)\/(.+)/)
 				.get((req,res)=>{
 					new Promise((resolve,reject)=>{
@@ -47,6 +48,7 @@ const UI = (app,io)=>{
 					})
 				})
 			
+			*/
 			// Render views
 			app.route('/views/*')
 				.get((req,res)=>{

@@ -34,8 +34,11 @@ const App = app=>{
 		next()
 	})
 	app.use('/static', require('express').static(require('path').join(process.cwd(),'app'),{etag:false}))
+	app.use('/media', require('express').static(process.env.MEDIA_ROOT,{etag:false}))
 	
 	app.locals.nutv = require('../package.json')
+	
+	// Hopefully not required anymore
 	app.locals.media = {
 		root: process.env.MEDIA_ROOT,
 		shows: process.env.MEDIA_SHOWS,

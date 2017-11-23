@@ -6,8 +6,8 @@ angular.module('nutv.core')
 		// Component for downloading artwork
 		templateUrl: '/views/components/artwork.html',
 		bindings: {
-			show: '=',
-			artwork: '=',
+			artwork: '<',
+			show: '<',
 			type: '@'
 		},
 		controller: ['$http','$log','alertService', function($http,$log,alertService){
@@ -19,7 +19,7 @@ angular.module('nutv.core')
 					})
 					.catch(error=>{
 						alertService.notify({type:'danger',msg:'Unable to save artwork'})
-						$log.error(error)
+						if (error) $log.error(error)
 					})
 			}
 		}]
@@ -27,25 +27,22 @@ angular.module('nutv.core')
 	
 	.component('nutvBanner', {
 		templateUrl: '/views/components/banner.html',
-		bindings: {item:'<', type:'@'},
-		controller: ['$log',function($log){
+		bindings: {item:'<'},
+		controller: [function(){
 			this.$onInit = ()=>{
 				let sources = []
-				let directory = this.item.config.directory.replace(/\s/g,'%20')
 				
 				if (this.item.images.banner.files.length){
 					this.item.images.banner.files.forEach(file=>{
-						sources.push(`/media/${this.type}s/${directory}/${file.filename} ${file.width}w`)
+						sources.push(`${this.item.images.baseUrl}/${file.filename} ${file.width}w`)
 					})
 				} else if (this.item.images.banner.filename){
-					sources.push(`/media/${this.type}s/${directory}/${this.item.images.banner.filename} 800w`)
+					sources.push(`${this.item.images.baseUrl}/${this.item.images.banner.filename} 800w`)
 				}
-				
 				this.srcset = sources.join(', ')
-				
-				this.background = `background-image: url("/media/${this.type}s/${directory}/${this.item.images.background.files[0].filename}")`
-				
-				$log.debug(this.background)
+				if (this.item.images.background.enabled){
+					this.background = `background-image: url("/${this.item.images.baseUrl}/${this.item.images.background.files[0].filename}")`
+				}
 			}
 		}]
 	})
@@ -53,44 +50,37 @@ angular.module('nutv.core')
 	.component('nutvArtwork', {
 		// component for displaying artwork
 		templateUrl: '/views/components/poster.html',
-		bindings: {item:'<', type:'<'},
-		controller: ['$log',function($log){
-			this.sources = {banner:[`/static/gfx/default-banner.png 800w`],poster:[`/static/gfx/default-cover.png 250w`]}
-			
+		bindings: {item:'<'},
+		controller: [function(){
 			this.$onInit = ()=>{
+				this.sources = {banner:[`/static/gfx/default-banner.png 800w`],poster:[`/static/gfx/default-cover.png 250w`]}
+				
 				this.title = {banner:true,poster:true,text:this.item.title}
 				
-				try {
-					let directory = this.item.config.directory.replace(/\s/g,'%20').replace(':','\\')
-					
-					if (this.item.images.banner.enabled){
-						if (this.item.images.banner.files.length){
-							this.sources.banner = []
-							this.item.images.banner.files.forEach(file=>{
-								if (file.width > 800) return
-								this.sources.banner.push(`/media/${this.type}s/${directory}/${file.filename} ${file.width}w`)
-							})
-						}
-						this.title.banner = false
-					} else {
-						this.title.banner = true
+				if (this.item.images.banner.enabled){
+					if (this.item.images.banner.files.length){
+						this.sources.banner = []
+						this.item.images.banner.files.forEach(file=>{
+							if (file.width > 800) return
+							this.sources.banner.push(`${this.item.images.baseUrl}/${file.filename} ${file.width}w`)
+						})
 					}
-					
-					if (this.item.images.poster.enabled){
-						if (this.item.images.poster.files.length){
-							this.sources.poster = []
-							this.item.images.poster.files.forEach(file=>{
-								if (file.width > 800) return
-								this.sources.poster.push(`/media/${this.type}s/${directory}/${file.filename} ${file.width}w`)
-							})
-						}
-						this.title.poster = false
-					} else {
-						this.title.poster = true
+					this.title.banner = false
+				} else {
+					this.title.banner = true
+				}
+				
+				if (this.item.images.poster.enabled){
+					if (this.item.images.poster.files.length){
+						this.sources.poster = []
+						this.item.images.poster.files.forEach(file=>{
+							if (file.width > 800) return
+							this.sources.poster.push(`${this.item.images.baseUrl}/${file.filename} ${file.width}w`)
+						})
 					}
-					
-				} catch(e){
-					$log.error(e.message)
+					this.title.poster = false
+				} else {
+					this.title.poster = true
 				}
 			}
 		}]

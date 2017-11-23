@@ -14,13 +14,14 @@ request.defaults({
 
 const showSchema = new mongoose.Schema({
 	ids: {
-		guidebox: {type: Number, default: null},
+		guidebox: {type: Number},
 		imdb: {type:String, default: null, trim: true},
-		showrss: {type: Number, default: null},
+		showrss: {type: Number},
 		slug: {type:String, lowercase:true, required: true, trim: true},
 		tmdb: {type:Number, default:null},
 		trakt: {type:Number, default:null, required: true},
-		tvdb: {type:Number, default:null}
+		tvdb: {type:Number, default:null},
+		tvmaze: {type:Number}
 	},
 	config: {
 		directory: {type: String, default: ''},
@@ -82,11 +83,11 @@ const showSchema = new mongoose.Schema({
 	seasons: [seasonSchema],
 	episodes: [episodeSchema],
 	
-	uri: String,
-	
 	added: {type: Date, default: new Date()},
 	synced: {type: Date, default: null}, 
 	updated: {type: Date, default: new Date()}
+},{
+	toObject:{virtuals:true}, toJSON:{virtuals:true}
 })
 
 // Statics
@@ -122,16 +123,13 @@ showSchema.statics.recentEpisodes = function(user,days=7){
 	let since = new Date()
 	since.setDate(since.getDate()-days)
 	
-	// TODO: Skip watched episodes
-	
 	return this.aggregate([
 		{
 			$match: {
-				'config.enabled': true,
 				'subscribers.subscriber': user._id,
 				$or: [
 					{'episodes.file.added': {$gte:since, $lt:now}},
-					{'episodes.first_aired': {$gte:since, $lt:now}}
+					{'episodes.first_aired': {$gte:since, $lt:now},'config.enabled':true}
 				]
 			}
 		},{
@@ -140,7 +138,7 @@ showSchema.statics.recentEpisodes = function(user,days=7){
 			$match: {
 				$or: [
 					{'episodes.file.added': {$gte:since, $lt:now}},
-					{'episodes.first_aired': {$gte:since, $lt:now}}
+					{'episodes.first_aired': {$gte:since, $lt:now},'config.enabled':true}
 				],
 				'episodes.season': {$ne: 0}
 			}
@@ -598,15 +596,24 @@ showSchema.methods.syncHistory = function(user){
 		})
 }
 
+showSchema.virtual('uri').get(function(){
+	return `/api/shows/${this.ids.slug}`
+})
+
+showSchema.virtual('images.baseUrl').get(function(){
+	let root = process.env.MEDIA_SHOWS.replace(/\s/g,'%20').replace(/\/$/,'')
+	let directory = encodeURIComponent(this.config.directory)
+	return `/media/${root}/${directory}`
+})
+
+
 showSchema.pre('save', function(next){
-	if (this.ids) this.uri = `/api/shows/${this.ids.slug}`
 	this.updated = new Date()
 	next()
 })
 showSchema.post('findOne', function(doc,next){
 	if (doc){
 		if (!doc.config.quality) doc.config.quality = doc.config.hd ? '720p' : 'SD'
-		doc.uri = `/api/shows/${doc.ids.slug}`
 	}
 	next()
 })

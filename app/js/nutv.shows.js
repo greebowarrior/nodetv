@@ -95,7 +95,7 @@ angular.module('nutv.shows', ['nutv.core'])
 			},0)
 			
 			this.save = ()=>{
-				$http.patch(`/api/shows/${this.show.ids.slug}`, {config:this.show.config})
+				$http.patch(`${this.show.uri}`, {config:this.show.config})
 					.then(()=>{
 						alertService.notify({type:'success',msg:`Show updated: '${this.show.title}'`})
 					})
@@ -106,7 +106,7 @@ angular.module('nutv.shows', ['nutv.core'])
 			}
 			
 			this.feeds = ()=>{
-				$http.patch(`/api/shows/${this.show.ids.slug}/feeds`)
+				$http.patch(`${this.show.uri}/feeds`)
 					.then(()=>{
 						alertService.notify({type:'success',msg:`Feeds updated for '${this.show.title}'`})
 					})
@@ -115,7 +115,7 @@ angular.module('nutv.shows', ['nutv.core'])
 					})
 			}
 			this.getArtwork = ()=>{
-				$http.get(`/api/shows/${this.show.ids.slug}/artwork`)
+				$http.get(`${this.show.uri}/artwork`)
 					.then(response=>{
 						this.images = response.data
 					})
@@ -125,7 +125,7 @@ angular.module('nutv.shows', ['nutv.core'])
 					})
 			}
 			this.getDirectories = ()=>{
-				$http.get(`/api/shows/${this.show.ids.slug}/match`)
+				$http.get(`${this.show.uri}/match`)
 					.then(response=>{
 						this.matches = response.data
 					})
@@ -137,7 +137,7 @@ angular.module('nutv.shows', ['nutv.core'])
 					type: 'Question',
 					msg: 'Are you sure? This may take a while.'
 				}).then(()=>{
-					$http.post(`/api/shows/${this.show.ids.slug}/scan`)
+					$http.post(`${this.show.uri}/scan`)
 				})
 			}
 			
@@ -147,7 +147,7 @@ angular.module('nutv.shows', ['nutv.core'])
 					type: 'warning',
 					msg: 'Are you sure?'
 				}).then(()=>{
-					$http.delete(`/api/shows/${this.show.ids.slug}`)
+					$http.delete(`${this.show.uri}`)
 						.then(()=>{
 							$state.go('shows.index')
 						})
@@ -160,7 +160,7 @@ angular.module('nutv.shows', ['nutv.core'])
 					type: 'Question',
 					msg: 'Are you sure? This may take a while.'
 				}).then(()=>{
-					$http.post(`/api/shows/${this.show.ids.slug}/sync`)
+					$http.post(`${this.show.uri}/sync`)
 				})
 			}
 		}]
