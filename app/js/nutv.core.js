@@ -121,14 +121,16 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 			this.resolved = {}
 			
 			$transitions.onSuccess({}, transition=>{
-				this.crumbs = []
-				let promises = transition.getResolveTokens().map(token=>{
-					this.resolved[token] = transition.injector().get(token)
-					return this.resolved[token]
-				})
-				Promise.all(promises).then(()=>{
-					this.generate($state.$current)
-				})
+				if (!transition.dynamic()){
+					this.crumbs = []
+					let promises = transition.getResolveTokens().map(token=>{
+						this.resolved[token] = transition.injector().get(token)
+						return this.resolved[token]
+					})
+					Promise.all(promises).then(()=>{
+						this.generate($state.$current)
+					})
+				}
 			})
 			return this
 		}
@@ -201,34 +203,39 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 		// Automatically generate breadcrumbs from the router
 		templateUrl: 'views/components/breadcrumbs.html',
 		controller: ['$transitions','crumbService', function($transitions,crumbService){
-			$transitions.onSuccess({}, ()=>{
-				this.crumbs = crumbService.list()
+			$transitions.onSuccess({}, (transition)=>{
+				if (!transition.dynamic()){
+					this.crumbs = crumbService.list()
+				}
 			})
 		}]
 	})
 	.component('nutvGrid', {
-		bindings: {list:'=',type:'='},
+		bindings: {list:'<',type:'<',page:'<'},
 		templateUrl: 'views/components/grid.html',
-		controller: ['$http','$sessionStorage',function($http,$sessionStorage){
+		controller: ['$http','$log','$sessionStorage','$state',function($http,$log,$sessionStorage,$state){
 			if (!$sessionStorage.filter) $sessionStorage.filter = {title: ''}
-			if (!$sessionStorage.paginate) $sessionStorage.paginate = {items:18,page:1}
 			
-			this.filter = $sessionStorage.filter
-			this.pagination = $sessionStorage.paginate
+			this.$onInit = ()=>{
+				this.filter = $sessionStorage.filter
+				this.pagination = {items:18, page:this.page}
+			}
 			
+			this.clearResults = ()=>{
+				this.results = []
+			}
 			this.definiteArticle = (item)=>{
 				return item.title.replace(/^The\s/i, '')
 			}
-			
+			this.onChange = ()=>{
+				$state.go('.', {page:this.pagination.page})
+			}
 			this.search = ()=>{
 				if (this.items.length > 1 || this.filter.title.length <= 1) return
 				$http.post(`/api/trakt/search/${this.type}`,{q:this.filter.title})
 					.then(res=>{
 						this.results = res.data
 					})
-			}
-			this.clearResults = ()=>{
-				this.results = []
 			}
 		}]
 	})

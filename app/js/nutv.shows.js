@@ -55,10 +55,19 @@ angular.module('nutv.shows', ['nutv.core'])
 				}
 			})
 			.state('shows.index', {
-				url: '/',
+				url: '/?page',
 				component: 'nutvGrid',
+				params: {
+					page: {
+						value: '1',
+						squash: true,
+						dynamic: true
+					}
+				},
+				reloadOnSearch: false,
 				resolve: {
 					list: (showService)=>showService.list(),
+					page: ['$stateParams',(p)=>p.page],
 					type: ()=>'show'
 				}
 			})
