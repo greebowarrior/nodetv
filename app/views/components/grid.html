@@ -12,13 +12,11 @@
 	</div>
 	
 	<div class="cover" ng-repeat="item in $ctrl.items = ($ctrl.list|filter:$ctrl.filter) | orderBy:$ctrl.definiteArticle | limitTo:$ctrl.pagination.items:$ctrl.pagination.items*($ctrl.pagination.page-1)">
-		<a ui-sref="^.detail({slug: item.ids.slug})">
-			<nutv-artwork item="item"></nutv-artwork>
-		</a>
+		<nutv-artwork item="item"></nutv-artwork>
 	</div>
 	
 	<div class="grid-footer text-center" ng-show="$ctrl.items.length > $ctrl.pagination.items">
-		<ul class="pagination-sm" uib-pagination ng-model="$ctrl.pagination.page" ng-change="$ctrl.onChange()" total-items="$ctrl.items.length" items-per-page="$ctrl.pagination.items" boundary-link-numbers="true" force-ellipses="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+		<ul class="pagination-sm" uib-pagination ng-model="$ctrl.pagination.page" ng-change="$ctrl.pageChange()" total-items="$ctrl.items.length" items-per-page="$ctrl.pagination.items" boundary-link-numbers="true" force-ellipses="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
 	</div>
 </div>
 <nutv-search type="$ctrl.type" results="$ctrl.results"></nutv-search>

@@ -230,7 +230,7 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 			this.definiteArticle = (item)=>{
 				return item.title.replace(/^The\s/i, '')
 			}
-			this.onChange = ()=>{
+			this.pageChange = ()=>{
 				$state.go('.', {page:this.pagination.page})
 			}
 			this.search = ()=>{
@@ -243,13 +243,14 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 		}]
 	})
 	.component('nutvSearch', {
-		bindings: {type:'=',results:'='},
+		bindings: {type:'<',results:'='},
 		templateUrl: '/views/components/search.html',
 		controller: ['$http','$log','$state','alertService',function($http,$log,$state,alertService){
-			this.add = result=>{
-				$http.post(`/api/${this.type}s`, {slug: result.ids.slug})
+			
+			this.add = (result)=>{
+				$http.post(`/api/${this.type}s`, {slug:result.ids.slug})
 					.then(()=>{
-						$state.reload()
+						$state.go('^.detail', {slug:result.ids.slug})
 						alertService.alert({type:'success',title:'Added',msg:`'${result.title}' has been added to your library`})
 					})
 					.catch(()=>{
