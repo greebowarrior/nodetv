@@ -220,6 +220,9 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 				this.filter = $sessionStorage.filter
 				this.pagination = {items:18, page:this.page}
 			}
+			this.uiOnParamsChanged = (params)=>{
+				this.pagination.page = params.page
+			}
 			
 			this.clearResults = ()=>{
 				this.results = []
