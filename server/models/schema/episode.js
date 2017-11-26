@@ -184,7 +184,7 @@ episodeSchema.methods.getFilename = function(file){
 		vars.T = helpers.utils.normalize(this.title)
 	}
 	
-	let filename = config.format.replace(/%(\w)/g, function(match, key){
+	let filename = config.format.replace(/%(\w)/g, (match, key)=>{
 		return vars[key.toUpperCase()] ? vars[key.toUpperCase()] : key
 	})
 	return filename

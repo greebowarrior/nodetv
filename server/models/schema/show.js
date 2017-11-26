@@ -161,7 +161,7 @@ showSchema.statics.upcomingEpisodes = function(user,days=7){
 	return this.aggregate([
 		{
 			$match: {
-		//		'config.enabled': true,
+				'config.enabled': true,
 				'subscribers.subscriber': user._id,
 				'episodes.first_aired': {$gte:now, $lt:until}
 			}
@@ -317,7 +317,7 @@ showSchema.methods.setArtwork = function(data){
 		
 		let target = require('path').join(this.getDirectory(), `${data.type}-original` + require('path').extname(data.url))
 		helpers.files.download(data.url, target)
-			.then(()=>{
+			.then(source=>{
 				// Resize image
 				let files = []
 				let sizes = []
