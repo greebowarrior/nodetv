@@ -34,7 +34,7 @@
     "jsonwebtoken": "^8.1.0",
     "log4js": "^1.1.1",
     "mime-types": "^2.1.17",
-    "mongoose": "^4.13.4",
+    "mongoose": "^4.13.5",
     "mongoose-long": "^0.1.1",
     "node-schedule": "^1.2.5",
     "nodetv-helpers": "file:server/local_modules/nodetv-helpers",

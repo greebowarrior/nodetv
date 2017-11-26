@@ -43,6 +43,7 @@ const showSchema = new mongoose.Schema({
 	},
 	subscribers: [{
 		_id: false,
+		favourite: {type:Boolean, default:false},
 		rating: Number,
 		subscriber: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 	}],
@@ -354,24 +355,31 @@ showSchema.methods.setArtwork = function(data){
 						break
 				}
 				
-				sizes.forEach(size=>{
-					let filename = target.replace(/-original/,`-${size.suffix}`)
-					require('sharp')(target).resize(size.width, null).toFile(filename)
-					files.push({
-						filename: require('path').basename(filename),
-						width: size.width
+				return require('fs-extra').readFile(source)
+					.then(buffer=>{
+						return Promise.all(sizes).each(size=>{
+							let filename = source.replace(/-original/,`-${size.suffix}`)
+							return require('sharp')(buffer).resize(size.width, null).toFile(filename)
+								.then(()=>{
+									files.push({
+										filename: require('path').basename(filename),
+										width: size.width
+									})
+									return true
+								})
+						})
 					})
-				})
-				
-				this.images[data.type] = {
-					enabled: true,
-					files: files,
-					source: data.url
-				}
-				resolve()
+					.then(()=>{
+						this.images[data.type] = {
+							enabled: files.length ? true : false,
+							files: files,
+							source: data.url
+						}
+						resolve()
+					})
 			})
 			.catch(error=>{
-				console.error(error)
+				if (error) console.error(error)
 				reject(error)
 			})
 	})

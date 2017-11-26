@@ -40,8 +40,9 @@ angular.module('nutv.core')
 					sources.push(`${this.item.images.baseUrl}/${this.item.images.banner.filename} 800w`)
 				}
 				this.srcset = sources.join(', ')
+				
 				if (this.item.images.background.enabled){
-					this.background = `background-image: url("/${this.item.images.baseUrl}/${this.item.images.background.files[0].filename}")`
+					this.background = `background-image: url("${this.item.images.baseUrl}/${this.item.images.background.files[0].filename}")`
 				}
 			}
 		}]
@@ -64,6 +65,7 @@ angular.module('nutv.core')
 							if (file.width > 800) return
 							this.sources.banner.push(`${this.item.images.baseUrl}/${file.filename} ${file.width}w`)
 						})
+					//	this.sources.banner.push('/static/gfx/default-banner.png')
 					}
 					this.title.banner = false
 				} else {
@@ -77,6 +79,7 @@ angular.module('nutv.core')
 							if (file.width > 800) return
 							this.sources.poster.push(`${this.item.images.baseUrl}/${file.filename} ${file.width}w`)
 						})
+					//	this.sources.poster.push('/static/gfx/default-cover.png')
 					}
 					this.title.poster = false
 				} else {

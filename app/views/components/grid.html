@@ -13,7 +13,7 @@
 	
 	<div class="cover" ng-repeat="item in $ctrl.items = ($ctrl.list|filter:$ctrl.filter) | orderBy:$ctrl.definiteArticle | limitTo:$ctrl.pagination.items:$ctrl.pagination.items*($ctrl.pagination.page-1)">
 		<a ui-sref="^.detail({slug: item.ids.slug})">
-			<nutv-artwork item="item" type="$ctrl.type"></nutv-artwork>
+			<nutv-artwork item="item"></nutv-artwork>
 		</a>
 	</div>
 	
