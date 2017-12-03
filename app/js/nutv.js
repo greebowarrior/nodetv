@@ -135,40 +135,90 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 		templateUrl: '/views/dashboard/index.html',
 		controller: ['$http',function($http){
 			
-			this.episodes = {
-				recent: [], upcoming: []
-			}
-			this.count = {
-				recent: null, upcoming: null
-			}
+			// Generate a calendar
+			this.$onInit = ()=>{
+				/*
+				let i = -7
+				
+				let now = new Date()
+				this.dates = []
+				this.test = []
+				
+				do {
+					let day = new Date()
+					day.setDate(now.getDate()+i)
+					this.test[day.getDay()] = {episodes:[]}
+					
+					this.dates.push({date:day,num:day.getDay()})
+					i++
+				} while (i<=0)
+				*/
 			
-			$http.get('/api/shows/latest')
-				.then(response=>{
-					this.episodes.recent = response.data
-					this.episodes.recent.forEach(show=>{
-						this.count.recent += show.episodes.length
+				this.episodes = {
+					recent: [], upcoming: []
+				}
+				this.count = {
+					recent: null, upcoming: null
+				}
+				
+				$http.get('/api/shows/latest')
+					.then(response=>{
+						
+						/*
+						response.data.forEach(show=>{
+							show.episodes.forEach(episode=>{
+								let dow = (new Date(episode.first_aired)).getDay()
+								
+								this.test[dow].episodes.push({
+									title: show.title,
+									images: show.images,
+									episode: episode
+								})
+							})
+						})
+						*/
+						
+						this.episodes.recent = response.data
+						this.episodes.recent.forEach(show=>{
+							this.count.recent += show.episodes.length
+						})
 					})
-				})
-				.catch(()=>{
-				//	$log.error(error.message)
-				})
-			
-			$http.get('/api/shows/upcoming')
-				.then(response=>{
-					this.episodes.upcoming = response.data
-					this.episodes.upcoming.forEach(show=>{
-						this.count.upcoming += show.episodes.length
+					.catch(()=>{
+					//	$log.error(error.message)
 					})
-				})
-				.catch(()=>{
-				//	$log.error(error.message)
-				})
-
-			
+				
+				$http.get('/api/shows/upcoming')
+					.then(response=>{
+						this.episodes.upcoming = response.data
+						this.episodes.upcoming.forEach(show=>{
+							this.count.upcoming += show.episodes.length
+						})
+					})
+					.catch(()=>{
+					//	$log.error(error.message)
+					})
+			}
 		}]
 	})
 	
-	.run(['$cookies','$socket','$log','$transitions','alertService',($cookies,$socket,$log,$transitions,alertService)=>{
+	.component('nutvUpnpDevice', {
+		bindings: {close:'&',dismiss:'&'},
+		templateUrl: '/views/components/upnp-device.html',
+		controller: ['$http',function($http){
+			this.$onInit = ()=>{
+				this.devices = []
+				
+				$http.get('/api/upnp/devices').then(res=>{
+					this.devices = res.data
+				})
+				this.play = (device)=>{
+					this.close({$value:device})
+				}
+			}
+		}]
+	})
+	
+	.run(['$cookies','$socket','$log',($cookies,$socket,$log)=>{
 	//	$transitions.onError({}, ()=>{
 	//		alertService.notify({type:'danger',msg:'Unable to load this content. Sorry'})
 	//	})
@@ -177,10 +227,10 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 			if (!navigator.serviceWorker.controller){
 				navigator.serviceWorker.register('/static/js/nutv.service-worker.js', {scope:'/'})
 					.then(()=>{
-						console.debug('[NuTV] Service Worker registered')
+						$log.debug('[NuTV] Service Worker registered')
 					})
 					.catch((error)=>{
-						console.error('[NuTV] Service Worker registration failed: ', error.message)
+						$log.warn('[NuTV] Service Worker registration failed: ', error.message)
 					})
 			}
 		}

@@ -6,6 +6,9 @@
 				<span class="caret"></span>
 			</span>
 			<ul class="dropdown-menu" uib-dropdown-menu>
+				<li ng-show="$ctrl.episode.file.filename">
+					<a ng-click="$ctrl.play()"><span class="fa fa-play"></span> Play</a>
+				</li>
 				<li ng-show="$ctrl.episode.hashes.length">
 					<a ng-click="$ctrl.download()"><span class="fa fa-download"></span> Download</a>
 				</li>

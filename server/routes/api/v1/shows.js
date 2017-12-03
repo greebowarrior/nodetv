@@ -467,6 +467,29 @@ const ShowsAPI = (app,io)=>{
 				})
 		})
 	
+	router.route('/:slug/seasons/:season/episodes/:episode/play')
+		.post((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					return show.getEpisode(req.params.season, req.params.episode)
+				})
+				.then(episode=>{
+					if (!episode) throw new Error(`Episode not found`)
+					
+					console.debug(req.body.device)
+					
+					return helpers.upnp.setDevice(req.body.device.url).then(()=>{
+						helpers.upnp.load(episode)
+						res.status(200).end()
+					})
+				})
+				.catch(error=>{
+					console.debug(error)
+					res.status(400).end()
+				})
+		})
+	
 	// SHOW - COLLECTED ??
 	
 	// should this have an endpoint?

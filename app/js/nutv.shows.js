@@ -207,6 +207,16 @@ angular.module('nutv.shows', ['nutv.core'])
 					console.debug('No download selected')
 				})
 			}
+			this.play = ()=>{
+				$uibModal.open({
+					component: 'nutvUpnpDevice'
+				}).result.then(device=>{
+					return $http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/play`, {device:device})
+				}).catch(()=>{
+					$log.debug('Play aborted')
+				})
+			}
+			
 			this.watched = ()=>{
 				$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/watched`)
 					.then(()=>{

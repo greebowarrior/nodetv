@@ -29,7 +29,6 @@ const App = app=>{
 	
 	// Define headers and static paths
 	app.use((req,res,next)=>{
-		
 		res.setHeader('Service-Worker-Allowed', '/')
 		next()
 	})
@@ -38,7 +37,6 @@ const App = app=>{
 	
 	app.locals.nutv = require('../package.json')
 	
-	// Hopefully not required anymore
 	app.locals.media = {
 		root: process.env.MEDIA_ROOT,
 		shows: process.env.MEDIA_SHOWS,

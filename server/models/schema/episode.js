@@ -48,6 +48,8 @@ const episodeSchema = new mongoose.Schema({
 		filesize: Number,
 		quality: {type: String, enum: ['SD','720p','1080p']}
 	}
+},{
+	toObject:{virtuals:true}, toJSON:{virtuals:true}
 })
 
 episodeSchema.methods.setInfoHash = function(data){
@@ -203,5 +205,11 @@ episodeSchema.methods.setDownloading = function(hash){
 		resolve()
 	})
 }
+
+episodeSchema.virtual('file.url').get(function(){
+	if (this.parent().config.directory && this.file.filename){
+		return process.env.WEB_URL +'/media/'+ process.env.MEDIA_SHOWS + this.parent().config.directory +'/'+ this.file.filename
+	}
+})
 
 module.exports = episodeSchema

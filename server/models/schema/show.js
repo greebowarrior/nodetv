@@ -8,7 +8,7 @@ const helpers = require('nodetv-helpers')
 const request = require('request-promise')
 request.defaults({
 	headers: {
-		'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
+		'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
 	}
 })
 
@@ -311,11 +311,28 @@ showSchema.methods.getSubscribers = function(){
 	return Promise.all(subscribers)
 }
 
+showSchema.methods.setTVMazeID = function(){
+	return require('request-promise')({
+		json: true,
+		uri: `https://api.tvmaze.com/lookup/shows`,
+		qs: {tvdb: this.ids.tvdb}
+	}).then(res=>{
+		if (res.data.id) this.ids.tvmaze = res.data.id
+	})
+	.catch(error=>{
+		if (error) console.debug(error.message)
+	})
+	.finally(()=>{
+		return this
+	})
+}
+
 showSchema.methods.setArtwork = function(data){
 	return new Promise((resolve,reject)=>{
 		if (!data.url) return reject()
 		
 		let target = require('path').join(this.getDirectory(), `${data.type}-original` + require('path').extname(data.url))
+		
 		helpers.files.download(data.url, target)
 			.then(source=>{
 				// Resize image

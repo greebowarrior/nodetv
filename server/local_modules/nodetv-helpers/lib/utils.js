@@ -76,7 +76,6 @@ exports.isProper = (filename)=>{
 
 exports.getInfoHash = (item)=>{
 	// tv:info_hash namespace?
-	
 	if (item.link.match(/btih\:([\w]{32,40})/i)){
 		// ShowRSS
 		let match = item.link.match(/btih\:([\w]{32,40})/i)
@@ -96,8 +95,6 @@ exports.normalize = (string)=>{
 }
 
 exports.walkDir = (directory)=>{
-//	const path = require('path')
-	
 	return require('glob-promise')('**/*',{cwd:directory,nodir:true})
 		.then(files=>{
 			return files

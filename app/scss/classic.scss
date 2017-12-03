@@ -78,3 +78,16 @@ footer {
 		text-align: center;
 	}
 }
+
+
+.week {
+	align-items: flex-start;
+	align-content: flex-start;
+	display: flex;
+	flex-wrap: nowrap;
+	width: 100%;
+	div.day {
+		display: block;
+		width: 14%;
+	}
+}
