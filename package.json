@@ -1,6 +1,6 @@
 {
   "name": "nutv",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "Martin Purcell <martin.purcell@gmail.com>",
   "description": "NodeTV - TV Library Manager",
   "private": true,
@@ -34,7 +34,7 @@
     "jsonwebtoken": "^8.1.0",
     "log4js": "^1.1.1",
     "mime-types": "^2.1.17",
-    "mongoose": "^4.13.5",
+    "mongoose": "^4.13.6",
     "mongoose-long": "^0.1.1",
     "node-schedule": "^1.2.5",
     "node-ssdp": "^3.2.5",
