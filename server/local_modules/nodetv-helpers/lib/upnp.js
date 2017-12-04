@@ -15,24 +15,38 @@ const UPNP = function(){
 	
 UPNP.prototype.search = function(){
 	let ssdp = new SSDP()
+	let searchType = 'urn:schemas-upnp-org:device:MediaRenderer:1'
 	
 	this.devices = []
+	
 	ssdp.on('response', (headers)=>{
 		let device = new (require('upnp-device-client'))(headers.LOCATION)
 		
 		device.getDeviceDescription((error,desc)=>{
 			if (error) console.error(error.message)
 			if (desc){
-				this.devices.push({
+				if (desc.deviceType != searchType) return
+				
+				let obj = {
 					name: desc.friendlyName,
+					type: desc.deviceType,
 					udn: desc.UDN,
 					url: headers.LOCATION
-				})
+				}
+				
+				let idx = this.devices.findIndex(item=>item.udn==obj.udn)
+				
+				if (idx >= 0){
+					this.devices[idx] = obj
+				} else {
+					this.devices.push(obj)
+				}
 			}
 		})
 	})
 	
-	ssdp.search('urn:schemas-upnp-org:device:MediaRenderer:1')
+	ssdp.search(searchType)
+	
 	return new Promise((resolve)=>{
 		setTimeout(()=>{
 			resolve(this.devices)

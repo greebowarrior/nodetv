@@ -476,13 +476,12 @@ const ShowsAPI = (app,io)=>{
 				})
 				.then(episode=>{
 					if (!episode) throw new Error(`Episode not found`)
-					
-					console.debug(req.body.device)
-					
 					return helpers.upnp.setDevice(req.body.device.url).then(()=>{
-						helpers.upnp.load(episode)
-						res.status(200).end()
+						return helpers.upnp.load(episode)
 					})
+				})
+				.then(()=>{
+					res.status(200).end()
 				})
 				.catch(error=>{
 					console.debug(error)

@@ -1,3 +1,5 @@
+"use strict"
+
 const helpers = require('nodetv-helpers')
 const router = require('express').Router()
 
