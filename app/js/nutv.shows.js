@@ -195,7 +195,7 @@ angular.module('nutv.shows', ['nutv.core'])
 						episode: ()=>this.episode
 					}
 				}).result.then(result=>{
-					$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/download`, {hash:result})
+					$http.post(`${this.episode.uri}/download`, {hash:result})
 						.then(()=>{
 							alertService.alert({
 								title: 'Download started',
@@ -211,14 +211,13 @@ angular.module('nutv.shows', ['nutv.core'])
 				$uibModal.open({
 					component: 'nutvUpnpDevice'
 				}).result.then(device=>{
-					return $http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/play`, {device:device})
+					return $http.post(`${this.episode.uri}/play`, {device:device})
 				}).catch(()=>{
 					$log.debug('Play aborted')
 				})
 			}
-			
 			this.watched = ()=>{
-				$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/watched`)
+				$http.post(`${this.episode.uri}/watched`)
 					.then(()=>{
 						alertService.alert({
 							title: 'Episode watched',

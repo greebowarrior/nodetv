@@ -15,7 +15,7 @@ const seasonSchema = new mongoose.Schema({
 	episodes: [],
 	first_aired: Date,
 	updated_at: {type: Date, default: null}
-})
+},{toObject:{virtuals:true}, toJSON:{virtuals:true}})
 
 seasonSchema.methods.getEpisodes = function(){
 	return new Promise(resolve=>{
@@ -54,5 +54,9 @@ seasonSchema.methods.setWatched = function(user){
 		resolve(this)
 	})
 }
+
+seasonSchema.virtual('uri').get(function(){
+	return `${this.parent().uri}/seasons/${this.season}`
+})
 
 module.exports = seasonSchema

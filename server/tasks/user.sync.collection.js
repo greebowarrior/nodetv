@@ -1,8 +1,6 @@
 "use strict"
 
 const helpers = require('nodetv-helpers')
-
-//const Show = helpers.model('show')
 const User = helpers.model('user')
 
 // Sync user collection

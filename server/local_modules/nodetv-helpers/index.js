@@ -1,11 +1,5 @@
 "use strict"
 
-exports.files = require('./lib/files')
-exports.utils = require('./lib/utils')
-exports.torrents = require('./lib/torrents')
-exports.trakt = require('./lib/trakt')
-exports.upnp = require('./lib/upnp')
-
 exports.model = (name='')=>{
 	try {
 		return require(require('path').join(process.cwd(),'server','models', name))
@@ -14,6 +8,11 @@ exports.model = (name='')=>{
 	}
 }
 
+exports.files = require('./lib/files')
+exports.utils = require('./lib/utils')
+exports.torrents = require('./lib/torrents')
+exports.trakt = require('./lib/trakt')
+exports.upnp = require('./lib/upnp')
 
 const Config = function(){
 	this.config = {}

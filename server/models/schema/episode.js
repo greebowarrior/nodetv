@@ -206,6 +206,10 @@ episodeSchema.methods.setDownloading = function(hash){
 	})
 }
 
+episodeSchema.virtual('uri').get(function(){
+	return `${this.parent().uri}/seasons/${this.season}/episodes/${this.episode}`
+})
+
 episodeSchema.virtual('file.url').get(function(){
 	if (this.parent().config.directory && this.file.filename){
 		return process.env.WEB_URL +'/media/'+ process.env.MEDIA_SHOWS + this.parent().config.directory +'/'+ this.file.filename
