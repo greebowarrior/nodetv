@@ -545,6 +545,13 @@
 		"oAP": "\/app\/views\/components\/search.html",
 		"oF": 0
 		},
+	"\/app\/views\/components\/upnp-device.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/upnp-device.html",
+		"oF": 0
+		},
 	"\/app\/views\/dashboard\/index.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -715,6 +722,13 @@
 		"rFN": 0,
 		"uCM": 0
 		},
+	"\/scripts\/letsencrypt.conf": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/scripts\/letsencrypt.conf",
+		"oF": 0
+		},
 	"\/scripts\/nginx.conf": {
 		"cB": 0,
 		"ft": 8192,
@@ -795,6 +809,16 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/min\/trakt.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-helpers\/lib\/upnp.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/min\/upnp.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -1002,6 +1026,16 @@
 		"oA": 1,
 		"oAP": "\/server\/routes\/api\/v1\/min\/trakt.min.js",
 		"oF": 1,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/routes\/api\/v1\/upnp.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/routes\/api\/v1\/min\/upnp.min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
@@ -3081,7 +3115,7 @@
 		"autoOutputPathRelativePath": "..\/js",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
-		"autoOutputPathStyle": 2,
+		"autoOutputPathStyle": 0,
 		"createDeclarationFile": 0,
 		"createSourceMap": 1,
 		"jsxMode": 0,

@@ -50,13 +50,14 @@ UPNP.prototype.search = function(){
 	return new Promise((resolve)=>{
 		setTimeout(()=>{
 			resolve(this.devices)
-		},1000)
+		},2500)
 	})
 }
-UPNP.prototype.setDevice = function(device){
+UPNP.prototype.setDevice = function(url){
+	/*
 	return new Promise((resolve,reject)=>{
 		try {
-			this.device = new UMRC(device)
+			this.device = new UMRC(url)
 			
 			this.device.on('error', (error)=>{
 				console.error(error)
@@ -102,8 +103,14 @@ UPNP.prototype.setDevice = function(device){
 			reject()
 		}
 	})
+	*/
+	return new Promise(resolve=>{
+		const device = new Device(url)
+		resolve(device)
+	})
 }
 
+/*
 UPNP.prototype.load = function(media={}){
 	return new Promise((resolve,reject)=>{
 		
@@ -121,12 +128,12 @@ UPNP.prototype.load = function(media={}){
 		}
 		this.device.load(encodeURI(this.media.file.url), options, (error,result)=>{
 			if (error) return reject(error)
+			console.debug('result', result)
 			resolve(result)
 		})
 		
 	})
 }
-
 UPNP.prototype.pause = function(){
 	try {
 		this.device.pause()
@@ -155,5 +162,66 @@ UPNP.prototype.stop = function(){
 		if (e) console.error(e.message)
 	}
 }
+*/
+
+/************************************************/
+
+const Device = function(url){
+	this.device = new UMRC(url)
+	
+	this.device.on('error', (error)=>{
+		if (error) console.error(error.message)
+	})
+}
+
+Device.prototype.load = function(media={}){
+	return new Promise((resolve,reject)=>{
+		if (!media.url) return reject(new Error(`No filedata supplied`))
+		let options = { 
+			autoplay: true,
+			metadata: {
+				title: media.title,
+				type: 'video'
+			}
+		}
+		this.device.load(encodeURI(media.url), options, (error)=>{
+			if (error) return reject(error)
+			resolve(this.device)
+		})
+	})
+}
+
+/*
+Device.prototype.pause = function(){
+	try {
+		this.device.pause()
+	} catch(e){
+		if (e) console.error(e.message)
+	}	
+}
+Device.prototype.play = function(){
+	try {
+		this.device.play()
+	} catch(e){
+		if (e) console.error(e.message)
+	}
+}
+Device.prototype.seek = function(seconds=0){
+	try {
+		this.device.seek(seconds)
+	} catch(e){
+		if (e) console.error(e.message)
+	}
+}
+Device.prototype.stop = function(){
+	try {
+		this.device.stop(()=>{
+			this.device = undefined
+		})
+	} catch(e){
+		if (e) console.error(e.message)
+	}
+}
+*/
 
 module.exports = new UPNP()
