@@ -1076,6 +1076,16 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/server\/routes\/sockets\/upnp.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/routes\/sockets\/min\/upnp.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/server\/routes\/ui.js": {
 		"ft": 64,
 		"ma": 0,

@@ -100,7 +100,7 @@ module.exports = io=>{
 					.then(files=>{
 						files.forEach(file=>{
 							try {
-								if (file.match(/\.js$/)) require('./sockets/'+file)(client)
+								if (file.match(/\.js$/)) require(`./sockets/${file}`)(client)
 							} catch(e){
 								console.error(e.message)
 							}

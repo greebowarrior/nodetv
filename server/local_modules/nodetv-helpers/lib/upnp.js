@@ -13,7 +13,7 @@ const UPNP = function(){
 	this.search()
 }
 	
-UPNP.prototype.search = function(){
+UPNP.prototype.search = function(callback){
 	let ssdp = new SSDP()
 	let searchType = 'urn:schemas-upnp-org:device:MediaRenderer:1'
 	
@@ -39,6 +39,7 @@ UPNP.prototype.search = function(){
 				if (idx >= 0){
 					this.devices[idx] = obj
 				} else {
+					if (typeof callback == 'function') callback(obj)
 					this.devices.push(obj)
 				}
 			}

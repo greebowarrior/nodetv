@@ -204,16 +204,14 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	.component('nutvUpnpDevice', {
 		bindings: {close:'&',dismiss:'&'},
 		templateUrl: '/views/components/upnp-device.html',
-		controller: ['$http',function($http){
+		controller: ['$http','$socket',function($http,$socket){
+			this.devices = []
 			this.$onInit = ()=>{
-				this.devices = []
-				
-				$http.get('/api/upnp/devices').then(res=>{
-					this.devices = res.data
-				})
-				this.play = (device)=>{
-					this.close({$value:device})
-				}
+				$socket.on('upnp.device', (device)=>this.devices.push(device))
+				$socket.emit('upnp.search')
+			}
+			this.play = (device)=>{
+				this.close({$value:device})
 			}
 		}]
 	})
