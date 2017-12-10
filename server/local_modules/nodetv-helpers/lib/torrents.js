@@ -86,8 +86,10 @@ exports.getComplete = function(){
 						if (a.bytesCompleted > b.bytesCompleted) return -1
 						return 0
 					})
+					
 					let item = {
 						id: torrent.id,
+						doneDate: new Date(torrent.doneDate*1000),
 						downloadDir: torrent.downloadDir,
 						files: torrent.files,
 						hashString: torrent.hashString,

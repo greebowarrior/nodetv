@@ -626,11 +626,10 @@ showSchema.virtual('uri').get(function(){
 })
 
 showSchema.virtual('images.baseUrl').get(function(){
-	let root = process.env.MEDIA_SHOWS.replace(/\s/g,'%20').replace(/\/$/,'')
+	let root = process.env.MEDIA_SHOWS.replace(/\s/g,'%20')
 	let directory = encodeURIComponent(this.config.directory)
-	return `/media/${root}/${directory}`
+	return `/media/${root}${directory}`
 })
-
 
 showSchema.pre('save', function(next){
 	this.updated = new Date()

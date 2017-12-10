@@ -14,9 +14,9 @@ exports.torrents = require('./lib/torrents')
 exports.trakt = require('./lib/trakt')
 exports.upnp = require('./lib/upnp')
 
+/*
 const Config = function(){
 	this.config = {}
-	return this
 }
 Config.prototype.set = function(name,value){
 	this.config[name] = value
@@ -27,3 +27,4 @@ Config.prototype.get = function(name){
 }
 
 exports.config = new Config()
+*/

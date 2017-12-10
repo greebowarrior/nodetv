@@ -18,7 +18,6 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 					let idx = show.episodes.findIndex(item=>{
 						return item.file.download.hashString && item.file.download.hashString.toUpperCase() == torrent.hashString.toUpperCase()
 					})
-					
 					let episode  = show.episodes[idx]
 					
 					if (!episode.file.download.active) return null
@@ -28,7 +27,7 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 					})
 					
 					let directory = show.getDirectory()
-					let filename = episode.getFilename(files[0].name)
+					let filename = episode.getFilename(files[0].name, torrent.hashString)
 					
 					if (!directory) throw new Error(`${show.title}: Directory not defined`)
 					
@@ -37,7 +36,8 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 					
 					return helpers.files.copy(source, target, show.config.transcode, episode)
 						.then(()=>{
-							return episode.setCollected(filename)
+							// TO DO: Mark collected if multi-episode file
+							return episode.setCollected(filename, torrent.doneDate)
 						})
 						.then(()=>{
 							console.debug(`Downloaded - ${show.title}: ${filename}`)

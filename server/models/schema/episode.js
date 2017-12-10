@@ -87,18 +87,20 @@ episodeSchema.methods.getInfoHash = function(){
 	})
 }
 
-episodeSchema.methods.setCollected = function(file=false){
+episodeSchema.methods.setCollected = function(file=false,date=null){
+	if (!date) date = new Date()
+	
 	return this.parent().getSubscribers()
 		.then(subscribers=>{
 			subscribers.forEach(user=>{
-				helpers.trakt(user).sync.collection.add({episodes:[{ids:{trakt:this.ids.trakt}}]})
+				helpers.trakt(user).sync.collection.add({episodes:[{ids:{trakt:this.ids.trakt},collected_at:date}]})
 			})
 			return null
 		})
 		.finally(()=>{
 			if (file){
 				this.file.filename = file
-				this.file.added = new Date()
+				this.file.added = date
 				this.file.download.active = undefined
 			}
 			return this
@@ -264,14 +266,12 @@ episodeSchema.methods.play = function(user,url){
 	
 }
 
-
 episodeSchema.virtual('uri').get(function(){
 	return `${this.parent().uri}/seasons/${this.season}/episodes/${this.episode}`
 })
-
 episodeSchema.virtual('file.url').get(function(){
 	if (this.parent().config.directory && this.file.filename){
-		return process.env.WEB_URL +'/media/'+ process.env.MEDIA_SHOWS +'/'+ this.parent().config.directory +'/'+ this.file.filename
+		return process.env.WEB_URL +'media/'+ process.env.MEDIA_SHOWS + this.parent().config.directory +'/'+ this.file.filename
 	}
 })
 
