@@ -5,9 +5,15 @@ but hopefully learning from my previous mistakes
 
 ## Tech Specs
 
-- MongoDB backend
-- Angular.js frontend
+- MEAN stack
 - Trakt.tv as primary data source
+
+### Third-party dependencies
+
+- [Trakt](https://trakt.tv) - Provides all Show, Episode, and Movie metadata
+- [FanArt.tv](https://fanart.tc) - Show & Movie artwork
+- [ShowRSS](https://showrss.com) - RSS Feeds for Shows
+
 
 # Why do this?
 
@@ -21,31 +27,38 @@ So, use it, or don't. I don't care. But if you do, there's a few things to be aw
 - Developed on: macOS 10.12
 - Tested on: Ubuntu Linux 16.04 LTS
 
-It should work on any *nix-compatible system that can run NodeJS.
-Totally untested on Windows, but I can't think of any reason it wouldn't.
+It should run on any *nix-compatible system that can run NodeJS.
+Totally untested on Windows, but I can't think of any reason it wouldn't work.
+
+You'll need a free Trakt.tv account in order to use their API.
+
+# What does it do?
+
+NodeTV lets you manage a local media library of TV Shows with a tidy interface. Add some RSS feeds and it'll download your shows automatically.
+
+You can also start playback on UPnP network devices from the UI.
+
+# Sounds good, what do I need?
+
+Okay, you need some slight technical experience, and some software. We'll assume you have the former, so here's a list of the latter:
 
 ### Third-party software
 
-- [Node.js](https://nodejs.org) 6.10
-- [MongoDB](https://mongodb.org) 2.6.x
+- [nginx](https://nginx.org) 1.13.0 +
+- [Node.js](https://nodejs.org) 8.9.0 +
+- [MongoDB](https://mongodb.org) 3.2.0 +
 - [Transmission](https://transmissionbt.com) 2.92 with RPC Enabled
-
-I'd recommend using nginx with SSL as a reverse proxy. Example config to be added at a later date.
-
-### Third-party dependencies
-
-- [Trakt](https://trakt.tv) - Provides all Show, Episode, and Movie metadata
-- [FanArt.tv](https://fanart.tc) - Show & Movie artwork
-- [ShowRSS](https://showrss.com) - RSS Feeds for Shows
-- [Proxy Spider](https://trakt.tv)
 
 # Install
 
-Create a user `media`
+Create a user named `media`
 
 > git clone https://github.com/greebowarrior/nodetv.git /opt/nutv  
 > cd /opt/nutv  
-> npm install  
+> su media
+> npm i
+
+
 
 Install the systemd service
 

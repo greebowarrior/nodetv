@@ -97,6 +97,26 @@ const Auth = app=>{
 			res.redirect('/login')
 		})
 	
+	app.route('*')
+		.all((req,res,next)=>{
+			if (!req.user) return next()
+			
+			User.findById(req.user._id)
+				.then(user=>{
+					if (!user) throw new Error(`User not found`)
+					
+					let token = user.apiToken()
+					let jwt = require('jsonwebtoken').sign({id:req.user._id,username:req.user.username,token:token}, process.env.SECRET_KEY)
+					res.cookie('jwt', jwt, {maxAge:60*60*24*7*1000})
+				})
+				.catch(error=>{
+					if (error) console.error(error.message)
+				})
+				.finally(()=>{
+					next()
+				})
+		})
+		
 	// Limit auth attempts to 1 every 5 seconds
 	/*
 	router.use(new RateLimit({

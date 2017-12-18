@@ -743,13 +743,6 @@
 		"oAP": "\/scripts\/nutv.service",
 		"oF": 0
 		},
-	"\/scripts\/untitled file": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/scripts\/untitled file",
-		"oF": 0
-		},
 	"\/server.js": {
 		"ft": 64,
 		"ma": 0,
@@ -898,6 +891,44 @@
 		"oO": 0,
 		"oS": 1
 		},
+	"\/server\/local_modules\/nodetv-upnp\/index.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-upnp\/min\/index.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-upnp\/lib\/client.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-upnp\/lib\/min\/client.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-upnp\/lib\/mediarenderer.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-upnp\/lib\/min\/mediarenderer.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-upnp\/package.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-upnp\/package-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"\/server\/local_modules\/trakt.tv-artwork\/index.js": {
 		"ft": 64,
 		"ma": 0,
@@ -915,6 +946,16 @@
 		"oF": 0,
 		"oO": 0,
 		"oS": 1
+		},
+	"\/server\/models\/device.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/models\/min\/device.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
 		},
 	"\/server\/models\/movie.js": {
 		"ft": 64,

@@ -23,13 +23,15 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 		socket.forward('alert')
 		return socket
 	}])
-	.factory('alertService', ['$rootScope','$socket','SweetAlert',($rootScope,$socket,SweetAlert)=>{
+	.factory('alertService', ['$rootScope','$socket','$window','SweetAlert',($rootScope,$socket,$window,SweetAlert)=>{
 		let Alert = function(){
 			this.alerts = []
 			
 			$rootScope.$on('alert', (event,alert)=>{
+				// Is this even used?
 				this.add(alert)
 			})
+			
 			$socket.on('alert', data=>{
 				this.alert(data)
 			})
@@ -44,18 +46,51 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 		Alert.prototype.add = function(data){
 			return this.notify(data)
 		}
+		Alert.prototype.banner = function(data){
+			// bootstrap-style alert
+			return this.notify(data)
+		}
+		
 		Alert.prototype.close = function(index){
 			this.alerts.splice(index, 1)
 		}
 		Alert.prototype.notify = function(data){
+			// Native browser alert
+			
+			/*
+			new Promise((resolve,reject)=>{
+				if ('Notification' in window){
+					console.debug(Notification.permission)
+					if (Notification.permission === 'granted') return resolve()
+					Notification.requestPermission()
+						.then(permission=>{
+							Notification.permission = permission
+							if (Notification.permission === 'granted') resolve()
+							reject()
+						})
+					reject()
+				} else {
+					reject()
+				}
+			})
+			.then(()=>{
+				new Notification('NodeTV',{
+					body: data.msg,
+					badge:'/static/gfx/icons/icon-32.png',
+					icon:'/static/gfx/icons/icon-192.png'
+				})
+			})
+			.catch(()=>{
+				console.debug('derp')
+				this.alerts.push({type:data.type,msg:data.msg})
+			})
 			/*
 			if ('Notification' in $window){
 				if (Notification.permission === 'granted'){
 					new Notification('NodeTV',{
 						body: data.msg,
-						badge:'/static/gfx/icons/touch-icon.png',
-						icon:'/static/gfx/icons/touch-icon.png',
-						image:'/static/gfx/icons/touch-icon.png'
+						badge:'/static/gfx/icons/icon-32.png',
+						icon:'/static/gfx/icons/icon-192.png'
 					})
 				} else if (Notification.permission !== 'denied'){
 					Notification.requestPermission()
@@ -66,16 +101,18 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 							if (permission === 'granted'){
 								new Notification('NodeTV',{
 									body: data.msg,
-									badge:'/static/gfx/icons/touch-icon.png',
-									icon:'/static/gfx/icons/touch-icon.png'
+									badge:'/static/gfx/icons/icon-32.png',
+									icon:'/static/gfx/icons/icon-192.png'
 								})
 							}
 						})
+						
 				}
+				this.alerts.push({type:data.type,msg:data.msg})
 			} else {
 				this.alerts.push({type:data.type,msg:data.msg})
 			}
-			*/
+			/**/
 			this.alerts.push({type:data.type,msg:data.msg})
 		}
 		
@@ -261,11 +298,11 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 	})
 	
 	.config(['$httpProvider','$localStorageProvider','$locationProvider','$sessionStorageProvider',
-			($httpProvider,$localStorageProvider,$locationProvider,$sessionStorageProvider)=>{
-				$httpProvider.interceptors.push('httpIntercept')
-				$locationProvider.html5Mode(true)
-				
-				$localStorageProvider.setKeyPrefix('NodeTV-')
-				$sessionStorageProvider.setKeyPrefix('NodeTV-')
-			}])
+		($httpProvider,$localStorageProvider,$locationProvider,$sessionStorageProvider)=>{
+			$httpProvider.interceptors.push('httpIntercept')
+			$locationProvider.html5Mode(true)
+			
+			$localStorageProvider.setKeyPrefix('NodeTV-')
+			$sessionStorageProvider.setKeyPrefix('NodeTV-')
+	}])
 	

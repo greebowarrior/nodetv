@@ -16,6 +16,7 @@
 			<td>
 				<span ng-show="hash.repack">REPACK</span>
 				<span ng-show="hash.proper">PROPER</span>
+				<span ng-show="hash.multi || hash.linked.length > 1">MULTI-EP</span>
 			</td>
 			<td>{{::hash.added|date:'short'}}</td>
 		</tr>

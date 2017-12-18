@@ -13,11 +13,11 @@
 		<tr ng-repeat="device in $ctrl.devices">
 			<td>{{::device.name}}</td>
 			<td class="text-right">
-				<button type="buton" class="btn btn-default" ng-click="$ctrl.play(device)"><span class="fa fa-play"></span> Play</button>
+				<button type="button" class="btn btn-primary" ng-click="$ctrl.play(device)"><span class="fa fa-play"></span> Play</button>
 			</td>
 		</tr>
 	</table>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default" type="button" ng-click="$ctrl.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-danger" ng-click="$ctrl.dismiss()">Cancel</button>
 </div>

@@ -33,6 +33,7 @@ const episodeSchema = new mongoose.Schema({
 		hash: String,
 		hd: {type: Boolean, default: false},
 		linked: [Number],
+		multi: {type: Boolean, default: false},
 		quality: {type: String, enum: ['SD','720p','1080p']},
 		repack: {type: Boolean, default: false},
 		proper: {type: Boolean, default: false}

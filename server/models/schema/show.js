@@ -218,6 +218,7 @@ showSchema.methods.parseFeed = function(){
 							btih: helpers.utils.getInfoHash(entry),
 							hd: helpers.utils.isHD(entry.title),
 							linked: result.episodes,
+							multi: result.episodes.length > 1 ? true : false,
 							quality: helpers.utils.getQuality(entry.title),
 							repack: helpers.utils.isRepack(entry.title),
 							proper: helpers.utils.isProper(entry.title),
