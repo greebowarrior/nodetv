@@ -1,25 +1,22 @@
-<div class="search">
-	<form ng-submit="$ctrl.search()">
-		<div class="input-group">
-			<input type="text" class="form-control" ng-model="$ctrl.filter.title" placeholder="Search" />
-			<span class="input-group-btn">
-				<button type="submit" class="btn btn-success" ng-hide="$ctrl.results.length"><span class="fa fa-search"></span></button>
-				<button type="button" class="btn btn-danger" ng-show="$ctrl.results.length" ng-click="$ctrl.clearResults()"><span class="fa fa-close"></span></button>
-			</span>
-		</div>
-	</form>
-</div>
-
-<div class="row nutv-grid">
-	<div class="col-sm-4 col-md-2 cover" ng-repeat="item in $ctrl.items = ($ctrl.list|filter:$ctrl.filter) | orderBy:$ctrl.definiteArticle | limitTo:$ctrl.pagination.items:$ctrl.pagination.items*($ctrl.pagination.page-1)">
-		<a ui-sref="^.detail({slug: item.ids.slug})">
-			<nutv-artwork item="item" type="$ctrl.type"></nutv-artwork>
-		</a>
+<div class="nutv-grid">
+	<div class="grid-header">
+		<form ng-submit="$ctrl.search()">
+			<div class="input-group">
+				<input type="text" class="form-control" ng-model="$ctrl.filter.title" placeholder="Search" />
+				<span class="input-group-btn">
+					<button type="submit" class="btn btn-success" ng-hide="$ctrl.results.length"><span class="fa fa-search"></span></button>
+					<button type="button" class="btn btn-danger" ng-show="$ctrl.results.length" ng-click="$ctrl.clearResults()"><span class="fa fa-close"></span></button>
+				</span>
+			</div>
+		</form>
 	</div>
 	
-	<div class="col-sm-12 text-center" ng-show="$ctrl.items.length > $ctrl.pagination.items">
-		<ul class="pagination-sm" uib-pagination ng-model="$ctrl.pagination.page" total-items="$ctrl.items.length" items-per-page="$ctrl.pagination.items" boundary-link-numbers="true" force-ellipses="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+	<div class="cover" ng-repeat="item in $ctrl.items = ($ctrl.list|filter:$ctrl.filter) | orderBy:$ctrl.definiteArticle | limitTo:$ctrl.pagination.items:$ctrl.pagination.items*($ctrl.pagination.page-1)">
+		<nutv-artwork item="item"></nutv-artwork>
+	</div>
+	
+	<div class="grid-footer text-center" ng-show="$ctrl.items.length > $ctrl.pagination.items">
+		<ul class="pagination-sm" uib-pagination ng-model="$ctrl.pagination.page" ng-change="$ctrl.pageChange()" total-items="$ctrl.items.length" items-per-page="$ctrl.pagination.items" boundary-link-numbers="true" force-ellipses="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
 	</div>
 </div>
-
 <nutv-search type="$ctrl.type" results="$ctrl.results"></nutv-search>

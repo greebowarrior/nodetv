@@ -34,6 +34,7 @@ let movieSchema = new mongoose.Schema({
 	}],
 	file: {
 		added: Date,
+		directory: String,
 		download: {
 			active: Boolean,
 			hashString: String
@@ -93,6 +94,18 @@ movieSchema.statics.findByUser = function(user){
 	return this.find({
 		'subscribers.subscriber': mongoose.Types.ObjectId(user._id)
 	})
+}
+
+
+movieSchema.methods.getDirectory = function(){
+	if (this.config.directory){
+		return require('path').join(
+			process.env.MEDIA_ROOT,
+			process.env.MEDIA_MOVIES,
+			helpers.utils.normalize(this.file.directory)
+		)
+	}
+	return false
 }
 
 movieSchema.methods.subscribe = function(user){

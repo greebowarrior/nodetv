@@ -8,6 +8,7 @@ const helpers = require('nodetv-helpers')
 const passport = require('passport')
 const router = require('express').Router()
 
+const JwtStrategy = require('passport-jwt').Strategy
 const LocalStrategy = require('passport-local').Strategy
 const TokenStrategy = require('passport-token').Strategy
 const TraktStrategy = require('passport-trakt').Strategy
@@ -27,6 +28,21 @@ passport.deserializeUser((id,done)=>{
 		})
 })
 
+passport.use('jwt', new JwtStrategy({
+		secretOrKey: process.env.SECRET_KEY,
+		jwtFromRequest: require('passport-jwt').ExtractJwt.fromAuthHeaderAsBearerToken()
+	},
+	(payload, done)=>{
+		User.findOne({_id:payload.id}) // {_id:payload.id,username:payload.username,'tokens.token':payload.token}
+			.then(user=>{
+				if (!user) throw new Error('Invalid user')
+				done(null, user)
+			})
+			.catch(error=>{
+				done(error, false)
+			})
+	}
+))
 passport.use('local', new LocalStrategy((username,password,done)=>{
 	User.findOne({$or:[{username:username.toLowerCase()},{email:username.toLowerCase()}]})
 		.then(user=>{
@@ -47,9 +63,7 @@ passport.use('token', new TokenStrategy((username,token,done)=>{
 			done(error, false)
 		})
 }))
-
-passport.use('trakt', new TraktStrategy(
-	{
+passport.use('trakt', new TraktStrategy({
 		clientID: process.env.TRAKT_CLIENT_ID,
 		clientSecret: process.env.TRAKT_CLIENT_SECRET,
 		callbackURL: process.env.TRAKT_REDIRECT_URI || 'urn:ietf:wg:oauth:2.0:oob'
@@ -74,14 +88,35 @@ const Auth = app=>{
 	
 	// Secure all API routes with token authentication
 	app.route('/api/*')
-		.all(passport.authenticate('token'))
+		.all(passport.authenticate(['jwt','token'],{session:false}))
 		
 	app.route('/logout')
 		.get((req,res)=>{
 			req.logout()
+			res.clearCookie('jwt')
 			res.redirect('/login')
 		})
 	
+	app.route('*')
+		.all((req,res,next)=>{
+			if (!req.user) return next()
+			
+			User.findById(req.user._id)
+				.then(user=>{
+					if (!user) throw new Error(`User not found`)
+					
+					let token = user.apiToken()
+					let jwt = require('jsonwebtoken').sign({id:req.user._id,username:req.user.username,token:token}, process.env.SECRET_KEY)
+					res.cookie('jwt', jwt, {maxAge:60*60*24*7*1000})
+				})
+				.catch(error=>{
+					if (error) console.error(error.message)
+				})
+				.finally(()=>{
+					next()
+				})
+		})
+		
 	// Limit auth attempts to 1 every 5 seconds
 	/*
 	router.use(new RateLimit({
@@ -91,16 +126,19 @@ const Auth = app=>{
 	}))
 	*/
 	router.route('/login')
-		.post(passport.authenticate('local'), (req,res)=>{
+		.post(passport.authenticate('local'),(req,res)=>{
 			if (req.user){
 				User.findById(req.user._id)
 					.then(user=>{
 						let token = user.apiToken()
-						res.header('X-Username', user.username)
-						res.header('X-Token', token)
-						res.send({username:user.username,token:token})
+						
+						let jwt = require('jsonwebtoken').sign({id:req.user._id,username:req.user.username,token:token}, process.env.SECRET_KEY)
+						res.cookie('jwt', jwt, {maxAge:60*60*24*7*1000})
+						
+						res.status(200).send(jwt)
 					})
-					.catch(()=>{
+					.catch(error=>{
+						console.debug(error)
 						res.status(401).send({error:'Unauthorized'})
 					})
 			} else {
@@ -111,6 +149,7 @@ const Auth = app=>{
 	router.route('/logout')
 		.all((req,res)=>{
 			req.logout()
+			res.clearCookie('jwt')
 			res.status(200).send({success:true})
 		})
 		
@@ -120,9 +159,11 @@ const Auth = app=>{
 				User.findById(req.user._id)
 					.then(user=>{
 						let token = user.apiToken()
-						res.header('X-Username', user.username)
-						res.header('X-Token', token)
-						res.send({username:user.username,token:token})
+						
+						let jwt = require('jsonwebtoken').sign({id:req.user._id,username:req.user.username,token:token}, process.env.SECRET_KEY)
+						res.cookie('jwt', jwt, {maxAge:60*60*24*7*1000})
+						
+						res.send(jwt)
 					})
 					.catch(()=>{
 						res.status(401).send({error:'Unauthorized'})

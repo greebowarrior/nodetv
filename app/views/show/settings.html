@@ -16,38 +16,49 @@
 		<div class="input-group">
 			<span class="input-group-addon"><span class="fa fa-file-o"></span></span>
 			<input id="ipt_format" type="text" class="form-control" ng-model="$ctrl.show.config.format" />
+			<span class="input-group-addon" uib-tooltip="">.mkv</span>
 		</div>
 		<small class="help-block text-right">
 			<strong>%S</strong>: Season,
 			<strong>%E</strong>: Episode,
 			<strong>%T</strong>: Title,
-			<strong>%X</strong>: File extension
+<!-- 			<strong>%X</strong>: File extension -->
 		</small>
 	</div>
 	
-	<div class="checkbox">
-		<label>
-			<input type="checkbox" class="checkbox" ng-model="$ctrl.show.config.enabled" /> Download new episodes when available
-		</label>
-	</div>
-	<div class="checkbox" ng-show="$ctrl.show.config.enabled">
-		<label>
-			<input type="checkbox" class="checkbox" ng-model="$ctrl.show.config.hd"  /> Prefer HD Video
-		</label>
-	</div>
-	<div class="checkbox" ng-show="$ctrl.show.config.enabled">
-		<label>
-			<input type="checkbox" class="checkbox" ng-model="$ctrl.show.config.transcode" /> Transcode to MP4
-		</label>
-	</div>
-	
-	<div class="form-group" ng-show="$ctrl.show.config.enabled">
-		<label>RSS Feed</label>
-		<div class="input-group" ng-repeat="feed in $ctrl.show.config.feed">
-			<span class="input-group-addon"><span class="fa fa-rss"></span></span>
-			<input type="url" class="form-control" ng-model="feed.url" />
+	<div class="row">
+		<div class="col-md-8">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" class="checkbox" ng-model="$ctrl.show.config.enabled" /> Download new episodes when available
+				</label>
+			</div>
 		</div>
-		<small class="help-block text-right">We recommend <a href="https://showrss.info" target="_blank">ShowRSS</a></small>
+		<div class="col-md-4" ng-show="$ctrl.show.config.enabled">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" class="checkbox" ng-model="$ctrl.show.config.transcode" /> Transcode to MP4
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-8">
+			<div class="form-group">
+				<label>RSS Feed</label>
+				<div class="input-group" ng-repeat="feed in $ctrl.show.config.feed">
+					<span class="input-group-addon"><span class="fa fa-rss"></span></span>
+					<input type="url" class="form-control" ng-model="feed.url" />
+				</div>
+				<small class="help-block text-right">We recommend <a href="https://showrss.info" target="_blank">ShowRSS</a></small>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				<label>Preferred Quality</label>
+				<select class="form-control" ng-model="$ctrl.show.config.quality" ng-options="option for option in $ctrl.qualities"></select>
+			</div>
+		</div>
 	</div>
 	<hr />
 	<div class="form-group">

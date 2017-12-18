@@ -1,14 +1,11 @@
 "use strict"
 
-angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert','ngTouch','btford.socket-io','ui.bootstrap','ui.router'])
+angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','ngSweetAlert','ngTouch','btford.socket-io','ui.bootstrap','ui.router'])
 		
-	.factory('httpIntercept', ['$localStorage','$location','$q',($localStorage,$location,$q)=>{
+	.factory('httpIntercept', ['$cookies','$location','$q',($cookies,$location,$q)=>{
 		return {
 			request: config=>{
-				if ($localStorage.token){
-					if ($localStorage.token.username) config.headers['X-Username'] = $localStorage.token.username
-					if ($localStorage.token.username) config.headers['X-Token'] = $localStorage.token.token
-				}
+				if ($cookies.get('jwt')) config.headers['Authorization'] = 'Bearer '+$cookies.get('jwt')
 				return config
 			},
 			response: response=>{
@@ -26,13 +23,15 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 		socket.forward('alert')
 		return socket
 	}])
-	.factory('alertService', ['$rootScope','$socket','SweetAlert',($rootScope,$socket,SweetAlert)=>{
+	.factory('alertService', ['$rootScope','$socket','$window','SweetAlert',($rootScope,$socket,$window,SweetAlert)=>{
 		let Alert = function(){
 			this.alerts = []
 			
 			$rootScope.$on('alert', (event,alert)=>{
+				// Is this even used?
 				this.add(alert)
 			})
+			
 			$socket.on('alert', data=>{
 				this.alert(data)
 			})
@@ -47,18 +46,51 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 		Alert.prototype.add = function(data){
 			return this.notify(data)
 		}
+		Alert.prototype.banner = function(data){
+			// bootstrap-style alert
+			return this.notify(data)
+		}
+		
 		Alert.prototype.close = function(index){
 			this.alerts.splice(index, 1)
 		}
 		Alert.prototype.notify = function(data){
+			// Native browser alert
+			
+			/*
+			new Promise((resolve,reject)=>{
+				if ('Notification' in window){
+					console.debug(Notification.permission)
+					if (Notification.permission === 'granted') return resolve()
+					Notification.requestPermission()
+						.then(permission=>{
+							Notification.permission = permission
+							if (Notification.permission === 'granted') resolve()
+							reject()
+						})
+					reject()
+				} else {
+					reject()
+				}
+			})
+			.then(()=>{
+				new Notification('NodeTV',{
+					body: data.msg,
+					badge:'/static/gfx/icons/icon-32.png',
+					icon:'/static/gfx/icons/icon-192.png'
+				})
+			})
+			.catch(()=>{
+				console.debug('derp')
+				this.alerts.push({type:data.type,msg:data.msg})
+			})
 			/*
 			if ('Notification' in $window){
 				if (Notification.permission === 'granted'){
 					new Notification('NodeTV',{
 						body: data.msg,
-						badge:'/static/gfx/icons/touch-icon.png',
-						icon:'/static/gfx/icons/touch-icon.png',
-						image:'/static/gfx/icons/touch-icon.png'
+						badge:'/static/gfx/icons/icon-32.png',
+						icon:'/static/gfx/icons/icon-192.png'
 					})
 				} else if (Notification.permission !== 'denied'){
 					Notification.requestPermission()
@@ -69,16 +101,18 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 							if (permission === 'granted'){
 								new Notification('NodeTV',{
 									body: data.msg,
-									badge:'/static/gfx/icons/touch-icon.png',
-									icon:'/static/gfx/icons/touch-icon.png'
+									badge:'/static/gfx/icons/icon-32.png',
+									icon:'/static/gfx/icons/icon-192.png'
 								})
 							}
 						})
+						
 				}
+				this.alerts.push({type:data.type,msg:data.msg})
 			} else {
 				this.alerts.push({type:data.type,msg:data.msg})
 			}
-			*/
+			/**/
 			this.alerts.push({type:data.type,msg:data.msg})
 		}
 		
@@ -124,14 +158,16 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 			this.resolved = {}
 			
 			$transitions.onSuccess({}, transition=>{
-				this.crumbs = []
-				let promises = transition.getResolveTokens().map(token=>{
-					this.resolved[token] = transition.injector().get(token)
-					return this.resolved[token]
-				})
-				Promise.all(promises).then(()=>{
-					this.generate($state.$current)
-				})
+				if (!transition.dynamic()){
+					this.crumbs = []
+					let promises = transition.getResolveTokens().map(token=>{
+						this.resolved[token] = transition.injector().get(token)
+						return this.resolved[token]
+					})
+					Promise.all(promises).then(()=>{
+						this.generate($state.$current)
+					})
+				}
 			})
 			return this
 		}
@@ -204,22 +240,36 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 		// Automatically generate breadcrumbs from the router
 		templateUrl: 'views/components/breadcrumbs.html',
 		controller: ['$transitions','crumbService', function($transitions,crumbService){
-			$transitions.onSuccess({}, ()=>{
-				this.crumbs = crumbService.list()
+			$transitions.onSuccess({}, (transition)=>{
+				if (!transition.dynamic()){
+					this.crumbs = crumbService.list()
+				}
 			})
 		}]
 	})
 	.component('nutvGrid', {
-		bindings: {list:'=',type:'='},
+		bindings: {list:'<',type:'<',page:'<'},
 		templateUrl: 'views/components/grid.html',
-		controller: ['$http',function($http){
-			this.filter = {title:''}
-			this.pagination = {items:18,page:1}
+		controller: ['$http','$log','$sessionStorage','$state',function($http,$log,$sessionStorage,$state){
+			if (!$sessionStorage.filter) $sessionStorage.filter = {title: ''}
 			
+			this.$onInit = ()=>{
+				this.filter = $sessionStorage.filter
+				this.pagination = {items:18, page:this.page}
+			}
+			this.uiOnParamsChanged = (params)=>{
+				this.pagination.page = params.page
+			}
+			
+			this.clearResults = ()=>{
+				this.results = []
+			}
 			this.definiteArticle = (item)=>{
 				return item.title.replace(/^The\s/i, '')
 			}
-			
+			this.pageChange = ()=>{
+				$state.go('.', {page:this.pagination.page})
+			}
 			this.search = ()=>{
 				if (this.items.length > 1 || this.filter.title.length <= 1) return
 				$http.post(`/api/trakt/search/${this.type}`,{q:this.filter.title})
@@ -227,19 +277,17 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 						this.results = res.data
 					})
 			}
-			this.clearResults = ()=>{
-				this.results = []
-			}
 		}]
 	})
 	.component('nutvSearch', {
-		bindings: {type:'=',results:'='},
+		bindings: {type:'<',results:'='},
 		templateUrl: '/views/components/search.html',
 		controller: ['$http','$log','$state','alertService',function($http,$log,$state,alertService){
-			this.add = result=>{
-				$http.post(`/api/${this.type}s`, {slug: result.ids.slug})
+			
+			this.add = (result)=>{
+				$http.post(`/api/${this.type}s`, {slug:result.ids.slug})
 					.then(()=>{
-						$state.reload()
+						$state.go('^.detail', {slug:result.ids.slug})
 						alertService.alert({type:'success',title:'Added',msg:`'${result.title}' has been added to your library`})
 					})
 					.catch(()=>{
@@ -249,9 +297,12 @@ angular.module('nutv.core', ['ngAnimate','ngMessages','ngStorage','ngSweetAlert'
 		}]
 	})
 	
-	.config(['$localStorageProvider','$locationProvider','$httpProvider',($localStorageProvider,$locationProvider,$httpProvider)=>{
-		$locationProvider.html5Mode(true)
-		$localStorageProvider.setKeyPrefix('NodeTV-')
-		$httpProvider.interceptors.push('httpIntercept')
+	.config(['$httpProvider','$localStorageProvider','$locationProvider','$sessionStorageProvider',
+		($httpProvider,$localStorageProvider,$locationProvider,$sessionStorageProvider)=>{
+			$httpProvider.interceptors.push('httpIntercept')
+			$locationProvider.html5Mode(true)
+			
+			$localStorageProvider.setKeyPrefix('NodeTV-')
+			$sessionStorageProvider.setKeyPrefix('NodeTV-')
 	}])
 	

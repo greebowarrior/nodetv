@@ -40,6 +40,25 @@ exports.getEpisodeNumbers = function(filename){
 		}
 	})
 }
+exports.getProxy = (options={})=>{
+	const defaults = {
+		allowHttps: 1,
+		protocol: 'http'
+	}
+	let qs = Object.assign({}, defaults, options)
+	
+	return new Promise((resolve)=>{
+		require('request-promise')({
+			url:'https://api.getproxylist.com/proxy',qs:qs,json:true
+		}).then(json=>{
+				if (!json.ip) throw new Error(`No proxy returned from getproxylist`)
+				resolve(`${json.protocol}://${json.ip}:${json.port}`)
+			})
+			.catch(()=>{
+				resolve(false)
+			})
+	})
+}
 exports.getQuality = (filename)=>{
 	let match = filename.match(/([0-9]+p)/i)
 	if (match && match[1]) return match[1].toLowerCase()
@@ -51,8 +70,12 @@ exports.isHD = (filename)=>{
 exports.isRepack = (filename)=>{
 	return filename.match(/final|proper|repack|rerip/i) ? true : false
 }
+exports.isProper = (filename)=>{
+	return filename.match(/proper/i) ? true : false
+}
 
 exports.getInfoHash = (item)=>{
+	// tv:info_hash namespace?
 	if (item.link.match(/btih\:([\w]{32,40})/i)){
 		// ShowRSS
 		let match = item.link.match(/btih\:([\w]{32,40})/i)
@@ -72,8 +95,6 @@ exports.normalize = (string)=>{
 }
 
 exports.walkDir = (directory)=>{
-//	const path = require('path')
-	
 	return require('glob-promise')('**/*',{cwd:directory,nodir:true})
 		.then(files=>{
 			return files

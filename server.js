@@ -21,12 +21,6 @@ switch (process.env.NODE_ENV){
 		require('log4js').getLogger('console').setLevel('ALL')
 }
 
-try {
-	require('newrelic')
-} catch(e){
-	console.warn('New Relic monitoring not enabled')
-}
-
 global.Promise = require('bluebird').Promise
 Promise.config({warnings:false})
 

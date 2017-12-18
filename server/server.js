@@ -12,9 +12,6 @@ require('./database')
 // Load scheduler
 require('./scheduler')
 
-// Load UPnP Server
-//require('./upnp')
-
 // Create Web Server
 const app = require('express')()
 app.set('port', process.env.PORT || 3001)

@@ -59,13 +59,13 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	})
 	.component('nutvLogin', {
 		templateUrl: 'views/auth/login.html',
-		controller: ['$http','$localStorage','$log','$state','alertService',function($http,$localStorage,$log,$state,alertService){
+		controller: ['$cookies','$http','$log','$socket','$state','alertService',function($cookies,$http,$log,$socket,$state,alertService){
 			this.auth = {}
 			
 			this.login = ()=>{
 				$http.post('/auth/login', this.auth)
-					.then(response=>{
-						$localStorage.token = response.data
+					.then(()=>{
+						$socket.emit('authenticate', $cookies.get('jwt'))
 						$state.go('dashboard.home')
 					})
 					.catch(()=>{
@@ -77,14 +77,14 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	})
 	.component('nutvLogout', {
 		templateUrl: 'views/auth/logout.html',
-		controller: ['$http','$localStorage','$log','$state',function($http,$localStorage,$log,$state){
+		controller: ['$http','$log','$socket','$state',function($http,$log,$socket,$state){
 			$http.get('/auth/logout')
 				.then(()=>{
-					delete $localStorage.token
+					$socket.emit('auth.logout')
 					$state.go('dashboard.home')
 				})
 				.catch(()=>{
-					$log.debug('Error while logging out')
+					$log.debug('An error occured while logging out')
 				})
 		}]
 	})
@@ -110,9 +110,13 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	
 	.component('nutvNavigation', {
 		templateUrl: '/views/components/navigation.html',
-		controller: ['$localStorage','$log','$socket','$rootScope','$transitions',function($localStorage,$log,$socket,$rootScope,$transitions){
-			this.authenticated - false
+		controller: ['$cookies','$log','$socket','$transitions',function($cookies,$log,$socket,$transitions){
 			this.collapsed = true
+			this.enabled = false
+			
+			this.$onInit = ()=>{
+				if ($cookies.get('jwt')) this.enabled = true
+			}
 			
 			$transitions.onStart({}, ()=>{
 				this.collapsed = true
@@ -121,53 +125,115 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 			$socket.on('error',error=>{
 				$log.error(error)
 			})
-			$socket.on('connect', ()=>{
-				if ($localStorage.token) $socket.emit('authenticate', $localStorage.token)
+			
+			$socket.on('authenticated', (data)=>{
+				this.enabled = data.status
 			})
-			
-			$rootScope.$watch(()=>$localStorage.token, (current)=>{
-				this.authenticated = current && current.token ? true : false
-			
-				$socket.emit('authenticate', $localStorage.token, ()=>{
-					console.debug('Socket authenticated')
-				})
-			}, true)
 		}]
 	})
 	.component('nutvDashboard', {
 		templateUrl: '/views/dashboard/index.html',
 		controller: ['$http',function($http){
 			
-			this.episodes = {
-				recent: [], upcoming: []
-			}
-			this.count = {
-				recent: null, upcoming: null
-			}
+			// Generate a calendar
+			this.$onInit = ()=>{
+				/*
+				let i = -7
+				
+				let now = new Date()
+				this.dates = []
+				this.test = []
+				
+				do {
+					let day = new Date()
+					day.setDate(now.getDate()+i)
+					this.test[day.getDay()] = {episodes:[]}
+					
+					this.dates.push({date:day,num:day.getDay()})
+					i++
+				} while (i<=0)
+				*/
 			
-			$http.get('/api/shows/latest')
-				.then(response=>{
-					this.episodes.recent = response.data
-					this.episodes.recent.forEach(show=>{
-						this.count.recent += show.episodes.length
+				this.episodes = {
+					recent: [], upcoming: []
+				}
+				this.count = {
+					recent: null, upcoming: null
+				}
+				
+				$http.get('/api/shows/latest')
+					.then(response=>{
+						
+						/*
+						response.data.forEach(show=>{
+							show.episodes.forEach(episode=>{
+								let dow = (new Date(episode.first_aired)).getDay()
+								
+								this.test[dow].episodes.push({
+									title: show.title,
+									images: show.images,
+									episode: episode
+								})
+							})
+						})
+						*/
+						
+						this.episodes.recent = response.data
+						this.episodes.recent.forEach(show=>{
+							this.count.recent += show.episodes.length
+						})
 					})
-				})
-				.catch(()=>{
-				//	$log.error(error.message)
-				})
-			
-			$http.get('/api/shows/upcoming')
-				.then(response=>{
-					this.episodes.upcoming = response.data
-					this.episodes.upcoming.forEach(show=>{
-						this.count.upcoming += show.episodes.length
+					.catch(()=>{
+					//	$log.error(error.message)
 					})
-				})
-				.catch(()=>{
-				//	$log.error(error.message)
-				})
-
-			
+				
+				$http.get('/api/shows/upcoming')
+					.then(response=>{
+						this.episodes.upcoming = response.data
+						this.episodes.upcoming.forEach(show=>{
+							this.count.upcoming += show.episodes.length
+						})
+					})
+					.catch(()=>{
+					//	$log.error(error.message)
+					})
+			}
 		}]
 	})
 	
+	.component('nutvUpnpDevice', {
+		bindings: {close:'&',dismiss:'&'},
+		templateUrl: '/views/components/upnp-device.html',
+		controller: ['$http','$socket',function($http,$socket){
+			this.devices = []
+			this.$onInit = ()=>{
+				$socket.on('upnp.device', (device)=>this.devices.push(device))
+				$socket.emit('upnp.search')
+			}
+			this.play = (device)=>{
+				this.close({$value:device})
+			}
+		}]
+	})
+	
+	.run(['$cookies','$socket','$log',($cookies,$socket,$log)=>{
+	//	$transitions.onError({}, ()=>{
+	//		alertService.notify({type:'danger',msg:'Unable to load this content. Sorry'})
+	//	})
+		
+		if ('serviceWorker' in navigator){
+			if (!navigator.serviceWorker.controller){
+				navigator.serviceWorker.register('/static/js/nutv.service-worker.js', {scope:'/'})
+					.then(()=>{
+						$log.debug('[NuTV] Service Worker registered')
+					})
+					.catch((error)=>{
+						$log.warn('[NuTV] Service Worker registration failed: ', error.message)
+					})
+			}
+		}
+		
+		$socket.on('connect', ()=>{
+			if ($cookies.get('jwt')) $socket.emit('authenticate', $cookies.get('jwt'))
+		})
+	}])

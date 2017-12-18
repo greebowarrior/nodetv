@@ -12,7 +12,9 @@ module.exports = io=>{
 		
 		new Socket({
 			id: client.id,heartbeat: new Date()
-		}).save()
+		}).save().catch(error=>{
+			if (error) console.error(error.message)
+		})
 		
 		client.on('disconnect', ()=>{
 			Socket.findOneAndRemove({id:client.id})
@@ -37,8 +39,12 @@ module.exports = io=>{
 		// Socket authentication middleware
 		client.use((packet,next)=>{
 			// Always allow authentication requests
-			if (['authenticate'].indexOf(packet[0]) >= 0) return next()
+			if (packet[0].match(/^auth\./) || ['authenticate','login','logout'].indexOf(packet[0]) >= 0) return next()
 			
+			if (!client.user) next(new Error('Unauthorized'))
+			next()
+			
+			/*
 			Socket.findBySocket(client.id)
 				.then(socket=>{
 					if (!socket.user) throw new Error('Unauthorized')
@@ -47,26 +53,40 @@ module.exports = io=>{
 				.catch(error=>{
 					next(error)
 				})
+			*/
 		})
 		
 		/**************************************************/
 				
 		client.on('authenticate', (auth,callback)=>{
-			if (!auth || !auth.username || !auth.token) return
+			if (!auth) return
 			
-			return User.findByToken(auth.username, auth.token)
-				.then(user=>{
-					if (!user) throw new Error(`User not found`)
-				//	client.user = user
-					console.debug('Socket (%s) authenticated: %s', client.id, user.username)
-					return Socket.findOneAndUpdate({id:client.id},{$set:{user:user._id}})
+			new Promise((resolve,reject)=>{
+				require('jsonwebtoken').verify(auth, process.env.SECRET_KEY, (error,data)=>{
+					if (error) return reject(error)
+					if (data) return resolve(data)
 				})
-				.then(()=>{
-					if (typeof callback === 'function') callback()
-				})
-				.catch(error=>{
-					console.error(error)
-				})
+			})
+			.then(data=>{
+				return User.findByToken(data.username,data.token)
+			})
+			.then(user=>{
+				if (!user) throw new Error(`User not found`)
+				client.user = user
+				return Socket.update({id:client.id},{user:user._id})
+			})
+			.then(()=>{
+				client.emit('authenticated', {status:true})
+				if (typeof callback === 'function') callback({status:true})
+			})
+			.catch(error=>{
+				if (error) console.error(error.message)
+			})
+		})
+		
+		client.on('auth.logout', ()=>{
+			delete client.user
+			client.emit('authenticated', {status:false})
 		})
 		
 		/**************************************************/
@@ -80,7 +100,7 @@ module.exports = io=>{
 					.then(files=>{
 						files.forEach(file=>{
 							try {
-								if (file.match(/\.js$/)) require('./sockets/'+file)(client)
+								if (file.match(/\.js$/)) require(`./sockets/${file}`)(client)
 							} catch(e){
 								console.error(e.message)
 							}

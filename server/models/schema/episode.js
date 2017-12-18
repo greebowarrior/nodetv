@@ -33,19 +33,24 @@ const episodeSchema = new mongoose.Schema({
 		hash: String,
 		hd: {type: Boolean, default: false},
 		linked: [Number],
+		multi: {type: Boolean, default: false},
 		quality: {type: String, enum: ['SD','720p','1080p']},
-		repack: {type: Boolean, default: false}
+		repack: {type: Boolean, default: false},
+		proper: {type: Boolean, default: false}
 	}],
 	file: {
 		added: Date,
 		download: {
-			active: Boolean,
-			hashString: String
+			active: {type: Boolean},
+			btih: {type: String, uppercase: true},
+			hashString: {type: String}
 		},
 		filename: String,
 		filesize: Number,
 		quality: {type: String, enum: ['SD','720p','1080p']}
 	}
+},{
+	toObject:{virtuals:true}, toJSON:{virtuals:true}
 })
 
 episodeSchema.methods.setInfoHash = function(data){
@@ -56,19 +61,49 @@ episodeSchema.methods.setInfoHash = function(data){
 		resolve(this)
 	})
 }
+episodeSchema.methods.getInfoHash = function(){
+	let config = this.parent().config
+	
+	return new Promise(resolve=>{
+		// Sort array by quality
+		this.hashes.sort((a,b)=>{
+			if (a.quality == b.quality){
+				if (a.repack && !b.repack) return -1
+				if (!a.repack && b.repack) return 1
+				return 0
+			}
+			if (a.quality == '1080p' && b.quality != '1080p') return -1
+			if (a.quality == '720p'){
+				if (b.quality == '1080p') return 1
+				if (b.quality == 'SD') return -1
+			}
+			if (a.quality == 'SD') return 1
+			return 0
+		})
+		let filtered = this.hashes.filter(hash=>{
+			return hash.quality == config.quality
+		})
+		if (filtered.length) resolve(filtered[0])
+		
+	})
+}
 
-episodeSchema.methods.setCollected = function(file=false){
+episodeSchema.methods.setCollected = function(file=false,date=null){
+	if (!date) date = new Date()
+	
 	return this.parent().getSubscribers()
 		.then(subscribers=>{
 			subscribers.forEach(user=>{
-				helpers.trakt(user).sync.collection.add({episodes:[{ids:{trakt:this.ids.trakt}}]})
+				helpers.trakt(user).sync.collection.add({episodes:[{ids:{trakt:this.ids.trakt},collected_at:date}]})
 			})
+			return null
 		})
 		.finally(()=>{
-			if (file) this.file.filename = file
-			this.file.added = new Date()
-			this.file.download.active = undefined
-			
+			if (file){
+				this.file.filename = file
+				this.file.added = date
+				this.file.download.active = undefined
+			}
 			return this
 		})
 }
@@ -127,6 +162,8 @@ episodeSchema.methods.getFilename = function(file){
 		X: require('path').extname(file).replace(/^\./,'') || 'mkv'
 	}
 	
+	// TODO: Use the filename E01-02, etc to get the multi-episode filename
+	
 	if (this.hashes.linked && this.hashes.linked.length > 1){
 		/*
 		// Multi-episode file - get all parts to generate the filename/title
@@ -152,45 +189,91 @@ episodeSchema.methods.getFilename = function(file){
 		vars.T = helpers.utils.normalize(this.title)
 	}
 	
-	let filename = config.format.replace(/%(\w)/g, function(match, key){
+	let filename = config.format.replace(/%(\w)/g, (match, key)=>{
 		return vars[key.toUpperCase()] ? vars[key.toUpperCase()] : key
 	})
 	return filename
 }
 episodeSchema.methods.getMagnet = function(){
-	// Generate the magnet URL for the file
-	
-	return new Promise((resolve,reject)=>{
-		let config = this.parent().config
-		
-		// TODO: a better method of getting the best available torrent
-		
-		let hashes = this.hashes.filter(item=>{
-			 return item.hd === config.hd
-		})
-		if (!hashes.length) return reject()
-		// Get REPACK/PROPER only
-		
-		
-		// Sort by date DESC
-		
-		// Return first result
-		
-		hashes.sort((a,b)=>{
-			if (a.added < b.added || a.repack == false) return 1
-			if (a.added > b.added || a.repack == true) return -1
-			return 0
-		})
-		helpers.torrents.createMagnet(hashes[0].btih).then(magnet=>resolve(magnet))
+	return this.getInfoHash().then(hash=>{
+		return helpers.torrents.createMagnet(hash.btih)
 	})
 }
 
 episodeSchema.methods.setDownloading = function(hash){
 	return new Promise(resolve=>{
 		this.file.download.active = true
-		this.file.download.hashString = hash
+		this.file.download.hashString = hash.toUpperCase()
 		resolve()
 	})
 }
+
+episodeSchema.methods.play = function(user,url){
+	
+	return helpers.upnp.setDevice(url).then(device=>{
+		let media = {
+			title: `${this.parent().title} - S${this.season}E${this.episode}: ${this.title}`,
+			url: this.file.url
+		}
+		return device.load(media)
+		
+	}).then(device=>{
+		let media = {duration:0,position:0}
+		
+		device.on('playing', ()=>{
+			device.getDuration((error,duration)=>{
+				media.duration=duration
+			})
+			device.getPosition((error,position)=>{
+				media.position = position
+				/*
+				helpers.trakt(user).scrobble.start({
+					episode:{ids:{trakt:this.ids.trakt}},
+					progress: position/media.duration
+				})
+				*/
+				console.debug('[UPNP] playing', media.duration, position)
+			})
+		})
+		device.on('paused', ()=>{
+			device.getPosition((error,position)=>{
+				media.position = position
+				/*
+				helpers.trakt(user).scrobble.pause({
+					episode:{ids:{trakt:this.ids.trakt}},
+					progress: position/media.duration
+				})
+				*/
+				console.debug('[UPNP] paused', media.duration, position)
+			})
+		})
+		device.on('stopped', ()=>{
+			device.getPosition((error,position)=>{
+				media.position = position
+				/*
+				helpers.trakt(user).scrobble.stop({
+					episode:{ids:{trakt:this.ids.trakt}},
+					progress: position/media.duration
+				})
+				*/
+				console.debug('[UPNP] stopped', media.duration, position)
+			})
+		})
+		
+		device.on('status', (status)=>{
+			console.debug('[UPNP] ', status)
+		})
+	})
+	
+}
+
+episodeSchema.virtual('uri').get(function(){
+	return `${this.parent().uri}/seasons/${this.season}/episodes/${this.episode}`
+})
+episodeSchema.virtual('file.url').get(function(){
+	if (this.parent().config.directory && this.file.filename){
+		return process.env.WEB_URL +'media/'+ process.env.MEDIA_SHOWS + this.parent().config.directory +'/'+ this.file.filename
+	}
+})
 
 module.exports = episodeSchema

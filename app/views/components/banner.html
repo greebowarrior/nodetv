@@ -1,4 +1,6 @@
-<div>
+<div class="nutv-banner">
+	<div class="background-art" ng-show="$ctrl.item.images.background.enabled" style="{{$ctrl.background}}"></div>
+	
 	<img ng-srcset="{{$ctrl.srcset}}" class="img-responsive" />
-	<h1 ng-hide="$ctrl.item.images.banner.enabled">{{$ctrl.item.title}}</h1>
+	<h1 ng-hide="$ctrl.item.images.banner.enabled">{{::$ctrl.item.title}}</h1>
 </div>

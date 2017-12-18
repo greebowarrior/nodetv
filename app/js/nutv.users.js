@@ -154,10 +154,12 @@ angular.module('nutv.users', ['nutv.core'])
 	
 	.component('traktAuth', {
 		templateUrl: '/views/auth/trakt.html',
-		bindings: {
-			user: '='
-		},
+		bindings: {user: '='},
 		controller: ['$http','$socket','$timeout','alertService',function($http,$socket,$timeout,alertService){
+			this.$onInit = ()=>{
+				if (this.user._id) this.connect()
+			}
+			
 			this.disconnect = ()=>{
 				alertService.confirm({
 					title: 'Disconnect Trakt.tv?',
@@ -192,9 +194,5 @@ angular.module('nutv.users', ['nutv.core'])
 						}
 					})
 			}
-			
-			$timeout(()=>{
-				if (this.user._id) this.connect()
-			},0)
 		}]
 	})

@@ -6,16 +6,22 @@ const episodeSchema = require('./episode')
 
 const helpers = require('nodetv-helpers')
 const request = require('request-promise')
+request.defaults({
+	headers: {
+		'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'
+	}
+})
 
 const showSchema = new mongoose.Schema({
 	ids: {
-		guidebox: {type: Number, default: null},
+		guidebox: {type: Number},
 		imdb: {type:String, default: null, trim: true},
-		showrss: {type: Number, default: null},
+		showrss: {type: Number},
 		slug: {type:String, lowercase:true, required: true, trim: true},
 		tmdb: {type:Number, default:null},
 		trakt: {type:Number, default:null, required: true},
-		tvdb: {type:Number, default:null}
+		tvdb: {type:Number, default:null},
+		tvmaze: {type:Number}
 	},
 	config: {
 		directory: {type: String, default: ''},
@@ -23,14 +29,21 @@ const showSchema = new mongoose.Schema({
 		feed: [{_id:false,url:String}],
 		format: {type: String, default: 'Season %S/Episode %E - %T.%X'},
 		hd: {type: Boolean, default: false},
+		quality: {type: String, enum: ['SD','720p','1080p']},
 		transcode: {type: Boolean, default: false}
 	},
 	title: {type: String, required: true},
 	overview: String,
 	year: {type: Number, required: true},
 	first_aired: {type: Date},
+	airs: {
+		day: String,
+		time: String,
+		timezone: String
+	},
 	subscribers: [{
 		_id: false,
+		favourite: {type:Boolean, default:false},
 		rating: Number,
 		subscriber: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 	}],
@@ -71,17 +84,17 @@ const showSchema = new mongoose.Schema({
 	seasons: [seasonSchema],
 	episodes: [episodeSchema],
 	
-	uri: String,
-	
 	added: {type: Date, default: new Date()},
 	synced: {type: Date, default: null}, 
 	updated: {type: Date, default: new Date()}
+},{
+	toObject:{virtuals:true}, toJSON:{virtuals:true}
 })
 
 // Statics
 showSchema.statics.findByHashString = function(hash,projection={},options={}){
 	return this.findOne({
-		'episodes.file.download.hashString':hash
+		'episodes.file.download.hashString': {$regex: new RegExp(hash, 'i')}
 	},projection,options)
 }
 showSchema.statics.findBySlug = function(slug,projection={}){
@@ -111,17 +124,13 @@ showSchema.statics.recentEpisodes = function(user,days=7){
 	let since = new Date()
 	since.setDate(since.getDate()-days)
 	
-	// TODO: Skip watched episodes
-	// TODO: Limit by user
-	
 	return this.aggregate([
 		{
 			$match: {
-		//		'config.enabled': true,
 				'subscribers.subscriber': user._id,
 				$or: [
 					{'episodes.file.added': {$gte:since, $lt:now}},
-					{'episodes.first_aired': {$gte:since, $lt:now}}
+					{'episodes.first_aired': {$gte:since, $lt:now},'config.enabled':true}
 				]
 			}
 		},{
@@ -130,7 +139,7 @@ showSchema.statics.recentEpisodes = function(user,days=7){
 			$match: {
 				$or: [
 					{'episodes.file.added': {$gte:since, $lt:now}},
-					{'episodes.first_aired': {$gte:since, $lt:now}}
+					{'episodes.first_aired': {$gte:since, $lt:now},'config.enabled':true}
 				],
 				'episodes.season': {$ne: 0}
 			}
@@ -152,7 +161,7 @@ showSchema.statics.upcomingEpisodes = function(user,days=7){
 	return this.aggregate([
 		{
 			$match: {
-		//		'config.enabled': true,
+				'config.enabled': true,
 				'subscribers.subscriber': user._id,
 				'episodes.first_aired': {$gte:now, $lt:until}
 			}
@@ -161,7 +170,8 @@ showSchema.statics.upcomingEpisodes = function(user,days=7){
 		},{
 			$match: {
 				'episodes.first_aired': {$gte:now, $lt:until},
-				'episodes.file': {$exists: false}
+				'episodes.file': {$exists: false},
+				'episodes.season': {$ne: 0}
 			}
 		},{
 			$group: {
@@ -182,54 +192,48 @@ showSchema.methods.parseFeed = function(){
 			// TODO: Support multiple feeds
 			// TODO: Support proxying (for YTS, etc)
 			
-			request(this.config.feed[0].url, {proxy:false})
+			request({url:this.config.feed[0].url, proxy:false})
 				.then(xml=>{
 					require('rss-parser').parseString(xml, (error,json)=>{
-						if (json) resolve(json)
+						if (json) resolve(json.feed.entries)
 						if (error) reject(error)
 					})
 				})
 				.catch(error=>{
-					console.error(error)
 					reject(error)
 				})
 		} else {
-			reject({error: `Show not enabled: ${this.title}`})
+			reject(new Error(`Show not enabled: ${this.title}`))
 		}
 	})
-	.then(json=>{
-		let promises = []
-		
-		json.feed.entries.forEach(entry=>{
-			let promise = helpers.utils.getEpisodeNumbers(entry.title)
-				.then(result=>{
-					result.episodes.forEach(ep=>{
-						let episodes = this.episodes.filter(item=>{
-							return item.season == result.season && item.episode == ep
-						})
-						episodes.forEach(episode=>{
-							episode.setInfoHash({
-								btih: helpers.utils.getInfoHash(entry),
-								hd: helpers.utils.isHD(entry.title),
-								linked: result.episodes,
-								quality: helpers.utils.getQuality(entry.title),
-								repack: helpers.utils.isRepack(entry.title),
-								added: new Date(entry.pubDate)
-							})
+	.map(entry=>{
+		return helpers.utils.getEpisodeNumbers(entry.title)
+			.then(result=>{
+				result.episodes.forEach(ep=>{
+					let episodes = this.episodes.filter(item=>{
+						return item.season == result.season && item.episode == ep
+					})
+					episodes.forEach(episode=>{
+						episode.setInfoHash({
+							btih: helpers.utils.getInfoHash(entry),
+							hd: helpers.utils.isHD(entry.title),
+							linked: result.episodes,
+							multi: result.episodes.length > 1 ? true : false,
+							quality: helpers.utils.getQuality(entry.title),
+							repack: helpers.utils.isRepack(entry.title),
+							proper: helpers.utils.isProper(entry.title),
+							added: new Date(entry.pubDate)
 						})
 					})
-					return null
 				})
-			promises.push(promise)
-		})
-		
-		return Promise.all(promises)
+				return null
+			})
 	})
 	.then(()=>{
 		return this.save({new:true})
 	})
 	.catch(error=>{
-		if (error) console.error(`${this.title}`, error)
+		if (error) console.error(`${this.title}: `, error.statusCode)
 	})
 }
 showSchema.methods.subscribe = function(user){
@@ -253,6 +257,19 @@ showSchema.methods.unsubscribe = function(user){
 	helpers.trakt(user).sync.watchlist.remove({shows:[{ids:{trakt:this.ids.trakt}}]})
 	return this
 }
+
+showSchema.methods.hasRecentEpisodes = function(days=7){
+	return new Promise(resolve=>{
+		let since = new Date()
+		since.setDate(since.getDate()-days)
+		let results = this.episodes.filter(episode=>{
+			if (episode.first_aired >= since && episode.first_aired <= new Date()) return true
+		//	if (episode.first_aired >= since) return true
+		})
+		resolve(results)
+	})
+}
+
 
 showSchema.methods.getDirectory = function(){
 	if (this.config.directory){
@@ -295,27 +312,38 @@ showSchema.methods.getSubscribers = function(){
 	return Promise.all(subscribers)
 }
 
+showSchema.methods.setTVMazeID = function(){
+	return require('request-promise')({
+		json: true,
+		uri: `https://api.tvmaze.com/lookup/shows`,
+		qs: {tvdb: this.ids.tvdb}
+	}).then(res=>{
+		if (res.data.id) this.ids.tvmaze = res.data.id
+	})
+	.catch(error=>{
+		if (error) console.debug(error.message)
+	})
+	.finally(()=>{
+		return this
+	})
+}
+
 showSchema.methods.setArtwork = function(data){
 	return new Promise((resolve,reject)=>{
 		if (!data.url) return reject()
 		
 		let target = require('path').join(this.getDirectory(), `${data.type}-original` + require('path').extname(data.url))
+		
 		helpers.files.download(data.url, target)
-			.then(()=>{
+			.then(source=>{
 				// Resize image
 				let files = []
 				let sizes = []
 				
 				switch (data.type){
-					case 'poster':
+					case 'background':
 						sizes = [{
-							width: 250,
-							suffix: 'small'
-						},{
-							width: 500,
-							suffix: 'medium'
-						},{
-							width: 1000,
+							width: 1920,
 							suffix: 'large'
 						}]
 						break
@@ -331,26 +359,45 @@ showSchema.methods.setArtwork = function(data){
 							suffix: 'large'
 						}]
 						break
+					case 'poster':
+						sizes = [{
+							width: 250,
+							suffix: 'small'
+						},{
+							width: 500,
+							suffix: 'medium'
+						},{
+							width: 1000,
+							suffix: 'large'
+						}]
+						break
 				}
 				
-				sizes.forEach(size=>{
-					let filename = target.replace(/-original/,`-${size.suffix}`)
-					require('sharp')(target).resize(size.width, null).toFile(filename)
-					files.push({
-						filename: require('path').basename(filename),
-						width: size.width
+				return require('fs-extra').readFile(source)
+					.then(buffer=>{
+						return Promise.all(sizes).each(size=>{
+							let filename = source.replace(/-original/,`-${size.suffix}`)
+							return require('sharp')(buffer).resize(size.width, null).toFile(filename)
+								.then(()=>{
+									files.push({
+										filename: require('path').basename(filename),
+										width: size.width
+									})
+									return true
+								})
+						})
 					})
-				})
-				
-				this.images[data.type] = {
-					enabled: true,
-					files: files,
-					source: data.url
-				}
-				resolve()
+					.then(()=>{
+						this.images[data.type] = {
+							enabled: files.length ? true : false,
+							files: files,
+							source: data.url
+						}
+						resolve()
+					})
 			})
 			.catch(error=>{
-				console.error(error)
+				if (error) console.error(error)
 				reject(error)
 			})
 	})
@@ -475,6 +522,7 @@ showSchema.methods.sync = function(){
 			this.title = helpers.utils.normalize(summary.title)
 			this.overview = helpers.utils.normalize(summary.overview)
 			this.first_aired = new Date(summary.first_aired)
+			this.airs = summary.airs
 
 			if (!this.config.directory){
 				// Create a directory based on the name
@@ -574,13 +622,24 @@ showSchema.methods.syncHistory = function(user){
 		})
 }
 
+showSchema.virtual('uri').get(function(){
+	return `/api/shows/${this.ids.slug}`
+})
+
+showSchema.virtual('images.baseUrl').get(function(){
+	let root = process.env.MEDIA_SHOWS.replace(/\s/g,'%20')
+	let directory = encodeURIComponent(this.config.directory)
+	return `/media/${root}${directory}`
+})
+
 showSchema.pre('save', function(next){
-	if (this.ids) this.uri = `/api/shows/${this.ids.slug}`
 	this.updated = new Date()
 	next()
 })
 showSchema.post('findOne', function(doc,next){
-	if (doc) doc.uri = `/api/shows/${doc.ids.slug}`
+	if (doc){
+		if (!doc.config.quality) doc.config.quality = doc.config.hd ? '720p' : 'SD'
+	}
 	next()
 })
 

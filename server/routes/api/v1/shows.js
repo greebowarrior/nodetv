@@ -421,13 +421,38 @@ const ShowsAPI = (app,io)=>{
 					
 					return show.getEpisode(req.params.season, req.params.episode)
 						.then(episode=>{
-							return episode.getMagnet()
+							if (req.body.hash){
+								// Download a specific torrent
+								
+								return new Promise((resolve,reject)=>{
+									let idx = episode.hashes.findIndex(hash=>{
+										return hash.btih === req.body.hash
+									})
+									if (idx >= 0){
+										resolve(episode.hashes[idx])
+									} else {
+										reject()
+									}
+								})
+								.then(hash=>{
+									return helpers.torrents.createMagnet(hash.btih)
+								})
 								.then(magnet=>{
 									return helpers.torrents.add(magnet)
 								})
 								.then(hash=>{
 									return episode.setDownloading(hash)
 								})
+							} else {
+								// Find torrent by standard method
+								return episode.getMagnet()
+									.then(magnet=>{
+										return helpers.torrents.add(magnet)
+									})
+									.then(hash=>{
+										return episode.setDownloading(hash)
+									})
+							}
 						})
 						.then(()=>{
 							return show.save()
@@ -438,6 +463,31 @@ const ShowsAPI = (app,io)=>{
 				})
 				.catch(error=>{
 					console.error(error)
+					res.status(400).end()
+				})
+		})
+	
+	router.route('/:slug/seasons/:season/episodes/:episode/play')
+		.post((req,res)=>{
+			Show.findBySlug(req.params.slug)
+				.then(show=>{
+					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
+					return show.getEpisode(req.params.season, req.params.episode)
+				})
+				.then(episode=>{
+					if (!episode) throw new Error(`Episode not found`)
+					
+					return episode.play(req.user, req.body.device.url)
+					
+				//	return helpers.upnp.setDevice(req.body.device.url).then(()=>{
+				//		return helpers.upnp.load(episode)
+				//	})
+				})
+				.then(()=>{
+					res.status(200).end()
+				})
+				.catch(error=>{
+					if (error) console.error(error)
 					res.status(400).end()
 				})
 		})

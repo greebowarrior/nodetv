@@ -55,10 +55,19 @@ angular.module('nutv.shows', ['nutv.core'])
 				}
 			})
 			.state('shows.index', {
-				url: '/',
+				url: '/?page',
 				component: 'nutvGrid',
+				params: {
+					page: {
+						value: '1',
+						squash: true,
+						dynamic: true
+					}
+				},
+				reloadOnSearch: false,
 				resolve: {
 					list: (showService)=>showService.list(),
+					page: ['$stateParams',(p)=>p.page],
 					type: ()=>'show'
 				}
 			})
@@ -88,13 +97,14 @@ angular.module('nutv.shows', ['nutv.core'])
 		templateUrl: '/views/show/show.html',
 		controller: ['$http','$log','$state','$timeout','alertService',function($http,$log,$state,$timeout,alertService){
 			this.images = []
+			this.qualities = ['1080p','720p','SD']
 			
 			$timeout(()=>{
 				if (!this.show.config.feed.length) this.show.config.feed = [{url:''}]
 			},0)
 			
 			this.save = ()=>{
-				$http.patch(`/api/shows/${this.show.ids.slug}`, {config:this.show.config})
+				$http.patch(`${this.show.uri}`, {config:this.show.config})
 					.then(()=>{
 						alertService.notify({type:'success',msg:`Show updated: '${this.show.title}'`})
 					})
@@ -105,7 +115,7 @@ angular.module('nutv.shows', ['nutv.core'])
 			}
 			
 			this.feeds = ()=>{
-				$http.patch(`/api/shows/${this.show.ids.slug}/feeds`)
+				$http.patch(`${this.show.uri}/feeds`)
 					.then(()=>{
 						alertService.notify({type:'success',msg:`Feeds updated for '${this.show.title}'`})
 					})
@@ -114,7 +124,7 @@ angular.module('nutv.shows', ['nutv.core'])
 					})
 			}
 			this.getArtwork = ()=>{
-				$http.get(`/api/shows/${this.show.ids.slug}/artwork`)
+				$http.get(`${this.show.uri}/artwork`)
 					.then(response=>{
 						this.images = response.data
 					})
@@ -124,7 +134,7 @@ angular.module('nutv.shows', ['nutv.core'])
 					})
 			}
 			this.getDirectories = ()=>{
-				$http.get(`/api/shows/${this.show.ids.slug}/match`)
+				$http.get(`${this.show.uri}/match`)
 					.then(response=>{
 						this.matches = response.data
 					})
@@ -136,7 +146,7 @@ angular.module('nutv.shows', ['nutv.core'])
 					type: 'Question',
 					msg: 'Are you sure? This may take a while.'
 				}).then(()=>{
-					$http.post(`/api/shows/${this.show.ids.slug}/scan`)
+					$http.post(`${this.show.uri}/scan`)
 				})
 			}
 			
@@ -146,7 +156,7 @@ angular.module('nutv.shows', ['nutv.core'])
 					type: 'warning',
 					msg: 'Are you sure?'
 				}).then(()=>{
-					$http.delete(`/api/shows/${this.show.ids.slug}`)
+					$http.delete(`${this.show.uri}`)
 						.then(()=>{
 							$state.go('shows.index')
 						})
@@ -159,7 +169,7 @@ angular.module('nutv.shows', ['nutv.core'])
 					type: 'Question',
 					msg: 'Are you sure? This may take a while.'
 				}).then(()=>{
-					$http.post(`/api/shows/${this.show.ids.slug}/sync`)
+					$http.post(`${this.show.uri}/sync`)
 				})
 			}
 		}]
@@ -176,18 +186,38 @@ angular.module('nutv.shows', ['nutv.core'])
 	.component('nutvShowEpisode', {
 		bindings: {episode:'=',show:'<'},
 		templateUrl: '/views/show/episode.html',
-		controller: ['$http','$log','alertService',function($http,$log,alertService){
+		controller: ['$http','$log','$uibModal','alertService',function($http,$log,$uibModal,alertService){
 			this.download = ()=>{
-				$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/download`)
-					.then(()=>{
-						alertService.alert({
-							title: 'Download started',
-							type: 'success'
+				$uibModal.open({
+					component: 'nutvShowDownload',
+					resolve: {
+						show: ()=>this.show,
+						episode: ()=>this.episode
+					}
+				}).result.then(result=>{
+					$http.post(`${this.episode.uri}/download`, {hash:result})
+						.then(()=>{
+							alertService.alert({
+								title: 'Download started',
+								type: 'success'
+							})
 						})
-					})
+				})
+				.catch(()=>{
+					console.debug('No download selected')
+				})
+			}
+			this.play = ()=>{
+				$uibModal.open({
+					component: 'nutvUpnpDevice'
+				}).result.then(device=>{
+					return $http.post(`${this.episode.uri}/play`, {device:device})
+				}).catch(()=>{
+					$log.debug('Play aborted')
+				})
 			}
 			this.watched = ()=>{
-				$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/watched`)
+				$http.post(`${this.episode.uri}/watched`)
 					.then(()=>{
 						alertService.alert({
 							title: 'Episode watched',
@@ -198,3 +228,45 @@ angular.module('nutv.shows', ['nutv.core'])
 			}
 		}]
 	})
+	
+	.component('nutvShowDownload', {
+		templateUrl: '/views/show/download.html',
+		bindings: {
+			resolve: '<',
+			close: '&',
+			dismiss: '&'
+		},
+		controller: [function(){
+			this.$onInit = ()=>{
+				this.selected = false
+				
+				this.show = this.resolve.show
+				this.episode = this.resolve.episode
+				
+				this.episode.hashes.sort((a,b)=>{
+					if (a.quality == b.quality){
+						if (a.repack && !b.repack) return -1
+						if (!a.repack && b.repack) return 1
+						return 0
+					}
+					if (a.quality == '1080p' && b.quality != '1080p') return -1
+					if (a.quality == '720p'){
+						if (b.quality == '1080p') return 1
+						if (b.quality == 'SD') return -1
+					}
+					if (a.quality == 'SD') return 1
+					return 0
+				})
+			}
+			this.select = (hash)=>{
+				this.selected = hash
+			}
+			this.download = ()=>{
+				this.close({$value:this.selected.btih})
+			}
+			this.cancel = ()=>{
+				this.dismiss({$value:'cancel'})
+			}
+		}]
+	})
+	

@@ -11,41 +11,69 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 	
 	Show.findEnabled()
 		.then(shows=>{
-			shows.forEach(show=>{
+			
+			shows.forEach((show,idx)=>{
 				if (!show.subscribers.length){
 					// Disable shows with no subscribers
 					show.config.enabled = false
+					// TODO: Disable ended/cancelled shows
 					return show.save()
 				}
 				
-				return show.parseFeed()
-					.then(()=>show.getLatestEpisodes())
+				show.hasRecentEpisodes()
 					.then(results=>{
-						let promises = []
-						results.forEach(result=>{
-							let episode = show.episodes.id(result._id)
-							
-							// Don't get latest episode if it's already downloading or downloaded
-							if (episode.file.download.active || episode.file.added) return
-							// Get magnet for preferred format
-							let process = episode.getMagnet()
-								// Send to transmission
-								.then(magnet=>helpers.torrents.add(magnet))
-								// Mark episode as downloading
-								.then(hash=>episode.setDownloading(hash))
-							promises.push(process)
-						})
-						return Promise.all(promises)
+						if (!results.length) throw new Error(`No recently aired episodes`)
+						setTimeout(()=>{
+							return show.parseFeed()
+						},idx*200)
+					})
+					.then(()=>show.getLatestEpisodes())
+					.map(result=>{
+						if (!result) throw new Error(`No recently available episodes`)
+						
+						let episode = show.episodes.id(result._id)
+						
+						return episode.getInfoHash()
+							.then(hash=>{
+								return new Promise((resolve,reject)=>{
+									if (!episode.file.download.hashString){
+										return resolve(hash)
+									} else {
+										if (episode.file.download.hashString.toUpperCase() == hash.btih.toUpperCase()){
+											return reject()
+										} else {
+											helpers.torrents.findByHash(episode.file.download.hashString)
+												.then(torrent=>{
+													return helpers.torrents.delete(torrent.id)
+												})
+												.finally(()=>{
+													resolve(hash)
+												})
+												.catch(error=>{
+													if (error) console.debug(error.message)
+												})
+										}
+									}
+								})
+							})
+							.then(hash=>{
+								if (hash){
+									console.debug(`Starting Download: ${show.title} - ${episode.title}`)
+									return helpers.torrents.createMagnet(hash.btih)
+								}
+							})
+							.then(magnet=>helpers.torrents.add(magnet))
+							.then(hash=>episode.setDownloading(hash))
 					})
 					.then(()=>{
 						return show.save()
 					})
 					.catch(error=>{
-						console.error(`${show.title}: `, error)
+						if (error) console.info(`${show.title}: `, error.message)
 					})
 			})
 		})
 		.catch(error=>{
-			if (error) console.error(error)
+			if (error) console.error(error.message)
 		})
 })

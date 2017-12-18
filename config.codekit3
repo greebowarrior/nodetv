@@ -7,30 +7,41 @@
 		"uuidString": "18A536C4-F3C0-4048-81AF-7D5149E0AE13"
 		}
 	],
-"creatorBuild": "25849",
+"creatorBuild": "26148",
 "files": {
 	"\/.env": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/.env",
 		"oF": 0
 		},
 	"\/.env.defaults": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/.env.defaults",
 		"oF": 0
 		},
 	"\/.gitignore": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/.gitignore",
 		"oF": 0
 		},
 	"\/.npmrc": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/.npmrc",
+		"oF": 0
+		},
+	"\/app\/browserconfig.xml": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/browserconfig.xml",
 		"oF": 0
 		},
 	"\/app\/css\/classic.css": {
@@ -44,6 +55,7 @@
 		"oS": 0
 		},
 	"\/app\/css\/classic.css.map": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/css\/classic.css.map",
@@ -71,22 +83,143 @@
 		"oT": 1,
 		"q": 100
 		},
-	"\/app\/gfx\/icons\/favicon.ico": {
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/app\/gfx\/icons\/favicon.ico",
-		"oF": 0
-		},
-	"\/app\/gfx\/icons\/touch-icon.png": {
+	"\/app\/gfx\/icon-source.png": {
 		"ft": 32768,
-		"iS": 9290,
+		"iS": 163331,
 		"oA": 0,
-		"oAP": "\/app\/gfx\/icons\/touch-icon.png",
+		"oAP": "\/app\/gfx\/icon-source.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/apple-touch-icon.png": {
+		"ft": 32768,
+		"iS": 19607,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/apple-touch-icon.png",
 		"oF": 0,
 		"oIPL": 0,
 		"opt": 0,
 		"oT": 1,
 		"q": 100
+		},
+	"\/app\/gfx\/icons\/favicon-16x16.png": {
+		"ft": 32768,
+		"iS": 1260,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/favicon-16x16.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/favicon-32x32.png": {
+		"ft": 32768,
+		"iS": 2189,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/favicon-32x32.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/favicon.ico": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/gfx\/icons\/favicon.ico",
+		"oF": 0
+		},
+	"\/app\/gfx\/icons\/icon-128.png": {
+		"ft": 32768,
+		"iS": 21154,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/icon-128.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/icon-152.png": {
+		"ft": 32768,
+		"iS": 27258,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/icon-152.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/icon-192.png": {
+		"ft": 32768,
+		"iS": 30325,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/icon-192.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/icon-256.png": {
+		"ft": 32768,
+		"iS": 44347,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/icon-256.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/icon-32.png": {
+		"ft": 32768,
+		"iS": 2017,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/icon-32.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/icon-512.png": {
+		"ft": 32768,
+		"iS": 171127,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/icon-512.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/mstile-150x150.png": {
+		"ft": 32768,
+		"iS": 20044,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/icons\/mstile-150x150.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/icons\/safari-pinned-tab.svg": {
+		"ft": 2097152,
+		"miP": 0,
+		"oA": 2,
+		"oAP": "\/app\/gfx\/icons\/safari-pinned-tab.svg",
+		"oF": 0,
+		"opt": 0,
+		"plM": 3758088159,
+		"prP": 0
 		},
 	"\/app\/gfx\/logo-trakt.png": {
 		"ft": 32768,
@@ -94,13 +227,14 @@
 		"oA": 0,
 		"oAP": "\/app\/gfx\/logo-trakt.png",
 		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
+		"oIPL": 1,
+		"opt": 1,
 		"oT": 1,
 		"q": 100
 		},
 	"\/app\/js\/components\/artwork.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/components\/min\/artwork.min.js",
@@ -110,6 +244,7 @@
 		},
 	"\/app\/js\/components\/nutv.show.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/components\/min\/nutv.show.min.js",
@@ -119,6 +254,7 @@
 		},
 	"\/app\/js\/libs\/ng-socket.min.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/libs\/min\/ng-socket.min-min.js",
@@ -128,6 +264,7 @@
 		},
 	"\/app\/js\/libs\/ng-storage-0.3.10.min.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/libs\/min\/ng-storage-0.3.10.min-min.js",
@@ -137,6 +274,7 @@
 		},
 	"\/app\/js\/libs\/ng-sweetalert-1.1.2.min.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/libs\/min\/ng-sweetalert-1.1.2.min.min.js",
@@ -144,17 +282,9 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/app\/js\/libs\/ui-bootstrap-tpls-2.2.0.min.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/app\/js\/libs\/min\/ui-bootstrap-tpls-2.2.0.min-min.js",
-		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/app\/js\/libs\/ui-bootstrap-tpls-2.5.0.min.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/libs\/min\/ui-bootstrap-tpls-2.5.0.min.min.js",
@@ -164,6 +294,7 @@
 		},
 	"\/app\/js\/libs\/ui-router-1.0.3.min.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/libs\/min\/ui-router-1.0.3.min.min.js",
@@ -173,6 +304,7 @@
 		},
 	"\/app\/js\/nutv.core.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/min\/nutv.core-min.js",
@@ -182,6 +314,7 @@
 		},
 	"\/app\/js\/nutv.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/min\/nutv-min.js",
@@ -191,6 +324,7 @@
 		},
 	"\/app\/js\/nutv.movies.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/min\/nutv.movies.min.js",
@@ -198,8 +332,19 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/app\/js\/nutv.service-worker.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/app\/js\/min\/nutv.service-worker.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/app\/js\/nutv.shows.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/min\/nutv.shows.min.js",
@@ -209,6 +354,7 @@
 		},
 	"\/app\/js\/nutv.users.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/app\/js\/min\/nutv.users.min.js",
@@ -246,6 +392,19 @@
 		"ma": 1,
 		"oA": 0,
 		"oAP": "\/app\/css\/modern.css",
+		"oF": 0,
+		"oS": 3,
+		"uL": 1
+		},
+	"\/app\/scss\/nodetv\/_artwork.scss": {
+		"aP": 1,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 1,
+		"oA": 1,
+		"oAP": "\/app\/scss\/css\/_artwork.css",
 		"oF": 0,
 		"oS": 3,
 		"uL": 1
@@ -303,172 +462,213 @@
 		"uL": 1
 		},
 	"\/app\/views\/auth\/login.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 1,
 		"oAP": "\/app\/views\/auth\/login.html",
 		"oF": 1
 		},
 	"\/app\/views\/auth\/logout.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/auth\/logout.html",
 		"oF": 0
 		},
 	"\/app\/views\/auth\/trakt.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/auth\/trakt.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/alerts.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/alerts.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/artwork.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/artwork.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/banner.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/banner.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/breadcrumbs.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/breadcrumbs.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/grid.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/grid.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/messages.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/messages.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/navigation.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/navigation.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/poster.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/poster.html",
 		"oF": 0
 		},
 	"\/app\/views\/components\/search.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/components\/search.html",
 		"oF": 0
 		},
+	"\/app\/views\/components\/upnp-device.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/components\/upnp-device.html",
+		"oF": 0
+		},
 	"\/app\/views\/dashboard\/index.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/dashboard\/index.html",
 		"oF": 0
 		},
 	"\/app\/views\/dashboard\/install.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/dashboard\/install.html",
 		"oF": 0
 		},
 	"\/app\/views\/layouts\/classic.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 1,
 		"oAP": "\/app\/views\/layouts\/classic.html",
 		"oF": 1
 		},
 	"\/app\/views\/layouts\/modern.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/layouts\/modern.html",
 		"oF": 0
 		},
 	"\/app\/views\/movie\/movie.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/movie\/movie.html",
 		"oF": 0
 		},
 	"\/app\/views\/movie\/search.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/movie\/search.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/add.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/add.html",
 		"oF": 0
 		},
+	"\/app\/views\/show\/download.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/show\/download.html",
+		"oF": 0
+		},
 	"\/app\/views\/show\/episode.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/episode.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/search.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/search.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/season.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/season.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/settings.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/settings.html",
 		"oF": 0
 		},
 	"\/app\/views\/show\/show.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/show\/show.html",
 		"oF": 0
 		},
 	"\/app\/views\/user\/index.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/user\/index.html",
 		"oF": 0
 		},
 	"\/app\/views\/user\/list.html": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/user\/list.html",
 		"oF": 0
 		},
 	"\/LICENCE.txt": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/LICENCE.txt",
 		"oF": 0
 		},
 	"\/Milestones.md": {
+		"cB": 0,
 		"cS": 0,
 		"eF": 1,
 		"eL": 1,
-		"eLB": 0,
 		"ema": 1,
 		"eSQ": 1,
 		"ft": 4096,
@@ -505,10 +705,10 @@
 		"oS": 1
 		},
 	"\/Readme.md": {
+		"cB": 0,
 		"cS": 0,
 		"eF": 1,
 		"eL": 1,
-		"eLB": 0,
 		"ema": 1,
 		"eSQ": 1,
 		"ft": 4096,
@@ -522,13 +722,22 @@
 		"rFN": 0,
 		"uCM": 0
 		},
+	"\/scripts\/letsencrypt.conf": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/scripts\/letsencrypt.conf",
+		"oF": 0
+		},
 	"\/scripts\/nginx.conf": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/scripts\/nginx.conf",
 		"oF": 0
 		},
 	"\/scripts\/nutv.service": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/scripts\/nutv.service",
@@ -536,6 +745,7 @@
 		},
 	"\/server.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/min\/server.min.js",
@@ -545,6 +755,7 @@
 		},
 	"\/server\/app.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/min\/app.min.js",
@@ -554,6 +765,7 @@
 		},
 	"\/server\/database.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/min\/database-min.js",
@@ -563,6 +775,7 @@
 		},
 	"\/server\/local_modules\/nodetv-helpers\/index.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/local_modules\/nodetv-helpers\/min\/index.min.js",
@@ -572,6 +785,7 @@
 		},
 	"\/server\/local_modules\/nodetv-helpers\/lib\/files.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/min\/files.min.js",
@@ -581,6 +795,7 @@
 		},
 	"\/server\/local_modules\/nodetv-helpers\/lib\/torrents.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/min\/torrents.min.js",
@@ -590,6 +805,7 @@
 		},
 	"\/server\/local_modules\/nodetv-helpers\/lib\/trakt.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/min\/trakt.min.js",
@@ -597,8 +813,19 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/server\/local_modules\/nodetv-helpers\/lib\/upnp.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/min\/upnp.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/server\/local_modules\/nodetv-helpers\/lib\/utils.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/min\/utils.min.js",
@@ -608,6 +835,7 @@
 		},
 	"\/server\/local_modules\/nodetv-helpers\/lib\/workers\/file.copy.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/workers\/min\/file.copy.min.js",
@@ -617,6 +845,7 @@
 		},
 	"\/server\/local_modules\/nodetv-helpers\/lib\/workers\/file.delete.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/workers\/min\/file.delete.min.js",
@@ -626,6 +855,7 @@
 		},
 	"\/server\/local_modules\/nodetv-helpers\/lib\/workers\/file.download.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/workers\/min\/file.download.min.js",
@@ -635,6 +865,7 @@
 		},
 	"\/server\/local_modules\/nodetv-helpers\/lib\/workers\/file.move.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/workers\/min\/file.move.min.js",
@@ -644,6 +875,7 @@
 		},
 	"\/server\/local_modules\/nodetv-helpers\/lib\/workers\/file.transcode.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/workers\/min\/file.transcode.min.js",
@@ -659,8 +891,47 @@
 		"oO": 0,
 		"oS": 1
 		},
+	"\/server\/local_modules\/nodetv-upnp\/index.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-upnp\/min\/index.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-upnp\/lib\/client.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-upnp\/lib\/min\/client.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-upnp\/lib\/mediarenderer.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-upnp\/lib\/min\/mediarenderer.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/local_modules\/nodetv-upnp\/package.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-upnp\/package-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"\/server\/local_modules\/trakt.tv-artwork\/index.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/local_modules\/trakt.tv-artwork\/min\/index.min.js",
@@ -676,17 +947,29 @@
 		"oO": 0,
 		"oS": 1
 		},
-	"\/server\/models\/movie.js": {
+	"\/server\/models\/device.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
-		"oAP": "\/server\/models\/min\/movie-min.js",
-		"oF": 1,
+		"oAP": "\/server\/models\/min\/device.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/models\/movie.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/models\/min\/movie.min.js",
+		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},
 	"\/server\/models\/schema\/episode.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/models\/schema\/min\/episode.min.js",
@@ -696,6 +979,7 @@
 		},
 	"\/server\/models\/schema\/season.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/models\/schema\/min\/season.min.js",
@@ -705,6 +989,7 @@
 		},
 	"\/server\/models\/schema\/show.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/models\/schema\/min\/show.min.js",
@@ -714,6 +999,7 @@
 		},
 	"\/server\/models\/show.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/models\/min\/show-min.js",
@@ -723,6 +1009,7 @@
 		},
 	"\/server\/models\/socket.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/models\/min\/socket.min.js",
@@ -732,6 +1019,7 @@
 		},
 	"\/server\/models\/user.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/models\/min\/user-min.js",
@@ -739,8 +1027,19 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/server\/plugins\/app.datadog.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/plugins\/min\/app.datadog.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/server\/routes\/api.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/routes\/min\/api-min.js",
@@ -750,6 +1049,7 @@
 		},
 	"\/server\/routes\/api\/v1\/movies.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/routes\/api\/v1\/min\/movies.min.js",
@@ -759,6 +1059,7 @@
 		},
 	"\/server\/routes\/api\/v1\/shows.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/routes\/api\/v1\/min\/shows.min.js",
@@ -768,6 +1069,7 @@
 		},
 	"\/server\/routes\/api\/v1\/trakt.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/routes\/api\/v1\/min\/trakt.min.js",
@@ -775,8 +1077,19 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/server\/routes\/api\/v1\/upnp.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/routes\/api\/v1\/min\/upnp.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/server\/routes\/api\/v1\/users.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/routes\/api\/v1\/min\/users.min.js",
@@ -785,6 +1098,7 @@
 		"tS": 0
 		},
 	"\/server\/routes\/api\/watchlist.js~": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 1,
 		"oAP": "\/server\/routes\/api\/watchlist.js~",
@@ -792,6 +1106,7 @@
 		},
 	"\/server\/routes\/auth.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/routes\/min\/auth.min.js",
@@ -801,6 +1116,7 @@
 		},
 	"\/server\/routes\/sockets.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/routes\/min\/sockets.min.js",
@@ -808,8 +1124,19 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/server\/routes\/sockets\/upnp.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/routes\/sockets\/min\/upnp.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/server\/routes\/ui.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/routes\/min\/ui.min.js",
@@ -819,6 +1146,7 @@
 		},
 	"\/server\/scheduler.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/min\/scheduler.min.js",
@@ -828,6 +1156,7 @@
 		},
 	"\/server\/server.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/min\/server-min.js",
@@ -836,6 +1165,7 @@
 		"tS": 0
 		},
 	"\/server\/tasks\/sync.shows.js~": {
+		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/server\/tasks\/sync.shows.js~",
@@ -843,6 +1173,7 @@
 		},
 	"\/server\/tasks\/system.ddns.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/tasks\/min\/system.ddns.min.js",
@@ -852,6 +1183,7 @@
 		},
 	"\/server\/tasks\/system.show.feeds.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/tasks\/min\/system.show.feeds.min.js",
@@ -861,6 +1193,7 @@
 		},
 	"\/server\/tasks\/system.show.sync.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/tasks\/min\/system.show.sync.min.js",
@@ -870,6 +1203,7 @@
 		},
 	"\/server\/tasks\/system.torrents.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/tasks\/min\/system.torrents.min.js",
@@ -879,6 +1213,7 @@
 		},
 	"\/server\/tasks\/user.sync.collection.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/tasks\/min\/user.sync.collection.min.js",
@@ -888,6 +1223,7 @@
 		},
 	"\/server\/tasks\/user.sync.history.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/tasks\/min\/user.sync.history.min.js",
@@ -897,18 +1233,10 @@
 		},
 	"\/server\/tasks\/user.sync.watchlist.js": {
 		"ft": 64,
+		"ma": 0,
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/tasks\/min\/user.sync.watchlist.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/upnp.js": {
-		"ft": 64,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/min\/upnp.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -1507,7 +1835,7 @@
 			"optionString": "{'beforeBlockComment': true}"
 			},
 		"lines-around-directive": {
-			"active": 0,
+			"active": false,
 			"optionString": "{'before': 'always', 'after': 'always'}"
 			},
 		"max-depth": {
@@ -1551,11 +1879,11 @@
 			"optionString": ""
 			},
 		"newline-after-var": {
-			"active": 0,
+			"active": false,
 			"optionString": "'always'"
 			},
 		"newline-before-return": {
-			"active": 0,
+			"active": false,
 			"optionString": ""
 			},
 		"newline-per-chained-call": {
@@ -2638,7 +2966,8 @@
 		"createSourceMap": 0,
 		"minifyOutput": 1,
 		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 1,
+		"transpilerStyle": 1
 		},
 	"languageDefaultsCSS": {
 		"autoOutputAction": 2,
@@ -2671,6 +3000,7 @@
 		"noEscapeInAttributes": 0,
 		"outputFormat": 2,
 		"outputStyle": 0,
+		"shouldRunCacheBuster": 0,
 		"useCDATA": 0,
 		"useDoubleQuotes": 0,
 		"useUnixNewlines": 0
@@ -2712,7 +3042,8 @@
 		"autoOutputPathRelativePath": "",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
-		"autoOutputPathStyle": 0
+		"autoOutputPathStyle": 0,
+		"shouldRunCacheBuster": 0
 		},
 	"languageDefaultsLESS": {
 		"allowInsecureImports": 0,
@@ -2744,13 +3075,13 @@
 		"enableFootnotes": 1,
 		"enableLabels": 1,
 		"enableSmartQuotes": 1,
-		"escapeLineBreaks": 0,
 		"maskEmailAddresses": 1,
 		"outputFormat": 0,
 		"outputStyle": 0,
 		"parseMetadata": 1,
 		"processHTML": 0,
 		"randomFootnoteNumbers": 0,
+		"shouldRunCacheBuster": 0,
 		"useCompatibilityMode": 0
 		},
 	"languageDefaultsOTHER": {
@@ -2759,7 +3090,8 @@
 		"autoOutputPathRelativePath": "",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
-		"autoOutputPathStyle": 0
+		"autoOutputPathStyle": 0,
+		"shouldRunCacheBuster": 0
 		},
 	"languageDefaultsPNG": {
 		"autoOutputAction": 0,
@@ -2779,7 +3111,8 @@
 		"autoOutputPathReplace2": "",
 		"autoOutputPathStyle": 0,
 		"compileDebug": 1,
-		"outputStyle": 0
+		"outputStyle": 0,
+		"shouldRunCacheBuster": 0
 		},
 	"languageDefaultsSASS": {
 		"autoOutputAction": 0,
@@ -2807,7 +3140,8 @@
 		"logicless": 0,
 		"outputFormat": 0,
 		"outputStyle": 1,
-		"railsCompatible": 0
+		"railsCompatible": 0,
+		"shouldRunCacheBuster": 0
 		},
 	"languageDefaultsSTYLUS": {
 		"autoOutputAction": 0,
@@ -2839,7 +3173,7 @@
 		"autoOutputPathRelativePath": "..\/js",
 		"autoOutputPathReplace1": "",
 		"autoOutputPathReplace2": "",
-		"autoOutputPathStyle": 2,
+		"autoOutputPathStyle": 0,
 		"createDeclarationFile": 0,
 		"createSourceMap": 1,
 		"jsxMode": 0,
@@ -2858,6 +3192,7 @@
 	"previewPathAddition": "",
 	"skippedFoldersString": "log, _logs, logs, _cache, cache, \/storage\/framework\/sessions, node_modules",
 	"sourceFolderName": "source",
+	"susyVersion": 3,
 	"uglifyDefinesString": "",
 	"uglifyFlags2": {
 		"ascii-only": {

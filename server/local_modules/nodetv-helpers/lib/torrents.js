@@ -14,8 +14,8 @@ const trackers = [
 	'udp://tracker.opentrackr.org:1337',
 	'udp://tracker.coppersurfer.tk:6969',
 	'udp://tracker.leechers-paradise.org:6969',
-	'udp://zer0day.ch:1337',
-	'udp://explodie.org:6969'
+	'udp://ipv6.leechers-paradise.org:6969/announce',
+	'http://tracker.trackerfix.com:80'	
 ]
 
 exports.add = function(url){
@@ -51,6 +51,28 @@ exports.delete = function(id){
 		})
 	})
 }
+exports.findByHash = (btih)=>{
+	return new Promise((resolve,reject)=>{
+		torrent.get((error,args)=>{
+			if (error) return reject(error)
+			if (args){
+				args.torrents.forEach(torrent=>{
+					try {
+						if (torrent.hashString.toUpperCase() == btih.toUpperCase()){
+							resolve({
+								id: torrent.id,
+								hashString: torrent.hashString
+							})
+						}
+					} catch(e){
+						console.debug(e)
+					}
+				})
+				reject()
+			}
+		})
+	})
+}
 exports.getComplete = function(){
 	return new Promise((resolve,reject)=>{
 		let response = []
@@ -64,8 +86,10 @@ exports.getComplete = function(){
 						if (a.bytesCompleted > b.bytesCompleted) return -1
 						return 0
 					})
+					
 					let item = {
 						id: torrent.id,
+						doneDate: new Date(torrent.doneDate*1000),
 						downloadDir: torrent.downloadDir,
 						files: torrent.files,
 						hashString: torrent.hashString,
