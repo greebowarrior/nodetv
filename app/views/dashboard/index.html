@@ -7,7 +7,7 @@
 </div-->
 
 <div class="row">
-	<div class="col-md-6" ng-show="$ctrl.episodes.recent.length">
+	<div class="col-sm-6" ng-show="$ctrl.episodes.recent.length">
 		<h3>
 			{{$ctrl.count.recent}} Recent
 			<ng-pluralize count="$ctrl.count.recent" when="{'0':'episodes','one':'episode','other':'episodes'}"></ng-pluralize>
@@ -42,7 +42,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-md-6" ng-show="$ctrl.episodes.upcoming.length">
+	<div class="col-sm-6" ng-show="$ctrl.episodes.upcoming.length">
 		<h3>
 			{{$ctrl.count.upcoming}} Upcoming
 			<ng-pluralize count="$ctrl.count.upcoming" when="{'0':'episodes','one':'episode','other':'episodes'}"></ng-pluralize>

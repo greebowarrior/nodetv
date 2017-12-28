@@ -4,7 +4,12 @@
 			<nutv-banner item="$ctrl.movie" type="movie"></nutv-banner>
 		</div>
 		<div class="col-sm-12">
-			<p class="well">{{$ctrl.movie.overview}}</p>
+			<div class="well">
+				<p>{{$ctrl.movie.overview}}</p>
+				<!--
+				<p class="help-block"><strong>Year</strong>: {{$ctrl.movie.year}} - <strong>Runtime</strong>: {{$ctrl.movie.runtime}} mins</p>
+				-->
+			</div>
 		</div>
 	</div>
 	

@@ -164,7 +164,7 @@ movieSchema.methods.getDirectory = function(){
 	return require('path').join(
 		process.env.MEDIA_ROOT,
 		process.env.MEDIA_MOVIES,
-		'A-Z',
+		'A-Z', this.getAlpha(),
 		helpers.utils.normalize(this.config.directory)
 	)
 }
@@ -326,11 +326,7 @@ movieSchema.methods.setCollected = function(file=null){
 	})
 }
 movieSchema.methods.setDirectory = function(){
-	this.config.directory = require('path').join(
-		this.getAlpha(),
-		helpers.utils.normalize(`${this.title} (${this.year})`)
-	)
-	return this.config.directory
+	this.config.directory = helpers.utils.normalize(`${this.title} (${this.year})`)
 }
 movieSchema.methods.setDownloading = function(hash){
 	return new Promise(resolve=>{
@@ -381,13 +377,15 @@ movieSchema.methods.setWatched = function(user, date=null, id=null){
 movieSchema.methods.sync = function(user={}){
 	return helpers.trakt(user).movies.summary({id:this.ids.slug, extended:'full'})
 		.then(summary=>{
-		//	if (!this.synced || this.synced < new Date(summary.updated_at)){
+			if (!this.synced || this.synced < new Date(summary.updated_at)){
 				this.ids = Object.assign({}, this.ids, summary.ids)
-				this.overview = summary.overview
 				this.year = summary.year
 				this.synced = new Date(summary.updated_at)
-				this.title = summary.title
-		//	}
+			}
+			this.title = helpers.utils.normalize(summary.title)
+			this.overview = summary.overview
+			this.runtime = summary.runtime
+			
 			return this
 		})
 }
@@ -412,17 +410,17 @@ movieSchema.virtual('uri').get(function(){
 })
 movieSchema.virtual('file.url').get(function(){
 	if (this.config.directory && this.file.filename){
-		return process.env.WEB_URL +'media/'+ process.env.MEDIA_MOVIES + 'A-Z/' + this.config.directory +'/'+ this.file.filename
+		return process.env.WEB_URL +'media/'+ process.env.MEDIA_MOVIES +'A-Z/'+ 
+			this.getAlpha().replace('#','%23') +'/'+ this.config.directory +'/'+ this.file.filename
 	}
 })
 movieSchema.virtual('images.baseUrl').get(function(){
-	if (this.config.directory){
-		let root = process.env.MEDIA_MOVIES.replace(/\s/g,'%20')
-		let directory = encodeURIComponent(this.config.directory)
-		return `/media/${root}A-Z/${directory}`
-	} else {
-		return this.setDirectory()
-	}
+	if (!this.config.directory) this.setDirectory()
+	
+	let root = process.env.MEDIA_MOVIES.replace(/\s/g,'%20')
+	let directory = encodeURIComponent(this.config.directory)
+	let alpha = this.getAlpha().replace('#','%23')
+	return `/media/${root}A-Z/${alpha}/${directory}`
 })
 
 movieSchema.pre('save', function(next){

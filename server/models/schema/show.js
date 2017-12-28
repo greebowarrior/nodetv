@@ -271,16 +271,14 @@ showSchema.methods.hasRecentEpisodes = function(days=7){
 }
 
 showSchema.methods.getDirectory = function(){
-	if (this.config.directory){
-		return require('path').join(
-			process.env.MEDIA_ROOT,
-			process.env.MEDIA_SHOWS,
-			helpers.utils.normalize(this.config.directory)
-		)
-	}
-	return false
+	if (!this.config.directory) this.setDirectory()
+	
+	return require('path').join(
+		process.env.MEDIA_ROOT,
+		process.env.MEDIA_SHOWS,
+		helpers.utils.normalize(this.config.directory)
+	)
 }
-
 showSchema.methods.getEpisode = function(season,episode){
 	return new Promise((resolve,reject)=>{
 		let idx = this.episodes.findIndex(item=>{
@@ -291,7 +289,6 @@ showSchema.methods.getEpisode = function(season,episode){
 		resolve(this.episodes.id(this.episodes[idx]._id))
 	})
 }
-
 showSchema.methods.getLatestEpisodes = function(days=7){
 	return new Promise(resolve=>{
 		let since = new Date()
@@ -402,8 +399,7 @@ showSchema.methods.setArtwork = function(data){
 	})
 }
 showSchema.methods.setDirectory = function(){
-	// Use to rename an existing directory
-	// or create one if it doesn't already exist
+	this.config.directory = helpers.utils.normalize(this.title)
 }
 
 showSchema.methods.setCollected = function(){
@@ -523,10 +519,6 @@ showSchema.methods.sync = function(){
 			this.first_aired = new Date(summary.first_aired)
 			this.airs = summary.airs
 
-			if (!this.config.directory){
-				// Create a directory based on the name
-				this.config.directory = this.title
-			}
 			require('fs-extra').ensureDir(this.getDirectory())
 			
 			return helpers.trakt().seasons.summary({id:this.ids.slug,extended:'episodes,full'})
