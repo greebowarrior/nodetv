@@ -4,7 +4,7 @@
 		"PORT": 3001
 	},
 	"execMap":{
-		"js": "node --inspect"
+		"js": "node --inspect=9222"
 	},
 	"ignore": [".codekit-cache","config.codekit3"],
 	"watch": ["server.js","server/","server/**/*"]

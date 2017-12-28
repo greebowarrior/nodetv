@@ -244,12 +244,8 @@ movieSchema.methods.setArtwork = function(data){
 		
 		let target = require('path').join(this.getDirectory(), `${data.type}-original` + require('path').extname(data.url))
 		
-		console.debug(target)
-		
 		helpers.files.download(data.url, target)
 			.then(source=>{
-				
-				console.debug('cock')
 				
 				// Resize image
 				let files = []
@@ -312,7 +308,6 @@ movieSchema.methods.setArtwork = function(data){
 					})
 			})
 			.catch(error=>{
-				console.debug('arse')
 				if (error) console.error(error.message)
 				reject(error)
 			})
