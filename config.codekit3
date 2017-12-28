@@ -1181,6 +1181,16 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/server\/tasks\/system.movie.feeds.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/system.movie.feeds.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/server\/tasks\/system.show.feeds.js": {
 		"ft": 64,
 		"ma": 0,

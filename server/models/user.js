@@ -74,10 +74,10 @@ userSchema.methods.refreshToken = function(){
 	return
 }
 
-userSchema.methods.syncCollection = function(){
-	return helpers.trakt(this).sync.collection.get({type:'shows'})
+userSchema.methods.syncCollection = function(type='shows'){
+	return helpers.trakt(this).sync.collection.get({type:type})
 		.then(results=>{
-			if (!results) throw new Error(`No shows in Trakt collection`)
+			if (!results) throw new Error(`No items in Trakt collection`)
 			
 			let promises = []
 			results.forEach(result=>{
@@ -87,9 +87,9 @@ userSchema.methods.syncCollection = function(){
 							if (!movie) movie = new Movie(result.movie)
 							return movie.subscribe(this).save({new:true})
 						})
-						.then(movie=>{
-							return movie.sync()
-						})
+					//	.then(movie=>{
+					//		return movie.sync()
+					//	})
 						.then(movie=>{
 							return movie.save()
 						})

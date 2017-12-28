@@ -18,7 +18,8 @@ const MoviesAPI = (api)=>{
 					res.send(movies)
 				})
 				.catch(error=>{
-					res.status(404).send({error:error})
+					if (error) console.error(error.message)
+					res.status(404).send({error:error.message})
 				})
 		})
 		.post((req,res)=>{
@@ -26,7 +27,7 @@ const MoviesAPI = (api)=>{
 				.then(movie=>{
 					if (movie) return movie
 					movie = new Movie({ids:{slug:req.body.slug}})
-					return movie.sync()
+					return movie.sync(req.user)
 				})
 				.then(movie=>{
 					// Subscribe to show
@@ -36,11 +37,11 @@ const MoviesAPI = (api)=>{
 					res.status(201).send(movie)
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(400).send({error:error})
 				})
 		})
-	
+			
 	router.route('/:slug')
 		.delete((req,res)=>{
 			Movie.findBySlug(req.params.slug)
@@ -51,7 +52,8 @@ const MoviesAPI = (api)=>{
 					res.status(204).end()
 				})
 				.catch(error=>{
-					res.status(400).send({error:error})
+					if (error) console.error(error.message)
+					res.status(400).send({error:error.message})
 				})
 		})
 		.get((req,res)=>{
@@ -61,25 +63,41 @@ const MoviesAPI = (api)=>{
 					res.send(movie)
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(400).send({error:'Bad Request'})
 				})
 		})
 	
+	router.route('/:slug/feeds')
+		.patch((req,res)=>{
+			Movie.findBySlug(req.params.slug)
+				.then(movie=>{
+					if (!movie) throw new Error(`Movie not found: ${req.params.slug}`)
+					return movie.parseFeed()
+				})
+				.then(movie=>{
+					res.status(200).send(movie.hashes || [])
+				})
+				.catch(error=>{
+					if (error) console.error(error.message)
+					res.status(404).send({error:error.message})
+				})
+		})
+
 	router.route('/:slug/sync')
 		.post((req,res)=>{
 			Movie.findBySlug(req.params.slug)
 				.then(movie=>{
-					return movie.sync()
+					return movie.sync(req.user)
 				})
 				.then(movie=>{
-					return movie.save()
+					return movie.save({new:true})
 				})
-				.then(()=>{
-					res.send({success:true})
+				.then(movie=>{
+					res.send(movie)
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(400).send({error:'Bad request'})
 				})
 		})
@@ -88,27 +106,27 @@ const MoviesAPI = (api)=>{
 		.get((req,res)=>{
 			Movie.findBySlug(req.params.slug)
 				.then(movie=>{
-					return helpers.trakt().images.get(movie.ids)
+					return helpers.trakt().images.get(movie.ids,'movie')
 				})
 				.then(images=>{
 					res.send(images)
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(400).send({error:'Bad request'})
 				})
 		})
 		.post((req,res)=>{
 			Movie.findBySlug(req.params.slug)
 				.then(movie=>{
-					return movie.setArtwork(req.body).then(()=>movie.save())
+					return movie.setArtwork(req.body).then(()=>movie.save({new:true}))
 				})
-				.then(()=>{
-					res.send({success:true})
+				.then(movie=>{
+					res.send(movie)
 				})
 				.catch(error=>{
-					console.error(error)
-					res.status(404).end()
+					if (error) console.error(error.message)
+					res.status(400).end()
 				})
 		})
 
@@ -131,7 +149,7 @@ const MoviesAPI = (api)=>{
 					res.send(movie)
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(400).send({error:'Bad Request'})
 				})
 			
@@ -156,7 +174,7 @@ const MoviesAPI = (api)=>{
 					res.send(movie)
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(400).send({error:'Bad Request'})
 				})
 		})

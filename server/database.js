@@ -13,10 +13,10 @@ const Database = ()=>{
 	
 	mongoose.connect(conn, {useMongoClient:true})
 		.then(()=>{
-			console.info('Connected to MongoDB: %s:%d/%s', process.env.DB_HOST, process.env.DB_PORT, process.env.DB_NAME)
+			console.info('Connected to MongoDB: %s:%s/%s', process.env.DB_HOST, process.env.DB_PORT, process.env.DB_NAME)
 		})
 		.catch(error=>{
-			console.error(error.message)
+			if (error) console.error(error.message)
 		})
 	
 	process.on('SIGTERM', ()=>{

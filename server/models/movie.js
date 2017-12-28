@@ -8,7 +8,6 @@ let movieSchema = new mongoose.Schema({
 	overview: String,
 	year: Number,
 	ids: {
-		guidebox: {type: Number, default: null},
 		imdb: {type: String, default: null},
 		slug: {type:String, lowercase:true, required: true, trim: true},
 		tmdb: {type:Number, default:null},
@@ -20,6 +19,7 @@ let movieSchema = new mongoose.Schema({
 		subscriber: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 		watches: [{
 			_id: false,
+			id: mongoose.Schema.Types.Long,
 			date: {type: Date, default: new Date()}
 		}]
 	}],
@@ -29,9 +29,14 @@ let movieSchema = new mongoose.Schema({
 		btih: {type: String, uppercase: true, required: true},
 		hash: String,
 		hd: {type: Boolean, default: false},
-		quality: {type: String, enum: ['SD','720p','1080p']},
-		repack: {type: Boolean, default: false}
+		quality: {type: String, enum: ['SD','720p','1080p','3D']},
+		size: {type: String}
 	}],
+	config: {
+		directory: String,
+		quality: {type: String, enum: ['SD','720p','1080p','3D']},
+		transcode: {type: Boolean, default: false}
+	},
 	file: {
 		added: Date,
 		directory: String,
@@ -42,7 +47,7 @@ let movieSchema = new mongoose.Schema({
 		filename: String,
 		filesize: Number,
 		hash: String,
-		quality: {type: String, enum: ['SD','720p','1080p']}
+		quality: {type: String, enum: ['SD','720p','1080p','3D']}
 	},
 	images: {
 		background: {
@@ -52,6 +57,7 @@ let movieSchema = new mongoose.Schema({
 				width: String,
 				filename: String
 			}],
+			filename: String,
 			source: String
 		},
 		banner: {
@@ -61,6 +67,7 @@ let movieSchema = new mongoose.Schema({
 				width: String,
 				filename: String
 			}],
+			filename: String,
 			source: String
 		},
 		poster: {
@@ -70,6 +77,7 @@ let movieSchema = new mongoose.Schema({
 				width: String,
 				filename: String
 			}],
+			filename: String,
 			source: String
 		}
 	},
@@ -78,34 +86,136 @@ let movieSchema = new mongoose.Schema({
 	added: {type: Date, default: new Date()},
 	synced: {type: Date},
 	updated: {type: Date, default: new Date()}
+},{
+	toObject:{virtuals:true}, toJSON:{virtuals:true}
 })
 
 movieSchema.statics.findBySlug = function(slug){
 	return this.findOne({
 		'ids.slug': slug.toLowerCase().trim()
-	})
+	}).exec()
 }
 movieSchema.statics.findByTrakt = function(trakt){
 	return this.findOne({
 		'ids.trakt': parseInt(trakt,10)
-	})
+	}).exec()
 }
 movieSchema.statics.findByUser = function(user){
 	return this.find({
 		'subscribers.subscriber': mongoose.Types.ObjectId(user._id)
-	})
+	}).sort({title:1}).exec()
 }
 
+movieSchema.statics.updateLatest = function(){
+	// TODO: Proxy support
+	return require('request-promise')({url:'https://yts.me/api/v2/list_movies.json', json:true, proxy:false})
+		.then(json=>{
+			return json.data.movie_count >= 1 ? json.data.movies : []
+		})
+		.map(result=>{
+			return this.findOne({'ids.imdb':result.imdb_code}).exec().then(movie=>{
+				if (!movie) return null
+				
+				result.torrents.forEach(torrent=>{
+					let idx = movie.hashes.indexOf(item=>item.btih == torrent.hash)
+					
+					if (idx == -1){
+						movie.hashes.push({
+							btih: torrent.hash,
+							quality: torrent.quality,
+							added: new Date(torrent.date_uploaded)
+						})
+					}
+				})
+				return movie.save()
+			})
+		})
+		.catch(error=>{
+			if (error) console.error(error.message)
+		})
+}
+movieSchema.statics.syncCollection = function(user={}){
+	return helpers.trakt(user).sync.collection.get({type:'movies'})
+		.map(result=>{
+			if (result.movie){
+				return this.findBySlug(result.movie.ids.slug)
+					.then(movie=>{
+						if (!movie) movie = new this(result.movie)
+						return movie.subscribe(user).save({new:true})
+					})
+				//	.then(movie=>{
+				//		return movie.sync()
+				//	})
+				//	.then(movie=>{
+				//		return movie.save()
+				//	})
+			}
+		})
+}
 
+movieSchema.methods.getAlpha = function(){
+	let alpha = this.title.replace(/^(A\s|The\s|\W)/i,'').trim().substring(0,1)
+	if (alpha.match(/^[\d]/)) alpha = '#'
+	return alpha
+}
 movieSchema.methods.getDirectory = function(){
-	if (this.config.directory){
-		return require('path').join(
-			process.env.MEDIA_ROOT,
-			process.env.MEDIA_MOVIES,
-			helpers.utils.normalize(this.file.directory)
-		)
-	}
-	return false
+	if (!this.config.directory) this.setDirectory()
+	
+	return require('path').join(
+		process.env.MEDIA_ROOT,
+		process.env.MEDIA_MOVIES,
+		'A-Z',
+		helpers.utils.normalize(this.config.directory)
+	)
+}
+movieSchema.methods.getInfoHash = function(){
+	return new Promise(resolve=>{
+		// Sort array by quality
+		this.hashes.sort((a,b)=>{
+			if (a.quality == b.quality){
+				if (a.repack && !b.repack) return -1
+				if (!a.repack && b.repack) return 1
+				return 0
+			}
+			if (a.quality == '1080p' && b.quality != '1080p') return -1
+			if (a.quality == '720p'){
+				if (b.quality == '1080p') return 1
+				if (b.quality == 'SD') return -1
+			}
+			if (a.quality == 'SD') return 1
+			return 0
+		})
+		let filtered = this.hashes.filter(hash=>{
+			return hash.quality == this.config.quality
+		})
+		if (filtered.length) resolve(filtered[0])
+	})
+}
+movieSchema.methods.parseFeed = function(){
+	// TODO: add proxy support
+	
+	return Promise.try(()=>{
+		if (!this.ids.imdb) throw new Error(`No IMDB ID: ${this.ids.slug}`)
+		return require('request-promise').get({url:'https://yts.me/api/v2/list_movies.json', qs:{query_term:this.ids.imdb}, json:true, proxy:false})
+	})
+	.then(json=>{
+		if (json.data.movie_count == 1){
+			json.data.movies.forEach(movie=>{
+				movie.torrents.forEach(torrent=>{
+					let idx = this.hashes.findIndex(item=>item.btih == torrent.hash)
+					if (idx == -1){
+						this.hashes.push({
+							btih: torrent.hash,
+							quality: torrent.quality,
+							size: torrent.size,
+							added: new Date(torrent.date_uploaded)
+						})
+					}
+				})
+			})
+		}
+		return this.save()
+	})
 }
 
 movieSchema.methods.subscribe = function(user){
@@ -128,6 +238,116 @@ movieSchema.methods.unsubscribe = function(user){
 	return this
 }
 
+movieSchema.methods.setArtwork = function(data){
+	return new Promise((resolve,reject)=>{
+		if (!data.url) return reject(new Error(`No Source URL`))
+		
+		let target = require('path').join(this.getDirectory(), `${data.type}-original` + require('path').extname(data.url))
+		
+		console.debug(target)
+		
+		helpers.files.download(data.url, target)
+			.then(source=>{
+				
+				console.debug('cock')
+				
+				// Resize image
+				let files = []
+				let sizes = []
+				
+				switch (data.type){
+					case 'background':
+						sizes = [{
+							width: 1920,
+							suffix: 'large'
+						}]
+						break
+					case 'banner':
+						sizes = [{
+							width: 575,
+							suffix: 'small'
+						},{
+							width: 800,
+							suffix: 'medium'
+						},{
+							width: 940,
+							suffix: 'large'
+						}]
+						break
+					case 'poster':
+						sizes = [{
+							width: 250,
+							suffix: 'small'
+						},{
+							width: 500,
+							suffix: 'medium'
+						},{
+							width: 1000,
+							suffix: 'large'
+						}]
+						break
+				}
+				
+				return require('fs-extra').readFile(source)
+					.then(buffer=>{
+						return Promise.all(sizes).each(size=>{
+							let filename = source.replace(/-original/,`-${size.suffix}`)
+							return require('sharp')(buffer).resize(size.width, null).toFile(filename)
+								.then(()=>{
+									files.push({
+										filename: require('path').basename(filename),
+										width: size.width
+									})
+									return true
+								})
+						})
+					})
+					.then(()=>{
+						this.images[data.type] = {
+							enabled: files.length ? true : false,
+							files: files,
+							source: data.url
+						}
+						resolve()
+					})
+			})
+			.catch(error=>{
+				console.debug('arse')
+				if (error) console.error(error.message)
+				reject(error)
+			})
+	})
+}
+movieSchema.methods.setCollected = function(file=null){
+	return this.subscribers.forEach(user=>{
+		helpers.trakt(user).sync.collection.add({movies:[{ids:{trakt:this.ids.trakt}}]})
+	})
+	.finally(()=>{
+		if (file) this.file.filename = file
+		this.file.added = new Date()
+		this.file.download.active = undefined
+		
+		return this
+	})
+}
+movieSchema.methods.setDirectory = function(){
+	this.config.directory = require('path').join(
+		this.getAlpha(),
+		helpers.utils.normalize(`${this.title} (${this.year})`)
+	)
+	return this.config.directory
+}
+movieSchema.methods.setDownloading = function(hash){
+	return new Promise(resolve=>{
+		this.file.download.active = true
+		this.file.download.hashString = hash.toUpperCase()
+		resolve()
+	})
+}
+movieSchema.methods.setFilename = function(file){
+	let ext = require('path').extname(file) || '.mp4'
+	return helpers.utils.normalize(`${this.title} (${this.year})${ext}`)
+}
 movieSchema.methods.setWatched = function(user, date=null, id=null){
 	if (!date) date = new Date()
 	
@@ -162,29 +382,17 @@ movieSchema.methods.setWatched = function(user, date=null, id=null){
 		return this
 	})
 }
-movieSchema.methods.setCollected = function(file=null){
-	return this.subscribers.forEach(user=>{
-		helpers.trakt(user).sync.collection.add({movies:[{ids:{trakt:this.ids.trakt}}]})
-	})
-	.finally(()=>{
-		if (file) this.file.filename = file
-		this.file.added = new Date()
-		this.file.download.active = undefined
-		
-		return this
-	})
-}
 
 movieSchema.methods.sync = function(user={}){
 	return helpers.trakt(user).movies.summary({id:this.ids.slug, extended:'full'})
 		.then(summary=>{
-			if (!this.synced || this.synced < new Date(summary.updated_at)){
+		//	if (!this.synced || this.synced < new Date(summary.updated_at)){
 				this.ids = Object.assign({}, this.ids, summary.ids)
 				this.overview = summary.overview
 				this.year = summary.year
 				this.synced = new Date(summary.updated_at)
 				this.title = summary.title
-			}
+		//	}
 			return this
 		})
 }
@@ -203,6 +411,24 @@ movieSchema.methods.syncHistory = function(user={}){
 			console.debug(error)
 		})
 }
+
+movieSchema.virtual('uri').get(function(){
+	return `/api/movies/${this.ids.slug}`
+})
+movieSchema.virtual('file.url').get(function(){
+	if (this.config.directory && this.file.filename){
+		return process.env.WEB_URL +'media/'+ process.env.MEDIA_MOVIES + 'A-Z/' + this.config.directory +'/'+ this.file.filename
+	}
+})
+movieSchema.virtual('images.baseUrl').get(function(){
+	if (this.config.directory){
+		let root = process.env.MEDIA_MOVIES.replace(/\s/g,'%20')
+		let directory = encodeURIComponent(this.config.directory)
+		return `/media/${root}A-Z/${directory}`
+	} else {
+		return this.setDirectory()
+	}
+})
 
 movieSchema.pre('save', function(next){
 	this.updated = new Date()

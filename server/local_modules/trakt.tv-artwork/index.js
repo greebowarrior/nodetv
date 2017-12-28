@@ -9,7 +9,6 @@ Artwork.prototype.init = function(trakt,options){
 	this.trakt = trakt
 	this.options = options
 }
-
 Artwork.prototype.prune = function(input,limit=12){
 	let list = []
 	
@@ -28,7 +27,6 @@ Artwork.prototype.prune = function(input,limit=12){
 		return item
 	}).slice(0, limit)
 }
-
 Artwork.prototype.get = function(ids,type='show'){
 	return new Promise((resolve,reject)=>{
 		

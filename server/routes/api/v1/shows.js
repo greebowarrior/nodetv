@@ -241,6 +241,7 @@ const ShowsAPI = (app,io)=>{
 						})
 				})
 				.then(show=>{
+					
 					return Socket.findByUser(req.user)
 						.then(sockets=>{
 							sockets.forEach(socket=>{
@@ -253,7 +254,7 @@ const ShowsAPI = (app,io)=>{
 						})
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(404).send({error: 'Not Found'})
 				})
 		})

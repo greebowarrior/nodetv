@@ -93,7 +93,7 @@ angular.module('nutv.shows', ['nutv.core'])
 	}])
 	
 	.component('nutvShow', {
-		bindings:{show:'='},
+		bindings:{show:'<'},
 		templateUrl: '/views/show/show.html',
 		controller: ['$http','$log','$state','$timeout','alertService',function($http,$log,$state,$timeout,alertService){
 			this.images = []
@@ -169,7 +169,9 @@ angular.module('nutv.shows', ['nutv.core'])
 					type: 'Question',
 					msg: 'Are you sure? This may take a while.'
 				}).then(()=>{
-					$http.post(`${this.show.uri}/sync`)
+					$http.post(`${this.show.uri}/sync`).then(res=>{
+						$log.debug(res.data)
+					})
 				})
 			}
 		}]

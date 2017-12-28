@@ -116,7 +116,7 @@ showSchema.statics.findEnabled = function(projection={},options={}){
 	return this.find({
 		'config.enabled':true,
 		'config.feed':{$exists:true}
-	},projection,options)
+	},projection,options).exec()
 }
 
 showSchema.statics.recentEpisodes = function(user,days=7){
@@ -270,7 +270,6 @@ showSchema.methods.hasRecentEpisodes = function(days=7){
 	})
 }
 
-
 showSchema.methods.getDirectory = function(){
 	if (this.config.directory){
 		return require('path').join(
@@ -316,7 +315,7 @@ showSchema.methods.setTVMazeID = function(){
 	return require('request-promise')({
 		json: true,
 		uri: `https://api.tvmaze.com/lookup/shows`,
-		qs: {tvdb: this.ids.tvdb}
+		qs: {tvdb: this.ids.tvdb, imdb:this.ids.imdb}
 	}).then(res=>{
 		if (res.data.id) this.ids.tvmaze = res.data.id
 	})

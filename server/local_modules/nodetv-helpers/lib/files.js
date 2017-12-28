@@ -41,6 +41,9 @@ exports.copy = function(source, target, transcode = false){
 			return target
 		})
 }
+exports.directory = function(target){
+	return fs.ensureDir(target)
+}
 exports.download = function(url,target){
 	return fs.ensureDir(path.dirname(target))
 		.then(()=>{

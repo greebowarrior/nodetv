@@ -1,9 +1,7 @@
 <div>
 	<div class="row">
 		<div class="col-sm-12">
-			<img ng-show="$ctrl.show.images.banner.enabled" ng-src="/media/shows/{{$ctrl.show.config.directory}}/{{$ctrl.show.images.banner.filename}}" class="img-responsive" />
-			<h1 ng-hide="$ctrl.show.images.banner.enabled">{{$ctrl.movie.title}} <small>{{$ctrl.movie.year}}</small></h1>
-			<h6 ng-show="$ctrl.movie.runtime">Runtime: {{$ctrl.movie.runtime}} mins</h6>
+			<nutv-banner item="$ctrl.movie" type="movie"></nutv-banner>
 		</div>
 		<div class="col-sm-12">
 			<p class="well">{{$ctrl.movie.overview}}</p>
@@ -12,7 +10,10 @@
 	
 	<uib-tabset>
 		<uib-tab heading="Downloads">
-			<!--ng-include src="'/views/movies/settings.html'"></ng-include-->
+			<div class="btn-group">
+				<button class="btn btn-default" ng-click="$ctrl.getDownloads()"><span class="fa fa-refresh"></span></button>
+				<button class="btn btn-default" ng-repeat="hash in $ctrl.movie.hashes" ng-click="$ctrl.download(hash)"> {{hash.quality}}</button>
+			</div>
 		</uib-tab>
 		
 		<uib-tab heading="Artwork">
@@ -21,21 +22,21 @@
 			<div class="row" ng-show="$ctrl.images.banners.length">
 				<div class="col-xs-12"><h6>Banners</h6></div>
 				<div class="col-sm-3" ng-repeat="image in $ctrl.images.banners">
-					<show-artwork show="$ctrl.show" artwork="image" type="banner"></show-artwork>
+					<show-artwork show="$ctrl.movie" artwork="image" type="banner"></show-artwork>
 				</div>
 			</div>
 			
 			<div class="row" ng-show="$ctrl.images.posters.length">
 				<div class="col-xs-12"><h6>Posters</h6></div>
 				<div class="col-xs-3 col-sm-3 col-md-2" ng-repeat="image in $ctrl.images.posters">
-					<show-artwork show="$ctrl.show" artwork="image" type="poster"></show-artwork>
+					<show-artwork show="$ctrl.movie" artwork="image" type="poster"></show-artwork>
 				</div>
 			</div>
 			
 			<div class="row" ng-show="$ctrl.images.backgrounds.length">
 				<div class="col-sm-12"><h6>Backgrounds</h6></div>
 				<div class="col-sm-3" ng-repeat="image in $ctrl.images.backgrounds">
-					<show-artwork show="$ctrl.show" artwork="image" type="background"></show-artwork>
+					<show-artwork show="$ctrl.movie" artwork="image" type="background"></show-artwork>
 				</div>
 			</div>
 		</uib-tab>
@@ -43,14 +44,11 @@
 		<uib-tab heading="Tools">
 			<div class="row">
 				<div class="col-sm-12">
-					<!--<button class="btn btn-primary" ng-hide="$ctrl.show.config.directory" ng-click="$ctrl.match()">Match directory</button>-->
-					
 					<button class="btn btn-info" ng-click="$ctrl.sync()">
 						<span class="fa fa-refresh"></span> Sync movie data
 					</button>
-					
 					<button class="btn btn-danger">
-						<span class="fa fa-trash-o"></span> Remove movie
+						<span class="fa fa-trash-o" ng-click="$ctrl.remove()"></span> Remove movie
 					</button>
 					
 				</div>

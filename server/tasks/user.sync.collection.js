@@ -11,7 +11,7 @@ require('node-schedule').scheduleJob('30 0 * * *', ()=>{
 			if (!users) throw new Error(`No Trakt-enabled users`)
 			
 			users.forEach(user=>{
-				user.syncCollection()
+				user.syncCollection('shows')
 					.then(results=>{
 						console.debug(`%s : %d shows synced from collection`, user.username, results.length)
 					})
