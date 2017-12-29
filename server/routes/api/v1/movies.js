@@ -152,7 +152,39 @@ const MoviesAPI = (api)=>{
 					if (error) console.error(error.message)
 					res.status(400).send({error:'Bad Request'})
 				})
-			
+		})
+	
+	router.route('/:slug/download')
+		.post((req,res)=>{
+			Movie.findBySlug(req.params.slug)
+				.then(movie=>{
+					if (!movie) throw new Error(`Movie not found: ${req.params.slug}`)
+					
+					if (!req.body.hash) throw new Error(`Download quality not selected: ${movie.title}`)
+					
+					let idx = movie.hashes.findIndex(hash=>hash.btih===req.body.hash)
+					if (idx == -1) throw new Error(`Download quality not available: ${movie.title}`)
+					
+					let hash = movie.hashes[idx]
+					
+					return helpers.torrents.createMagnet(hash.btih)
+						.then(magnet=>{
+							return helpers.torrents.add(magnet)
+						})
+						.then(()=>{
+							return movie.setDownloading(hash)
+						})
+						.then(()=>{
+							return movie.save()
+						})
+				})
+				.then(()=>{
+					res.send({success:true})
+				})
+				.catch(error=>{
+					if (error) console.error(error.message)
+					res.status(400).end()
+				})
 		})
 	
 	router.route('/:slug/watched')

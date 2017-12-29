@@ -265,7 +265,7 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 				this.results = []
 			}
 			this.definiteArticle = (item)=>{
-				return item.title.replace(/^The\s/i, '')
+				return item.title.replace(/^(The\s|A\s|\W)/i, '')
 			}
 			this.pageChange = ()=>{
 				$state.go('.', {page:this.pagination.page})

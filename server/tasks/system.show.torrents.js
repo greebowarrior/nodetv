@@ -7,10 +7,10 @@ const helpers = require('nodetv-helpers')
 const Show = helpers.model('show')
 
 require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
-	console.debug('Checking for completed downloads')
+	console.debug('Shows: Checking for completed downloads')
 	
 	helpers.torrents.getComplete()
-		.map(torrent=>{
+		.each(torrent=>{
 			Show.findByHashString(torrent.hashString)
 				.then(show=>{
 					if (!show) return null

@@ -6,9 +6,6 @@
 		<div class="col-sm-12">
 			<div class="well">
 				<p>{{$ctrl.movie.overview}}</p>
-				<!--
-				<p class="help-block"><strong>Year</strong>: {{$ctrl.movie.year}} - <strong>Runtime</strong>: {{$ctrl.movie.runtime}} mins</p>
-				-->
 			</div>
 		</div>
 	</div>
@@ -17,7 +14,7 @@
 		<uib-tab heading="Downloads">
 			<div class="btn-group">
 				<button class="btn btn-default" ng-click="$ctrl.getDownloads()"><span class="fa fa-refresh"></span></button>
-				<button class="btn btn-default" ng-repeat="hash in $ctrl.movie.hashes" ng-click="$ctrl.download(hash)"> {{hash.quality}}</button>
+				<button class="btn btn-default" ng-repeat="hash in $ctrl.movie.hashes" ng-click="$ctrl.download(hash.btih)"> {{hash.quality}}</button>
 			</div>
 		</uib-tab>
 		

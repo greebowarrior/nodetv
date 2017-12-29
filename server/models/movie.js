@@ -29,17 +29,16 @@ let movieSchema = new mongoose.Schema({
 		btih: {type: String, uppercase: true, required: true},
 		hash: String,
 		hd: {type: Boolean, default: false},
-		quality: {type: String, enum: ['SD','720p','1080p','3D']},
+		quality: {type: String, enum: ['SD','720p','1080p','3D','4K']},
 		size: {type: String}
 	}],
 	config: {
 		directory: String,
-		quality: {type: String, enum: ['SD','720p','1080p','3D']},
+		quality: {type: String, enum: ['SD','720p','1080p','3D','4K']},
 		transcode: {type: Boolean, default: false}
 	},
 	file: {
 		added: Date,
-		directory: String,
 		download: {
 			active: Boolean,
 			hashString: String
@@ -47,7 +46,8 @@ let movieSchema = new mongoose.Schema({
 		filename: String,
 		filesize: Number,
 		hash: String,
-		quality: {type: String, enum: ['SD','720p','1080p','3D']}
+		quality: {type: String, enum: ['SD','720p','1080p','3D','4K']},
+		subtitles: String
 	},
 	images: {
 		background: {
@@ -90,6 +90,11 @@ let movieSchema = new mongoose.Schema({
 	toObject:{virtuals:true}, toJSON:{virtuals:true}
 })
 
+movieSchema.statics.findByHashString = function(hash,projection={},options={}){
+	return this.findOne({
+		'file.download.hashString': {$regex: new RegExp(hash, 'i')}
+	},projection,options).exec()
+}
 movieSchema.statics.findBySlug = function(slug){
 	return this.findOne({
 		'ids.slug': slug.toLowerCase().trim()
@@ -141,17 +146,43 @@ movieSchema.statics.syncCollection = function(user={}){
 				return this.findBySlug(result.movie.ids.slug)
 					.then(movie=>{
 						if (!movie) movie = new this(result.movie)
+						return movie.sync(user)
+					})
+					.then(movie=>{
 						return movie.subscribe(user).save({new:true})
 					})
-				//	.then(movie=>{
-				//		return movie.sync()
-				//	})
-				//	.then(movie=>{
-				//		return movie.save()
-				//	})
 			}
 		})
 }
+movieSchema.statics.scan = function(){
+	const directory = process.env.MEDIA_ROOT + process.env.MEDIA_MOVIES + 'A-Z/'
+	
+	return require('glob-promise')('*/*',{cwd:directory,nodir:true})
+		.each(file=>{
+			let match = file.match(/^(?:\w\/)(.+)\s\((\d+)\)\s\[([\w]{2,4}p?)\]\.(\w{3,4})$/i)
+			if (!match) return
+			
+			this.findOne({title: match[1], year: parseInt(match[2],10)}).exec().then(movie=>{
+				if (!movie) throw new Error(`Movie not found: ${match[1]}`)
+				movie.setQuality(match[3])
+				
+				let target = require('path').join(movie.getDirectory(), movie.getFilename(file))
+				
+				return helpers.files.move(directory+file, target)
+					.then(()=>{
+						movie.file.filename = movie.getFilename(file)
+						return movie.save()
+					})
+			})
+			.catch(error=>{
+				if (error) console.error(error.message)
+			})
+		})
+		.catch(error=>{
+			if (error) console.error(error.message)
+		})
+}
+
 
 movieSchema.methods.getAlpha = function(){
 	let alpha = this.title.replace(/^(A\s|The\s|\W)/i,'').trim().substring(0,1)
@@ -168,6 +199,11 @@ movieSchema.methods.getDirectory = function(){
 		helpers.utils.normalize(this.config.directory)
 	)
 }
+movieSchema.methods.getFilename = function(file){
+	let ext = require('path').extname(file) || '.mp4'
+	return helpers.utils.normalize(`${this.title} (${this.year}) [${this.file.quality}]${ext}`)
+}
+
 movieSchema.methods.getInfoHash = function(){
 	return new Promise(resolve=>{
 		// Sort array by quality
@@ -329,15 +365,19 @@ movieSchema.methods.setDirectory = function(){
 	this.config.directory = helpers.utils.normalize(`${this.title} (${this.year})`)
 }
 movieSchema.methods.setDownloading = function(hash){
-	return new Promise(resolve=>{
-		this.file.download.active = true
-		this.file.download.hashString = hash.toUpperCase()
-		resolve()
-	})
+	this.file.quality = hash.quality
+	this.file.download.active = true
+	this.file.download.hashString = hash.btih.toUpperCase()
+	
+	return Promise.resolve(this)
 }
 movieSchema.methods.setFilename = function(file){
 	let ext = require('path').extname(file) || '.mp4'
-	return helpers.utils.normalize(`${this.title} (${this.year})${ext}`)
+	return helpers.utils.normalize(`${this.title} (${this.year}) [${this.file.quality}]${ext}`)
+}
+movieSchema.methods.setQuality = function(quality){
+	if (quality.match(/480p/i)) quality = 'SD'
+	this.file.quality = quality
 }
 movieSchema.methods.setWatched = function(user, date=null, id=null){
 	if (!date) date = new Date()
@@ -385,7 +425,6 @@ movieSchema.methods.sync = function(user={}){
 			this.title = helpers.utils.normalize(summary.title)
 			this.overview = summary.overview
 			this.runtime = summary.runtime
-			
 			return this
 		})
 }

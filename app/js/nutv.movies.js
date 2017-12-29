@@ -42,10 +42,19 @@ angular.module('nutv.movies', ['nutv.core'])
 				}
 			})
 			.state('movies.index', {
-				url: '/',
+				url: '/?page',
 				component: 'nutvGrid',
+				params: {
+					page: {
+						value: '1',
+						squash: true,
+						dynamic: true
+					}
+				},
+				reloadOnSearch: false,
 				resolve: {
 					list: (movieService)=>movieService.list(),
+					page: ['$stateParams',(p)=>p.page],
 					type: ()=>'movie'
 				}
 			})
@@ -67,6 +76,16 @@ angular.module('nutv.movies', ['nutv.core'])
 		controller: ['$http','$log','alertService', function($http,$log,alertService){
 			this.$onInit = ()=>{
 				this.images = []
+			}
+			
+			this.download = (btih)=>{
+				$http.post(`${this.movie.uri}/download`, {hash:btih}).then(()=>{
+					alertService.alert({type:'success',title:`Download started: '${this.movie.title}'`})
+				})
+				.catch(error=>{
+					alertService.notify({type:'danger',msg:`Unable to download '${this.movie.title}'`})
+					$log.error(error)
+				})
 			}
 			
 			this.getArtwork = ()=>{
