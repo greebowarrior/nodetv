@@ -187,7 +187,7 @@ movieSchema.statics.scan = function(){
 movieSchema.methods.getAlpha = function(){
 	let alpha = this.title.replace(/^(A\s|The\s|\W)/i,'').trim().substring(0,1)
 	if (alpha.match(/^[\d]/)) alpha = '#'
-	return alpha
+	return alpha.toUpperCase()
 }
 movieSchema.methods.getDirectory = function(){
 	if (!this.config.directory) this.setDirectory()
