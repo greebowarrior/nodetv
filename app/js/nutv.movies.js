@@ -73,7 +73,7 @@ angular.module('nutv.movies', ['nutv.core'])
 	.component('nutvMovie', {
 		bindings: {movie: '<'},
 		templateUrl: '/views/movie/movie.html',
-		controller: ['$http','$log','alertService', function($http,$log,alertService){
+		controller: ['$http','$log','$uibModal','alertService', function($http,$log,$uibModal,alertService){
 			this.$onInit = ()=>{
 				this.images = []
 			}
@@ -100,6 +100,16 @@ angular.module('nutv.movies', ['nutv.core'])
 			this.getDownloads = ()=>{
 				$http.patch(`${this.movie.uri}/feeds`).then(res=>{
 					this.movie.hashes = res.data
+				})
+			}
+			
+			this.play = ()=>{
+				$uibModal.open({
+					component: 'nutvUpnpDevice'
+				}).result.then(device=>{
+					return $http.post(`${this.movie.uri}/play`, {device:device})
+				}).catch(()=>{
+					$log.debug('Play aborted')
 				})
 			}
 			

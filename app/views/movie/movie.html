@@ -16,6 +16,11 @@
 				<button class="btn btn-default" ng-click="$ctrl.getDownloads()"><span class="fa fa-refresh"></span></button>
 				<button class="btn btn-default" ng-repeat="hash in $ctrl.movie.hashes" ng-click="$ctrl.download(hash.btih)"> {{hash.quality}}</button>
 			</div>
+			
+			<div ng-show="$ctrl.movie.file.filename">
+				<button type="button" class="btn btn-default" ng-click="$ctrl.play()"><span class="fa fa-play"></span> Play {{$ctrl.movie.file.quality}}</button>
+			</div>
+			
 		</uib-tab>
 		
 		<uib-tab heading="Artwork">
