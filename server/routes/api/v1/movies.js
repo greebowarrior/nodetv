@@ -41,7 +41,13 @@ const MoviesAPI = (api)=>{
 					res.status(400).send({error:error})
 				})
 		})
-			
+	
+	router.route('/scan')
+		.post((req,res)=>{
+			Movie.scan()
+			res.status(202).end()
+		})
+	
 	router.route('/:slug')
 		.delete((req,res)=>{
 			Movie.findBySlug(req.params.slug)
