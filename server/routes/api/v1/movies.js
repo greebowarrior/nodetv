@@ -193,6 +193,22 @@ const MoviesAPI = (api)=>{
 				})
 		})
 	
+	router.route('/:slug/play')
+		.post((req,res)=>{
+			Movie.findBySlug(req.params.slug)
+				.then(movie=>{
+					if (!movie) throw new Error(`Show not found: ${req.params.slug}`)
+					return movie.play(req.user, req.body.device.url)
+				})
+				.then(()=>{
+					res.status(200).end()
+				})
+				.catch(error=>{
+					if (error) console.error(error)
+					res.status(400).end()
+				})
+		})
+	
 	router.route('/:slug/watched')
 		.post((req,res)=>{
 			Movie.findBySlug(req.params.slug)

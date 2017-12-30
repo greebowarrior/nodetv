@@ -14,8 +14,9 @@ const trackers = [
 	'udp://tracker.opentrackr.org:1337',
 	'udp://tracker.coppersurfer.tk:6969',
 	'udp://tracker.leechers-paradise.org:6969',
-	'udp://ipv6.leechers-paradise.org:6969/announce',
-	'http://tracker.trackerfix.com:80'	
+	'udp://ipv6.leechers-paradise.org:6969',
+	'udp://tracker.pirateparty.gr:6969',
+	'udp://tracker.zer0day.to:1337'
 ]
 
 exports.add = function(url){

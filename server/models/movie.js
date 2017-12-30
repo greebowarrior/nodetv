@@ -423,6 +423,62 @@ movieSchema.methods.setWatched = function(user, date=null, id=null){
 	})
 }
 
+movieSchema.methods.play = function(user,url){
+	return helpers.upnp.setDevice(url).then(device=>{
+		let media = {
+			title: `${this.title} (${this.year})`,
+			url: this.file.url
+		}
+		return device.load(media)
+		
+	}).then(device=>{
+		let media = {duration:0,position:0}
+		
+		device.on('playing', ()=>{
+			device.getDuration((error,duration)=>{
+				media.duration=duration
+			})
+			device.getPosition((error,position)=>{
+				media.position = position
+				/*
+				helpers.trakt(user).scrobble.start({
+					episode:{ids:{trakt:this.ids.trakt}},
+					progress: position/media.duration
+				})
+				*/
+				console.debug('[UPNP] playing', media.duration, position)
+			})
+		})
+		device.on('paused', ()=>{
+			device.getPosition((error,position)=>{
+				media.position = position
+				/*
+				helpers.trakt(user).scrobble.pause({
+					episode:{ids:{trakt:this.ids.trakt}},
+					progress: position/media.duration
+				})
+				*/
+				console.debug('[UPNP] paused', media.duration, position)
+			})
+		})
+		device.on('stopped', ()=>{
+			device.getPosition((error,position)=>{
+				media.position = position
+				/*
+				helpers.trakt(user).scrobble.stop({
+					episode:{ids:{trakt:this.ids.trakt}},
+					progress: position/media.duration
+				})
+				*/
+				console.debug('[UPNP] stopped', media.duration, position)
+			})
+		})
+		
+		device.on('status', (status)=>{
+			console.debug('[UPNP] ', status)
+		})
+	})
+}
 movieSchema.methods.sync = function(user={}){
 	return helpers.trakt(user).movies.summary({id:this.ids.slug, extended:'full'})
 		.then(summary=>{
