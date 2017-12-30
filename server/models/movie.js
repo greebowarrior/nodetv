@@ -183,7 +183,6 @@ movieSchema.statics.scan = function(){
 		})
 }
 
-
 movieSchema.methods.getAlpha = function(){
 	let alpha = this.title.replace(/^(A\s|The\s|\W)/i,'').trim().substring(0,1)
 	if (alpha.match(/^[\d]/)) alpha = '#'
@@ -349,9 +348,19 @@ movieSchema.methods.setArtwork = function(data){
 			})
 	})
 }
-movieSchema.methods.setCollected = function(file=null){
-	return this.subscribers.forEach(user=>{
-		helpers.trakt(user).sync.collection.add({movies:[{ids:{trakt:this.ids.trakt}}]})
+movieSchema.methods.setCollected = function(file=null,date=null){
+	if (!date) date = new Date()
+	
+	return Promise.each(this.subscribers, (user)=>{
+		require('./user').findById(user.subscriber)
+			.then(user=>{
+				if (!user) throw new Error(`User not found`)
+				helpers.trakt(user).sync.collection.add({movies:[{ids:{trakt:this.ids.trakt}}],collected_at:date})
+			})
+			.catch(error=>{
+				if (error) console.error(error.message)
+			})
+		return true
 	})
 	.finally(()=>{
 		if (file) this.file.filename = file
