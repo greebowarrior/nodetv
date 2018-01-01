@@ -83,7 +83,7 @@ angular.module('nutv.movies', ['nutv.core'])
 					alertService.alert({type:'success',title:`Download started: '${this.movie.title}'`})
 				})
 				.catch(error=>{
-					alertService.notify({type:'danger',msg:`Unable to download '${this.movie.title}'`})
+					alertService.notify({type:'danger',title:this.movie.title,text:'Unable to download'})
 					$log.error(error)
 				})
 			}
@@ -93,8 +93,8 @@ angular.module('nutv.movies', ['nutv.core'])
 					this.images = res.data
 				})
 				.catch(error=>{
-					alertService.notify({type:'warning',msg:`Unable to find artwork for '${this.movie.title}'`})
 					if (error) $log.error(error)
+					alertService.notify({type:'warning',title:this.movie.title,text:'Unable to find artwork'})
 				})
 			}
 			this.getDownloads = ()=>{
@@ -116,16 +116,17 @@ angular.module('nutv.movies', ['nutv.core'])
 			this.save = ()=>{
 				$http.patch(`${this.movie.uri}`, {config:this.movie.config})
 					.then(()=>{
-						alertService.notify({type:'success',msg:`Mmvie updated: '${this.movie.title}'`})
+						alertService.notify({type:'success',title:this.movie.title,text:'Movie updated'})
 					})
 					.catch(error=>{
-						alertService.notify({type:'danger',msg:`Unable to update '${this.movie.title}'`})
+						alertService.notify({type:'danger',title:this.movie.title,text:'Unable to update'})
 						$log.error(error)
 					})
 			}
 			this.sync = ()=>{
 				alertService.confirm({
 					title: 'Sync movie data?',
+					text: 'This may take a while',
 					type: 'Question'
 				}).then(()=>{
 					$http.post(`${this.movie.uri}/sync`).then(res=>{

@@ -245,10 +245,10 @@ const ShowsAPI = (app,io)=>{
 					return Socket.findByUser(req.user)
 						.then(sockets=>{
 							sockets.forEach(socket=>{
-								io.to(socket.id).emit('alert', {
+								io.to(socket.id).emit('notify', {
 									title: show.title,
 									type: 'success',
-									msg: 'Show data updated'
+									text: 'Show data updated'
 								})
 							})
 						})

@@ -69,7 +69,7 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 						$state.go('dashboard.home')
 					})
 					.catch(()=>{
-						alertService.notify({type:'danger',msg:'Incorrect username/password'})
+						alertService.notify({type:'danger',title:'Error',text:'Incorrect username/password'})
 						$log.warn('Authentication error')
 					})
 			}
@@ -97,12 +97,12 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 				$http.post('/auth/install', this.user)
 					.then(res=>{
 						if (res.data.installed){
-							alertService.notify({type:'success',msg:'Installation complete. Please log in.'})
+							alertService.notify({type:'success',title:'Installation complete',text:'Please log in.'})
 							$state.go('login')
 						}
 					})
 					.catch(()=>{
-						alertService.notify({type:'danger',msg:'An error occured. Please try again'})
+						alertService.notify({type:'danger',text:'An error occured. Please try again'})
 					})
 			}
 		}]
@@ -133,27 +133,12 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	})
 	.component('nutvDashboard', {
 		templateUrl: '/views/dashboard/index.html',
-		controller: ['$http',function($http){
+		controller: ['$http','alertService',function($http,alertService){
 			
 			// Generate a calendar
 			this.$onInit = ()=>{
-				/*
-				let i = -7
+				this.movies = []
 				
-				let now = new Date()
-				this.dates = []
-				this.test = []
-				
-				do {
-					let day = new Date()
-					day.setDate(now.getDate()+i)
-					this.test[day.getDay()] = {episodes:[]}
-					
-					this.dates.push({date:day,num:day.getDay()})
-					i++
-				} while (i<=0)
-				*/
-			
 				this.episodes = {
 					recent: [], upcoming: []
 				}
@@ -163,21 +148,6 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 				
 				$http.get('/api/shows/latest')
 					.then(response=>{
-						
-						/*
-						response.data.forEach(show=>{
-							show.episodes.forEach(episode=>{
-								let dow = (new Date(episode.first_aired)).getDay()
-								
-								this.test[dow].episodes.push({
-									title: show.title,
-									images: show.images,
-									episode: episode
-								})
-							})
-						})
-						*/
-						
 						this.episodes.recent = response.data
 						this.episodes.recent.forEach(show=>{
 							this.count.recent += show.episodes.length
@@ -197,6 +167,26 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 					.catch(()=>{
 					//	$log.error(error.message)
 					})
+					
+				$http.get(`/api/movies/available`)
+					.then(res=>{
+						this.movies = res.data
+					})
+					.catch(()=>{
+					//	$log.error(error.message)
+					})
+			}
+			
+			this.addMovie = (movie)=>{
+				alertService.confirm({
+					title: `Add Movie`,
+					text: `Do you want to add "${movie.title}" to your video library?`,
+					type: 'Question'
+				}).then(()=>{
+				//	$http.post(`/api/movies`, movie).then(res=>{
+				//		$state.go('movies.detail', {slug:res.data.ids.slug})
+				//	})
+				})
 			}
 		}]
 	})

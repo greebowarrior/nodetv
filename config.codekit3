@@ -242,16 +242,6 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/app\/js\/components\/nutv.show.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/app\/js\/components\/min\/nutv.show.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/app\/js\/libs\/ng-socket.min.js": {
 		"ft": 64,
 		"ma": 0,
@@ -1139,6 +1129,16 @@
 		"mi": 0,
 		"oA": 1,
 		"oAP": "\/server\/tasks\/min\/system.movie.feeds.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/server\/tasks\/system.movie.sync.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/tasks\/min\/system.movie.sync.min.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0

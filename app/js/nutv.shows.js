@@ -106,10 +106,10 @@ angular.module('nutv.shows', ['nutv.core'])
 			this.save = ()=>{
 				$http.patch(`${this.show.uri}`, {config:this.show.config})
 					.then(()=>{
-						alertService.notify({type:'success',msg:`Show updated: '${this.show.title}'`})
+						alertService.notify({type:'success',title:this.show.title,text:`Show updated`})
 					})
 					.catch(error=>{
-						alertService.notify({type:'danger',msg:`Unable to update '${this.show.title}'`})
+						alertService.notify({type:'danger',title:this.show.title,text:`Unable to update`})
 						$log.error(error)
 					})
 			}
@@ -117,7 +117,7 @@ angular.module('nutv.shows', ['nutv.core'])
 			this.feeds = ()=>{
 				$http.patch(`${this.show.uri}/feeds`)
 					.then(()=>{
-						alertService.notify({type:'success',msg:`Feeds updated for '${this.show.title}'`})
+						alertService.notify({type:'success',title:this.show.title,text:`Feeds updated`})
 					})
 					.catch(error=>{
 						$log.error(error)
@@ -129,7 +129,7 @@ angular.module('nutv.shows', ['nutv.core'])
 						this.images = response.data
 					})
 					.catch(error=>{
-						alertService.notify({type:'warning',msg:`Unable to find artwork for '${this.show.title}'`})
+						alertService.notify({type:'warning',title:this.show.title,text:`Unable to find artwork`})
 						if (error) $log.error(error)
 					})
 			}
@@ -144,7 +144,7 @@ angular.module('nutv.shows', ['nutv.core'])
 				alertService.confirm({
 					title: 'Rescan Directory',
 					type: 'Question',
-					msg: 'Are you sure? This may take a while.'
+					text: 'Are you sure? This may take a while.'
 				}).then(()=>{
 					$http.post(`${this.show.uri}/scan`)
 				})
@@ -154,7 +154,7 @@ angular.module('nutv.shows', ['nutv.core'])
 				alertService.confirm({
 					title: 'Remove show',
 					type: 'warning',
-					msg: 'Are you sure?'
+					text: 'Are you sure?'
 				}).then(()=>{
 					$http.delete(`${this.show.uri}`)
 						.then(()=>{
@@ -167,7 +167,7 @@ angular.module('nutv.shows', ['nutv.core'])
 				alertService.confirm({
 					title: 'Sync show data',
 					type: 'Question',
-					msg: 'Are you sure? This may take a while.'
+					text: 'Are you sure? This may take a while.'
 				}).then(()=>{
 					$http.post(`${this.show.uri}/sync`).then(res=>{
 						$log.debug(res.data)
@@ -223,7 +223,7 @@ angular.module('nutv.shows', ['nutv.core'])
 					.then(()=>{
 						alertService.alert({
 							title: 'Episode watched',
-							msg: `${this.episode.title}`,
+							text: `${this.episode.title}`,
 							type: 'success'
 						})
 					})

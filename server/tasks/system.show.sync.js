@@ -11,7 +11,7 @@ require('node-schedule').scheduleJob('0 1 * * *', ()=>{
 	
 	Show.findEnabled()
 		.then(shows=>{
-			if (!shows.length) throw new Error(`No shows availale`)
+			if (!shows.length) throw new Error(`No shows available`)
 			shows.forEach(show=>{
 				console.debug(`Syncing ${show.title}`)
 				

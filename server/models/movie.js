@@ -154,7 +154,7 @@ movieSchema.statics.syncCollection = function(user={}){
 			}
 		})
 }
-movieSchema.statics.scan = function(){
+movieSchema.statics.scanAll = function(){
 	const directory = process.env.MEDIA_ROOT + process.env.MEDIA_MOVIES + 'A-Z/'
 	
 	return require('glob-promise')('*/*',{cwd:directory,nodir:true})
@@ -478,6 +478,10 @@ movieSchema.methods.play = function(user,url){
 			console.debug('[UPNP] ', status)
 		})
 	})
+}
+movieSchema.methods.scan = function(){
+	// scan the movie directory and find video files
+	
 }
 movieSchema.methods.sync = function(user={}){
 	return helpers.trakt(user).movies.summary({id:this.ids.slug, extended:'full'})

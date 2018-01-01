@@ -23,14 +23,9 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 		socket.forward('alert')
 		return socket
 	}])
-	.factory('alertService', ['$rootScope','$socket','$window','SweetAlert',($rootScope,$socket,$window,SweetAlert)=>{
+	.factory('alertService', ['$log','$socket','SweetAlert',($log,$socket,SweetAlert)=>{
 		let Alert = function(){
 			this.alerts = []
-			
-			$rootScope.$on('alert', (event,alert)=>{
-				// Is this even used?
-				this.add(alert)
-			})
 			
 			$socket.on('alert', data=>{
 				this.alert(data)
@@ -42,12 +37,15 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 			return this
 		}
 		
+		// Types of alerts available:
+		// * Alerts: Pop-up interactive dialogs, using SWAL
+		// * Banners: Appear at the top of the page, using Bootstrap
+		// * Confirm: Subset of Alerts
+		// * Notifications: Use Notification API, fallback to Banners
+		
 		// Notifications
 		Alert.prototype.add = function(data){
-			return this.notify(data)
-		}
-		Alert.prototype.banner = function(data){
-			// bootstrap-style alert
+			$log.warn('alertService.add is deprecated')
 			return this.notify(data)
 		}
 		
@@ -55,73 +53,49 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 			this.alerts.splice(index, 1)
 		}
 		Alert.prototype.notify = function(data){
-			// Native browser alert
-			
+			// Native browser alerts
 			/*
 			new Promise((resolve,reject)=>{
 				if ('Notification' in window){
-					console.debug(Notification.permission)
+					$log.debug(Notification.permission)
 					if (Notification.permission === 'granted') return resolve()
+					
 					Notification.requestPermission()
 						.then(permission=>{
-							Notification.permission = permission
-							if (Notification.permission === 'granted') resolve()
-							reject()
+							if (permission === 'granted') return resolve()
+							return reject()
 						})
-					reject()
+						.catch(()=>{
+							return reject()
+						})
 				} else {
-					reject()
+					return reject()
 				}
 			})
 			.then(()=>{
-				new Notification('NodeTV',{
-					body: data.msg,
+				new Notification('NodeTV', {
+					body: data.text || data.msg,
 					badge:'/static/gfx/icons/icon-32.png',
-					icon:'/static/gfx/icons/icon-192.png'
+					icon: data.icon || '/static/gfx/icons/icon-512.png'
 				})
 			})
 			.catch(()=>{
-				console.debug('derp')
 				this.alerts.push({type:data.type,msg:data.msg})
 			})
-			/*
-			if ('Notification' in $window){
-				if (Notification.permission === 'granted'){
-					new Notification('NodeTV',{
-						body: data.msg,
-						badge:'/static/gfx/icons/icon-32.png',
-						icon:'/static/gfx/icons/icon-192.png'
-					})
-				} else if (Notification.permission !== 'denied'){
-					Notification.requestPermission()
-						.then(permission=>{
-							if (!('permission' in Notification)){
-								Notification.permission = permission
-							}
-							if (permission === 'granted'){
-								new Notification('NodeTV',{
-									body: data.msg,
-									badge:'/static/gfx/icons/icon-32.png',
-									icon:'/static/gfx/icons/icon-192.png'
-								})
-							}
-						})
-						
-				}
-				this.alerts.push({type:data.type,msg:data.msg})
-			} else {
-				this.alerts.push({type:data.type,msg:data.msg})
-			}
-			/**/
-			this.alerts.push({type:data.type,msg:data.msg})
+			*/
+			this.alerts.push({
+				type: data.type,
+				title: data.title,
+				text: data.text || data.msg
+			})
 		}
 		
 		// Alerts & Dialogs
 		Alert.prototype.alert = function(data){
 			return SweetAlert.swal({
-				message: data.msg || undefined,
 				timer: data.timer || 2000,
 				title: data.title || undefined,
+				text: data.text || undefined,
 				type: data.type
 			})
 		}
@@ -129,7 +103,7 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 			return new Promise(resolve=>{
 				SweetAlert.swal({
 					title: data.title,
-					text: data.msg,
+					text: data.text || data.msg,
 					type: 'warning',
 					showCancelButton: true,
 					confirmButtonColor: '#DD6B55',
@@ -288,10 +262,10 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 				$http.post(`/api/${this.type}s`, {slug:result.ids.slug})
 					.then(()=>{
 						$state.go('^.detail', {slug:result.ids.slug})
-						alertService.alert({type:'success',title:'Added',msg:`'${result.title}' has been added to your library`})
+						alertService.alert({type:'success',title:'Added',text:`'${result.title}' has been added to your library`})
 					})
 					.catch(()=>{
-						alertService.notify({type:'danger',msg:`An error occured while adding to your library`})
+						alertService.notify({type:'danger',title:'Error',text:`An error occured while adding to your library`})
 					})
 			}
 		}]

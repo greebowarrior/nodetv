@@ -24,6 +24,14 @@
 	max-width: 970px;
 }
 
+.nav {
+	li.active {
+		@media (max-width:767px){
+			border-left: 4px solid white;
+		}
+	}
+}
+
 .pagination {
 	li {
 		a {

@@ -44,8 +44,33 @@ const MoviesAPI = (api)=>{
 	
 	router.route('/scan')
 		.post((req,res)=>{
-			Movie.scan()
+			Movie.scanAll()
 			res.status(202).end()
+		})
+	
+	router.route('/available')
+		.get((req,res)=>{
+			// TODO: Add proxy support and caching
+			return require('request-promise').get({url:'https://yts.me/api/v2/list_movies.json', qs:{limit:12}, json:true, proxy:false})
+				.then(json=>{
+					let results = json.data.movies.map(item=>{
+						return {
+							title: item.title,
+							year: item.year,
+							ids: {
+								imdb: item.imdb_code,
+								slug: item.slug
+							},
+							image: item.medium_cover_image,
+							added: new Date(item.date_added)
+						}
+					})
+					res.send(results)
+				})
+				.catch(error=>{
+					if (error) console.error(error.message)
+					res.status(404).end()
+				})
 		})
 	
 	router.route('/:slug')
@@ -206,6 +231,22 @@ const MoviesAPI = (api)=>{
 				.catch(error=>{
 					if (error) console.error(error)
 					res.status(400).end()
+				})
+		})
+	
+	router.route('/:slug/scan')
+		.post((req,res)=>{
+			Movie.findBySlug(req.params.slug)
+				.then(movie=>{
+					if (!movie) throw new Error(`Movie not found: ${req.params.slug}`)
+					
+					movie.scan()
+					
+					res.status(202).end()
+				})
+				.catch(error=>{
+					if (error) console.error(error.message)
+					res.status(404).end()
 				})
 		})
 	

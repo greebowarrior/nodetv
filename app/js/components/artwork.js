@@ -14,17 +14,16 @@ angular.module('nutv.core')
 			this.save = ()=>{
 				$http.post(`${this.show.uri}/artwork`, {preview:this.artwork.preview,url:this.artwork.url,type:this.type})
 					.then(res=>{
-						alertService.notify({type:'success',msg:'Artwork saved'})
+						alertService.notify({type:'success',title:this.show.title,text:'Artwork saved'})
 						$log.debug(res.data)
 					})
 					.catch(error=>{
-						alertService.notify({type:'danger',msg:'Unable to save artwork'})
+						alertService.notify({type:'danger',title:'Error',text:'Unable to save artwork'})
 						if (error) $log.error(error)
 					})
 			}
 		}]
 	})
-	
 	
 	.component('nutvArtwork', {
 		// component for displaying artwork
@@ -101,11 +100,11 @@ angular.module('nutv.core')
 			this.save = ()=>{
 				$http.post(`${this.item.uri}/artwork`, {preview:this.artwork.preview,url:this.artwork.url,type:this.type})
 					.then(res=>{
-						alertService.notify({type:'success',msg:'Artwork saved'})
+						alertService.notify({type:'success',title:this.item.title,text:'Artwork saved'})
 						$log.debug(res.data)
 					})
 					.catch(error=>{
-						alertService.notify({type:'danger',msg:'Unable to save artwork'})
+						alertService.notify({type:'danger',title:this.item.title,text:'Unable to save artwork'})
 						if (error) $log.error(error)
 					})
 			}
