@@ -69,7 +69,7 @@ require('node-schedule').scheduleJob('10 * * * *', ()=>{
 						return show.save()
 					})
 					.catch(error=>{
-						if (error) console.info(`${show.title}: `, error.message)
+						if (error) console.debug(`${show.title}: `, error.message)
 					})
 			})
 		})

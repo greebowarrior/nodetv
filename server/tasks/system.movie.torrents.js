@@ -32,7 +32,7 @@ require('node-schedule').scheduleJob('*/10 * * * *', ()=>{
 							return movie.setCollected(filename, torrent.doneDate)
 						})
 						.then(()=>{
-							console.debug(`Downloaded: ${movie.title}`)
+							console.debug(`Movie Downloaded: ${movie.title}`)
 							return movie.save()
 						})
 						.catch(error=>{

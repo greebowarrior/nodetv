@@ -8,7 +8,7 @@ const Movie = helpers.model('movie')
 
 require('node-schedule').scheduleJob('20 * * * *', ()=>{
 	console.debug('Updating from YTS feeds')
-	
+	/*
 	Movie.updateLatest()
 		.each(movie=>{
 			if (!movie) return
@@ -50,4 +50,5 @@ require('node-schedule').scheduleJob('20 * * * *', ()=>{
 		.catch(error=>{
 			if (error) console.error(`${this.title}: ${error.message}`)
 		})
+	*/
 })

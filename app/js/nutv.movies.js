@@ -73,7 +73,7 @@ angular.module('nutv.movies', ['nutv.core'])
 	.component('nutvMovie', {
 		bindings: {movie: '<'},
 		templateUrl: '/views/movie/movie.html',
-		controller: ['$http','$log','$uibModal','alertService', function($http,$log,$uibModal,alertService){
+		controller: ['$http','$log','$state','$uibModal','alertService', function($http,$log,$state,$uibModal,alertService){
 			this.$onInit = ()=>{
 				this.images = []
 			}
@@ -112,7 +112,18 @@ angular.module('nutv.movies', ['nutv.core'])
 					$log.debug('Play aborted')
 				})
 			}
-			
+			this.remove = ()=>{
+				alertService.confirm({
+					title: 'Remove movie',
+					type: 'warning',
+					text: 'Are you sure?'
+				}).then(()=>{
+					$http.delete(`${this.movie.uri}`)
+						.then(()=>{
+							$state.go('^.index')
+						})
+				})
+			}
 			this.save = ()=>{
 				$http.patch(`${this.movie.uri}`, {config:this.movie.config})
 					.then(()=>{

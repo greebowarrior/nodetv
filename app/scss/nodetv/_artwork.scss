@@ -32,10 +32,10 @@
 		img {
 			border: 1px solid $nodetv-grey;
 			@media (max-width: 767px){
-				min-height: 118px;
+		//		min-height: 118px;
 			}
 			@media (min-width: 768px){
-				min-height: 134px;
+		//		min-height: 134px;
 			}
 			
 			&:before {
