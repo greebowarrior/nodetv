@@ -106,7 +106,7 @@ angular.module('nutv.shows', ['nutv.core'])
 			this.save = ()=>{
 				$http.patch(`${this.show.uri}`, {config:this.show.config})
 					.then(()=>{
-						alertService.notify({type:'success',title:this.show.title,text:`Show updated`})
+						alertService.alert({type:'success',title:this.show.title,text:`Show updated`})
 					})
 					.catch(error=>{
 						alertService.notify({type:'danger',title:this.show.title,text:`Unable to update`})
@@ -201,6 +201,7 @@ angular.module('nutv.shows', ['nutv.core'])
 						.then(()=>{
 							alertService.alert({
 								title: 'Download started',
+								text: this.episode.title,
 								type: 'success'
 							})
 						})

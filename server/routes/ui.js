@@ -27,28 +27,15 @@ const UI = (app,io)=>{
 				})
 		})
 		.finally(()=>{
-			// Get media files (It's better to use nginx for this)
-			/*
-			app.route(/^\/media\/(?:shows|movies)\/(.+)/)
+			app.route('/manifest.json')
 				.get((req,res)=>{
-					new Promise((resolve,reject)=>{
-						req.params.file = req.params[0]
-						if (req.params.file){
-							let file = require('path').join(process.env.MEDIA_ROOT,process.env.MEDIA_SHOWS,req.params.file)
-							if (require('fs-extra').existsSync(file)) resolve(file)
-						}
-						reject()
-					})
-					.then(file=>{
-						res.sendFile(file)
-					})
-					.catch(error=>{
-						if (error) console.error(error.message)
-						res.sendStatus(404)
-					})
+					const manifest = require('path').join(process.cwd(),'app', 'manifest.json')
+					let json = require(manifest)
+					json.version = app.locals.nutv.version
+					json.description = app.locals.nutv.description
+					res.send(json)
 				})
 			
-			*/
 			// Render views
 			app.route('/views/*')
 				.get((req,res)=>{

@@ -1,3 +1,4 @@
+/* global swal:false */
 "use strict"
 
 angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','ngSweetAlert','ngTouch','btford.socket-io','ui.bootstrap','ui.router'])
@@ -23,36 +24,68 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 		socket.forward('alert')
 		return socket
 	}])
-	.factory('alertService', ['$log','$socket','SweetAlert',($log,$socket,SweetAlert)=>{
-		let Alert = function(){
+
+	.factory('alertService', ['$log','$socket','$q',($log,$socket,$q)=>{
+		const Alerts = function(){
 			this.alerts = []
-			
 			$socket.on('alert', data=>{
 				this.alert(data)
 			})
 			$socket.on('notify', data=>{
 				this.notify(data)
 			})
-			
 			return this
 		}
 		
-		// Types of alerts available:
-		// * Alerts: Pop-up interactive dialogs, using SWAL
-		// * Banners: Appear at the top of the page, using Bootstrap
-		// * Confirm: Subset of Alerts
-		// * Notifications: Use Notification API, fallback to Banners
-		
-		// Notifications
-		Alert.prototype.add = function(data){
-			$log.warn('alertService.add is deprecated')
-			return this.notify(data)
+		Alerts.prototype.close = function(idx){
+			this.alerts.splice(idx, 1)
 		}
 		
-		Alert.prototype.close = function(index){
-			this.alerts.splice(index, 1)
+		Alerts.prototype.alert = function(alert){
+			const deferred = $q.defer()
+			
+			swal({
+				title: alert.title,
+				text: alert.text || undefined,
+				type : alert.type || 'info',
+				timer: alert.timer || 1500,
+				
+				showCancelButton: false,
+				showConfirmButton: false,
+				
+				onClose: ()=>{
+					deferred.resolve()
+				}
+			})
+			
+			return deferred.promise
 		}
-		Alert.prototype.notify = function(data){
+		Alerts.prototype.confirm = function(alert){
+			const deferred = $q.defer()
+			swal({
+				title: alert.title || 'Are you sure?',
+				text: alert.text || undefined,
+				type: 'question',
+				
+				allowOutsideClick: false,
+				showCancelButton: true,
+				showConfirmButton: true,
+				cancelButtonText: 'Nope',
+				confirmButtonText: 'Yes, do it'
+				
+			}).then(result=>{
+				if (result.value){
+					this.alert({
+						title: 'Done', type: 'success'
+					})
+					deferred.resolve(result)
+				} else {
+					deferred.reject(result)
+				}
+			})
+			return deferred.promise
+		}
+		Alerts.prototype.notify = function(data){
 			// Native browser alerts
 			/*
 			new Promise((resolve,reject)=>{
@@ -90,41 +123,7 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 			})
 		}
 		
-		// Alerts & Dialogs
-		Alert.prototype.alert = function(data){
-			return SweetAlert.swal({
-				timer: data.timer || 2000,
-				title: data.title || undefined,
-				text: data.text || undefined,
-				type: data.type
-			})
-		}
-		Alert.prototype.confirm = function(data){
-			return new Promise(resolve=>{
-				SweetAlert.swal({
-					title: data.title,
-					text: data.text || data.msg,
-					type: 'warning',
-					showCancelButton: true,
-					confirmButtonColor: '#DD6B55',
-					confirmButtonText: 'Yes, do it',
-					closeOnConfirm: false
-				}, confirmed=>{
-					if (confirmed){
-						SweetAlert.swal({
-							title: 'Done!',
-							timer: 2000,
-							type: 'success'
-						})
-						resolve(confirmed)
-					}
-				})
-			})
-		}
-		
-		Alert.prototype.swal = SweetAlert.swal
-		
-		return new Alert()
+		return new Alerts()
 	}])
 	.factory('crumbService', ['$interpolate','$log','$state','$transitions',($interpolate,$log,$state,$transitions)=>{
 		const Crumbs = function(){
