@@ -138,7 +138,7 @@ angular.module('nutv.movies', ['nutv.core'])
 				alertService.confirm({
 					title: 'Sync movie data?',
 					text: 'This may take a while',
-					type: 'Question'
+					type: 'question'
 				}).then(()=>{
 					$http.post(`${this.movie.uri}/sync`).then(res=>{
 						this.movie = res.data

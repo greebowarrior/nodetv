@@ -1,7 +1,7 @@
 /* global swal:false */
 "use strict"
 
-angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','ngSweetAlert','ngTouch','btford.socket-io','ui.bootstrap','ui.router'])
+angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','ngTouch','btford.socket-io','ui.bootstrap','ui.router'])
 		
 	.factory('httpIntercept', ['$cookies','$location','$q',($cookies,$location,$q)=>{
 		return {
@@ -48,7 +48,10 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 				title: alert.title,
 				text: alert.text || undefined,
 				type : alert.type || 'info',
-				timer: alert.timer || 1500,
+				timer: alert.timer || 2000,
+				toast: alert.toast || false,
+				
+				position: alert.toast ? 'top-end' : 'center',
 				
 				showCancelButton: false,
 				showConfirmButton: false,
@@ -65,7 +68,7 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 			swal({
 				title: alert.title || 'Are you sure?',
 				text: alert.text || undefined,
-				type: 'question',
+				type: alert.type || 'question',
 				
 				allowOutsideClick: false,
 				showCancelButton: true,

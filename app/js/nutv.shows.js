@@ -106,10 +106,10 @@ angular.module('nutv.shows', ['nutv.core'])
 			this.save = ()=>{
 				$http.patch(`${this.show.uri}`, {config:this.show.config})
 					.then(()=>{
-						alertService.alert({type:'success',title:this.show.title,text:`Show updated`})
+						alertService.alert({type:'success',title:this.show.title,text:`Show updated`,toast:true})
 					})
 					.catch(error=>{
-						alertService.notify({type:'danger',title:this.show.title,text:`Unable to update`})
+						alertService.alert({type:'error',title:this.show.title,text:`Unable to update`,toast:true})
 						$log.error(error)
 					})
 			}
@@ -117,7 +117,7 @@ angular.module('nutv.shows', ['nutv.core'])
 			this.feeds = ()=>{
 				$http.patch(`${this.show.uri}/feeds`)
 					.then(()=>{
-						alertService.notify({type:'success',title:this.show.title,text:`Feeds updated`})
+						alertService.alert({type:'success',title:this.show.title,text:`Feeds updated`,toast:true})
 					})
 					.catch(error=>{
 						$log.error(error)
@@ -129,7 +129,7 @@ angular.module('nutv.shows', ['nutv.core'])
 						this.images = response.data
 					})
 					.catch(error=>{
-						alertService.notify({type:'warning',title:this.show.title,text:`Unable to find artwork`})
+						alertService.notify({type:'error',title:this.show.title,text:`Unable to find artwork`})
 						if (error) $log.error(error)
 					})
 			}
@@ -143,13 +143,12 @@ angular.module('nutv.shows', ['nutv.core'])
 			this.rescan = ()=>{
 				alertService.confirm({
 					title: 'Rescan Directory',
-					type: 'Question',
+					type: 'question',
 					text: 'Are you sure? This may take a while.'
 				}).then(()=>{
 					$http.post(`${this.show.uri}/scan`)
 				})
 			}
-			
 			this.remove = ()=>{
 				alertService.confirm({
 					title: 'Remove show',
@@ -162,11 +161,10 @@ angular.module('nutv.shows', ['nutv.core'])
 						})
 				})
 			}
-			
 			this.sync = ()=>{
 				alertService.confirm({
 					title: 'Sync show data',
-					type: 'Question',
+					type: 'question',
 					text: 'Are you sure? This may take a while.'
 				}).then(()=>{
 					$http.post(`${this.show.uri}/sync`).then(res=>{
