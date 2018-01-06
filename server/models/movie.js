@@ -162,13 +162,11 @@ movieSchema.statics.scanAll = function(){
 	
 	return require('glob-promise')('*/*',{cwd:directory,nodir:true})
 		.each(file=>{
-			let match = file.match(/^(?:\w\/)(.+)\s\((\d+)\)\s\[([\w]{2,4}p?)\]\.(\w{3,4})$/i)
+			let match = file.match(/^(?:.\/)(.+)\s\((\d+)\)\s\[([\w]{2,4}p?)\]\.(\w{3,4})$/i)
 			if (!match) return
 			
 			this.findOne({title: match[1], year: parseInt(match[2],10)}).exec().then(movie=>{
 				if (!movie) throw new Error(`Movie not found: ${match[1]}`)
-				
-				console.info(`Found: ${movie.title}`)
 				/*
 				movie.setQuality(match[3])
 				
