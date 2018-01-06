@@ -48,7 +48,10 @@ const showSchema = new mongoose.Schema({
 		subscriber: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 	}],
 	status: String,
-	genres: Array,
+	genres: [{
+		_id: false,
+		name: String
+	}],
 	images: {
 		background: {
 			enabled: {type: Boolean, default: false},
@@ -518,7 +521,8 @@ showSchema.methods.sync = function(){
 			this.overview = helpers.utils.normalize(summary.overview)
 			this.first_aired = new Date(summary.first_aired)
 			this.airs = summary.airs
-
+			this.genres = summary.genres.map(genre=>({name:genre}))
+			
 			require('fs-extra').ensureDir(this.getDirectory())
 			
 			return helpers.trakt().seasons.summary({id:this.ids.slug,extended:'episodes,full'})

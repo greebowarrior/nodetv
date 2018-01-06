@@ -81,7 +81,10 @@ let movieSchema = new mongoose.Schema({
 			source: String
 		}
 	},
-	genres: Array,
+	genres: [{
+		_id: false,
+		name: String
+	}],
 	runtime: Number,
 	added: {type: Date, default: new Date()},
 	synced: {type: Date},
@@ -164,6 +167,9 @@ movieSchema.statics.scanAll = function(){
 			
 			this.findOne({title: match[1], year: parseInt(match[2],10)}).exec().then(movie=>{
 				if (!movie) throw new Error(`Movie not found: ${match[1]}`)
+				
+				console.info(`Found: ${movie.title}`)
+				/*
 				movie.setQuality(match[3])
 				
 				let target = require('path').join(movie.getDirectory(), movie.getFilename(file))
@@ -173,6 +179,7 @@ movieSchema.statics.scanAll = function(){
 						movie.file.filename = movie.getFilename(file)
 						return movie.save()
 					})
+				*/
 			})
 			.catch(error=>{
 				if (error) console.error(error.message)
@@ -483,6 +490,12 @@ movieSchema.methods.scan = function(){
 	// scan the movie directory and find video files
 	
 }
+movieSchema.methods.symlinks = function(){
+	// Create genre symlinks in genres folder
+	this.genres.forEach(genre=>{
+		
+	})
+}
 movieSchema.methods.sync = function(user={}){
 	return helpers.trakt(user).movies.summary({id:this.ids.slug, extended:'full'})
 		.then(summary=>{
@@ -494,6 +507,7 @@ movieSchema.methods.sync = function(user={}){
 			this.title = helpers.utils.normalize(summary.title)
 			this.overview = summary.overview
 			this.runtime = summary.runtime
+			this.genres = summary.genres.map(genre=>({name:genre}))
 			return this
 		})
 }

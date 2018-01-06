@@ -28,6 +28,13 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 				url: '/',
 				component: 'nutvDashboard'
 			})
+			.state('dashboard.tools', {
+				url: '/tools',
+				component: 'nutvDashboardTools',
+				breadcrumb: {
+					title: 'Tools'
+				}
+			})
 			
 			.state('install', {
 				url: '/install',
@@ -186,6 +193,28 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 				//	$http.post(`/api/movies`, movie).then(res=>{
 				//		$state.go('movies.detail', {slug:res.data.ids.slug})
 				//	})
+				})
+			}
+		}]
+	})
+	
+	.component('nutvDashboardTools', {
+		templateUrl: '/views/dashboard/tools.html',
+		controller: ['$http','$log','alertService',function($http,$log,alertService){
+			this.$onInit = ()=>{
+				this.confirmed = false
+			}
+			
+			this.movieScan = ()=>{
+				alertService.confirm({
+					type: 'warning',
+					title: 'Rescan All Movies?',
+					text: 'This will perform a full scan of your movie library, and may take some time. Are you sure you want to proceed?'
+				}).then(()=>{
+					return $http.post('/api/movies/scan',{})
+				}).then(res=>{
+					alertService.alert({type:'info',title:'Rescan in progress',text:'This may take a while to complete'})
+					$log.debug(res.data)
 				})
 			}
 		}]

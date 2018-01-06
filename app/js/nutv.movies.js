@@ -79,13 +79,14 @@ angular.module('nutv.movies', ['nutv.core'])
 			}
 			
 			this.download = (btih)=>{
-				$http.post(`${this.movie.uri}/download`, {hash:btih}).then(()=>{
-					alertService.alert({type:'success',title:`Download started: '${this.movie.title}'`})
-				})
-				.catch(error=>{
-					alertService.notify({type:'danger',title:this.movie.title,text:'Unable to download'})
-					$log.error(error)
-				})
+				$http.post(`${this.movie.uri}/download`, {hash:btih})
+					.then(()=>{
+						alertService.alert({type:'success',title:this.movie.title,text:`Download started`})
+					})
+					.catch(error=>{
+						alertService.alert({type:'danger',title:this.movie.title,text:'Unable to download',toast:true})
+						$log.error(error)
+					})
 			}
 			
 			this.getArtwork = ()=>{
@@ -94,12 +95,17 @@ angular.module('nutv.movies', ['nutv.core'])
 				})
 				.catch(error=>{
 					if (error) $log.error(error)
-					alertService.notify({type:'warning',title:this.movie.title,text:'Unable to find artwork'})
+					alertService.alert({type:'warning',title:this.movie.title,text:'Unable to find artwork',toast:true})
 				})
 			}
 			this.getDownloads = ()=>{
 				$http.patch(`${this.movie.uri}/feeds`).then(res=>{
+					if (!res.data) throw new Error(`Unable to find downloads`)
 					this.movie.hashes = res.data
+				})
+				.catch(error=>{
+					if (error) $log.error(error)
+					alertService.alert({type:'warning',title:this.movie.title,text:'Unable to find downloads',toast:true})
 				})
 			}
 			
@@ -114,14 +120,13 @@ angular.module('nutv.movies', ['nutv.core'])
 			}
 			this.remove = ()=>{
 				alertService.confirm({
-					title: 'Remove movie',
+					title: 'Remove Movie?',
 					type: 'warning',
-					text: 'Are you sure?'
+					text: 'Are you sure you want to remove this from your library?'
 				}).then(()=>{
 					$http.delete(`${this.movie.uri}`)
-						.then(()=>{
-							$state.go('^.index')
-						})
+				}).then(()=>{
+					$state.go('^.index')
 				})
 			}
 			this.save = ()=>{
@@ -136,13 +141,14 @@ angular.module('nutv.movies', ['nutv.core'])
 			}
 			this.sync = ()=>{
 				alertService.confirm({
-					title: 'Sync movie data?',
-					text: 'This may take a while',
+					title: 'Sync Movie Data?',
+					text: 'Be patient, this may take a while.',
 					type: 'question'
 				}).then(()=>{
-					$http.post(`${this.movie.uri}/sync`).then(res=>{
-						this.movie = res.data
-					})
+					$http.post(`${this.movie.uri}/sync`)
+				}).then(res=>{
+					alertService.alert({type:'success',title:this.movie.title,text:'Movie updated',toast:true})
+					this.movie = res.data
 				})
 			}
 		}]
