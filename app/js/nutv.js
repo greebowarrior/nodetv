@@ -140,7 +140,7 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 	})
 	.component('nutvDashboard', {
 		templateUrl: '/views/dashboard/index.html',
-		controller: ['$http','alertService',function($http,alertService){
+		controller: ['$http','$state','alertService',function($http,$state,alertService){
 			
 			// Generate a calendar
 			this.$onInit = ()=>{
@@ -188,11 +188,11 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 				alertService.confirm({
 					title: `Add Movie`,
 					text: `Do you want to add "${movie.title}" to your video library?`,
-					type: 'Question'
+					type: 'question'
 				}).then(()=>{
-				//	$http.post(`/api/movies`, movie).then(res=>{
-				//		$state.go('movies.detail', {slug:res.data.ids.slug})
-				//	})
+					$http.post(`/api/movies`, {slug:movie.ids.slug}).then(res=>{
+						$state.go('movies.detail', {slug:res.data.ids.slug})
+					})
 				})
 			}
 		}]
@@ -208,10 +208,34 @@ angular.module('nutv', ['nutv.core','nutv.shows','nutv.movies','nutv.users'])
 			this.movieScan = ()=>{
 				alertService.confirm({
 					type: 'warning',
-					title: 'Rescan All Movies?',
-					text: 'This will perform a full scan of your movie library, and may take some time. Are you sure you want to proceed?'
+					title: 'Upgrade Movies',
+					text: 'This will perform a full rescan of your movie library, and may take some time. Are you sure you want to proceed?'
 				}).then(()=>{
 					return $http.post('/api/movies/scan',{})
+				}).then(res=>{
+					alertService.alert({type:'info',title:'Rescan in progress',text:'This may take a while to complete'})
+					$log.debug(res.data)
+				})
+			}
+			this.movieSync = ()=>{
+				alertService.confirm({
+					type: 'warning',
+					title: 'Rebuild Movie Library?',
+					text: 'This will re-sync your entire movie library from Trakt.tv'
+				}).then(()=>{
+					return $http.post('/api/movies/sync', {})
+				}).then(res=>{
+					alertService.alert({type:'info',title:'Resync in progress',text:'This may take a while to complete'})
+					$log.debug(res.data)
+				})
+			}
+			this.movieUpgrade = ()=>{
+				alertService.confirm({
+					type: 'warning',
+					title: 'Upgrade Movie Library?',
+					text: 'This will upgrade your movie library to the new structure, and may take some time. Are you sure you want to proceed?'
+				}).then(()=>{
+					return $http.post('/api/movies/upgrade',{})
 				}).then(res=>{
 					alertService.alert({type:'info',title:'Rescan in progress',text:'This may take a while to complete'})
 					$log.debug(res.data)

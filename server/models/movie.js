@@ -144,15 +144,18 @@ movieSchema.statics.updateLatest = function(){
 }
 movieSchema.statics.syncCollection = function(user={}){
 	return helpers.trakt(user).sync.collection.get({type:'movies'})
-		.map(result=>{
+		.each(result=>{
 			if (result.movie){
-				return this.findBySlug(result.movie.ids.slug)
+				this.findBySlug(result.movie.ids.slug)
 					.then(movie=>{
 						if (!movie) movie = new this(result.movie)
 						return movie.sync(user)
 					})
 					.then(movie=>{
 						return movie.subscribe(user).save({new:true})
+					})
+					.catch(error=>{
+						if (error) console.error(error.message)
 					})
 			}
 		})
@@ -165,19 +168,17 @@ movieSchema.statics.scanAll = function(){
 			let match = file.match(/^(?:.\/)(.+)\s\((\d+)\)\s\[([\w]{2,4}p?)\]\.(\w{3,4})$/i)
 			if (!match) return
 			
-			this.findOne({title: match[1], year: parseInt(match[2],10)}).exec().then(movie=>{
-				if (!movie) throw new Error(`Movie not found: ${match[1]}`)
-				/*
+			this.findOne({title: new RegExp(match[1].trim(), 'i'), year: parseInt(match[2],10)}).exec().then(movie=>{
+				if (!movie) throw new Error(`Movie not found: ${match[1]} (${match[2]})`)
+				
 				movie.setQuality(match[3])
 				
-				let target = require('path').join(movie.getDirectory(), movie.getFilename(file))
-				
+				const target = require('path').join(movie.getDirectory(), movie.getFilename(file))
 				return helpers.files.move(directory+file, target)
 					.then(()=>{
 						movie.file.filename = movie.getFilename(file)
 						return movie.save()
 					})
-				*/
 			})
 			.catch(error=>{
 				if (error) console.error(error.message)
@@ -485,14 +486,30 @@ movieSchema.methods.play = function(user,url){
 	})
 }
 movieSchema.methods.scan = function(){
-	// scan the movie directory and find video files
-	
+	// Scan the movie directory and find video files
+	return require('glob-promise')('*.*',{cwd:this.getDirectory(),nodir:true})
+		.each(file=>{
+			if (require('path').extname(file) == '.srt'){
+				this.file.subtitles = require('path').basename(file)
+				return Promise.resolve()
+			}
+			
+			let match = file.match(/^(.+)\s\((\d+)\)\s\[([\w]{2,4}p?)\]\.(\w{3,4})$/i)
+			if (match){
+				this.setQuality(match[3])
+				this.file.filename = require('path').basename(file)
+				return Promise.resolve()
+			}
+		})
+		.finally(()=>this.save({new:true}))
 }
 movieSchema.methods.symlinks = function(){
 	// Create genre symlinks in genres folder
+	/*
 	this.genres.forEach(genre=>{
 		
 	})
+	*/
 }
 movieSchema.methods.sync = function(user={}){
 	return helpers.trakt(user).movies.summary({id:this.ids.slug, extended:'full'})

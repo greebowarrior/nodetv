@@ -35,17 +35,12 @@ const MoviesAPI = (api)=>{
 				})
 				.then(movie=>{
 					res.status(201).send(movie)
+					return movie.parseFeed()
 				})
 				.catch(error=>{
 					if (error) console.error(error.message)
 					res.status(400).send({error:error})
 				})
-		})
-	
-	router.route('/scan')
-		.post((req,res)=>{
-			Movie.scanAll()
-			res.status(202).end()
 		})
 	
 	router.route('/available')
@@ -71,6 +66,22 @@ const MoviesAPI = (api)=>{
 					if (error) console.error(error.message)
 					res.status(404).end()
 				})
+		})
+	
+	router.route('/scan')
+		.post((req,res)=>{
+		//	Movie.find({}).each(movie=>movie.scan())
+			res.status(202).end()
+		})
+	router.route('/sync')
+		.post((req,res)=>{
+			Movie.syncCollection(req.user)
+			res.status(202).end()
+		})
+	router.route('/upgrade')
+		.post((req,res)=>{
+			Movie.scanAll()
+			res.status(202).end()
 		})
 	
 	router.route('/:slug')

@@ -79,12 +79,13 @@ angular.module('nutv.movies', ['nutv.core'])
 			}
 			
 			this.download = (btih)=>{
+				
 				$http.post(`${this.movie.uri}/download`, {hash:btih})
 					.then(()=>{
-						alertService.alert({type:'success',title:this.movie.title,text:`Download started`})
+						alertService.alert({type:'success',title:this.movie.title,text:`Download started`,toast:true})
 					})
 					.catch(error=>{
-						alertService.alert({type:'danger',title:this.movie.title,text:'Unable to download',toast:true})
+						alertService.alert({type:'error',title:this.movie.title,text:'Unable to download',toast:true})
 						$log.error(error)
 					})
 			}
@@ -145,7 +146,7 @@ angular.module('nutv.movies', ['nutv.core'])
 					text: 'Be patient, this may take a while.',
 					type: 'question'
 				}).then(()=>{
-					$http.post(`${this.movie.uri}/sync`)
+					return $http.post(`${this.movie.uri}/sync`)
 				}).then(res=>{
 					alertService.alert({type:'success',title:this.movie.title,text:'Movie updated',toast:true})
 					this.movie = res.data
