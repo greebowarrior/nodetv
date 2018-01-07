@@ -79,15 +79,12 @@ angular.module('nutv.movies', ['nutv.core'])
 			}
 			
 			this.download = (btih)=>{
-				
-				$http.post(`${this.movie.uri}/download`, {hash:btih})
-					.then(()=>{
-						alertService.alert({type:'success',title:this.movie.title,text:`Download started`,toast:true})
-					})
-					.catch(error=>{
-						alertService.alert({type:'error',title:this.movie.title,text:'Unable to download',toast:true})
-						$log.error(error)
-					})
+				$http.post(`${this.movie.uri}/download`, {hash:btih}).then(()=>{
+					alertService.alert({type:'success',title:this.movie.title,text:`Download started`,toast:true})
+				}).catch(error=>{
+					alertService.alert({type:'error',title:this.movie.title,text:'Unable to download',toast:true})
+					$log.error(error)
+				})
 			}
 			
 			this.getArtwork = ()=>{
@@ -125,9 +122,11 @@ angular.module('nutv.movies', ['nutv.core'])
 					type: 'warning',
 					text: 'Are you sure you want to remove this from your library?'
 				}).then(()=>{
-					$http.delete(`${this.movie.uri}`)
-				}).then(()=>{
-					$state.go('^.index')
+					return $http.delete(`${this.movie.uri}`).then(()=>{
+						$state.go('^.index')
+					}).catch(()=>{
+						alertService.alert({type:'error',title:this.movie.title,text:'Unable to remove',toast:true})
+					})
 				})
 			}
 			this.save = ()=>{
