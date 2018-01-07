@@ -505,9 +505,9 @@ showSchema.methods.scan = function(){
 		})
 }
 
-showSchema.methods.sync = function(){
+showSchema.methods.sync = function(user={}){
 	// Sync data from Trakt
-	return helpers.trakt().shows.summary({id:this.ids.slug, extended:'full'})
+	return helpers.trakt(user).shows.summary({id:this.ids.slug, extended:'full'})
 		.then(summary=>{
 			
 			if (this.synced < new Date(summary.updated_at)){
