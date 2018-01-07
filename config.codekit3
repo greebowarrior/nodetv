@@ -262,16 +262,6 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/app\/js\/libs\/ng-sweetalert-1.1.2.min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/app\/js\/libs\/min\/ng-sweetalert-1.1.2.min.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/app\/js\/libs\/ui-bootstrap-tpls-2.5.0.min.js": {
 		"ft": 64,
 		"ma": 0,
@@ -554,6 +544,13 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/app\/views\/dashboard\/install.html",
+		"oF": 0
+		},
+	"\/app\/views\/dashboard\/tools.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/app\/views\/dashboard\/tools.html",
 		"oF": 0
 		},
 	"\/app\/views\/layouts\/classic.html": {

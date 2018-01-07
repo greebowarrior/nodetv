@@ -139,6 +139,17 @@ angular.module('nutv.movies', ['nutv.core'])
 						$log.error(error)
 					})
 			}
+			this.scan = ()=>{
+				alertService.confirm({
+					title: 'Rescan Movie Directory?',
+					text: 'Be patient, this may take a while.',
+					type: 'question'
+				}).then(()=>{
+					return $http.post(`${this.movie.uri}/scan`)
+				}).then(()=>{
+					alertService.alert({type:'info',title:this.movie.title,text:'Rescan in progress',toast:true})
+				})
+			}
 			this.sync = ()=>{
 				alertService.confirm({
 					title: 'Sync Movie Data?',

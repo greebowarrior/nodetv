@@ -6,6 +6,7 @@
 		<div class="col-sm-12">
 			<div class="well">
 				<p>{{$ctrl.movie.overview}}</p>
+				<div>Runtime: {{$ctrl.movie.runtime}} mins</div>
 			</div>
 		</div>
 	</div>
@@ -51,6 +52,9 @@
 		<uib-tab heading="Tools">
 			<div class="row">
 				<div class="col-sm-12">
+					<button class="btn btn-warning" ng-click="$ctrl.scan()">
+						<span class="fa fa-search"></span> Scan movie folder
+					</button>
 					<button class="btn btn-info" ng-click="$ctrl.sync()">
 						<span class="fa fa-refresh"></span> Sync movie data
 					</button>
