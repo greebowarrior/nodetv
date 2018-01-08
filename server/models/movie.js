@@ -125,7 +125,7 @@ movieSchema.statics.updateLatest = function(){
 				if (!movie) return null
 				
 				result.torrents.forEach(torrent=>{
-					let idx = movie.hashes.indexOf(item=>item.btih == torrent.hash)
+					let idx = movie.hashes.findIndex(item=>item.btih == torrent.hash)
 					
 					if (idx == -1){
 						movie.hashes.push({
@@ -135,6 +135,7 @@ movieSchema.statics.updateLatest = function(){
 						})
 					}
 				})
+				
 				return movie.save({new:true})
 			})
 		})
