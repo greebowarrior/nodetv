@@ -135,7 +135,7 @@ movieSchema.statics.updateLatest = function(){
 						})
 					}
 				})
-				return movie.save()
+				return movie.save({new:true})
 			})
 		})
 		.catch(error=>{
@@ -493,7 +493,6 @@ movieSchema.methods.scan = function(){
 				this.file.subtitles = require('path').basename(file)
 				return Promise.resolve()
 			}
-			
 			let match = file.match(/^(.+)\s\((\d+)\)\s\[([\w]{2,4}p?)\]\.(\w{3,4})$/i)
 			if (match){
 				this.setQuality(match[3])
