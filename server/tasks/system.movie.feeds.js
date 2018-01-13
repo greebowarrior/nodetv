@@ -9,17 +9,9 @@ require('node-schedule').scheduleJob('18 * * * *', ()=>{
 	console.debug('Updating movies from YTS feeds')
 	
 	Movie.updateLatest()
-		.then(()=>{
-			return Movie.find({'ids.imdb':{$exists:true},$or:[{hashes:{$size:0}},{hashes:{$exists:false}}]})
-		})
-		.each(movie=>{
-			return movie.parseFeed()
-		})
 		.catch(error=>{
 			if (error) console.error(error.message)
 		})
-		
-	
 })
 
 // Find feeds per movie nightly at 4:31am
@@ -28,6 +20,7 @@ require('node-schedule').scheduleJob('31 4 * * *', ()=>{
 	
 	Movie.find({'ids.imdb':{$exists:true},$or:[{hashes:{$size:0}},{hashes:{$exists:false}}]})
 		.each((movie,idx)=>{
+			if (!movie) return null
 			setTimeout(()=>{
 				return movie.parseFeed()
 			},idx*250)
