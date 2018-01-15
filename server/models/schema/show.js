@@ -209,15 +209,16 @@ showSchema.methods.parseFeed = function(){
 			reject(new Error(`Show not enabled: ${this.title}`))
 		}
 	})
-	.map(entry=>{
-		return helpers.utils.getEpisodeNumbers(entry.title)
+	.each(entry=>{
+		helpers.utils.getEpisodeNumbers(entry.title)
 			.then(result=>{
 				result.episodes.forEach(ep=>{
 					let episodes = this.episodes.filter(item=>{
 						return item.season == result.season && item.episode == ep
 					})
 					episodes.forEach(episode=>{
-						episode.setInfoHash({
+						// This next line is occasionally throwing an error, saying the document doesn't exist. Why?
+						this.episodes.id(episode._id).setInfoHash({
 							btih: helpers.utils.getInfoHash(entry),
 							hd: helpers.utils.isHD(entry.title),
 							linked: result.episodes,
@@ -229,14 +230,18 @@ showSchema.methods.parseFeed = function(){
 						})
 					})
 				})
-				return null
 			})
+			.catch(error=>{
+				if (error) console.error(error)
+			})
+		return true
 	})
 	.then(()=>{
+		console.debug(`Saving ${this.title}`)
 		return this.save({new:true})
 	})
 	.catch(error=>{
-		if (error) console.error(`${this.title}: `, error.statusCode)
+		if (error) console.error(`${this.title}: `, error.message)
 	})
 }
 showSchema.methods.subscribe = function(user){

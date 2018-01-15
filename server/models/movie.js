@@ -116,7 +116,7 @@ movieSchema.statics.findByUser = function(user){
 
 movieSchema.statics.updateLatest = function(){
 	// TODO: Proxy support
-	return require('request-promise')({url:'https://yts.me/api/v2/list_movies.json', json:true, proxy:false})
+	return require('request-promise')({url:process.env.YTS_API, json:true, proxy:false})
 		.then(json=>{
 			return json.data.movie_count >= 1 ? json.data.movies : []
 		})
@@ -238,7 +238,7 @@ movieSchema.methods.parseFeed = function(){
 	
 	return Promise.try(()=>{
 		if (!this.ids.imdb) throw new Error(`No IMDB ID: ${this.ids.slug}`)
-		return require('request-promise').get({url:'https://yts.me/api/v2/list_movies.json', qs:{query_term:this.ids.imdb}, json:true, proxy:false})
+		return require('request-promise').get({url:process.env.YTS_API, qs:{query_term:this.ids.imdb}, json:true, proxy:false})
 	})
 	.then(json=>{
 		if (json.data.movie_count == 1){
