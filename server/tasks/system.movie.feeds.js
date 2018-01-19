@@ -18,7 +18,7 @@ require('node-schedule').scheduleJob('18 * * * *', ()=>{
 require('node-schedule').scheduleJob('31 4 * * *', ()=>{
 	console.debug('Updating movies from YTS feeds')
 	
-	Movie.find({'ids.imdb':{$exists:true},$or:[{hashes:{$size:0}},{hashes:{$exists:false}}]})
+	Movie.find({'ids.imdb':{$exists:true},$or:[{hashes:{$size:0}},{hashes:{$exists:false}}]}).exec()
 		.each((movie,idx)=>{
 			if (!movie) return null
 			setTimeout(()=>{
