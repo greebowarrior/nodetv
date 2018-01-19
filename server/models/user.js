@@ -102,7 +102,7 @@ userSchema.methods.syncCollection = function(type='shows'){
 							return show.subscribe(this).save({new:true})
 						})
 						.then(show=>{
-							return show.sync()
+							return show.sync(this)
 						})
 						.then(show=>{
 							return show.save()

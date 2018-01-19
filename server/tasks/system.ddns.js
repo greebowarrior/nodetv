@@ -8,7 +8,7 @@ require('node-schedule').scheduleJob('0 * * * *', ()=>{
 	try {
 		if (!process.env.DDNS_USER || !process.env.DDNS_TOKEN) return
 		
-		console.info('Updating DynDNS')
+		console.debug('Updating DynDNS')
 		
 		const updateDNS = data=>{
 			const options = {
@@ -42,7 +42,7 @@ require('node-schedule').scheduleJob('0 * * * *', ()=>{
 				return updateDNS(ips)
 			})
 			.then(()=>{
-				console.info('DynDNS Updated')
+				console.debug('DynDNS Updated')
 			})
 			.catch(()=>{
 				console.error('DynDNS update failed')
