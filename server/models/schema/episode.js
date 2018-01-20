@@ -94,7 +94,13 @@ episodeSchema.methods.setCollected = function(file=false,date=null){
 	return this.parent().getSubscribers()
 		.then(subscribers=>{
 			subscribers.forEach(user=>{
-				helpers.trakt(user).sync.collection.add({episodes:[{ids:{trakt:this.ids.trakt},collected_at:date}]})
+				helpers.trakt(user).sync.collection.add({
+					episodes:[{
+						ids:{trakt:this.ids.trakt},
+						collected_at:date.toISOString(),
+						media_type: 'digital'
+					}]
+				})
 			})
 			return null
 		})

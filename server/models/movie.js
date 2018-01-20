@@ -362,7 +362,14 @@ movieSchema.methods.setCollected = function(file=null,date=null){
 		require('./user').findById(user.subscriber)
 			.then(user=>{
 				if (!user) throw new Error(`User not found`)
-				helpers.trakt(user).sync.collection.add({movies:[{ids:{trakt:this.ids.trakt}}],collected_at:date})
+				helpers.trakt(user).sync.collection.add({
+					movies: [{
+						ids:{trakt:this.ids.trakt},
+						collected_at: date.toISOString(),
+						media_type: 'digital'
+				//		resolution: 'hd_1080p'
+					}]
+				})
 			})
 			.catch(error=>{
 				if (error) console.error(error.message)
@@ -371,7 +378,7 @@ movieSchema.methods.setCollected = function(file=null,date=null){
 	})
 	.finally(()=>{
 		if (file) this.file.filename = file
-		this.file.added = new Date()
+		this.file.added = date
 		this.file.download.active = undefined
 		
 		return this
@@ -494,22 +501,24 @@ movieSchema.methods.scan = function(){
 				this.file.subtitles = require('path').basename(file)
 				return Promise.resolve()
 			}
+			
 			let match = file.match(/^(.+)\s\((\d+)\)\s\[([\w]{2,4}p?)\]\.(\w{3,4})$/i)
 			if (match){
+				let filename = require('path').basename(file)
 				this.setQuality(match[3])
-				this.file.filename = require('path').basename(file)
 				
-				let source = require('path').join(this.getDirectory(),file)
+				this.file.filename = require('path').basename(file)
+				let source = require('path').join(this.getDirectory(),filename)
 				
 				return require('fs-extra').stat(source)
 					.then(stat=>{
-						this.file.added = stat.birthtime || stat.mtime
+						this.file.added = new Date(stat.mtime)
 						return Promise.resolve()
 					})
 			}
 		})
 		.then(()=>{
-			if (this.file.added) this.setCollected(this.file.added)
+			if (this.file.added) this.setCollected(this.file.filename, this.file.added)
 		})
 		.finally(()=>this.save({new:true}))
 }
