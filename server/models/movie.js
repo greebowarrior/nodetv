@@ -498,8 +498,18 @@ movieSchema.methods.scan = function(){
 			if (match){
 				this.setQuality(match[3])
 				this.file.filename = require('path').basename(file)
-				return Promise.resolve()
+				
+				let source = require('path').join(this.getDirectory(),file)
+				
+				return require('fs-extra').stat(source)
+					.then(stat=>{
+						this.file.added = stat.birthtime || stat.mtime
+						return Promise.resolve()
+					})
 			}
+		})
+		.then(()=>{
+			if (this.file.added) this.setCollected(this.file.added)
 		})
 		.finally(()=>this.save({new:true}))
 }

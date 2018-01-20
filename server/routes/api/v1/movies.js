@@ -70,7 +70,7 @@ const MoviesAPI = (api)=>{
 	
 	router.route('/scan')
 		.post((req,res)=>{
-			Movie.find({}).each(movie=>movie.scan())
+			Movie.find({}).exec().each(movie=>movie.scan())
 			res.status(202).end()
 		})
 	router.route('/sync')

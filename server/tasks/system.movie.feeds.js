@@ -21,8 +21,12 @@ require('node-schedule').scheduleJob('31 4 * * *', ()=>{
 	Movie.find({'ids.imdb':{$exists:true},$or:[{hashes:{$size:0}},{hashes:{$exists:false}}]}).exec()
 		.each((movie,idx)=>{
 			if (!movie) return null
+			console.debug(idx, movie.title)
+			
 			setTimeout(()=>{
-				return movie.parseFeed()
+				movie.parseFeed().catch(error=>{
+					if (error) console.error(error.message)
+				})
 			},idx*250)
 		})
 		.catch(error=>{
