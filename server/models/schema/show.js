@@ -1,6 +1,8 @@
 "use strict"
 
 const mongoose = require('mongoose')
+const RSSParser = require('rss-parser')
+
 const seasonSchema = require('./season')
 const episodeSchema = require('./episode')
 
@@ -190,23 +192,26 @@ showSchema.statics.upcomingEpisodes = function(user,days=7){
 // Methods
 showSchema.methods.parseFeed = function(){
 	// Parse the RSS feed, and update accordingly
-	return new Promise((resolve,reject)=>{
+	return Promise.try(()=>{
 		if (this.config.enabled && this.config.feed.length){
 			// TODO: Support multiple feeds
-			// TODO: Support proxying (for YTS, etc)
+			// TODO: Support proxying
 			
-			request({url:this.config.feed[0].url, proxy:false})
+			return request({url:this.config.feed[0].url, proxy:false})
 				.then(xml=>{
-					require('rss-parser').parseString(xml, (error,json)=>{
-						if (json) resolve(json.feed.entries)
-						if (error) reject(error)
+					const parser = new RSSParser({
+						customFields: {item: [['tv:external_id','tvmaze_id'],['tv:info_hash','hash']]}
 					})
+					return parser.parseString(xml)
+				})
+				.then(json=>{
+					return json.items
 				})
 				.catch(error=>{
-					reject(error)
+					Promise.reject(error)
 				})
 		} else {
-			reject(new Error(`Show not enabled: ${this.title}`))
+			return Promise.reject(new Error(`Show not enabled: ${this.title}`))
 		}
 	})
 	.each(entry=>{
@@ -473,9 +478,9 @@ showSchema.methods.scan = function(){
 						if (idx == -1) return
 						const formatted = this.episodes[idx].getFilename(file)
 						
-						return require('fs-extra').lstat(require('path').join(directory,file))
+						return require('fs-extra').stat(require('path').join(directory,file))
 							.then(stat=>{
-								this.episodes[idx].file.added = stat.mtime
+								this.episodes[idx].file.added = new Date(stat.mtime)
 								this.episodes[idx].file.filename = formatted
 								this.episodes[idx].file.filesize = stat.size
 								

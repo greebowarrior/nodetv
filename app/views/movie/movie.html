@@ -6,7 +6,12 @@
 		<div class="col-sm-12">
 			<div class="well">
 				<p>{{$ctrl.movie.overview}}</p>
-				<div>Runtime: {{$ctrl.movie.runtime}} mins</div>
+				
+				<ul class="details">
+					<li>{{$ctrl.movie.year}}</li>
+					<li>Runtime: {{$ctrl.movie.runtime}} mins</li>
+					<li ng-show="$ctrl.movie.file.added">Downloaded: {{$ctrl.movie.file.added|date:'medium'}}</li>
+				</ul>
 			</div>
 		</div>
 	</div>

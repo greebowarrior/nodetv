@@ -209,6 +209,9 @@ movieSchema.methods.getFilename = function(file){
 	let ext = require('path').extname(file) || '.mp4'
 	return helpers.utils.normalize(`${this.title} (${this.year}) [${this.file.quality}]${ext}`)
 }
+movieSchema.methods.getMediainfo = function(file){
+	return require('mediainfo')(file)
+}
 
 movieSchema.methods.getInfoHash = function(){
 	return new Promise(resolve=>{
@@ -367,7 +370,8 @@ movieSchema.methods.setCollected = function(file=null,date=null){
 						ids:{trakt:this.ids.trakt},
 						collected_at: date.toISOString(),
 						media_type: 'digital'
-				//		resolution: 'hd_1080p'
+				//		resolution: helpers.utils.getTraktResolution(this.file.quality)
+				//		'3d': this.file.quality === '3D' ? true : false
 					}]
 				})
 			})
@@ -513,6 +517,7 @@ movieSchema.methods.scan = function(){
 				return require('fs-extra').stat(source)
 					.then(stat=>{
 						this.file.added = new Date(stat.mtime)
+						this.file.filesize = stat.size
 						return Promise.resolve()
 					})
 			}

@@ -92,24 +92,20 @@ episodeSchema.methods.setCollected = function(file=false,date=null){
 	if (!date) date = new Date()
 	
 	return this.parent().getSubscribers()
-		.then(subscribers=>{
-			subscribers.forEach(user=>{
-				helpers.trakt(user).sync.collection.add({
-					episodes:[{
-						ids:{trakt:this.ids.trakt},
-						collected_at:date.toISOString(),
-						media_type: 'digital'
-					}]
-				})
+		.each(user=>{
+			helpers.trakt(user).sync.collection.add({
+				episodes:[{
+					ids:{trakt: this.ids.trakt},
+					collected_at: date.toISOString(),
+					media_type: 'digital'
+				}]
 			})
 			return null
 		})
 		.finally(()=>{
-			if (file){
-				this.file.filename = file
-				this.file.added = date
-				this.file.download.active = undefined
-			}
+			if (file) this.file.filename = file
+			this.file.added = date
+			this.file.download.active = undefined
 			return this
 		})
 }

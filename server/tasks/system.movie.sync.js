@@ -1,6 +1,6 @@
 "use strict"
 
-// Update enabled shows and fetch episode data
+// Update Movies metadata nightly
 
 const helpers = require('nodetv-helpers')
 const Movie = helpers.model('movie')
@@ -25,7 +25,7 @@ require('node-schedule').scheduleJob('15 1 * * *', ()=>{
 				return null
 			})
 			.catch(error=>{
-				if (error) console.error(`${movie.title}: ${error.message}`)
+				if (error) console.error(error.message)
 			})
 	})
 })
