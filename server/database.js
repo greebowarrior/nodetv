@@ -11,7 +11,7 @@ const Database = ()=>{
 	if (process.env.DB_USER && process.env.DB_PASS) conn += `${process.env.DB_USER}:${process.env.DB_PASS}@`
 	conn += `${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
 	
-	mongoose.connect(conn, {promiseLibrary:require('bluebird'),useMongoClient:true})
+	mongoose.connect(conn, {promiseLibrary:require('bluebird')}) //,useMongoClient:true})
 		.then(()=>{
 			console.info('Connected to MongoDB: %s:%s/%s', process.env.DB_HOST, process.env.DB_PORT, process.env.DB_NAME)
 		})

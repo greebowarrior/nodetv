@@ -116,6 +116,7 @@ userSchema.methods.syncCollection = function(type='shows'){
 }
 
 userSchema.pre('save', function(next){
+	this.apiToken()
 	this.updated = new Date()
 	next()
 })
@@ -135,11 +136,6 @@ userSchema.pre('remove', function(next){
 					if (typeof next === 'function') next()
 				})
 		})
-})
-
-userSchema.post('findOne', function(doc,next){
-	//doc.uri = `/api/users/${doc._id}`
-	next()
 })
 
 module.exports = mongoose.model('User', userSchema)
