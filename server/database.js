@@ -2,7 +2,9 @@
 
 const mongoose = require('mongoose')
 require('mongoose-long')(mongoose)
+
 mongoose.Promise = global.Promise
+mongoose.plugin(require('mongoose-unique-validator'))
 
 const Database = ()=>{
 	
@@ -13,7 +15,7 @@ const Database = ()=>{
 	
 	mongoose.connect(conn, {promiseLibrary:require('bluebird')}) //,useMongoClient:true})
 		.then(()=>{
-			console.info('Connected to MongoDB: %s:%s/%s', process.env.DB_HOST, process.env.DB_PORT, process.env.DB_NAME)
+			console.debug('Connected to MongoDB: %s:%s/%s', process.env.DB_HOST, process.env.DB_PORT, process.env.DB_NAME)
 		})
 		.catch(error=>{
 			if (error) console.error(error.message)

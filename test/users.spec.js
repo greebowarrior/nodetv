@@ -3,8 +3,9 @@
 const chai = require('chai')
 const expect = chai.expect
 
+const User = require('../server/models/user')
+
 describe('Users', function(){
-	let User = require('../server/models/user')
 	
 	const data = {username:'mocha',email:'mocha@example.com'}
 	
@@ -19,15 +20,26 @@ describe('Users', function(){
 		}).catch(done)
 	})
 
+	it('Prevent duplicate user', (done)=>{
+		let user = new User(data)
+		user.setPassword('password','password')
+		user.save().then(()=>{
+			done(new Error('Duplicate user created'))
+		}).catch(()=>{
+			done()
+		})
+	})
+	
 	it('List users',(done)=>{
-		User.find({}).then(users=>{
+		User.find({}).limit(1).then(users=>{
 			expect(users).to.be.a('array')
+			expect(users).to.have.lengthOf(1)
 			done()
 		}).catch(done)
 	})
 	
 	it('Get user by username', (done)=>{
-		User.findByUsername('mocha').then(user=>{
+		User.findByUsername(data.username).then(user=>{
 			expect(user.username).to.equal(data.username)
 			expect(user.email).to.equal(data.email)
 			expect(user.verifyPassword('password')).to.be.true

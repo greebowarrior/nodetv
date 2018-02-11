@@ -19,9 +19,9 @@ const showSchema = new mongoose.Schema({
 		guidebox: {type: Number},
 		imdb: {type:String, default: null, trim: true},
 		showrss: {type: Number},
-		slug: {type:String, lowercase:true, required: true, trim: true},
+		slug: {type:String, lowercase:true, required:true, trim:true, unique:true},
 		tmdb: {type:Number, default:null},
-		trakt: {type:Number, default:null, required: true},
+		trakt: {type:Number, default:null, required:true, unique:true},
 		tvdb: {type:Number, default:null},
 		tvmaze: {type:Number}
 	},

@@ -9,9 +9,9 @@ let movieSchema = new mongoose.Schema({
 	year: Number,
 	ids: {
 		imdb: {type: String, default: null},
-		slug: {type:String, lowercase:true, required: true, trim: true},
+		slug: {type:String, lowercase:true, required: true, trim: true, unique:true},
 		tmdb: {type:Number, default:null},
-		trakt: {type:Number, default:null, required: true}
+		trakt: {type:Number, default:null, required: true, unique:true}
 	},
 	subscribers: [{
 		_id: false,
