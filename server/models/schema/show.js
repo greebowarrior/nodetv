@@ -517,7 +517,7 @@ showSchema.methods.scan = function(){
 
 showSchema.methods.sync = function(user={}){
 	// Sync data from Trakt
-	return helpers.trakt(user).shows.summary({id:this.ids.slug, extended:'full'})
+	return helpers.trakt(user).shows.summary({id:this.ids.trakt, extended:'full'})
 		.then(summary=>{
 			
 			if (this.synced < new Date(summary.updated_at)){
@@ -535,7 +535,7 @@ showSchema.methods.sync = function(user={}){
 			
 			require('fs-extra').ensureDir(this.getDirectory())
 			
-			return helpers.trakt().seasons.summary({id:this.ids.slug,extended:'episodes,full'})
+			return helpers.trakt().seasons.summary({id:this.ids.trakt,extended:'episodes,full'})
 		})
 		
 		.then(seasons=>{
