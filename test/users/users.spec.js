@@ -1,9 +1,6 @@
 "use strict"
 
-const chai = require('chai')
-const expect = chai.expect
-
-const User = require('../server/models/user')
+const User = require('../../server/models/user')
 
 describe('Users', function(){
 	

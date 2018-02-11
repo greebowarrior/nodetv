@@ -1,12 +1,8 @@
 "use strict"
 
-const chai = require('chai')
-const expect = chai.expect
-
-const Show = require('../server/models/show')
+const Show = require('../../server/models/show')
 
 describe('Shows', function(){
-	
 	const data = {title:'Supergirl', year:2015, ids:{slug:'supergirl',trakt:99046}}
 	
 	it('Add show', (done)=>{
@@ -35,7 +31,24 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})
+	
+	it('Get show by slug', (done)=>{
+		Show.findBySlug(data.ids.slug).then(show=>{
+			expect(show.title).to.equal(data.title)
+			expect(show.year).to.equal(data.year)
+			expect(show.ids.trakt).to.equal(data.ids.trakt)
+			done()
+		}).catch(done)
+	})
 
+	it('Get show by Trakt ID', (done)=>{
+		Show.findByTrakt(data.ids.trakt).then(show=>{
+			expect(show.title).to.equal(data.title)
+			expect(show.year).to.equal(data.year)
+			expect(show.ids.trakt).to.equal(data.ids.trakt)
+			done()
+		}).catch(done)
+	})
 	
 	it('Sync show', (done)=>{
 		Show.findOne({'ids.trakt':data.ids.trakt}).then(show=>{

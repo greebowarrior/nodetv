@@ -1,12 +1,8 @@
 "use strict"
 
-const chai = require('chai')
-const expect = chai.expect
-
-const Movie = require('../server/models/movie')
+const Movie = require('../../server/models/movie')
 
 describe('Movies', function(){
-	
 	const data = {title:'Titanic', year:1997, ids:{slug:'titanic-1997',trakt:475}}
 	
 	it('Add Movie', (done)=>{
@@ -31,6 +27,26 @@ describe('Movies', function(){
 		Movie.find({}).limit(1).then(movies=>{
 			expect(movies).to.be.a('array')
 			expect(movies).to.have.lengthOf(1)
+			done()
+		}).catch(done)
+	})
+	
+	it('Get movie by slug', (done)=>{
+		Movie.findBySlug(data.ids.slug).then(movie=>{
+			expect(movie.title).to.equal(data.title)
+			expect(movie.year).to.equal(data.year)
+			expect(movie.ids.slug).to.equal(data.ids.slug)
+			expect(movie.ids.trakt).to.equal(data.ids.trakt)
+			done()
+		}).catch(done)
+	})
+	
+	it('Get movie by Trakt ID', (done)=>{
+		Movie.findByTrakt(data.ids.trakt).then(movie=>{
+			expect(movie.title).to.equal(data.title)
+			expect(movie.year).to.equal(data.year)
+			expect(movie.ids.slug).to.equal(data.ids.slug)
+			expect(movie.ids.trakt).to.equal(data.ids.trakt)
 			done()
 		}).catch(done)
 	})

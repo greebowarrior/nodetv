@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "nodemon",
-    "test": "nyc mocha --sort --exit",
+    "test": "nyc mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "main": "./server.js",

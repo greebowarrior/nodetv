@@ -1,0 +1,5 @@
+--require ./test/setup.js
+--recursive
+--sort
+--timeout 5000
+--exit
