@@ -1,6 +1,7 @@
 # Node TV
 
 [![Build Status](https://travis-ci.org/greebowarrior/nodetv.svg?branch=1.1.0)](https://travis-ci.org/greebowarrior/nodetv)
+[![Coverage Status](https://coveralls.io/repos/github/greebowarrior/nodetv/badge.svg?branch=1.1.0)](https://coveralls.io/github/greebowarrior/nodetv?branch=1.1.0)
 
 A complete re-write of my [existing project](https://github.com/greebowarrior/nessa)
 but hopefully learning from my previous mistakes
