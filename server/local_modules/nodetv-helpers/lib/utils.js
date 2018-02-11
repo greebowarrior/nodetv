@@ -43,6 +43,7 @@ exports.getEpisodeNumbers = function(filename){
 exports.getProxy = (options={})=>{
 	const defaults = {
 		allowHttps: 1,
+		apiKey: process.env.PROXY_API_KEY,
 		protocol: 'http'
 	}
 	let qs = Object.assign({}, defaults, options)
@@ -51,12 +52,12 @@ exports.getProxy = (options={})=>{
 		require('request-promise')({
 			url:'https://api.getproxylist.com/proxy',qs:qs,json:true
 		}).then(json=>{
-				if (!json.ip) throw new Error(`No proxy returned from getproxylist`)
-				resolve(`${json.protocol}://${json.ip}:${json.port}`)
-			})
-			.catch(()=>{
-				resolve(false)
-			})
+			if (!json.ip) throw new Error(`No proxy returned from getproxylist`)
+		//	let proxy = `${json.protocol}://${json.ip}:${json.port}`
+			resolve(`${json.protocol}://${json.ip}:${json.port}`)
+		}).catch(()=>{
+			resolve(false)
+		})
 	})
 }
 exports.getQuality = (filename)=>{

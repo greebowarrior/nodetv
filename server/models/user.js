@@ -30,12 +30,13 @@ const userSchema = new mongoose.Schema({
 
 userSchema.statics.findByToken = function(username,token){
 	return this.findOne({
-		'username': username, 'tokens.token': token
+		$or: [{username:username},{email:username}],
+		'tokens.token': token
 	})
 }
 userSchema.statics.findByUsername = function(username){
 	return this.findOne({
-		'username': username
+		$or: [{username:username},{email:username}]
 	})
 }
 

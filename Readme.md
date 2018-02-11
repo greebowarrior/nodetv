@@ -1,6 +1,6 @@
 # Node TV
 
-[![Build Status](https://travis-ci.org/greebowarrior/nodetv.svg?branch=master)](https://travis-ci.org/greebowarrior/nodetv)
+[![Build Status](https://travis-ci.org/greebowarrior/nodetv.svg?branch=1.1.0)](https://travis-ci.org/greebowarrior/nodetv)
 
 A complete re-write of my [existing project](https://github.com/greebowarrior/nessa)
 but hopefully learning from my previous mistakes
