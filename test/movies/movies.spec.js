@@ -13,7 +13,6 @@ describe('Movies', function(){
 			done()
 		}).catch(done)
 	})
-
 	it('Prevent duplicate movie', (done)=>{
 		let movie = new Movie(data)
 		movie.save().then(()=>{
@@ -22,7 +21,6 @@ describe('Movies', function(){
 			done()
 		})
 	})
-	
 	it('List Movies', (done)=>{
 		Movie.find({}).limit(1).then(movies=>{
 			expect(movies).to.be.a('array')
@@ -30,7 +28,6 @@ describe('Movies', function(){
 			done()
 		}).catch(done)
 	})
-	
 	it('Get movie by slug', (done)=>{
 		Movie.findBySlug(data.ids.slug).then(movie=>{
 			expect(movie.title).to.equal(data.title)
@@ -40,19 +37,18 @@ describe('Movies', function(){
 			done()
 		}).catch(done)
 	})
-	
 	it('Get movie by Trakt ID', (done)=>{
 		Movie.findByTrakt(data.ids.trakt).then(movie=>{
 			expect(movie.title).to.equal(data.title)
 			expect(movie.year).to.equal(data.year)
 			expect(movie.ids.slug).to.equal(data.ids.slug)
 			expect(movie.ids.trakt).to.equal(data.ids.trakt)
+			expect(movie.uri).to.equal(`/api/movies/${data.ids.slug}`)
 			done()
 		}).catch(done)
 	})
-	
 	it('Sync Movie', (done)=>{
-		Movie.findOne({'ids.trakt':data.ids.trakt}).then(movie=>{
+		Movie.findByTrakt(data.ids.trakt).then(movie=>{
 			expect(movie.title).to.equal(data.title)
 			return movie.sync()
 		}).then(movie=>{
@@ -61,7 +57,6 @@ describe('Movies', function(){
 			done()
 		}).catch(done)
 	})
-	
 	it('Remove Movie', (done)=>{
 		Movie.findBySlug(data.ids.slug).then(movie=>{
 			expect(movie.title).to.equal(data.title)

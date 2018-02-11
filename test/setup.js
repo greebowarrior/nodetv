@@ -3,5 +3,10 @@
 require('dotenv-extended').load()
 require('../server/database')
 
-global.expect = require('chai').expect
-global.should = require('chai').should()
+let chai = require('chai')
+chai.use(require('chai-http'))
+
+global.expect = chai.expect
+global.should = chai.should()
+
+//global.server = require('../server')

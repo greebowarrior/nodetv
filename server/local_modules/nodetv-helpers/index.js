@@ -4,7 +4,7 @@ exports.model = (name='')=>{
 	try {
 		return require(require('path').join(process.cwd(),'server','models', name))
 	} catch(error){
-		console.error(error.message)
+		if (error) console.error(error.message)
 	}
 }
 

@@ -1,0 +1,13 @@
+{
+	"env": {
+		"es6": true,
+		"mocha": true,
+		"mongo": true,
+		"node": true
+	},
+	"globals": {
+		"assert": false,
+		"expect": true,
+		"should": false
+	}
+}
