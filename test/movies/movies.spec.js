@@ -3,7 +3,7 @@
 const Movie = require('../../server/models/movie')
 
 describe('Movies', function(){
-	const data = {title:'Titanic', year:1997, ids:{slug:'titanic-1997',trakt:475}}
+	const data = {title:'Titanic', year:1997, ids:{slug:'titanic-1997',trakt:475,tmdb:597}}
 	
 	it('Add Movie', (done)=>{
 		let movie = new Movie(data)
@@ -54,6 +54,14 @@ describe('Movies', function(){
 		}).then(movie=>{
 			expect(movie.overview).to.be.a('string')
 			expect(movie.ids.imdb).to.equal('tt0120338')
+			done()
+		}).catch(done)
+	})
+	it('Get Artwork', (done)=>{
+		require('nodetv-helpers').trakt().images.get(data.ids.tmdb,'movie').then(images=>{
+			expect(images.backgrounds).to.be.a('array')
+			expect(images.banners).to.be.a('array')
+			expect(images.posters).to.be.a('array')
 			done()
 		}).catch(done)
 	})
