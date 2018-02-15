@@ -8,6 +8,7 @@
 	"globals": {
 		"assert": false,
 		"expect": true,
-		"should": false
+		"should": false,
+		"sinon": true
 	}
 }

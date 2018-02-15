@@ -89,6 +89,25 @@ exports.getInfoHash = (item)=>{
 	return false
 }
 
+exports.getTraktResolution = (quality)=>{
+	let resolution = 'sd_480p'
+	switch (quality){
+		case '4K':
+			resolution = 'uhd_4k'
+			break;
+		case '1080p':
+			resolution = 'hd_1080p'
+			break;
+		case '720p':
+			resolution = 'hd_720p'
+			break;
+		case 'SD':
+			resolution = 'sd_480p'
+			break;
+	}
+	return resolution
+}
+
 exports.normalize = (string)=>{
 	const Entities = require('html-entities').AllHtmlEntities
 	const entity = new Entities()
