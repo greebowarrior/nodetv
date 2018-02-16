@@ -7,7 +7,7 @@
 		"uuidString": "18A536C4-F3C0-4048-81AF-7D5149E0AE13"
 		}
 	],
-"creatorBuild": "26148",
+"creatorBuild": "26261",
 "files": {
 	"\/.env": {
 		"cB": 0,
@@ -23,6 +23,13 @@
 		"oAP": "\/.env.defaults",
 		"oF": 0
 		},
+	"\/.eslintrc": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/.eslintrc",
+		"oF": 0
+		},
 	"\/.gitignore": {
 		"cB": 0,
 		"ft": 8192,
@@ -35,6 +42,13 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/.npmrc",
+		"oF": 0
+		},
+	"\/.travis.yml": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/.travis.yml",
 		"oF": 0
 		},
 	"\/app\/browserconfig.xml": {
@@ -1209,6 +1223,81 @@
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
+		},
+	"\/test\/helpers\/utils.spec.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/test\/helpers\/min\/utils.spec.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/test\/mocha.opts": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/test\/mocha.opts",
+		"oF": 0
+		},
+	"\/test\/movies\/movies.spec.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/test\/movies\/min\/movies.spec.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/test\/setup.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/test\/min\/setup.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/test\/shows\/shows.spec.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/test\/shows\/min\/shows.spec.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/test\/users\/users.spec.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/test\/users\/min\/users.spec.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
+	"\/TODO.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 1,
+		"oAP": "\/TODO.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
 		}
 	},
 "hooks": [
@@ -1617,7 +1706,7 @@
 		},
 	"esLintConfigFileHandlingType": 1,
 	"esLintECMAVersion": 7,
-	"esLintEnvironmentsMask": 8527923,
+	"esLintEnvironmentsMask": 9576627,
 	"esLintRules": {
 		"accessor-pairs": {
 			"active": 0,
@@ -3159,7 +3248,7 @@
 		],
 	"overrideExternalServerCSS": 0,
 	"previewPathAddition": "",
-	"skippedFoldersString": "log, _logs, logs, _cache, cache, \/storage\/framework\/sessions, node_modules",
+	"skippedFoldersString": "log, _logs, logs, _cache, cache, \/storage\/framework\/sessions, node_modules, .nyc_output\/",
 	"sourceFolderName": "source",
 	"susyVersion": 3,
 	"uglifyDefinesString": "",

@@ -134,7 +134,7 @@ showSchema.statics.recentEpisodes = function(user,days=7){
 			$match: {
 				'subscribers.subscriber': user._id,
 				$or: [
-					{'episodes.file.added': {$gte:since, $lt:now}},
+			//		{'episodes.file.added': {$gte:since, $lt:now}},
 					{'episodes.first_aired': {$gte:since, $lt:now},'config.enabled':true}
 				]
 			}
@@ -143,7 +143,7 @@ showSchema.statics.recentEpisodes = function(user,days=7){
 		},{
 			$match: {
 				$or: [
-					{'episodes.file.added': {$gte:since, $lt:now}},
+			//		{'episodes.file.added': {$gte:since, $lt:now}},
 					{'episodes.first_aired': {$gte:since, $lt:now},'config.enabled':true}
 				],
 				'episodes.season': {$ne: 0}
@@ -224,7 +224,7 @@ showSchema.methods.parseFeed = function(){
 					episodes.forEach(episode=>{
 						// This next line is occasionally throwing an error, saying the document doesn't exist. Why?
 						this.episodes.id(episode._id).setInfoHash({
-							btih: helpers.utils.getInfoHash(entry),
+							btih: entry.hash, //helpers.utils.getInfoHash(entry),
 							hd: helpers.utils.isHD(entry.title),
 							linked: result.episodes,
 							multi: result.episodes.length > 1 ? true : false,
@@ -417,7 +417,7 @@ showSchema.methods.setDirectory = function(){
 
 showSchema.methods.setCollected = function(){
 	this.episodes.forEach(episode=>{
-		episode.setCollected()
+		episode.setCollected(null, episode.file.added)
 	})
 	return this
 }

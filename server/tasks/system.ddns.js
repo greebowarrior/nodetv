@@ -31,10 +31,10 @@ require('node-schedule').scheduleJob('0 * * * *', ()=>{
 		let promises = [
 			request('http://v4.ipv6-test.com/api/myip.php').then(body=>{
 				return {type:'v4',address:body}
-			}),
+			}).catch(()=>null),
 			request('http://v6.ipv6-test.com/api/myip.php').then(body=>{
 				return {type:'v6',address:body}
-			})
+			}).catch(()=>null)
 		]
 		
 		Promise.any(promises)

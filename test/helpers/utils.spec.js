@@ -26,7 +26,7 @@ describe('Utils', function(){
 			expect(data).to.be.a('string')
 			done()
 		}).catch(error=>{
-			expect(error).to.be.null
+			expect(error).to.be.false
 			done()
 		})
 	})
