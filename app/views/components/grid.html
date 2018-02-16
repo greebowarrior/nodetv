@@ -16,7 +16,7 @@
 	</div>
 	
 	<div class="grid-footer text-center" ng-show="$ctrl.items.length > $ctrl.pagination.items">
-		<ul class="pagination-sm" uib-pagination ng-model="$ctrl.pagination.page" ng-change="$ctrl.pageChange()" total-items="$ctrl.items.length" items-per-page="$ctrl.pagination.items" boundary-link-numbers="true" force-ellipses="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+		<ul class="pagination-sm" uib-pagination ng-model="$ctrl.pagination.page" ng-change="$ctrl.pageChange()" total-items="$ctrl.items.length" items-per-page="$ctrl.pagination.items" boundary-link-numbers="true" force-ellipses="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" max-size="10" rotate="true"></ul>
 	</div>
 </div>
 <nutv-search type="$ctrl.type" results="$ctrl.results"></nutv-search>

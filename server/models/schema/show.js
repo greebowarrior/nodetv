@@ -1,6 +1,8 @@
 "use strict"
 
 const mongoose = require('mongoose')
+const RSSParser = require('rss-parser')
+
 const seasonSchema = require('./season')
 const episodeSchema = require('./episode')
 
@@ -17,9 +19,9 @@ const showSchema = new mongoose.Schema({
 		guidebox: {type: Number},
 		imdb: {type:String, default: null, trim: true},
 		showrss: {type: Number},
-		slug: {type:String, lowercase:true, required: true, trim: true},
+		slug: {type:String, lowercase:true, required:true, trim:true, unique:true},
 		tmdb: {type:Number, default:null},
-		trakt: {type:Number, default:null, required: true},
+		trakt: {type:Number, default:null, required:true, unique:true},
 		tvdb: {type:Number, default:null},
 		tvmaze: {type:Number}
 	},
@@ -48,7 +50,10 @@ const showSchema = new mongoose.Schema({
 		subscriber: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 	}],
 	status: String,
-	genres: Array,
+	genres: [{
+		_id: false,
+		name: String
+	}],
 	images: {
 		background: {
 			enabled: {type: Boolean, default: false},
@@ -116,7 +121,7 @@ showSchema.statics.findEnabled = function(projection={},options={}){
 	return this.find({
 		'config.enabled':true,
 		'config.feed':{$exists:true}
-	},projection,options)
+	},projection,options).exec()
 }
 
 showSchema.statics.recentEpisodes = function(user,days=7){
@@ -129,7 +134,7 @@ showSchema.statics.recentEpisodes = function(user,days=7){
 			$match: {
 				'subscribers.subscriber': user._id,
 				$or: [
-					{'episodes.file.added': {$gte:since, $lt:now}},
+			//		{'episodes.file.added': {$gte:since, $lt:now}},
 					{'episodes.first_aired': {$gte:since, $lt:now},'config.enabled':true}
 				]
 			}
@@ -138,7 +143,7 @@ showSchema.statics.recentEpisodes = function(user,days=7){
 		},{
 			$match: {
 				$or: [
-					{'episodes.file.added': {$gte:since, $lt:now}},
+			//		{'episodes.file.added': {$gte:since, $lt:now}},
 					{'episodes.first_aired': {$gte:since, $lt:now},'config.enabled':true}
 				],
 				'episodes.season': {$ne: 0}
@@ -187,35 +192,39 @@ showSchema.statics.upcomingEpisodes = function(user,days=7){
 // Methods
 showSchema.methods.parseFeed = function(){
 	// Parse the RSS feed, and update accordingly
-	return new Promise((resolve,reject)=>{
+	return Promise.try(()=>{
 		if (this.config.enabled && this.config.feed.length){
 			// TODO: Support multiple feeds
-			// TODO: Support proxying (for YTS, etc)
+			// TODO: Support proxying
 			
-			request({url:this.config.feed[0].url, proxy:false})
+			return request({url:this.config.feed[0].url, proxy:false})
 				.then(xml=>{
-					require('rss-parser').parseString(xml, (error,json)=>{
-						if (json) resolve(json.feed.entries)
-						if (error) reject(error)
+					const parser = new RSSParser({
+						customFields: {item: [['tv:external_id','tvmaze_id'],['tv:info_hash','hash']]}
 					})
+					return parser.parseString(xml)
+				})
+				.then(json=>{
+					return json.items
 				})
 				.catch(error=>{
-					reject(error)
+					Promise.reject(error)
 				})
 		} else {
-			reject(new Error(`Show not enabled: ${this.title}`))
+			return Promise.reject(new Error(`Show not enabled: ${this.title}`))
 		}
 	})
-	.map(entry=>{
-		return helpers.utils.getEpisodeNumbers(entry.title)
+	.each(entry=>{
+		helpers.utils.getEpisodeNumbers(entry.title)
 			.then(result=>{
 				result.episodes.forEach(ep=>{
 					let episodes = this.episodes.filter(item=>{
 						return item.season == result.season && item.episode == ep
 					})
 					episodes.forEach(episode=>{
-						episode.setInfoHash({
-							btih: helpers.utils.getInfoHash(entry),
+						// This next line is occasionally throwing an error, saying the document doesn't exist. Why?
+						this.episodes.id(episode._id).setInfoHash({
+							btih: entry.hash, //helpers.utils.getInfoHash(entry),
 							hd: helpers.utils.isHD(entry.title),
 							linked: result.episodes,
 							multi: result.episodes.length > 1 ? true : false,
@@ -226,14 +235,18 @@ showSchema.methods.parseFeed = function(){
 						})
 					})
 				})
-				return null
 			})
+			.catch(error=>{
+				if (error) console.error(error)
+			})
+		return true
 	})
 	.then(()=>{
+		console.debug(`Saving ${this.title}`)
 		return this.save({new:true})
 	})
 	.catch(error=>{
-		if (error) console.error(`${this.title}: `, error.statusCode)
+		if (error) console.error(`${this.title}: `, error.message)
 	})
 }
 showSchema.methods.subscribe = function(user){
@@ -270,18 +283,15 @@ showSchema.methods.hasRecentEpisodes = function(days=7){
 	})
 }
 
-
 showSchema.methods.getDirectory = function(){
-	if (this.config.directory){
-		return require('path').join(
-			process.env.MEDIA_ROOT,
-			process.env.MEDIA_SHOWS,
-			helpers.utils.normalize(this.config.directory)
-		)
-	}
-	return false
+	if (!this.config.directory) this.setDirectory()
+	
+	return require('path').join(
+		process.env.MEDIA_ROOT,
+		process.env.MEDIA_SHOWS,
+		helpers.utils.normalize(this.config.directory)
+	)
 }
-
 showSchema.methods.getEpisode = function(season,episode){
 	return new Promise((resolve,reject)=>{
 		let idx = this.episodes.findIndex(item=>{
@@ -292,7 +302,6 @@ showSchema.methods.getEpisode = function(season,episode){
 		resolve(this.episodes.id(this.episodes[idx]._id))
 	})
 }
-
 showSchema.methods.getLatestEpisodes = function(days=7){
 	return new Promise(resolve=>{
 		let since = new Date()
@@ -316,7 +325,7 @@ showSchema.methods.setTVMazeID = function(){
 	return require('request-promise')({
 		json: true,
 		uri: `https://api.tvmaze.com/lookup/shows`,
-		qs: {tvdb: this.ids.tvdb}
+		qs: {tvdb: this.ids.tvdb, imdb:this.ids.imdb}
 	}).then(res=>{
 		if (res.data.id) this.ids.tvmaze = res.data.id
 	})
@@ -403,13 +412,12 @@ showSchema.methods.setArtwork = function(data){
 	})
 }
 showSchema.methods.setDirectory = function(){
-	// Use to rename an existing directory
-	// or create one if it doesn't already exist
+	this.config.directory = helpers.utils.normalize(this.title)
 }
 
 showSchema.methods.setCollected = function(){
 	this.episodes.forEach(episode=>{
-		episode.setCollected()
+		episode.setCollected(null, episode.file.added)
 	})
 	return this
 }
@@ -470,9 +478,9 @@ showSchema.methods.scan = function(){
 						if (idx == -1) return
 						const formatted = this.episodes[idx].getFilename(file)
 						
-						return require('fs-extra').lstat(require('path').join(directory,file))
+						return require('fs-extra').stat(require('path').join(directory,file))
 							.then(stat=>{
-								this.episodes[idx].file.added = stat.mtime
+								this.episodes[idx].file.added = new Date(stat.mtime)
 								this.episodes[idx].file.filename = formatted
 								this.episodes[idx].file.filesize = stat.size
 								
@@ -507,9 +515,9 @@ showSchema.methods.scan = function(){
 		})
 }
 
-showSchema.methods.sync = function(){
+showSchema.methods.sync = function(user={}){
 	// Sync data from Trakt
-	return helpers.trakt().shows.summary({id:this.ids.slug, extended:'full'})
+	return helpers.trakt(user).shows.summary({id:this.ids.trakt, extended:'full'})
 		.then(summary=>{
 			
 			if (this.synced < new Date(summary.updated_at)){
@@ -523,14 +531,11 @@ showSchema.methods.sync = function(){
 			this.overview = helpers.utils.normalize(summary.overview)
 			this.first_aired = new Date(summary.first_aired)
 			this.airs = summary.airs
-
-			if (!this.config.directory){
-				// Create a directory based on the name
-				this.config.directory = this.title
-			}
+			this.genres = summary.genres.map(genre=>({name:genre}))
+			
 			require('fs-extra').ensureDir(this.getDirectory())
 			
-			return helpers.trakt().seasons.summary({id:this.ids.slug,extended:'episodes,full'})
+			return helpers.trakt().seasons.summary({id:this.ids.trakt,extended:'episodes,full'})
 		})
 		
 		.then(seasons=>{

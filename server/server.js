@@ -20,7 +20,7 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 
 server.listen(app.get('port'), ()=>{
-	console.log(`Listening on port ${app.get('port')}`)
+	console.debug(`Listening on port ${app.get('port')}`)
 })
 
 // Configure Express

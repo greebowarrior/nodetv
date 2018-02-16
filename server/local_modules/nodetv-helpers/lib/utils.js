@@ -43,6 +43,7 @@ exports.getEpisodeNumbers = function(filename){
 exports.getProxy = (options={})=>{
 	const defaults = {
 		allowHttps: 1,
+		apiKey: process.env.PROXY_API_KEY,
 		protocol: 'http'
 	}
 	let qs = Object.assign({}, defaults, options)
@@ -51,12 +52,12 @@ exports.getProxy = (options={})=>{
 		require('request-promise')({
 			url:'https://api.getproxylist.com/proxy',qs:qs,json:true
 		}).then(json=>{
-				if (!json.ip) throw new Error(`No proxy returned from getproxylist`)
-				resolve(`${json.protocol}://${json.ip}:${json.port}`)
-			})
-			.catch(()=>{
-				resolve(false)
-			})
+			if (!json.ip) throw new Error(`No proxy returned from getproxylist`)
+		//	let proxy = `${json.protocol}://${json.ip}:${json.port}`
+			resolve(`${json.protocol}://${json.ip}:${json.port}`)
+		}).catch(()=>{
+			resolve(false)
+		})
 	})
 }
 exports.getQuality = (filename)=>{
@@ -86,6 +87,25 @@ exports.getInfoHash = (item)=>{
 		return match[1].toUpperCase()
 	}
 	return false
+}
+
+exports.getTraktResolution = (quality)=>{
+	let resolution = 'sd_480p'
+	switch (quality){
+		case '4K':
+			resolution = 'uhd_4k'
+			break;
+		case '1080p':
+			resolution = 'hd_1080p'
+			break;
+		case '720p':
+			resolution = 'hd_720p'
+			break;
+		case 'SD':
+			resolution = 'sd_480p'
+			break;
+	}
+	return resolution
 }
 
 exports.normalize = (string)=>{

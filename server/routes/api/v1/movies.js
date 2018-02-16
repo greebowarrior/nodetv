@@ -12,13 +12,14 @@ const MoviesAPI = (api)=>{
 	
 	router.route('/')
 		.get((req,res)=>{
-			Movie.findByUser(req.user._id)
+			Movie.findByUser(req.user)
 				.then(movies=>{
 					movies.sort((a,b)=>a.title.toLowerCase().localeCompare(b.title.toLowerCase()))
 					res.send(movies)
 				})
 				.catch(error=>{
-					res.status(404).send({error:error})
+					if (error) console.error(error.message)
+					res.status(404).send({error:error.message})
 				})
 		})
 		.post((req,res)=>{
@@ -26,7 +27,7 @@ const MoviesAPI = (api)=>{
 				.then(movie=>{
 					if (movie) return movie
 					movie = new Movie({ids:{slug:req.body.slug}})
-					return movie.sync()
+					return movie.sync(req.user)
 				})
 				.then(movie=>{
 					// Subscribe to show
@@ -34,11 +35,53 @@ const MoviesAPI = (api)=>{
 				})
 				.then(movie=>{
 					res.status(201).send(movie)
+					return movie.parseFeed()
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(400).send({error:error})
 				})
+		})
+	
+	router.route('/available')
+		.get((req,res)=>{
+			// TODO: Add proxy support and caching
+			return require('request-promise').get({url:process.env.YTS_API, qs:{limit:12}, json:true, proxy:false})
+				.then(json=>{
+					let results = json.data.movies.map(item=>{
+						return {
+							title: item.title,
+							year: item.year,
+							ids: {
+								imdb: item.imdb_code,
+								slug: item.slug
+							},
+							image: item.medium_cover_image,
+							added: new Date(item.date_added)
+						}
+					})
+					res.send(results)
+				})
+				.catch(error=>{
+					if (error) console.error(error.message)
+					res.status(404).end()
+				})
+		})
+	
+	router.route('/scan')
+		.post((req,res)=>{
+			Movie.find({}).exec().each(movie=>movie.scan())
+			res.status(202).end()
+		})
+	router.route('/sync')
+		.post((req,res)=>{
+			Movie.syncCollection(req.user)
+			res.status(202).end()
+		})
+	router.route('/upgrade')
+		.post((req,res)=>{
+			Movie.scanAll()
+			res.status(202).end()
 		})
 	
 	router.route('/:slug')
@@ -51,7 +94,8 @@ const MoviesAPI = (api)=>{
 					res.status(204).end()
 				})
 				.catch(error=>{
-					res.status(400).send({error:error})
+					if (error) console.error(error.message)
+					res.status(400).send({error:error.message})
 				})
 		})
 		.get((req,res)=>{
@@ -61,25 +105,41 @@ const MoviesAPI = (api)=>{
 					res.send(movie)
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(400).send({error:'Bad Request'})
 				})
 		})
 	
+	router.route('/:slug/feeds')
+		.patch((req,res)=>{
+			Movie.findBySlug(req.params.slug)
+				.then(movie=>{
+					if (!movie) throw new Error(`Movie not found: ${req.params.slug}`)
+					return movie.parseFeed()
+				})
+				.then(movie=>{
+					res.status(200).send(movie.hashes || [])
+				})
+				.catch(error=>{
+					if (error) console.error(error.message)
+					res.status(404).send({error:error.message})
+				})
+		})
+
 	router.route('/:slug/sync')
 		.post((req,res)=>{
 			Movie.findBySlug(req.params.slug)
 				.then(movie=>{
-					return movie.sync()
+					return movie.sync(req.user)
 				})
 				.then(movie=>{
-					return movie.save()
+					return movie.save({new:true})
 				})
-				.then(()=>{
-					res.send({success:true})
+				.then(movie=>{
+					res.send(movie)
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(400).send({error:'Bad request'})
 				})
 		})
@@ -88,27 +148,27 @@ const MoviesAPI = (api)=>{
 		.get((req,res)=>{
 			Movie.findBySlug(req.params.slug)
 				.then(movie=>{
-					return helpers.trakt().images.get(movie.ids)
+					return helpers.trakt().images.get(movie.ids,'movie')
 				})
 				.then(images=>{
 					res.send(images)
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(400).send({error:'Bad request'})
 				})
 		})
 		.post((req,res)=>{
 			Movie.findBySlug(req.params.slug)
 				.then(movie=>{
-					return movie.setArtwork(req.body).then(()=>movie.save())
+					return movie.setArtwork(req.body).then(()=>movie.save({new:true}))
 				})
-				.then(()=>{
-					res.send({success:true})
+				.then(movie=>{
+					res.send(movie)
 				})
 				.catch(error=>{
-					console.error(error)
-					res.status(404).end()
+					if (error) console.error(error.message)
+					res.status(400).end()
 				})
 		})
 
@@ -131,10 +191,74 @@ const MoviesAPI = (api)=>{
 					res.send(movie)
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(400).send({error:'Bad Request'})
 				})
-			
+		})
+	
+	router.route('/:slug/download')
+		.post((req,res)=>{
+			Movie.findBySlug(req.params.slug)
+				.then(movie=>{
+					if (!movie) throw new Error(`Movie not found: ${req.params.slug}`)
+					
+					if (!req.body.hash) throw new Error(`Download quality not selected: ${movie.title}`)
+					
+					let idx = movie.hashes.findIndex(hash=>hash.btih===req.body.hash)
+					if (idx == -1) throw new Error(`Download quality not available: ${movie.title}`)
+					
+					let hash = movie.hashes[idx]
+					
+					return helpers.torrents.createMagnet(hash.btih)
+						.then(magnet=>{
+							return helpers.torrents.add(magnet)
+						})
+						.then(()=>{
+							return movie.setDownloading(hash)
+						})
+						.then(()=>{
+							return movie.save()
+						})
+				})
+				.then(()=>{
+					res.send({success:true})
+				})
+				.catch(error=>{
+					if (error) console.error(error.message)
+					res.status(400).end()
+				})
+		})
+	
+	router.route('/:slug/play')
+		.post((req,res)=>{
+			Movie.findBySlug(req.params.slug)
+				.then(movie=>{
+					if (!movie) throw new Error(`Show not found: ${req.params.slug}`)
+					return movie.play(req.user, req.body.device.url)
+				})
+				.then(()=>{
+					res.status(200).end()
+				})
+				.catch(error=>{
+					if (error) console.error(error)
+					res.status(400).end()
+				})
+		})
+	
+	router.route('/:slug/scan')
+		.post((req,res)=>{
+			Movie.findBySlug(req.params.slug)
+				.then(movie=>{
+					if (!movie) throw new Error(`Movie not found: ${req.params.slug}`)
+					
+					movie.scan()
+					
+					res.status(202).end()
+				})
+				.catch(error=>{
+					if (error) console.error(error.message)
+					res.status(404).end()
+				})
 		})
 	
 	router.route('/:slug/watched')
@@ -156,7 +280,7 @@ const MoviesAPI = (api)=>{
 					res.send(movie)
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error.message)
 					res.status(400).send({error:'Bad Request'})
 				})
 		})

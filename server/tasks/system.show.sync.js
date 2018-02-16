@@ -4,23 +4,28 @@
 
 const helpers = require('nodetv-helpers')
 const Show = helpers.model('show')
+const User = helpers.model('user')
 
 // Run nightly at 1am
 require('node-schedule').scheduleJob('0 1 * * *', ()=>{
 	console.debug(`Syncing show data from Trakt`)
-	
-	Show.findEnabled()
-		.then(shows=>{
-			if (!shows.length) throw new Error(`No shows availale`)
-			shows.forEach(show=>{
+
+	Promise.try(()=>{
+		return User.findOne({trakt:{$exists:true}})
+	}).then(user=>{
+		Show.findEnabled()
+			.each(show=>{
 				console.debug(`Syncing ${show.title}`)
 				
-				show.sync().then(()=>{
-					show.save()
+				show.sync(user).then(()=>{
+					return show.save()
+				}).catch(error=>{
+					if (error) console.error(error.message)
 				})
+				return null
 			})
-		})
-		.catch(error=>{
-			console.debug(error.message)
-		})
+			.catch(error=>{
+				if (error) console.error(error.message)
+			})
+	})
 })

@@ -12,38 +12,15 @@ angular.module('nutv.core')
 		},
 		controller: ['$http','$log','alertService', function($http,$log,alertService){
 			this.save = ()=>{
-				$http.post(`/api/shows/${this.show.ids.slug}/artwork`, {preview:this.artwork.preview,url:this.artwork.url,type:this.type})
+				$http.post(`${this.show.uri}/artwork`, {preview:this.artwork.preview,url:this.artwork.url,type:this.type})
 					.then(res=>{
-						alertService.notify({type:'success',msg:'Artwork saved'})
+						alertService.notify({type:'success',title:this.show.title,text:'Artwork saved'})
 						$log.debug(res.data)
 					})
 					.catch(error=>{
-						alertService.notify({type:'danger',msg:'Unable to save artwork'})
+						alertService.notify({type:'danger',title:'Error',text:'Unable to save artwork'})
 						if (error) $log.error(error)
 					})
-			}
-		}]
-	})
-	
-	.component('nutvBanner', {
-		templateUrl: '/views/components/banner.html',
-		bindings: {item:'<'},
-		controller: [function(){
-			this.$onInit = ()=>{
-				let sources = []
-				
-				if (this.item.images.banner.files.length){
-					this.item.images.banner.files.forEach(file=>{
-						sources.push(`${this.item.images.baseUrl}/${file.filename} ${file.width}w`)
-					})
-				} else if (this.item.images.banner.filename){
-					sources.push(`${this.item.images.baseUrl}/${this.item.images.banner.filename} 800w`)
-				}
-				this.srcset = sources.join(', ')
-				
-				if (this.item.images.background.enabled){
-					this.background = `background-image: url("${this.item.images.baseUrl}/${this.item.images.background.files[0].filename}")`
-				}
 			}
 		}]
 	})
@@ -85,6 +62,51 @@ angular.module('nutv.core')
 				} else {
 					this.title.poster = true
 				}
+			}
+		}]
+	})
+	.component('nutvBanner', {
+		templateUrl: '/views/components/banner.html',
+		bindings: {item:'<'},
+		controller: [function(){
+			this.$onInit = ()=>{
+				let sources = []
+				
+				if (this.item.images.banner.files.length){
+					this.item.images.banner.files.forEach(file=>{
+						sources.push(`${this.item.images.baseUrl}/${file.filename} ${file.width}w`)
+					})
+				} else if (this.item.images.banner.filename){
+					sources.push(`${this.item.images.baseUrl}/${this.item.images.banner.filename} 800w`)
+				}
+				this.srcset = sources.join(', ')
+				
+				if (this.item.images.background.enabled){
+					this.background = `background-image: url("${this.item.images.baseUrl}/${this.item.images.background.files[0].filename}")`
+				}
+			}
+		}]
+	})
+	
+	.component('nutvGetArtwork', {
+		// Component for downloading artwork 
+		templateUrl: '/views/components/artwork.html',
+		bindings: {
+			artwork: '<',
+			item: '<',
+			type: '@'
+		},
+		controller: ['$http','$log','alertService', function($http,$log,alertService){
+			this.save = ()=>{
+				$http.post(`${this.item.uri}/artwork`, {preview:this.artwork.preview,url:this.artwork.url,type:this.type})
+					.then(res=>{
+						alertService.notify({type:'success',title:this.item.title,text:'Artwork saved'})
+						$log.debug(res.data)
+					})
+					.catch(error=>{
+						alertService.notify({type:'danger',title:this.item.title,text:'Unable to save artwork'})
+						if (error) $log.error(error)
+					})
 			}
 		}]
 	})

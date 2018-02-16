@@ -30,12 +30,13 @@ const userSchema = new mongoose.Schema({
 
 userSchema.statics.findByToken = function(username,token){
 	return this.findOne({
-		'username': username, 'tokens.token': token
+		$or: [{username:username},{email:username}],
+		'tokens.token': token
 	})
 }
 userSchema.statics.findByUsername = function(username){
 	return this.findOne({
-		'username': username
+		$or: [{username:username},{email:username}]
 	})
 }
 
@@ -74,10 +75,10 @@ userSchema.methods.refreshToken = function(){
 	return
 }
 
-userSchema.methods.syncCollection = function(){
-	return helpers.trakt(this).sync.collection.get({type:'shows'})
+userSchema.methods.syncCollection = function(type='shows'){
+	return helpers.trakt(this).sync.collection.get({type:type})
 		.then(results=>{
-			if (!results) throw new Error(`No shows in Trakt collection`)
+			if (!results) throw new Error(`No items in Trakt collection`)
 			
 			let promises = []
 			results.forEach(result=>{
@@ -87,9 +88,9 @@ userSchema.methods.syncCollection = function(){
 							if (!movie) movie = new Movie(result.movie)
 							return movie.subscribe(this).save({new:true})
 						})
-						.then(movie=>{
-							return movie.sync()
-						})
+					//	.then(movie=>{
+					//		return movie.sync()
+					//	})
 						.then(movie=>{
 							return movie.save()
 						})
@@ -102,7 +103,7 @@ userSchema.methods.syncCollection = function(){
 							return show.subscribe(this).save({new:true})
 						})
 						.then(show=>{
-							return show.sync()
+							return show.sync(this)
 						})
 						.then(show=>{
 							return show.save()
@@ -116,6 +117,7 @@ userSchema.methods.syncCollection = function(){
 }
 
 userSchema.pre('save', function(next){
+	this.apiToken()
 	this.updated = new Date()
 	next()
 })
@@ -135,11 +137,6 @@ userSchema.pre('remove', function(next){
 					if (typeof next === 'function') next()
 				})
 		})
-})
-
-userSchema.post('findOne', function(doc,next){
-	//doc.uri = `/api/users/${doc._id}`
-	next()
 })
 
 module.exports = mongoose.model('User', userSchema)

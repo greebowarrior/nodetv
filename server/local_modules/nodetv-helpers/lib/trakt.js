@@ -1,6 +1,6 @@
 "use strict"
 
-const TraktHelper = function(user){
+const TraktHelper = function(user={}){
 	let trakt = new (require('trakt.tv'))({
 		client_id: process.env.TRAKT_CLIENT_ID,
 		client_secret: process.env.TRAKT_CLIENT_SECRET,
@@ -14,7 +14,7 @@ const TraktHelper = function(user){
 			images: {apikey:'b983ff2542fb16b97009aef70d8ed6e4'}	// fanart.tv API key
 		}
 	})
-	if (user){
+	if (user.trakt){
 		trakt.import_token(user.trakt)
 			.then(result=>{
 				if (result.access_token !== user.trakt.access_token){

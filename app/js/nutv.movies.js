@@ -42,10 +42,19 @@ angular.module('nutv.movies', ['nutv.core'])
 				}
 			})
 			.state('movies.index', {
-				url: '/',
+				url: '/?page',
 				component: 'nutvGrid',
+				params: {
+					page: {
+						value: '1',
+						squash: true,
+						dynamic: true
+					}
+				},
+				reloadOnSearch: false,
 				resolve: {
 					list: (movieService)=>movieService.list(),
+					page: ['$stateParams',(p)=>p.page],
 					type: ()=>'movie'
 				}
 			})
@@ -62,108 +71,96 @@ angular.module('nutv.movies', ['nutv.core'])
 	}])
 	
 	.component('nutvMovie', {
-		bindings: {movie: '='},
+		bindings: {movie: '<'},
 		templateUrl: '/views/movie/movie.html',
-		controller: ['$http','$log','alertService',function($http,$log,alertService){
-			this.images = []
+		controller: ['$http','$log','$state','$uibModal','alertService', function($http,$log,$state,$uibModal,alertService){
+			this.$onInit = ()=>{
+				this.images = []
+			}
 			
-			this.save = ()=>{
-				alertService.alert()
-			}
-			this.getArtwork = ()=>{
-				
-			}
-			this.sync = ()=>{
-				alertService.confirm({
-					title: 'Sync movie data?',
-					type: 'Question'
-				}).then(()=>{
-					$http.post(`/api/movies/${this.movie.ids.slug}/sync`)
+			this.download = (btih)=>{
+				$http.post(`${this.movie.uri}/download`, {hash:btih}).then(()=>{
+					alertService.alert({type:'success',title:this.movie.title,text:`Download started`,toast:true})
+				}).catch(error=>{
+					alertService.alert({type:'error',title:this.movie.title,text:'Unable to download',toast:true})
+					$log.error(error)
 				})
 			}
-		}]
-	})
-	
-	/*
-	.component('nutvShow', {
-		bindings:{show:'='},
-		templateUrl: '/views/show/show.html',
-		controller: ['$http','$log','alertService',function($http,$log,alertService){
-			this.images = []
 			
+			this.getArtwork = ()=>{
+				$http.get(`${this.movie.uri}/artwork`).then(res=>{
+					this.images = res.data
+				})
+				.catch(error=>{
+					if (error) $log.error(error)
+					alertService.alert({type:'warning',title:this.movie.title,text:'Unable to find artwork',toast:true})
+				})
+			}
+			this.getDownloads = ()=>{
+				$http.patch(`${this.movie.uri}/feeds`).then(res=>{
+					if (!res.data) throw new Error(`Unable to find downloads`)
+					this.movie.hashes = res.data
+				})
+				.catch(error=>{
+					if (error) $log.error(error)
+					alertService.alert({type:'warning',title:this.movie.title,text:'Unable to find downloads',toast:true})
+				})
+			}
+			
+			this.play = ()=>{
+				$uibModal.open({
+					component: 'nutvUpnpDevice'
+				}).result.then(device=>{
+					return $http.post(`${this.movie.uri}/play`, {device:device})
+				}).catch(()=>{
+					$log.debug('Play aborted')
+				})
+			}
+			this.remove = ()=>{
+				alertService.confirm({
+					title: 'Remove Movie?',
+					type: 'warning',
+					text: 'Are you sure you want to remove this from your library?'
+				}).then(()=>{
+					return $http.delete(`${this.movie.uri}`).then(()=>{
+						$state.go('^.index')
+					}).catch(()=>{
+						alertService.alert({type:'error',title:this.movie.title,text:'Unable to remove',toast:true})
+					})
+				})
+			}
 			this.save = ()=>{
-				$http.patch(`/api/shows/${this.show.ids.slug}`, {config:this.show.config})
+				$http.patch(`${this.movie.uri}`, {config:this.movie.config})
 					.then(()=>{
-						alertService.notify({type:'success',msg:`Show updated: '${this.show.title}'`})
+						alertService.notify({type:'success',title:this.movie.title,text:'Movie updated'})
 					})
 					.catch(error=>{
-						alertService.notify({type:'danger',msg:`Unable to update '${this.show.title}'`})
+						alertService.notify({type:'danger',title:this.movie.title,text:'Unable to update'})
 						$log.error(error)
 					})
 			}
-			this.getArtwork = ()=>{
-				$http.get(`/api/shows/${this.show.ids.slug}/artwork`)
-					.then(response=>{
-						this.images = response.data
-					})
-					.catch(error=>{
-						alertService.notify({type:'warning',msg:`Unable to find artwork for '${this.show.title}'`})
-						if (error) $log.error(error)
-					})
-			}
-			this.getDirectories = ()=>{
-				$http.get(`/api/shows/${this.show.ids.slug}/match`)
-					.then(response=>{
-						this.matches = response.data
-					})
-			}
-			
-			this.rescan = ()=>{
+			this.scan = ()=>{
 				alertService.confirm({
-					title: 'Rescan Directory',
-					type: 'Question',
-					msg: 'Are you sure? This may take a while.'
+					title: 'Rescan Movie Directory?',
+					text: 'Be patient, this may take a while.',
+					type: 'question'
 				}).then(()=>{
-					$http.post(`/api/shows/${this.show.ids.slug}/scan`)
+					return $http.post(`${this.movie.uri}/scan`)
+				}).then(()=>{
+					alertService.alert({type:'info',title:this.movie.title,text:'Rescan in progress',toast:true})
 				})
 			}
-			
 			this.sync = ()=>{
 				alertService.confirm({
-					title: 'Sync show data',
-					type: 'Question',
-					msg: 'Are you sure? This may take a while.'
+					title: 'Sync Movie Data?',
+					text: 'Be patient, this may take a while.',
+					type: 'question'
 				}).then(()=>{
-					$http.post(`/api/shows/${this.show.ids.slug}/sync`)
+					return $http.post(`${this.movie.uri}/sync`)
+				}).then(res=>{
+					alertService.alert({type:'success',title:this.movie.title,text:'Movie updated',toast:true})
+					this.movie = res.data
 				})
 			}
 		}]
 	})
-	.component('nutvShowSeason', {
-		bindings: {
-			episodes: '<',
-			season: '<',
-			show: '<'
-		},
-		templateUrl: '/views/show/season.html'
-	})
-	.component('nutvShowEpisode', {
-		bindings: {episode:'<',show:'<'},
-		templateUrl: '/views/show/episode.html',
-		controller: ['$http','$log','alertService',function($http,$log,alertService){
-			this.download = ()=>{
-				$http.post(`${this.show.uri}/seasons/${this.episode.season}/episodes/${this.episode.episode}/download`)
-					.then(()=>{
-						$log.debug('derp')
-						alertService.alert({
-							title: 'Download started',
-							type: 'success'
-						})
-					})
-			}
-			this.watched = ()=>{
-				$log.debug('set watched')
-			}
-		}]
-	})
-	*/

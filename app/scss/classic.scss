@@ -9,6 +9,7 @@
 
 html {
 	background-color: #FFFFFF;
+	font-size: 14px;
 	margin: 0;
 	min-height: 100vh;
 	position: relative;
@@ -40,14 +41,31 @@ html {
 	}
 }
 
+header {
+	::selection {
+		background-color: transparent;
+	}
+}
+
 main {
 	padding-top: 70px;
+	
+	::selection {
+		background-color: $nodetv-red;
+		color: $nodetv-white;
+		&a {
+			color: $nodetv-black;
+		}
+	}
 }
 
 .highlight {
 	color: $nodetv-red;
 }
 
+.swal2-popup {
+	font-size: 1.6rem !important;
+}
 
 div.search {
 	margin-bottom: 10px;

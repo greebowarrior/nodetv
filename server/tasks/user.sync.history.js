@@ -14,7 +14,7 @@ require('node-schedule').scheduleJob('0,30 * * * *', function(){
 	since.setDate(since.getDate()-7)
 	
 	User.find({trakt:{$exists:true}}).exec()
-		.map(user=>{
+		.each(user=>{
 			helpers.trakt(user).sync.history.get({type:'shows', start_at:since})
 				.then(watches=>{
 					let history = []

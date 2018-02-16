@@ -6,7 +6,7 @@ const path = require('path')
 const forked = function(worker, data){
 	return new Promise((resolve,reject)=>{
 		require('child_process')
-			.fork(__dirname+'/workers/'+worker)
+			.fork(__dirname+'/workers/'+worker, {execArgv:[]}) // ,stdio:'inherit'})
 			.on('message', (msg)=>{
 				if (msg.errno && msg.code){
 					let error = require('syserrno').errorForCode(msg.code)
@@ -40,6 +40,9 @@ exports.copy = function(source, target, transcode = false){
 		.then(()=>{
 			return target
 		})
+}
+exports.directory = function(target){
+	return fs.ensureDir(target)
 }
 exports.download = function(url,target){
 	return fs.ensureDir(path.dirname(target))

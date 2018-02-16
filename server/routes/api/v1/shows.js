@@ -233,7 +233,7 @@ const ShowsAPI = (app,io)=>{
 				.then(show=>{
 					if (!show) throw new Error(`Show not found: ${req.params.slug}`)
 					
-					res.status(202).status({message: 'Accepted'})
+					res.status(202).end()
 					console.debug('Syncing show: %s', show.title)
 					return show.sync()
 						.then(()=>{
@@ -241,20 +241,21 @@ const ShowsAPI = (app,io)=>{
 						})
 				})
 				.then(show=>{
+					
 					return Socket.findByUser(req.user)
 						.then(sockets=>{
 							sockets.forEach(socket=>{
-								io.to(socket.id).emit('alert', {
+								io.to(socket.id).emit('notify', {
 									title: show.title,
 									type: 'success',
-									msg: 'Show data updated'
+									text: 'Show data updated'
 								})
 							})
 						})
 				})
 				.catch(error=>{
-					console.error(error)
-					res.status(404).send({error: 'Not Found'})
+					if (error) console.error(error.message)
+					res.status(404).end()
 				})
 		})
 

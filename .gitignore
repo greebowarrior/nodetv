@@ -4,6 +4,7 @@
 .env
 .eslintcache
 .npm
+.nyc_output
 .sass-cache
 .yarn-integrity
 

@@ -98,7 +98,7 @@ angular.module('nutv.users', ['nutv.core'])
 				
 				alertService.confirm({
 					title: 'Are you sure?',
-					msg: 'Your will not be able to recover this user!',
+					text: 'Your will not be able to recover this user!',
 					type: 'warning'
 				}).then(confirmed=>{
 					if (confirmed){
@@ -117,13 +117,13 @@ angular.module('nutv.users', ['nutv.core'])
 			this.sync = ()=>{
 				alertService.confirm({
 					title: 'Are you sure?',
-					msg: 'Sync all shows from Trakt.tv? This may take a while',
+					text: 'Sync all shows from Trakt.tv? This may take a while',
 					type: 'Question'
 				}).then(confirmed=>{
 					if (confirmed){
 						$http.post(`/api/users/${this.user._id}/sync`)
 							.then(()=>{
-								alertService.notify({type:'info',msg:`Sync in progress`})
+								alertService.notify({type:'info',title:'Success',text:`Sync in progress`})
 							})
 					}
 				})
@@ -138,10 +138,10 @@ angular.module('nutv.users', ['nutv.core'])
 					}
 				}).then(user=>{
 					if (this.user.new){
-						alertService.alert({type:'success',title:`User Added`})
+						alertService.alert({type:'success',title:'Success',text:`User Added`})
 						$state.go('^.detail',{id:user._id})
 					} else {
-						alertService.notify({type:'success',msg:`User '${this.user.username}' updated`})
+						alertService.notify({type:'success',title:'Success',text:`User '${this.user.username}' updated`})
 					}
 					//$state.go('^.list')
 				})
@@ -164,7 +164,7 @@ angular.module('nutv.users', ['nutv.core'])
 				alertService.confirm({
 					title: 'Disconnect Trakt.tv?',
 					type: 'Question',
-					msg: 'Are you sure you want to disconnect from Trakt.tv?'
+					text: 'Are you sure you want to disconnect from Trakt.tv?'
 				})
 				.then(()=>{
 					return $http.delete('/api/trakt/auth', {params:{id:this.user._id}})
@@ -174,7 +174,7 @@ angular.module('nutv.users', ['nutv.core'])
 					this.connect()
 				})
 				.catch(error=>{
-					console.error(error)
+					if (error) console.error(error)
 				})
 			}
 			

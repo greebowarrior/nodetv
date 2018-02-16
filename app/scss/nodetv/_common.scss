@@ -4,7 +4,7 @@
 	display: none !important;
 }
 
-a, .nav, .pagination, .carousel, .panel-title a, [ui-sref] {
+a, .nav, .pagination, .carousel, .panel-title a, [ui-sref], [ng-click] {
 	cursor: pointer;
 }
 
