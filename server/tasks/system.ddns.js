@@ -1,7 +1,7 @@
 "use strict"
 
 // Update DDNS service hourly
-
+/*
 const request = require('request-promise')
 
 require('node-schedule').scheduleJob('0 * * * *', ()=>{
@@ -51,3 +51,4 @@ require('node-schedule').scheduleJob('0 * * * *', ()=>{
 		console.error(e.message)
 	}
 })
+*/

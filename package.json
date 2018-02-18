@@ -4,9 +4,16 @@
   "author": "Martin Purcell <martin.purcell@gmail.com>",
   "description": "NodeTV - TV Library Manager",
   "private": true,
+  "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
     "url": "https://github.com/greebowarrior/nodetv.git"
+  },
+  "bin": {
+	  "nutv": "./server.js"
+  },
+  "bugs": {
+    "url": "https://github.com/greebowarrior/nodetv/issues"
   },
   "scripts": {
     "start": "nodemon",

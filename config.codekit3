@@ -7,7 +7,7 @@
 		"uuidString": "18A536C4-F3C0-4048-81AF-7D5149E0AE13"
 		}
 	],
-"creatorBuild": "26261",
+"creatorBuild": "26268",
 "files": {
 	"\/.env": {
 		"cB": 0,
@@ -722,6 +722,13 @@
 		"pME": 1,
 		"rFN": 0,
 		"uCM": 0
+		},
+	"\/scripts\/ddclient.conf": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/scripts\/ddclient.conf",
+		"oF": 0
 		},
 	"\/scripts\/letsencrypt.conf": {
 		"cB": 0,
