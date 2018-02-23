@@ -261,7 +261,7 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 		controller: ['$http','$log','$state','alertService',function($http,$log,$state,alertService){
 			
 			this.add = (result)=>{
-				$http.post(`/api/${this.type}s`, {slug:result.ids.slug})
+				$http.post(`/api/${this.type}s`, {slug:result.ids.slug,trakt:result.ids.trakt})
 					.then(()=>{
 						$state.go('^.detail', {slug:result.ids.slug})
 						alertService.alert({type:'success',title:'Added',text:`'${result.title}' has been added to your library`})

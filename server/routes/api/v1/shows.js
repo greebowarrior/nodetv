@@ -27,7 +27,7 @@ const ShowsAPI = (app,io)=>{
 				.then(show=>{
 					if (show) return show
 					
-					show = new Show({ids:{slug:req.body.slug}})
+					show = new Show({ids:{slug:req.body.slug,trakt:req.body.trakt}})
 					return show.sync(req.user)
 				})
 				.then(show=>{
