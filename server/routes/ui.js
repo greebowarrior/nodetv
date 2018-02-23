@@ -51,6 +51,18 @@ const UI = (app,io)=>{
 			
 			// Send the dashboard by default
 			app.use((req,res)=>{
+				let preload = [
+					`</static/css/classic.css?v=${app.locals.nutv.version}>; rel=preload; as=style`,
+					`</static/js/libs/ng-socket.min.js>; rel=preload; as=script`,
+					`</static/js/libs/ng-storage-0.3.10.min.js>; rel=preload; as=script`,
+					`</static/js/libs/ui-bootstrap-tpls-2.5.0.min.js>; rel=preload; as=script`,
+					`</static/js/nutv.js?v=${app.locals.nutv.version}>; rel=preload; as=script`,
+					`</static/js/nutv.core.js?v=${app.locals.nutv.version}>; rel=preload; as=script`,
+					`</static/js/nutv.movies.js?v=${app.locals.nutv.version}>; rel=preload; as=script`,
+					`</static/js/nutv.shows.js?v=${app.locals.nutv.version}>; rel=preload; as=script`,
+					`</static/js/nutv.users.js?v=${app.locals.nutv.version}>; rel=preload; as=script`
+				]
+				res.header('Link', preload.join(','))
 				res.render('dashboard/index.html')
 			})
 		})
