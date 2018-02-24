@@ -6,21 +6,18 @@ const CACHE_RESOURCE = [
 	// CSS
 	'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
 	'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
-	'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css',
 	'https://fonts.googleapis.com/css?family=Open+Sans:300,400,800',
 	// ICONS
 	'/static/gfx/icons/icon-32.png',
 	'/static/gfx/icons/icon-192.png',
 	// JavaScript
-	'https://code.jquery.com/jquery-3.2.1.min.js',
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js',
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-animate.min.js',
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-cookies.min.js',
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-sanitize.min.js',
-	'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-touch.min.js',
-	
-	'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js',
-	'/socket.io/socket.io.js'
+	'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.9/angular.min.js',
+	'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.9//angular-animate.min.js',
+	'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.9/angular-cookies.min.js',
+	'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.9/angular-sanitize.min.js',
+	'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.9/angular-touch.min.js',
+	'https://unpkg.com/@uirouter/angularjs@1.0/release/angular-ui-router.min.js',
+	'https://unpkg.com/sweetalert2@7/dist/sweetalert2.all.js'
 ]
 
 self.addEventListener('install', (event)=>{
