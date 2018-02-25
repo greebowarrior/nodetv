@@ -29,7 +29,6 @@ Artwork.prototype.prune = function(input,limit=12){
 }
 Artwork.prototype.get = function(ids,type='show'){
 	return new Promise((resolve,reject)=>{
-		
 		let api_url = null
 		switch (type){
 			case 'show':
@@ -39,20 +38,20 @@ Artwork.prototype.get = function(ids,type='show'){
 				api_url = `https://webservice.fanart.tv/v3/movies/${ids.tmdb}`
 				break
 		}
-		
-		require('request').get({
+		require('request-promise').get({
 			url: `${api_url}?api_key=${this.options.apikey}`,
 			json: true
-		}, (error,res,body)=>{
-			if (error || body.status == 'error') return reject()
-			if (body){
-				let response = {
-					banners: this.prune(body.tvbanner || body.moviebanner),
-					backgrounds: this.prune(body.showbackground || body.moviebackground),
-					posters: this.prune(body.tvposter || body.movieposter)
-				}
-				resolve(response)
+		}).then(body=>{
+			if (body.status == 'error') throw new Error(`No artwork found`)
+			let response = {
+				banners: this.prune(body.tvbanner || body.moviebanner),
+				backgrounds: this.prune(body.showbackground || body.moviebackground),
+				posters: this.prune(body.tvposter || body.movieposter)
 			}
+			resolve(response)
+		})
+		.catch(()=>{
+			reject()
 		})
 	})
 }

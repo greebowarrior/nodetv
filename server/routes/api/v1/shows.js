@@ -164,6 +164,9 @@ const ShowsAPI = (app,io)=>{
 				.then(images=>{
 					res.send(images)
 				})
+				.catch(()=>{
+					res.status(404).end()
+				})
 		})
 		.post((req,res)=>{
 			Show.findBySlug(req.params.slug)

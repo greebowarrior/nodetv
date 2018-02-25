@@ -128,9 +128,8 @@ angular.module('nutv.shows', ['nutv.core'])
 					.then(response=>{
 						this.images = response.data
 					})
-					.catch(error=>{
-						alertService.notify({type:'error',title:this.show.title,text:`Unable to find artwork`})
-						if (error) $log.error(error)
+					.catch(()=>{
+						alertService.alert({type:'error',title:this.show.title,text:`Unable to find artwork`,toast:true})
 					})
 			}
 			this.getDirectories = ()=>{
