@@ -30,6 +30,7 @@
 	
 	picture {
 		img {
+			background-color: rgba($nodetv-grey,0.1);
 			border: 1px solid $nodetv-grey;
 			@media (max-width: 767px){
 		//		min-height: 118px;
@@ -64,6 +65,7 @@
 	}
 	.title {
 		display: block;
+		font-weight: 300;
 		left: 50%;
 		position: absolute;
 		top: 50%;
