@@ -29,20 +29,18 @@ passport.deserializeUser((id,done)=>{
 })
 
 passport.use('jwt', new JwtStrategy({
-		secretOrKey: process.env.SECRET_KEY,
-		jwtFromRequest: require('passport-jwt').ExtractJwt.fromAuthHeaderAsBearerToken()
-	},
-	(payload, done)=>{
-		User.findOne({_id:payload.id}) // {_id:payload.id,username:payload.username,'tokens.token':payload.token}
-			.then(user=>{
-				if (!user) throw new Error('Invalid user')
-				done(null, user)
-			})
-			.catch(error=>{
-				done(error, false)
-			})
-	}
-))
+	secretOrKey: process.env.SECRET_KEY,
+	jwtFromRequest: require('passport-jwt').ExtractJwt.fromAuthHeaderAsBearerToken()
+},(payload, done)=>{
+	User.findOne({_id:payload.id}) // {_id:payload.id,username:payload.username,'tokens.token':payload.token}
+		.then(user=>{
+			if (!user) throw new Error('Invalid user')
+			done(null, user)
+		})
+		.catch(error=>{
+			done(error, false)
+		})
+}))
 passport.use('local', new LocalStrategy((username,password,done)=>{
 	User.findOne({$or:[{username:username.toLowerCase()},{email:username.toLowerCase()}]})
 		.then(user=>{
@@ -64,21 +62,19 @@ passport.use('token', new TokenStrategy((username,token,done)=>{
 		})
 }))
 passport.use('trakt', new TraktStrategy({
-		clientID: process.env.TRAKT_CLIENT_ID,
-		clientSecret: process.env.TRAKT_CLIENT_SECRET,
-		callbackURL: process.env.TRAKT_REDIRECT_URI || 'urn:ietf:wg:oauth:2.0:oob'
-	},
-	(accessToken, refreshToken, params, profile, done)=>{
-		User.findOne({'trakt.id': profile.id})
-			.then(user=>{
-				if (!user) throw new Error('Invalid user')
-				done(null, user)
-			})
-			.catch(error=>{
-				done(error, false)
-			})
-	}
-))
+	clientID: process.env.TRAKT_CLIENT_ID,
+	clientSecret: process.env.TRAKT_CLIENT_SECRET,
+	callbackURL: process.env.TRAKT_REDIRECT_URI || 'urn:ietf:wg:oauth:2.0:oob'
+},(accessToken, refreshToken, params, profile, done)=>{
+	User.findOne({'trakt.id': profile.id})
+		.then(user=>{
+			if (!user) throw new Error('Invalid user')
+			done(null, user)
+		})
+		.catch(error=>{
+			done(error, false)
+		})
+}))
 
 const Auth = app=>{
 	app.use(passport.initialize())

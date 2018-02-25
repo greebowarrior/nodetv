@@ -1,9 +1,7 @@
 "use strict"
 
 const UI = (app,io)=>{
-
-	app.route('*')
-		.all((req,res,next)=>{
+	app.route('*').all((req,res,next)=>{
 			if (req.user) res.locals.user = req.user
 			next()
 		})

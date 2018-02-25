@@ -32,6 +32,8 @@ const App = app=>{
 		res.setHeader('Service-Worker-Allowed', '/')
 		next()
 	})
+	
+	// These routes will be bypassed if you're using nginx
 	app.use('/static', require('express').static(require('path').join(process.cwd(),'app'),{etag:false}))
 	app.use('/media', require('express').static(process.env.MEDIA_ROOT,{etag:false}))
 	
