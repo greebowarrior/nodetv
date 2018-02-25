@@ -10,7 +10,7 @@
     "url": "https://github.com/greebowarrior/nodetv.git"
   },
   "bin": {
-	  "nutv": "./server.js"
+    "nutv": "./server.js"
   },
   "bugs": {
     "url": "https://github.com/greebowarrior/nodetv/issues"

@@ -75,9 +75,64 @@
 		"oAP": "\/app\/css\/classic.css.map",
 		"oF": 0
 		},
-	"\/app\/gfx\/default-banner.png": {
+	"\/app\/gfx\/_src\/default-banner.fw.png": {
+		"ft": 32768,
+		"iS": 112445,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/_src\/default-banner.fw.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/_src\/default-cover.fw.png": {
+		"ft": 32768,
+		"iS": 179071,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/_src\/default-cover.fw.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/_src\/icon-source.png": {
+		"ft": 32768,
+		"iS": 163331,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/_src\/icon-source.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/_src\/logo-trakt.png": {
+		"ft": 32768,
+		"iS": 79260,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/_src\/logo-trakt.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/default-banner-old.png": {
 		"ft": 32768,
 		"iS": 4479,
+		"oA": 0,
+		"oAP": "\/app\/gfx\/default-banner-old.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/app\/gfx\/default-banner.png": {
+		"ft": 32768,
+		"iS": 3728,
 		"oA": 0,
 		"oAP": "\/app\/gfx\/default-banner.png",
 		"oF": 0,
@@ -86,25 +141,25 @@
 		"oT": 1,
 		"q": 100
 		},
-	"\/app\/gfx\/default-cover.png": {
+	"\/app\/gfx\/default-cover-old.png": {
 		"ft": 32768,
 		"iS": 2941,
 		"oA": 0,
-		"oAP": "\/app\/gfx\/default-cover.png",
+		"oAP": "\/app\/gfx\/default-cover-old.png",
 		"oF": 0,
 		"oIPL": 0,
 		"opt": 0,
 		"oT": 1,
 		"q": 100
 		},
-	"\/app\/gfx\/icon-source.png": {
+	"\/app\/gfx\/default-cover.png": {
 		"ft": 32768,
-		"iS": 163331,
+		"iS": 6807,
 		"oA": 0,
-		"oAP": "\/app\/gfx\/icon-source.png",
+		"oAP": "\/app\/gfx\/default-cover.png",
 		"oF": 0,
-		"oIPL": 1,
-		"opt": 1,
+		"oIPL": 0,
+		"opt": 0,
 		"oT": 1,
 		"q": 100
 		},
@@ -237,7 +292,7 @@
 		},
 	"\/app\/gfx\/logo-trakt.png": {
 		"ft": 32768,
-		"iS": 79260,
+		"iS": 13087,
 		"oA": 0,
 		"oAP": "\/app\/gfx\/logo-trakt.png",
 		"oF": 0,
@@ -871,6 +926,16 @@
 		"sC": 3,
 		"tS": 0
 		},
+	"\/server\/local_modules\/nodetv-helpers\/lib\/workers\/file.mediainfo.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/local_modules\/nodetv-helpers\/lib\/workers\/min\/file.mediainfo.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/server\/local_modules\/nodetv-helpers\/lib\/workers\/file.move.js": {
 		"ft": 64,
 		"ma": 0,
@@ -1124,23 +1189,6 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"\/server\/tasks\/sync.shows.js~": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/server\/tasks\/sync.shows.js~",
-		"oF": 0
-		},
-	"\/server\/tasks\/system.ddns.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/tasks\/min\/system.ddns.min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
-		},
 	"\/server\/tasks\/system.movie.feeds.js": {
 		"ft": 64,
 		"ma": 0,
@@ -1295,8 +1343,8 @@
 	},
 "projectAttributes": {
 	"creationDate": 500848199,
-	"displayValue": "nutv",
-	"displayValueWasSetByUser": 0,
+	"displayValue": "NuTV",
+	"displayValueWasSetByUser": 1,
 	"iconImageName": "meme-archer"
 	},
 "projectSettings": {
@@ -1305,6 +1353,7 @@
 	"animateCSSInjections": 1,
 	"autoBuildNewItems": 1,
 	"autoprefixerBrowserString": "> 1%, last 2 versions, Firefox ESR, Opera 12.1",
+	"autoprefixerEnableIEGrid": 0,
 	"babelAuxiliaryCommentAfter": "",
 	"babelAuxiliaryCommentBefore": "",
 	"babelConfigFileHandlingType": 0,
@@ -3237,7 +3286,7 @@
 		],
 	"overrideExternalServerCSS": 0,
 	"previewPathAddition": "",
-	"skippedFoldersString": "log, _logs, logs, _cache, cache, \/storage\/framework\/sessions, node_modules, .nyc_output\/",
+	"skippedFoldersString": "log, _logs, logs, _cache, cache, \/storage\/framework\/sessions, node_modules, .nyc_output",
 	"sourceFolderName": "source",
 	"susyVersion": 3,
 	"uglifyDefinesString": "",

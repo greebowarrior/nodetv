@@ -22,7 +22,8 @@
 	"bugs": {
 		"url": "https://github.com/greebowarrior/trakt.tv-artwork/issues"
 	},
-	"dependencies": {
-		"request": "^2.81.0"
+	"peerDependencies": {
+		"request-promise": "4.2.2",
+		"trakt.tv": "^6.0.2"
 	}
 }

@@ -3,8 +3,5 @@
   "version": "1.0.0",
   "author": "Martin Purcell <martin.purcell@gmail.com>",
   "description": "NodeTV - Utilities",
-  "main": "./index.js",
-  "engines": {
-    "node": "^6.10.2"
-  }
+  "main": "./index.js"
 }
