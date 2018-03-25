@@ -7,7 +7,7 @@
 		"uuidString": "18A536C4-F3C0-4048-81AF-7D5149E0AE13"
 		}
 	],
-"creatorBuild": "26268",
+"creatorBuild": "26330",
 "files": {
 	"\/.env": {
 		"cB": 0,
@@ -42,6 +42,12 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/.npmrc",
+		"oF": 0
+		},
+	"\/.nyc_output": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "\/build\/.nyc_output",
 		"oF": 0
 		},
 	"\/.travis.yml": {
@@ -982,6 +988,16 @@
 		"oO": 0,
 		"oS": 1
 		},
+	"\/server\/models\/list.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 0,
+		"oA": 1,
+		"oAP": "\/server\/models\/min\/list.min.js",
+		"oF": 0,
+		"sC": 3,
+		"tS": 0
+		},
 	"\/server\/models\/movie.js": {
 		"ft": 64,
 		"ma": 0,
@@ -1049,16 +1065,6 @@
 		"oA": 1,
 		"oAP": "\/server\/models\/min\/user-min.js",
 		"oF": 1,
-		"sC": 3,
-		"tS": 0
-		},
-	"\/server\/plugins\/app.datadog.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 1,
-		"oAP": "\/server\/plugins\/min\/app.datadog.min.js",
-		"oF": 0,
 		"sC": 3,
 		"tS": 0
 		},

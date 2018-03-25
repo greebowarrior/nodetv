@@ -42,18 +42,21 @@ exports.getEpisodeNumbers = function(filename){
 }
 exports.getProxy = (options={})=>{
 	const defaults = {
-		allowHttps: 1,
-		apiKey: process.env.PROXY_API_KEY,
+		allowsHttps: 1,
 		protocol: 'http'
 	}
+	if (process.env.PROXY_API_KEY) defaults.apiKey = process.env.PROXY_API_KEY
+	
 	let qs = Object.assign({}, defaults, options)
 	
 	return new Promise((resolve)=>{
+//		if (process.env.HTTPS_PROXY) return resolve(process.env.HTTPS_PROXY)
+		
 		require('request-promise')({
-			url:'https://api.getproxylist.com/proxy',qs:qs,json:true
+			url:'https://api.getproxylist.com/proxy', qs:qs, json:true
 		}).then(json=>{
-			if (!json.ip) throw new Error(`No proxy returned from getproxylist`)
-		//	let proxy = `${json.protocol}://${json.ip}:${json.port}`
+			if (!json.ip) throw new Error(`No proxy returned from GetProxyList.com`)
+			process.env.HTTPS_PROXY = `${json.protocol}://${json.ip}:${json.port}`
 			resolve(`${json.protocol}://${json.ip}:${json.port}`)
 		}).catch(()=>{
 			resolve(false)

@@ -54,6 +54,41 @@ describe('Movies', function(){
 		}).then(movie=>{
 			expect(movie.overview).to.be.a('string')
 			expect(movie.ids.imdb).to.equal('tt0120338')
+			return movie.save()
+		}).then(()=>{
+			done()
+		}).catch(done)
+	})
+	it('Get Alpha for directory', (done)=>{
+		Movie.findByTrakt(data.ids.trakt).then(movie=>{
+			expect(movie.getAlpha()).to.equal('T')
+			done()
+		}).catch(done)
+	})
+	it('Get directory', (done)=>{
+		Movie.findByTrakt(data.ids.trakt).then(movie=>{
+			let path = require('path').join(process.env.MEDIA_ROOT,
+				process.env.MEDIA_MOVIES,
+				'A-Z', 'T', 'Titanic (1997)'
+			)
+			expect(movie.getDirectory()).to.equal(path)
+			done()
+		}).catch(done)
+	})
+	it('Set Downloading', (done)=>{
+		Movie.findByTrakt(data.ids.trakt).then(movie=>{
+			return movie.setDownloading({btih:'ABC123',quality:'1080p'})
+		}).then(movie=>{
+			expect(movie.file.quality).to.equal('1080p')
+			expect(movie.file.download.active).to.be.true
+			expect(movie.file.download.hashString).to.equal('ABC123')
+			done()
+		}).catch(done)
+	})
+	it('Set Quality', (done)=>{
+		Movie.findByTrakt(data.ids.trakt).then(movie=>{
+			expect(movie.setQuality('1080p').file.quality).to.equal('1080p')
+			expect(movie.setQuality('480p').file.quality).to.equal('SD')
 			done()
 		}).catch(done)
 	})
@@ -62,6 +97,13 @@ describe('Movies', function(){
 			expect(images.backgrounds).to.be.a('array')
 			expect(images.banners).to.be.a('array')
 			expect(images.posters).to.be.a('array')
+			done()
+		}).catch(done)
+	})
+	it('Get Filename', (done)=>{
+		Movie.findByTrakt(data.ids.trakt).then(movie=>{
+			movie.setQuality('1080p')
+			expect(movie.getFilename('file.mp4')).to.equal('Titanic (1997) [1080p].mp4')
 			done()
 		}).catch(done)
 	})

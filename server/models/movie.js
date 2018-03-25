@@ -405,6 +405,7 @@ movieSchema.methods.setFilename = function(file){
 movieSchema.methods.setQuality = function(quality){
 	if (quality.match(/480p/i)) quality = 'SD'
 	this.file.quality = quality
+	return this
 }
 movieSchema.methods.setWatched = function(user, date=null, id=null){
 	if (!date) date = new Date()
