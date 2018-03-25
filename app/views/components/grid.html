@@ -12,13 +12,13 @@
 					</div>
 				</div>
 				<div class="col-md-2">
-					<select class="form-control" ng-model="$ctrl.sortBy.sort" ng-options="option as option.label for option in $ctrl.sortOptions"></select>
+					<select class="form-control" ng-model="$ctrl.sortBy" ng-options="option as option.label for option in $ctrl.sortOptions"></select>
 				</div>
 			</div>
 		</form>
 	</div>
 	
-	<div class="cover" ng-repeat="item in $ctrl.items = ($ctrl.list|filter:$ctrl.filter) | orderBy:$ctrl.sortFilter:$ctrl.sortBy.sort.reverse | limitTo:$ctrl.pagination.items:$ctrl.pagination.items*($ctrl.pagination.page-1)">
+	<div class="cover" ng-repeat="item in $ctrl.items = ($ctrl.list|filter:$ctrl.filter) | orderBy:$ctrl.sortFilter:$ctrl.sortBy.reverse | limitTo:$ctrl.pagination.items:$ctrl.pagination.items*($ctrl.pagination.page-1)">
 		<nutv-artwork item="item"></nutv-artwork>
 	</div>
 	

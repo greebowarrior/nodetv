@@ -227,17 +227,17 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 		bindings: {list:'<',type:'<',page:'<'},
 		templateUrl: 'views/components/grid.html',
 		controller: ['$http','$log','$sessionStorage','$state',function($http,$log,$sessionStorage,$state){
-			this.sortOptions = [
-				{type:'title',reverse:false,label:'A-Z'},
-				{type:'added',reverse:true,label:'Recently Added'}
-			]
-				
-			if (!$sessionStorage.filter) $sessionStorage.filter = {title: ''}
-			if (!$sessionStorage.sortBy) $sessionStorage.sortBy = {sort:this.sortOptions[0]}
-			
 			this.$onInit = ()=>{
+				this.sortOptions = [
+					{type:'title',reverse:false,label:'A-Z'},
+					{type:'added',reverse:true,label:'Recently Added'}
+				]
+				
+				if (!$sessionStorage.filter) $sessionStorage.filter = {title: ''}
+//				if (!$sessionStorage.sortBy) $sessionStorage.sortBy = {sort:this.sortOptions[0]}
+
 				this.filter = $sessionStorage.filter
-				this.sortBy = $sessionStorage.sortBy
+				this.sortBy = this.sortOptions[0] //$sessionStorage.sortBy
 				
 				this.pagination = {items:18, page:this.page}
 			}
@@ -248,8 +248,8 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 				this.results = []
 			}
 			this.sortFilter = (item)=>{
-				if (this.sortBy.sort.type == 'title') return this.definiteArticle(item)
-				if (this.sortBy.sort.type == 'added') return item.added
+				if (this.sortBy.type == 'title') return this.definiteArticle(item)
+				if (this.sortBy.type == 'added') return item.added
 			}
 			this.definiteArticle = (item)=>{
 				return item.title.replace(/^(The\s|A\s|\W)/i, '')
