@@ -3,16 +3,20 @@
 		<form ng-submit="$ctrl.search()">
 			<div class="row">
 				<div class="col-md-10">
-					<div class="input-group">
-						<input type="text" class="form-control" ng-model="$ctrl.filter.title" placeholder="Search" />
-						<span class="input-group-btn">
-							<button type="submit" class="btn btn-success" ng-hide="$ctrl.results.length"><span class="fa fa-search"></span></button>
-							<button type="button" class="btn btn-danger" ng-show="$ctrl.results.length" ng-click="$ctrl.clearResults()"><span class="fa fa-close"></span></button>
-						</span>
+					<div class="form-group">
+						<div class="input-group">
+							<input type="text" class="form-control" ng-model="$ctrl.filter.title" placeholder="Search" />
+							<span class="input-group-btn">
+								<button type="submit" class="btn btn-success" ng-hide="$ctrl.results.length"><span class="fa fa-search"></span></button>
+								<button type="button" class="btn btn-danger" ng-show="$ctrl.results.length" ng-click="$ctrl.clearResults()"><span class="fa fa-close"></span></button>
+							</span>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-2">
-					<select class="form-control" ng-model="$ctrl.sortBy" ng-options="option as option.label for option in $ctrl.sortOptions"></select>
+					<div class="form-group">
+						<select class="form-control" ng-model="$ctrl.sortBy" ng-options="option as option.label for option in $ctrl.sortOptions"></select>
+					</div>
 				</div>
 			</div>
 		</form>
