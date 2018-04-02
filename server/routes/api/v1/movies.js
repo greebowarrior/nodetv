@@ -46,7 +46,7 @@ const MoviesAPI = (api)=>{
 	router.route('/available')
 		.get((req,res)=>{
 			// TODO: Add proxy support and caching
-			return require('request-promise').get({url:process.env.YTS_API, qs:{limit:12}, json:true, proxy:false})
+			return require('request-promise').get({url:process.env.YTS_API, qs:{limit:18}, json:true, proxy:false})
 				.then(json=>{
 					let results = json.data.movies.map(item=>{
 						return {
