@@ -1,6 +1,7 @@
 [Unit]
 Description=NodeTV Media Library Manager
-After=syslog.target network.target
+Requires=mongodb.service
+After=syslog.target network.target mongodb.service
 
 [Service]
 EnvironmentFile=-/home/media/nutv.env
