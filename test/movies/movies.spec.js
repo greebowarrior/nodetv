@@ -1,6 +1,7 @@
 "use strict"
 
 const Movie = require('../../server/models/movie')
+const nock = require('nock')
 
 describe('Movies', function(){
 	const data = {title:'Titanic', year:1997, ids:{slug:'titanic-1997',trakt:475,tmdb:597}}
@@ -93,8 +94,14 @@ describe('Movies', function(){
 		}).catch(done)
 	})
 	it('Get Artwork', (done)=>{
+		nock(`https://webservice.fanart.tv`).get(`/v3/movies/${data.ids.tmdb}`).reply(200, {
+			backgrounds: [],
+			banners: [],
+			posters: []
+		})
 		require('nodetv-helpers').trakt().images.get(data.ids.tmdb,'movie').then(images=>{
 			expect(images.backgrounds).to.be.a('array')
+			expect(images.backgrounds).to.have.lengthOf(0)
 			expect(images.banners).to.be.a('array')
 			expect(images.posters).to.be.a('array')
 			done()
