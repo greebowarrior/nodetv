@@ -22,8 +22,12 @@ describe('Utils', function(){
 	})
 	
 	it('getProxy', (done)=>{
+		require('nock')(`https://api.getproxylist.com`).filteringPath(()=>'/proxy').get(`/proxy`).reply(200, {
+			protocol: 'https', ip: '1.1.1.1', port: 8080
+		})
+		
 		utils.getProxy().then(data=>{
-			expect(data).to.be.a('string')
+			expect(data).to.equal('https://1.1.1.1:8080')
 			done()
 		}).catch(error=>{
 			expect(error).to.be.false

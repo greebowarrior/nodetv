@@ -15,6 +15,8 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 				.then(show=>{
 					if (!show) return null
 					
+					// Hash may match multiple episodes
+					
 					let idx = show.episodes.findIndex(item=>{
 						return item.file.download.hashString && item.file.download.hashString.toUpperCase() == torrent.hashString.toUpperCase()
 					})
@@ -27,25 +29,26 @@ require('node-schedule').scheduleJob('*/5 * * * *', ()=>{
 					})
 					
 					let directory = show.getDirectory()
-					let filename = episode.getFilename(files[0].name, torrent.hashString)
 					
-					if (!directory) throw new Error(`${show.title}: Directory not defined`)
-					
-					let source = require('path').join(torrent.downloadDir, files[0].name)
-					let target = require('path').join(directory, filename)
-					
-					return helpers.files.copy(source, target, show.config.transcode, episode)
-						.then(()=>{
-							// TO DO: Mark collected if multi-episode file
-							return episode.setCollected(filename, torrent.doneDate)
-						})
-						.then(()=>{
-							console.debug(`Downloaded - ${show.title}: ${filename}`)
-							return show.save()
-						})
-						.catch(error=>{
-							if (error) console.error(error.message)
-						})
+					return episode.getFilename(files[0].name, torrent.hashString).then(filename=>{
+						if (!directory) throw new Error(`${show.title}: Directory not defined`)
+						
+						let source = require('path').join(torrent.downloadDir, files[0].name)
+						let target = require('path').join(directory, filename)
+						
+						return helpers.files.copy(source, target, show.config.transcode, episode)
+							.then(()=>{
+								// TO DO: Mark collected if multi-episode file
+								return episode.setCollected(filename, torrent.doneDate)
+							})
+							.then(()=>{
+								console.debug(`Downloaded - ${show.title}: ${filename}`)
+								return show.save()
+							})
+							.catch(error=>{
+								if (error) console.error(error.message)
+							})
+					})
 				})
 				.finally(()=>{
 					// Check seed ratio, if >= limit, remove torrent

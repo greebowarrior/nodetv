@@ -1,0 +1,54 @@
+{
+	"title": "Supergirl",
+	"year": 2015,
+	"ids": {
+		"slug": "supergirl",
+		"trakt": 99046,
+		"tvdb": 295759
+	},
+	"file": {
+		"download": {
+			"btih": "ABC123"
+		}
+	},
+	"episodes": [{
+		"season": 1,
+		"episode": 1,
+		"title":"Pilot",
+		"hashes": [{
+			"btih": "ABC123",
+			"linked": [1,2]
+		}],
+		"file": {
+			"download": {
+				"btih": "ABC123"
+			}
+		}
+	},{
+		"season": 1,
+		"episode": 2,
+		"title":"Second Episode",
+		"hashes": [{
+			"btih": "ABC123",
+			"linked": [1,2]
+		}],
+		"file": {
+			"download": {
+				"btih": "ABC123"
+			}
+		}
+	},{
+		"season": 1,
+		"episode": 3,
+		"title":"Third Episode",
+		"hashes": [{
+			"btih": "DEF456",
+			"linked": []
+		}],
+		"file": {
+			"download": {
+				"btih": "DEF456"
+			}
+		}
+	}]
+}

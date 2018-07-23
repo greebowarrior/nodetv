@@ -1,9 +1,10 @@
 "use strict"
 
 const Show = require('../../server/models/show')
+const nock = require('nock')
 
 describe('Shows', function(){
-	const data = {title:'Supergirl', year:2015, ids:{slug:'supergirl',trakt:99046,tvdb:295759}}
+	const data = require('./show.json')
 	
 	it('Add show', (done)=>{
 		let show = new Show(data)
@@ -21,7 +22,6 @@ describe('Shows', function(){
 			done()
 		})
 	})
-
 	it('List shows', (done)=>{
 		Show.find({}).limit(1).then(shows=>{
 			expect(shows).to.be.a('array')
@@ -56,6 +56,11 @@ describe('Shows', function(){
 		}).catch(done)
 	})
 	it('Get Artwork', (done)=>{
+		nock(`https://webservice.fanart.tv`).get(`/v3/tv/${data.ids.tvdb}`).reply(200, {
+			backgrounds: [],
+			banners: [],
+			posters: []
+		})
 		require('nodetv-helpers').trakt().images.get(data.ids.tvdb,'show').then(images=>{
 			expect(images.backgrounds).to.be.a('array')
 			expect(images.banners).to.be.a('array')
@@ -77,6 +82,26 @@ describe('Shows', function(){
 		}).catch(done)
 	})
 	*/
+	
+	
+	it('Single episode title generation', (done)=>{
+		Show.findBySlug(data.ids.slug).then(show=>{
+			return show.episodes[2].getFilename('file.mp4')
+		}).then(filename=>{
+			expect(filename).to.equal('Season 01/Episode 03 - Third Episode.mp4')
+			done()
+		}).catch(done)
+	})
+	it('Linked episode title generation', (done)=>{
+		Show.findBySlug(data.ids.slug).then(show=>{
+			return show.episodes[0].getFilename('file.mp4')
+		}).then(filename=>{
+			expect(filename).to.equal('Season 01/Episode 01-02 - Pilot; Second Episode.mp4')
+			done()
+		}).catch(done)
+	})
+	
+	
 	it('Remove show', (done)=>{
 		Show.findBySlug(data.ids.slug).then(show=>{
 			expect(show.title).to.equal(data.title)

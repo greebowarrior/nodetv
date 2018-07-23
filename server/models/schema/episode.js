@@ -160,14 +160,58 @@ episodeSchema.methods.getFilename = function(file){
 	let vars = {
 		S: require('zero-fill')(2, this.season),
 		E: require('zero-fill')(2, this.episode),
-		T: '',
+		T: helpers.utils.normalize(this.title),
 		X: require('path').extname(file).replace(/^\./,'') || 'mkv'
 	}
 	
-	// TODO: Use the filename E01-02, etc to get the multi-episode filename
+	return Promise.try(()=>{
+		if (this.file.download.btih){
+			// Find a matching episode hash
+			
+			let hash = this.hashes.filter(item=>{
+				return item.btih == this.file.download.btih
+			})
+			if (hash[0] && hash[0].linked.length > 1){
+				let episodes = []
+				let titles = []
+				
+				return Promise.map(hash[0].linked, episode=>{
+					return this.parent().getEpisode(this.season, episode)
+				}).then(episodes=>{
+					return episodes.sort((a,b)=>{
+						if (a.episode < b.episode) return -1
+						if (a.episode > b.episode) return 1
+						return 0
+					})
+				}).map(episode=>{
+					episodes.push(require('zero-fill')(2,episode.episode))
+					titles.push(helpers.utils.normalize(episode.title))
+					return 
+				}).then(()=>{
+					vars.T = titles.join('; ')
+					vars.E = [
+						episodes[0],
+						episodes[episodes.length-1]
+					].join('-')
+					return Promise.resolve()
+				})
+			}
+		} else {
+			return Promise.resolve()
+		}
+	}).then(()=>{
+		let filename = config.format.replace(/%(\w)/g, (match, key)=>{
+			return vars[key.toUpperCase()] ? vars[key.toUpperCase()] : key
+		})
+		return filename
+	})
 	
+	
+	
+	
+	
+	/*
 	if (this.hashes.linked && this.hashes.linked.length > 1){
-		/*
 		// Multi-episode file - get all parts to generate the filename/title
 		let linked = this.parent().episodes.filter(item=>{
 			return this.season == item.season && this.hashes.linked.indexOf(item.episode) >= 0
@@ -186,15 +230,8 @@ episodeSchema.methods.getFilename = function(file){
 			require('zero-fill')(2,linked[0].episode),
 			require('zero-fill')(2,linked[linked.length-1].episode)
 		].join('-')
-		*/
-	} else {
-		vars.T = helpers.utils.normalize(this.title)
 	}
-	
-	let filename = config.format.replace(/%(\w)/g, (match, key)=>{
-		return vars[key.toUpperCase()] ? vars[key.toUpperCase()] : key
-	})
-	return filename
+	*/
 }
 episodeSchema.methods.getMagnet = function(){
 	return this.getInfoHash().then(hash=>{
