@@ -87,7 +87,7 @@ let movieSchema = new mongoose.Schema({
 	}],
 	runtime: Number,
 	added: {type: Date, default: new Date()},
-	synced: {type: Date},
+	synced: {type: Date, default: null},
 	updated: {type: Date, default: new Date()}
 },{
 	toObject:{virtuals:true}, toJSON:{virtuals:true}
@@ -537,9 +537,9 @@ movieSchema.methods.symlinks = function(){
 	*/
 }
 movieSchema.methods.sync = function(user={}){
-	return helpers.trakt(user).movies.summary({id:this.ids.slug, extended:'full'})
+	return helpers.trakt(user).movies.summary({id:this.ids.trakt, extended:'full'})
 		.then(summary=>{
-			if (!this.synced || this.synced < new Date(summary.updated_at)){
+			if (this.synced < new Date(summary.updated_at)){
 				this.ids = Object.assign({}, this.ids, summary.ids)
 				this.year = summary.year
 				this.synced = new Date(summary.updated_at)
