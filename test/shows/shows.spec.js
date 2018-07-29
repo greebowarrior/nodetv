@@ -47,8 +47,8 @@ describe('Shows', function(){
 		}).catch(done)
 	})
 	it('Sync show', (done)=>{
-		nock('https://api.trakt.tv/').get(`/shows/${data.ids.trakt}?extended=full`).reply(200, data)
-		nock('https://api.trakt.tv/').get(`/shows/${data.ids.trakt}/seasons?extended=episodes,full`).reply(200, data.seasons)
+		nock('https://api.trakt.tv').get(`/shows/${data.ids.trakt}?extended=full`).reply(200, data)
+		nock('https://api.trakt.tv').get(`/shows/${data.ids.trakt}/seasons?extended=episodes,full`).reply(200, data.seasons)
 		
 		Show.findByTrakt(data.ids.trakt).then(show=>{
 			expect(show.title).to.equal(data.title)

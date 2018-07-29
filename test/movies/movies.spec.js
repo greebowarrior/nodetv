@@ -49,7 +49,7 @@ describe('Movies', function(){
 		}).catch(done)
 	})
 	it('Sync movie', (done)=>{
-		nock('https://api.trakt.tv/').get(`/movies/${data.ids.trakt}?extended=full`).reply(200, data)
+		nock('https://api.trakt.tv').get(`/movies/${data.ids.trakt}?extended=full`).reply(200, data)
 		
 		Movie.findByTrakt(data.ids.trakt).then(movie=>{
 			expect(movie.title).to.equal(data.title)
