@@ -4,9 +4,9 @@ const Movie = require('../../server/models/movie')
 const nock = require('nock')
 
 describe('Movies', function(){
-	const data = {title:'Titanic', year:1997, ids:{slug:'titanic-1997',trakt:475,tmdb:597}}
+	const data = require('./movie.json')
 	
-	it('Add Movie', (done)=>{
+	it('Add movie', (done)=>{
 		let movie = new Movie(data)
 		movie.save().then(movie=>{
 			expect(movie.isNew).to.be.false
@@ -22,7 +22,7 @@ describe('Movies', function(){
 			done()
 		})
 	})
-	it('List Movies', (done)=>{
+	it('List movies', (done)=>{
 		Movie.find({}).limit(1).then(movies=>{
 			expect(movies).to.be.a('array')
 			expect(movies).to.have.lengthOf(1)
@@ -48,15 +48,15 @@ describe('Movies', function(){
 			done()
 		}).catch(done)
 	})
-	it('Sync Movie', (done)=>{
+	it('Sync movie', (done)=>{
+		nock('https://api.trakt.tv/').get(`/movies/${data.ids.trakt}?extended=full`).reply(200, data)
+		
 		Movie.findByTrakt(data.ids.trakt).then(movie=>{
 			expect(movie.title).to.equal(data.title)
 			return movie.sync()
 		}).then(movie=>{
 			expect(movie.overview).to.be.a('string')
-			expect(movie.ids.imdb).to.equal('tt0120338')
-			return movie.save()
-		}).then(()=>{
+			expect(movie.ids.imdb).to.equal(data.ids.imdb)
 			done()
 		}).catch(done)
 	})
@@ -76,7 +76,7 @@ describe('Movies', function(){
 			done()
 		}).catch(done)
 	})
-	it('Set Downloading', (done)=>{
+	it('Set downloading', (done)=>{
 		Movie.findByTrakt(data.ids.trakt).then(movie=>{
 			return movie.setDownloading({btih:'ABC123',quality:'1080p'})
 		}).then(movie=>{
@@ -86,19 +86,16 @@ describe('Movies', function(){
 			done()
 		}).catch(done)
 	})
-	it('Set Quality', (done)=>{
+	it('Set quality', (done)=>{
 		Movie.findByTrakt(data.ids.trakt).then(movie=>{
 			expect(movie.setQuality('1080p').file.quality).to.equal('1080p')
 			expect(movie.setQuality('480p').file.quality).to.equal('SD')
 			done()
 		}).catch(done)
 	})
-	it('Get Artwork', (done)=>{
-		nock(`https://webservice.fanart.tv`).get(`/v3/movies/${data.ids.tmdb}`).reply(200, {
-			backgrounds: [],
-			banners: [],
-			posters: []
-		})
+	it('Get artwork', (done)=>{
+		nock(`https://webservice.fanart.tv`).get(`/v3/movies/${data.ids.tmdb}`).reply(200, data.images)
+		
 		require('nodetv-helpers').trakt().images.get(data.ids.tmdb,'movie').then(images=>{
 			expect(images.backgrounds).to.be.a('array')
 			expect(images.backgrounds).to.have.lengthOf(0)
@@ -107,14 +104,14 @@ describe('Movies', function(){
 			done()
 		}).catch(done)
 	})
-	it('Get Filename', (done)=>{
+	it('Get filename', (done)=>{
 		Movie.findByTrakt(data.ids.trakt).then(movie=>{
 			movie.setQuality('1080p')
 			expect(movie.getFilename('file.mp4')).to.equal('Titanic (1997) [1080p].mp4')
 			done()
 		}).catch(done)
 	})
-	it('Remove Movie', (done)=>{
+	it('Remove movie', (done)=>{
 		Movie.findBySlug(data.ids.slug).then(movie=>{
 			expect(movie.title).to.equal(data.title)
 			return movie.remove()

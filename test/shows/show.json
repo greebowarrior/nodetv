@@ -1,54 +1,117 @@
 {
-	"title": "Supergirl",
-	"year": 2015,
 	"ids": {
+		"imdb": "tt4016454",
 		"slug": "supergirl",
+		"tmdb": 62688,
 		"trakt": 99046,
 		"tvdb": 295759
 	},
-	"file": {
-		"download": {
-			"btih": "ABC123"
+	"airs": {
+		"day": "Sunday",
+		"time": "20:00",
+		"timezone": "America/New_York"
+	},
+	"images": {
+		"background": {
+			"enabled": false,
+			"files": []
+		},
+		"banner": {
+			"enabled": false,
+			"files": []
+		},
+		"poster": {
+			"enabled": false,
+			"files": []
 		}
 	},
+	"title": "Supergirl",
+	"year": 2015,
 	"episodes": [{
+		"file": {
+			"download": {
+				"btih": "ABC123"
+			}
+		},
+		"watchers": [],
+		"hashes": [{
+			"hd": false,
+			"linked": [1, 2],
+			"multi": false,
+			"repack": false,
+			"proper": false,
+			"btih": "ABC123"
+		}],
 		"season": 1,
 		"episode": 1,
-		"title":"Pilot",
-		"hashes": [{
-			"btih": "ABC123",
-			"linked": [1,2]
-		}],
+		"title": "Pilot",
+		"first_aired": "2015-10-27T00:00:00.000Z",
+		"overview": "Kara at age 12 was sent from her dying home planet of Krypton to Earth, where she was taken in by the Danvers, a foster family who taught her to be careful with her extraordinary powers. After repressing said skills for more than a decade, Kara is forced to bust out her super moves in public during an unexpected disaster. Energized by her heroism for the first time in her life, she begins embracing her abilities in the name of helping the people of her city, earning herself a super moniker along the way."
+	}, {
 		"file": {
 			"download": {
 				"btih": "ABC123"
 			}
-		}
-	},{
+		},
+		"watchers": [],
+		"hashes": [{
+			"hd": false,
+			"linked": [1, 2],
+			"multi": false,
+			"repack": false,
+			"proper": false,
+			"btih": "ABC123"
+		}],
 		"season": 1,
 		"episode": 2,
-		"title":"Second Episode",
-		"hashes": [{
-			"btih": "ABC123",
-			"linked": [1,2]
-		}],
-		"file": {
-			"download": {
-				"btih": "ABC123"
-			}
-		}
-	},{
-		"season": 1,
-		"episode": 3,
-		"title":"Third Episode",
-		"hashes": [{
-			"btih": "DEF456",
-			"linked": []
-		}],
+		"title": "Stronger Together",
+		"first_aired": "2015-11-03T01:00:00.000Z",
+		"overview": "When Kara’s attempts to help National City don't go according to plan, she must put aside the doubts that she -- and the city's media -- has about her abilities in order to capture an escapee from the Kryptonian prison, Fort Rozz. Also, Cat pressures James to use his connection to Superman to get her an interview with Supergirl."
+	}, {
 		"file": {
 			"download": {
 				"btih": "DEF456"
 			}
-		}
-	}]
+		},
+		"watchers": [],
+		"hashes": [{
+			"hd": false,
+			"linked": [],
+			"multi": false,
+			"repack": false,
+			"proper": false,
+			"btih": "DEF456"
+		}],
+		"season": 1,
+		"episode": 3,
+		"title": "Fight or Flight",
+		"first_aired": "2015-11-10T01:00:00.000Z",
+		"overview": "Supergirl’s powers are tested when Reactron, one of Superman’s formidable enemies, arrives in National City and targets the young hero. Also, Cat plans to run an exposé on Supergirl. ",
+		"id": "5b5e27aa08a65d567bc68ec1"
+	}],
+	"subscribers": [],
+	"genres": [{
+		"name": "action"
+	}, {
+		"name": "adventure"
+	}, {
+		"name": "science-fiction"
+	}, {
+		"name": "drama"
+	}, {
+		"name": "superhero"
+	}],
+	"seasons": [{
+		"ids": {
+			"trakt": 111383,
+			"tvdb": 623813,
+			"tmdb": 66734
+		},
+		"episodes": [],
+		"season": 1,
+		"overview": ""
+	}],
+	"status": "returning series",
+	"overview": "As Superman’s cousin, Kara Danvers (aka Supergirl) balances her work as a reporter for CatCo Worldwide Media with her work for the Department of Extra-Normal Operations (DEO), a super-secret government organization whose mission is to keep National City – and the Earth – safe from sinister threats.",
+	"first_aired": "2015-10-27T00:00:00.000Z"
 }

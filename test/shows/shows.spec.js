@@ -47,6 +47,9 @@ describe('Shows', function(){
 		}).catch(done)
 	})
 	it('Sync show', (done)=>{
+		nock('https://api.trakt.tv/').get(`/shows/${data.ids.trakt}?extended=full`).reply(200, data)
+		nock('https://api.trakt.tv/').get(`/shows/${data.ids.trakt}/seasons?extended=episodes,full`).reply(200, data.seasons)
+		
 		Show.findByTrakt(data.ids.trakt).then(show=>{
 			expect(show.title).to.equal(data.title)
 			return show.sync()
@@ -55,12 +58,9 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})
-	it('Get Artwork', (done)=>{
-		nock(`https://webservice.fanart.tv`).get(`/v3/tv/${data.ids.tvdb}`).reply(200, {
-			backgrounds: [],
-			banners: [],
-			posters: []
-		})
+	it('Get artwork', (done)=>{
+		nock(`https://webservice.fanart.tv`).get(`/v3/tv/${data.ids.tvdb}`).reply(200, data.images)
+		
 		require('nodetv-helpers').trakt().images.get(data.ids.tvdb,'show').then(images=>{
 			expect(images.backgrounds).to.be.a('array')
 			expect(images.banners).to.be.a('array')
@@ -68,8 +68,7 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})
-	/*
-	it('Get episode', (done)=>{
+	it('Get S01E01', (done)=>{
 		Show.findByTrakt(data.ids.trakt).then(show=>{
 			expect(show.title).to.equal(data.title)
 			expect(show.episodes).to.be.a('array')
@@ -81,26 +80,23 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})
-	*/
 	
-	
-	it('Single episode title generation', (done)=>{
-		Show.findBySlug(data.ids.slug).then(show=>{
-			return show.episodes[2].getFilename('file.mp4')
-		}).then(filename=>{
-			expect(filename).to.equal('Season 01/Episode 03 - Third Episode.mp4')
-			done()
-		}).catch(done)
-	})
 	it('Linked episode title generation', (done)=>{
 		Show.findBySlug(data.ids.slug).then(show=>{
 			return show.episodes[0].getFilename('file.mp4')
 		}).then(filename=>{
-			expect(filename).to.equal('Season 01/Episode 01-02 - Pilot; Second Episode.mp4')
+			expect(filename).to.equal('Season 01/Episode 01-02 - Pilot; Stronger Together.mp4')
+			done()
+		}).catch(done)
+	})	
+	it('Single episode title generation', (done)=>{
+		Show.findBySlug(data.ids.slug).then(show=>{
+			return show.episodes[2].getFilename('file.mp4')
+		}).then(filename=>{
+			expect(filename).to.equal('Season 01/Episode 03 - Fight or Flight.mp4')
 			done()
 		}).catch(done)
 	})
-	
 	
 	it('Remove show', (done)=>{
 		Show.findBySlug(data.ids.slug).then(show=>{
