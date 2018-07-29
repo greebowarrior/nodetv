@@ -24,6 +24,6 @@
 	},
 	"peerDependencies": {
 		"request-promise": "4.2.2",
-		"trakt.tv": "^6.0.2"
+		"trakt.tv": "^7.0.0"
 	}
 }
