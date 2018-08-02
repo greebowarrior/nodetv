@@ -484,9 +484,9 @@ showSchema.methods.scan = function(){
 							return item.season == data.season && data.episodes.indexOf(item.episode) >= 0
 						})
 						if (idx == -1) return
-						const formatted = this.episodes[idx].getFilename(file)
 						
-						return require('fs-extra').stat(require('path').join(directory,file))
+						return this.episodes[idx].getFilename(file).then(formatted=>{
+							return require('fs-extra').stat(require('path').join(directory,file))
 							.then(stat=>{
 								this.episodes[idx].file.added = new Date(stat.mtime)
 								this.episodes[idx].file.filename = formatted
@@ -496,6 +496,7 @@ showSchema.methods.scan = function(){
 									let source = require('path').join(directory, file)
 									let target = require('path').join(directory, formatted)
 									// Rename file
+									
 									return helpers.files.move(source, target)
 										.then(()=>{
 											this.episodes[idx].file.filename = formatted
@@ -505,9 +506,10 @@ showSchema.methods.scan = function(){
 									return formatted
 								}
 							})
-							.catch(error=>{
-								console.error(error.message)
-							})
+						})
+						.catch(error=>{
+							console.error(error.message)
+						})
 					})
 					.catch(()=>{
 						console.debug(`${this.title}: '${file}' is not a valid episode filename`)
@@ -518,7 +520,7 @@ showSchema.methods.scan = function(){
 			return Promise.all(promises)
 		})
 		.then(resolved=>{
-			console.debug('Scan Complete', resolved)
+		//	console.debug('Scan Complete', resolved)
 			return this.save()
 		})
 }
