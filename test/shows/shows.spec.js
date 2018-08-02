@@ -98,10 +98,33 @@ describe('Shows', function(){
 		}).catch(done)
 	})
 	
+	it('Scan directory', (done)=>{
+		Show.findBySlug(data.ids.slug).then(show=>{
+			const dir = show.getDirectory()
+			expect(dir).to.equal(`${process.env.MEDIA_ROOT}${process.env.MEDIA_SHOWS}Supergirl`)
+			
+			let res = []
+			let files = ['S01E01E02.mp4','S01E03.mp4']
+			
+			files.forEach(file=>{
+				res.push(require('fs-extra').writeFile(require('path').join(dir,file),''))
+			})
+			return Promise.all(res).then(()=>{
+				return show.scan()
+			})
+		}).then(show=>{
+			return show.getEpisode(1,1).then(episode=>{
+				expect(episode.file.filename).to.equal('Season 01/Episode 01-02 - Pilot; Stronger Together.mp4')
+				done()
+			})
+		}).catch(done)
+	})
 	it('Remove show', (done)=>{
 		Show.findBySlug(data.ids.slug).then(show=>{
 			expect(show.title).to.equal(data.title)
-			return show.remove()
+			return require('fs-extra').remove(show.getDirectory()).then(()=>{
+				return show.remove()
+			})
 		}).then(()=>{
 			done()
 		}).catch(done)
