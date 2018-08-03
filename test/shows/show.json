@@ -30,7 +30,8 @@
 	"episodes": [{
 		"file": {
 			"download": {
-				"btih": "ABC123"
+				"btih": "ABC123",
+				"hashString": "ABC123"
 			}
 		},
 		"watchers": [],
@@ -50,7 +51,8 @@
 	}, {
 		"file": {
 			"download": {
-				"btih": "ABC123"
+				"btih": "ABC123",
+				"hashString": "ABC123"
 			}
 		},
 		"watchers": [],
@@ -70,7 +72,8 @@
 	}, {
 		"file": {
 			"download": {
-				"btih": "DEF456"
+				"btih": "DEF456",
+				"hashString": "DEF456"
 			}
 		},
 		"watchers": [],

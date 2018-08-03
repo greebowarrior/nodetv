@@ -29,6 +29,12 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})
+	it('Get show by hashstring', (done)=>{
+		Show.findByHashString('ABC123').then(show=>{
+			expect(show.title).to.equal(data.title)
+			done()
+		}).catch(done)
+	})
 	it('Get show by slug', (done)=>{
 		Show.findBySlug(data.ids.slug).then(show=>{
 			expect(show.title).to.equal(data.title)
@@ -46,6 +52,12 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})
+	it('Get show URI', (done)=>{
+		Show.findByTrakt(data.ids.trakt).then(show=>{
+			expect(show.uri).to.equal(`/api/shows/${data.ids.slug}`)
+			done()
+		}).catch(done)
+	})
 	it('Sync show', (done)=>{
 		nock('https://api.trakt.tv').get(`/shows/${data.ids.trakt}?extended=full`).reply(200, data)
 		nock('https://api.trakt.tv').get(`/shows/${data.ids.trakt}/seasons?extended=episodes,full`).reply(200, data.seasons)
@@ -58,6 +70,7 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})
+	
 	it('Get artwork', (done)=>{
 		nock(`https://webservice.fanart.tv`).get(`/v3/tv/${data.ids.tvdb}`).reply(200, data.images)
 		
@@ -77,7 +90,28 @@ describe('Shows', function(){
 			expect(episode.title).to.be.a('string')
 			expect(episode.season).to.equal(1)
 			expect(episode.episode).to.equal(1)
+			expect(episode.uri).to.equal(`/api/shows/${data.ids.slug}/seasons/1/episodes/1`)
 			done()
+		}).catch(done)
+	})
+	it('Get season', (done)=>{
+		Show.findByTrakt(data.ids.trakt).then(show=>{
+			return show.seasons[0].getEpisodes()
+		}).then(episodes=>{
+			expect(episodes).to.have.lengthOf(3)
+			done()
+		}).catch(done)
+	})
+	
+	it('Set S01E01 as downloading', done=>{
+		Show.findByTrakt(data.ids.trakt).then(show=>{
+			return show.getEpisode(1,1).then(episode=>{
+				return episode.setDownloading('ABC123').then(()=>{
+					expect(episode.file.download.active).to.be.true;
+					expect(episode.file.download.hashString).to.equal('ABC123')
+					done()
+				})
+			})
 		}).catch(done)
 	})
 	
