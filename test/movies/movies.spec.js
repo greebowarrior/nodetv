@@ -29,6 +29,41 @@ describe('Movies', function(){
 			done()
 		}).catch(done)
 	})
+
+	it('Update all from latest feed', done=>{
+		nock('http://localhost').get(`/list_movies.json`).reply(200, require('./list_movies.json'))
+		
+		Movie.updateLatest().then(movies=>{
+			expect(movies).to.have.lengthOf(1)
+			expect(movies[0].title).to.equal(data.title)
+			done()
+		}).catch(done)
+	})
+	it('Parse feed', done=>{
+		nock('http://localhost').get(`/list_movies.json?query_term=${data.ids.imdb}`).reply(200, require('./list_movies.json'))
+		
+		Movie.findByTrakt(data.ids.trakt).then(movie=>{
+			delete movie.hashes
+			return movie.parseFeed()
+		}).then(movie=>{
+			expect(movie.hashes).to.have.lengthOf(3)
+			done()
+		}).catch(done)
+	})
+	it('Set downloading', (done)=>{
+		Movie.findByTrakt(data.ids.trakt).then(movie=>{
+			expect(movie.hashes).to.have.lengthOf(3)
+			return movie.setDownloading({btih:movie.hashes[0].btih, quality:movie.hashes[0].quality})
+		}).then(movie=>{
+			expect(movie.file.quality).to.equal('3D')
+			expect(movie.file.download.active).to.be.true
+			expect(movie.file.download.hashString).to.equal('237457BA8029DEF449A0D3EF5B7E508780AC68DB')
+			movie.save()
+			
+			done()
+		}).catch(done)
+	})
+	
 	it('Get movie by slug', (done)=>{
 		Movie.findBySlug(data.ids.slug).then(movie=>{
 			expect(movie.title).to.equal(data.title)
@@ -48,11 +83,19 @@ describe('Movies', function(){
 			done()
 		}).catch(done)
 	})
+	it('Get movie by hashString', done=>{
+		Movie.findByHashString('237457BA8029DEF449A0D3EF5B7E508780AC68DB').then(movie=>{
+			expect(movie.ids.trakt).to.equal(data.ids.trakt)
+			done()
+		}).catch(done)
+	})
+	
 	it('Sync movie', (done)=>{
 		nock('https://api.trakt.tv').get(`/movies/${data.ids.trakt}?extended=full`).reply(200, data)
 		
 		Movie.findByTrakt(data.ids.trakt).then(movie=>{
 			expect(movie.title).to.equal(data.title)
+			expect(movie.year).to.equal(data.year)
 			return movie.sync()
 		}).then(movie=>{
 			expect(movie.overview).to.be.a('string')
@@ -76,16 +119,7 @@ describe('Movies', function(){
 			done()
 		}).catch(done)
 	})
-	it('Set downloading', (done)=>{
-		Movie.findByTrakt(data.ids.trakt).then(movie=>{
-			return movie.setDownloading({btih:'ABC123',quality:'1080p'})
-		}).then(movie=>{
-			expect(movie.file.quality).to.equal('1080p')
-			expect(movie.file.download.active).to.be.true
-			expect(movie.file.download.hashString).to.equal('ABC123')
-			done()
-		}).catch(done)
-	})
+	
 	it('Set quality', (done)=>{
 		Movie.findByTrakt(data.ids.trakt).then(movie=>{
 			expect(movie.setQuality('1080p').file.quality).to.equal('1080p')
@@ -108,6 +142,7 @@ describe('Movies', function(){
 		Movie.findByTrakt(data.ids.trakt).then(movie=>{
 			movie.setQuality('1080p')
 			expect(movie.getFilename('file.mp4')).to.equal('Titanic (1997) [1080p].mp4')
+			expect(movie.getFilename('')).to.equal('Titanic (1997) [1080p].mp4')
 			done()
 		}).catch(done)
 	})

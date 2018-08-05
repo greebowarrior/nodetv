@@ -1,0 +1,80 @@
+{
+	"status": "ok",
+	"status_message": "Query was successful",
+	"data": {
+		"movie_count": 1,
+		"limit": 20,
+		"page_number": 1,
+		"movies": [{
+			"id": 3897,
+			"url": "http://localhost/movie/titanic-1997",
+			"imdb_code": "tt0120338",
+			"title": "Titanic",
+			"title_english": "Titanic",
+			"title_long": "Titanic (1997)",
+			"slug": "titanic-1997",
+			"year": 1997,
+			"rating": 7.8,
+			"runtime": 194,
+			"genres": [
+				"Action",
+				"Drama",
+				"Romance"
+			],
+			"summary": "84 years later, a 100 year-old woman named Rose DeWitt Bukater tells the story to her granddaughter Lizzy Calvert, Brock Lovett, Lewis Bodine, Bobby Buell and Anatoly Mikailavich on the Keldysh about her life set in April 10th 1912, on a ship called Titanic when young Rose boards the departing ship with the upper-class passengers and her mother, Ruth DeWitt Bukater, and her fiancé, Caledon Hockley. Meanwhile, a drifter and artist named Jack Dawson and his best friend Fabrizio De Rossi win third-class tickets to the ship in a game. And she explains the whole story from departure until the death of Titanic on its first and last voyage April 15th, 1912 at 2:20 in the morning.",
+			"description_full": "84 years later, a 100 year-old woman named Rose DeWitt Bukater tells the story to her granddaughter Lizzy Calvert, Brock Lovett, Lewis Bodine, Bobby Buell and Anatoly Mikailavich on the Keldysh about her life set in April 10th 1912, on a ship called Titanic when young Rose boards the departing ship with the upper-class passengers and her mother, Ruth DeWitt Bukater, and her fiancé, Caledon Hockley. Meanwhile, a drifter and artist named Jack Dawson and his best friend Fabrizio De Rossi win third-class tickets to the ship in a game. And she explains the whole story from departure until the death of Titanic on its first and last voyage April 15th, 1912 at 2:20 in the morning.",
+			"synopsis": "84 years later, a 100 year-old woman named Rose DeWitt Bukater tells the story to her granddaughter Lizzy Calvert, Brock Lovett, Lewis Bodine, Bobby Buell and Anatoly Mikailavich on the Keldysh about her life set in April 10th 1912, on a ship called Titanic when young Rose boards the departing ship with the upper-class passengers and her mother, Ruth DeWitt Bukater, and her fiancé, Caledon Hockley. Meanwhile, a drifter and artist named Jack Dawson and his best friend Fabrizio De Rossi win third-class tickets to the ship in a game. And she explains the whole story from departure until the death of Titanic on its first and last voyage April 15th, 1912 at 2:20 in the morning.",
+			"yt_trailer_code": "CHekzSiZjrY",
+			"language": "English",
+			"mpa_rating": "PG-13",
+			"background_image": "http://localhost/assets/images/movies/Titanic_1997/background.jpg",
+			"background_image_original": "http://localhost/assets/images/movies/Titanic_1997/background.jpg",
+			"small_cover_image": "http://localhost/assets/images/movies/Titanic_1997/small-cover.jpg",
+			"medium_cover_image": "http://localhost/assets/images/movies/Titanic_1997/medium-cover.jpg",
+			"large_cover_image": "http://localhost/assets/images/movies/Titanic_1997/large-cover.jpg",
+			"state": "ok",
+			"torrents": [{
+					"url": "http://localhost/torrent/download/237457BA8029DEF449A0D3EF5B7E508780AC68DB",
+					"hash": "237457BA8029DEF449A0D3EF5B7E508780AC68DB",
+					"quality": "3D",
+					"seeds": 83,
+					"peers": 9,
+					"size": "2.80 GB",
+					"size_bytes": 3006477107,
+					"date_uploaded": "2015-11-02 04:25:37",
+					"date_uploaded_unix": 1446434737
+				},
+				{
+					"url": "http://localhost/torrent/download/A86B4ADB83506BB12CEABAC2F42AE480BA44ECFA",
+					"hash": "A86B4ADB83506BB12CEABAC2F42AE480BA44ECFA",
+					"quality": "720p",
+					"seeds": 245,
+					"peers": 44,
+					"size": "1.4 GB",
+					"size_bytes": 1503238554,
+					"date_uploaded": "2017-08-11 19:25:11",
+					"date_uploaded_unix": 1502472311
+				},
+				{
+					"url": "http://localhost/torrent/download/98CD5D90252265F1C59AB47330FF4C39F48CCC78",
+					"hash": "98CD5D90252265F1C59AB47330FF4C39F48CCC78",
+					"quality": "1080p",
+					"seeds": 273,
+					"peers": 63,
+					"size": "2.97 GB",
+					"size_bytes": 3189013217,
+					"date_uploaded": "2017-08-12 02:14:57",
+					"date_uploaded_unix": 1502496897
+				}
+			],
+			"date_uploaded": "2017-08-11 19:25:11",
+			"date_uploaded_unix": 1502472311
+		}]
+	},
+	"@meta": {
+		"server_time": 1533473328,
+		"server_timezone": "CET",
+		"api_version": 2,
+		"execution_time": "0.01 ms"
+	}
+}
