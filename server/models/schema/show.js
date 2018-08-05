@@ -31,7 +31,7 @@ const showSchema = new mongoose.Schema({
 		feed: [{_id:false,url:String}],
 		format: {type: String, default: 'Season %S/Episode %E - %T.%X'},
 		hd: {type: Boolean, default: false},
-		quality: {type: String, enum: ['SD','720p','1080p']},
+		quality: {type: String, enum: ['SD','720p','1080p'], default: 'SD'},
 		transcode: {type: Boolean, default: false}
 	},
 	title: {type: String, required: true},
@@ -250,7 +250,7 @@ showSchema.methods.parseFeed = function(){
 		return true
 	})
 	.then(()=>{
-		console.debug(`Saving ${this.title}`)
+	//	console.debug(`Saving ${this.title}`)
 		return this.save({new:true})
 	})
 	.catch(error=>{
