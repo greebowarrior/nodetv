@@ -172,7 +172,7 @@ const Auth = app=>{
 	router.route('/install')
 		.all((req,res,next)=>{
 			// Check if already installed
-			User.count()
+			User.countDocuments()
 				.then(count=>{
 					if (count) throw new Error(`Forbidden`)
 					next()
