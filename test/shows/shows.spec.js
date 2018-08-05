@@ -22,6 +22,7 @@ describe('Shows', function(){
 			done()
 		})
 	})
+	
 	it('List shows', (done)=>{
 		Show.find({}).limit(1).then(shows=>{
 			expect(shows).to.be.a('array')
@@ -29,6 +30,34 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})
+	it('List enabled shows', done=>{
+		Show.findEnabled().then(shows=>{
+			expect(shows).to.have.lengthOf(1)
+			done()
+		}).catch(done)
+	})
+	
+	it('Parse RSS feed', done=>{
+		Show.findByTrakt(data.ids.trakt).then(show=>{
+			expect(show.config.feed).to.be.an('array')
+			expect(show.config.feed).to.have.lengthOf(1)
+			expect(show.config.feed[0].url).to.equal('http://localhost/show.rss')
+			
+			nock('http://localhost').get('/show.rss').reply(200, (uri,body,cb)=>{
+				require('fs').readFile('test/shows/show.rss' , cb)
+			})
+			return show.parseFeed()
+			
+		}).then(show=>{
+			expect(show.episodes[2].hashes).to.have.lengthOf(1)
+			
+			
+		//	console.debug(show.episodes[2])
+			
+			done()
+		}).catch(done)
+	})
+	
 	it('Get show by hashstring', (done)=>{
 		Show.findByHashString('ABC123').then(show=>{
 			expect(show.title).to.equal(data.title)

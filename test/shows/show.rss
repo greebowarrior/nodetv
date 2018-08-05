@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:tv="http://showrss.info">
+	<channel>
+		<title>showRSS feed: Supergirl</title>
+		<link>http://showrss.info</link>
+		<ttl>30</ttl>
+		<description>showRSS show feed for Supergirl</description>
+		<item>
+			<title>Supergirl 1x01-02</title>
+			<link>magnet:?xt=urn:btih:ABC123&amp;dn=Supergirl+S01E01E02+HDTV+x264+PLUTONiUM&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce</link>
+			<guid isPermaLink="false">12a066162f448fa70c6959819501e8d31d87a463</guid>
+			<pubDate>Tue, 19 Jun 2018 05:06:51 +0000</pubDate>
+			<tv:show_id>140</tv:show_id>
+			<tv:external_id>1850</tv:external_id>
+			<tv:show_name>Supergirl</tv:show_name>
+			<tv:episode_id>70463</tv:episode_id>
+			<tv:raw_title>Supergirl S01E01E02 HDTV x264</tv:raw_title>
+			<tv:info_hash>ABC123</tv:info_hash>
+			<enclosure url="magnet:?xt=urn:btih:ABC123&amp;dn=Supergirl+S01E01E02+1080p+HDTV+x264+PLUTONiUM&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce" length="0" type="application/x-bittorrent"/>
+		</item>
+		<item>
+			<title>Supergirl 1x03 REPACK</title>
+			<link>magnet:?xt=urn:btih:DEF456&amp;dn=Supergirl+S01E03+HDTV+x264+REPACK&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce</link>
+			<guid isPermaLink="false">12a066162f448fa70c6959819501e8d31d87a464</guid>
+			<pubDate>Tue, 19 Jun 2018 05:06:51 +0000</pubDate>
+			<tv:show_id>140</tv:show_id>
+			<tv:external_id>1850</tv:external_id>
+			<tv:show_name>Supergirl</tv:show_name>
+			<tv:episode_id>70463</tv:episode_id>
+			<tv:raw_title>Supergirl S01E03 HDTV x264 REPACK</tv:raw_title>
+			<tv:info_hash>DEF456</tv:info_hash>
+			<enclosure url="magnet:?xt=urn:btih:DEF456&amp;dn=Supergirl+S01E03+1080p+HDTV+x264+REPACK&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce" length="0" type="application/x-bittorrent"/>
+		</item>
+	</channel>
+</rss>

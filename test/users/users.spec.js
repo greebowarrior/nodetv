@@ -16,7 +16,13 @@ describe('Users', function(){
 			done()
 		}).catch(done)
 	})
-
+	it('Verify password', done=>{
+		User.findByUsername(data.username).then(user=>{
+			expect(user.verifyPassword('password')).to.be.true
+			expect(user.verifyPassword('wrong password')).to.be.false
+			done()
+		}).catch(done)
+	})
 	it('Prevent duplicate user', (done)=>{
 		let user = new User(data)
 		user.setPassword('password','password')
@@ -34,7 +40,6 @@ describe('Users', function(){
 			done()
 		}).catch(done)
 	})
-	
 	it('Get user by username', (done)=>{
 		User.findByUsername(data.username).then(user=>{
 			expect(user.username).to.equal(data.username)
@@ -61,6 +66,15 @@ describe('Users', function(){
 			expect(user.email).to.equal(data.email)
 			expect(user.verifyPassword('password')).to.be.true
 			expect(user.tokens).to.have.lengthOf(1)
+			done()
+		}).catch(done)
+	})
+	
+	it('Generate API tokens', done=>{
+		User.findByUsername(data.username).then(user=>{
+			expect(user.apiToken()).to.be.a('string')
+			delete user.tokens
+			expect(user.apiToken()).to.be.a('string')
 			done()
 		}).catch(done)
 	})

@@ -6,6 +6,12 @@
 		"trakt": 99046,
 		"tvdb": 295759
 	},
+	"config": {
+		"enabled": true,
+		"feed": [{
+			"url": "http://localhost/show.rss"
+		}]
+	},
 	"airs": {
 		"day": "Sunday",
 		"time": "20:00",
@@ -77,14 +83,6 @@
 			}
 		},
 		"watchers": [],
-		"hashes": [{
-			"hd": false,
-			"linked": [],
-			"multi": false,
-			"repack": false,
-			"proper": false,
-			"btih": "DEF456"
-		}],
 		"season": 1,
 		"episode": 3,
 		"title": "Fight or Flight",

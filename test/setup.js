@@ -2,7 +2,7 @@
 
 global.Promise = require('bluebird').Promise
 
-require('dotenv-extended').load()
+require('dotenv-extended').load({path:'.env.test'})
 require('../server/database')
 
 let chai = require('chai')

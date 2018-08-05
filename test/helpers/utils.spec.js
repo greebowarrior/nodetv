@@ -12,13 +12,27 @@ describe('Utils', function(){
 			done()
 		}).catch(done)
 	})
-	it('getEpisodeNumbers: Daily', (done)=>{
+	it('getEpisodeNumbers: Daily shows', (done)=>{
 		utils.getEpisodeNumbers('BBC News 2018-01-01').then(data=>{
 			expect(data.year).to.equal(2018)
 			expect(data.month).to.equal(1)
 			expect(data.day).to.equal(1)
 			done()
 		}).catch(done)
+	})
+	it('getEpisodeNumbers: Mr Robot', (done)=>{
+		utils.getEpisodeNumbers('eps1.0_hellofriend.mov').then(data=>{
+			expect(data.season).to.equal(1)
+			expect(data.episodes).to.be.an('array')
+			expect(data.episodes[0]).to.equal(1)
+			done()
+		}).catch(done)
+	})
+	it('getEpisodeNumbers: Failure', (done)=>{
+		utils.getEpisodeNumbers('herpderp').catch(data=>{
+			expect(data).to.be.null;
+			done()
+		})
 	})
 	
 	it('getProxy', (done)=>{
@@ -53,6 +67,7 @@ describe('Utils', function(){
 		expect(utils.isRepack('PROPER')).to.be.true
 		expect(utils.isRepack('REPACK')).to.be.true
 		expect(utils.isRepack('RERIP')).to.be.true
+		expect(utils.isRepack('x264 YTS.AG')).to.be.false
 		done()
 	})
 	it('isProper', (done)=>{
@@ -70,7 +85,8 @@ describe('Utils', function(){
 	it('getInfoHash', (done)=>{
 		const btih = 'magnet:?xt=urn:btih:060AFC9881724A564103BC31DA19F7E9B22AFE29'
 		expect(utils.getInfoHash({link:btih})).to.equal('060AFC9881724A564103BC31DA19F7E9B22AFE29')
-	//	expect(utils.getInfoHash({guid:btih})).to.equal('060AFC9881724A564103BC31DA19F7E9B22AFE29')
+		expect(utils.getInfoHash({guid:btih})).to.equal('060AFC9881724A564103BC31DA19F7E9B22AFE29')
+		expect(utils.getInfoHash({})).to.be.false
 		done()
 	})
 	it('walkDir', (done)=>{
@@ -85,6 +101,12 @@ describe('Utils', function(){
 	it('normalize', (done)=>{
 		let string = utils.normalize('string')
 		expect(string).to.equal('string')
+		done()
+	})
+	
+	it('Model loader', done=>{
+		expect(()=>require('nodetv-helpers').model('show')).to.not.throw()
+		expect(()=>require('nodetv-helpers').model('derp')).to.throw()
 		done()
 	})
 })
