@@ -80,11 +80,11 @@ exports.isProper = (filename)=>{
 
 exports.getInfoHash = (item)=>{
 	// tv:info_hash namespace?
-	if (item.link.match(/btih\:([\w]{32,40})/i)){
+	if (item.link && item.link.match(/btih\:([\w]{32,40})/i)){
 		// ShowRSS
 		let match = item.link.match(/btih\:([\w]{32,40})/i)
 		return match[1].toUpperCase()
-	} else if (item.guid.match(/btih\:([\w]{32,40})/i)){
+	} else if (item.guid && item.guid.match(/btih\:([\w]{32,40})/i)){
 		// TVShowsApp
 		let match = item.guid.match(/btih\:([\w]{32,40})/i)
 		return match[1].toUpperCase()
