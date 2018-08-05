@@ -4,7 +4,7 @@ const User = require('../../server/models/user')
 
 describe('Users', function(){
 	
-	const data = {username:'mocha',email:'mocha@example.com'}
+	const data = require('./user.json')
 	
 	it('Create user', (done)=>{
 		let user = new User(data)
