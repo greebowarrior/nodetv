@@ -1,0 +1,36 @@
+{
+	"arguments": {
+		"torrents": [{
+			"addedDate": 1524220980,
+			"doneDate": 1524220982,
+			"downloadDir": "/home/torrents/",
+			"files":[{
+				"bytesCompleted": 30,
+				"length": 30,
+				"name": "S01E01.mp4"
+			}],
+			"hashString": "ABC123",
+			"id": 1,
+			"isFinished": false,
+			"percentDone": 1,
+			"seedRatioLimit": 50,
+			"uploadRatio": 34.4
+		},{
+			"addedDate": 1524220980,
+			"doneDate": 1524220982,
+			"downloadDir": "/home/torrents/",
+			"files":[{
+				"bytesCompleted": 30,
+				"length": 30,
+				"name": "S01E03.mp4"
+			}],
+			"hashString": "DEF456",
+			"id": 1,
+			"isFinished": false,
+			"percentDone": 0.9,
+			"seedRatioLimit": 50,
+			"uploadRatio": 1.2
+		}]
+	},
+	"result": "success"
+}
