@@ -1,12 +1,14 @@
 "use strict"
 
 const Show = require('../../server/models/show')
+const User = require('../../server/models/user')
+
 const nock = require('nock')
 
 describe('Shows', function(){
 	const data = require('./show.json')
 	
-	it('Add show', (done)=>{
+	it('Add show', done=>{
 		let show = new Show(data)
 		show.save().then(show=>{
 			expect(show.isNew).to.be.false
@@ -14,7 +16,7 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})
-	it('Prevent duplicate show', (done)=>{
+	it('Prevent duplicate show', done=>{
 		let show = new Show(data)
 		show.save().then(()=>{
 			done(new Error(`Duplicate show created`))
@@ -23,7 +25,7 @@ describe('Shows', function(){
 		})
 	})
 	
-	it('List shows', (done)=>{
+	it('List shows', done=>{
 		Show.find({}).limit(1).then(shows=>{
 			expect(shows).to.be.a('array')
 			expect(shows).to.have.lengthOf(1)
@@ -33,6 +35,26 @@ describe('Shows', function(){
 	it('List enabled shows', done=>{
 		Show.findEnabled().then(shows=>{
 			expect(shows).to.have.lengthOf(1)
+			done()
+		}).catch(done)
+	})
+	
+	it('Show subscription', done=>{
+		let user = new User(require('../users/user.json'))
+		user.setPassword('password','password')
+		
+		user.save().then(user=>{
+			return Show.findByTrakt(data.ids.trakt).then(show=>{
+				return show.subscribe(user).save()
+			}).then(show=>{
+				expect(show.subscribers).to.have.lengthOf(1)
+				expect(show.subscribers[0].subscriber).to.equal(user._id)
+				return show.unsubscribe(user).save()
+			}).then(show=>{
+				expect(show.subscribers).to.have.lengthOf(0)
+				return user.remove()
+			})
+		}).then(()=>{
 			done()
 		}).catch(done)
 	})
@@ -58,13 +80,13 @@ describe('Shows', function(){
 		}).catch(done)
 	})
 	
-	it('Get show by hashstring', (done)=>{
+	it('Get show by hashstring', done=>{
 		Show.findByHashString('ABC123').then(show=>{
 			expect(show.title).to.equal(data.title)
 			done()
 		}).catch(done)
 	})
-	it('Get show by slug', (done)=>{
+	it('Get show by slug', done=>{
 		Show.findBySlug(data.ids.slug).then(show=>{
 			expect(show.title).to.equal(data.title)
 			expect(show.year).to.equal(data.year)
@@ -73,7 +95,7 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})
-	it('Get show by Trakt ID', (done)=>{
+	it('Get show by Trakt ID', done=>{
 		Show.findByTrakt(data.ids.trakt).then(show=>{
 			expect(show.title).to.equal(data.title)
 			expect(show.year).to.equal(data.year)
@@ -81,13 +103,13 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})
-	it('Get show URI', (done)=>{
+	it('Get show URI', done=>{
 		Show.findByTrakt(data.ids.trakt).then(show=>{
 			expect(show.uri).to.equal(`/api/shows/${data.ids.slug}`)
 			done()
 		}).catch(done)
 	})
-	it('Sync show', (done)=>{
+	it('Sync show', done=>{
 		nock('https://api.trakt.tv').get(`/shows/${data.ids.trakt}?extended=full`).reply(200, data)
 		nock('https://api.trakt.tv').get(`/shows/${data.ids.trakt}/seasons?extended=episodes,full`).reply(200, data.seasons)
 		
@@ -100,17 +122,17 @@ describe('Shows', function(){
 		}).catch(done)
 	})
 	
-	it('Get artwork', (done)=>{
+	it('Get artwork', done=>{
 		nock(`https://webservice.fanart.tv`).get(`/v3/tv/${data.ids.tvdb}`).reply(200, data.images)
 		
 		require('nodetv-helpers').trakt().images.get(data.ids.tvdb,'show').then(images=>{
-			expect(images.backgrounds).to.be.a('array')
-			expect(images.banners).to.be.a('array')
-			expect(images.posters).to.be.a('array')
+			expect(images.backgrounds).to.be.an('array')
+			expect(images.banners).to.be.an('array')
+			expect(images.posters).to.be.an('array')
 			done()
 		}).catch(done)
 	})
-	it('Get S01E01', (done)=>{
+	it('Get S01E01', done=>{
 		Show.findByTrakt(data.ids.trakt).then(show=>{
 			expect(show.title).to.equal(data.title)
 			expect(show.episodes).to.be.a('array')
@@ -123,7 +145,7 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})
-	it('Get season', (done)=>{
+	it('Get season', done=>{
 		Show.findByTrakt(data.ids.trakt).then(show=>{
 			return show.seasons[0].getEpisodes()
 		}).then(episodes=>{
@@ -144,7 +166,7 @@ describe('Shows', function(){
 		}).catch(done)
 	})
 	
-	it('Linked episode title generation', (done)=>{
+	it('Linked episode title generation', done=>{
 		Show.findBySlug(data.ids.slug).then(show=>{
 			return show.episodes[0].getFilename('file.mp4')
 		}).then(filename=>{
@@ -152,7 +174,7 @@ describe('Shows', function(){
 			done()
 		}).catch(done)
 	})	
-	it('Single episode title generation', (done)=>{
+	it('Single episode title generation', done=>{
 		Show.findBySlug(data.ids.slug).then(show=>{
 			return show.episodes[2].getFilename('file.mp4')
 		}).then(filename=>{
@@ -161,7 +183,7 @@ describe('Shows', function(){
 		}).catch(done)
 	})
 	
-	it('Scan directory', (done)=>{
+	it('Scan directory', done=>{
 		Show.findBySlug(data.ids.slug).then(show=>{
 			const dir = show.getDirectory()
 			expect(dir).to.equal(`${process.env.MEDIA_ROOT}${process.env.MEDIA_SHOWS}Supergirl`)
@@ -182,7 +204,7 @@ describe('Shows', function(){
 			})
 		}).catch(done)
 	})
-	it('Remove show', (done)=>{
+	it('Remove show', done=>{
 		Show.findBySlug(data.ids.slug).then(show=>{
 			expect(show.title).to.equal(data.title)
 			return require('fs-extra').remove(show.getDirectory()).then(()=>{

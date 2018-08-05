@@ -263,7 +263,11 @@ showSchema.methods.subscribe = function(user){
 	})
 	if (idx === -1){
 		this.subscribers.push({subscriber:user._id})
-		helpers.trakt(user).sync.watchlist.add({shows:[{ids:{trakt:this.ids.trakt}}]})
+		try {
+			helpers.trakt(user).sync.watchlist.add({shows:[{ids:{trakt:this.ids.trakt}}]})
+		} catch(e){
+			console.error(e.message)
+		}
 	}
 	return this
 }
@@ -274,8 +278,12 @@ showSchema.methods.unsubscribe = function(user){
 	if (idx >= 0) this.subscribers.splice(idx,1)
 	
 	// Remove from watchlist & collection
-	helpers.trakt(user).sync.collection.remove({shows:[{ids:{trakt:this.ids.trakt}}]})
-	helpers.trakt(user).sync.watchlist.remove({shows:[{ids:{trakt:this.ids.trakt}}]})
+	try {
+		helpers.trakt(user).sync.collection.remove({shows:[{ids:{trakt:this.ids.trakt}}]})
+		helpers.trakt(user).sync.watchlist.remove({shows:[{ids:{trakt:this.ids.trakt}}]})
+	} catch(e){
+		console.error(e.message)
+	}
 	return this
 }
 

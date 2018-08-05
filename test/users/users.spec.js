@@ -40,6 +40,7 @@ describe('Users', function(){
 			done()
 		}).catch(done)
 	})
+	
 	it('Get user by username', (done)=>{
 		User.findByUsername(data.username).then(user=>{
 			expect(user.username).to.equal(data.username)
@@ -49,7 +50,6 @@ describe('Users', function(){
 			done()
 		}).catch(done)
 	})
-	
 	it('Get user by email', (done)=>{
 		User.findByUsername(data.email).then(user=>{
 			expect(user.username).to.equal(data.username)
@@ -59,7 +59,6 @@ describe('Users', function(){
 			done()
 		}).catch(done)
 	})
-
 	it('Get user by token', (done)=>{
 		User.findByToken(data.email, data.tokens[0].token).then(user=>{
 			expect(user.username).to.equal(data.username)
