@@ -48,6 +48,14 @@ describe('Utils', function(){
 			done()
 		})
 	})
+	it('getProxy failure', (done)=>{
+		require('nock')(`https://api.getproxylist.com`).filteringPath(()=>'/proxy').get(`/proxy`).reply(200, {})
+		
+		utils.getProxy().then(data=>{
+			expect(data).to.be.false
+			done()
+		}).catch(done)
+	})
 	it('getQuality', (done)=>{
 		expect(utils.getQuality('1080P')).to.equal('1080p')
 		expect(utils.getQuality('720P')).to.equal('720p')

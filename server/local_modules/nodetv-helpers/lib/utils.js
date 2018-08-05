@@ -45,7 +45,7 @@ exports.getProxy = (options={})=>{
 		allowsHttps: 1,
 		protocol: 'http'
 	}
-	if (process.env.PROXY_API_KEY) defaults.apiKey = process.env.PROXY_API_KEY
+	//if (process.env.PROXY_API_KEY) defaults.apiKey = process.env.PROXY_API_KEY
 	
 	let qs = Object.assign({}, defaults, options)
 	
