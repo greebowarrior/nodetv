@@ -115,6 +115,7 @@ describe('Utils', function(){
 	it('Model loader', done=>{
 		expect(()=>require('nodetv-helpers').model('show')).to.not.throw()
 		expect(()=>require('nodetv-helpers').model('derp')).to.throw()
+		expect(()=>require('nodetv-helpers').model()).to.throw()
 		done()
 	})
 })

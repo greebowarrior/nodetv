@@ -120,6 +120,17 @@ describe('Movies', function(){
 		}).catch(done)
 	})
 	
+	it('Get infohash', done=>{
+		Movie.findByTrakt(data.ids.trakt).then(movie=>{
+			movie.config.quality = '1080p'
+			return movie.getInfoHash()
+		}).then(res=>{
+			expect(res.btih).to.equal('98CD5D90252265F1C59AB47330FF4C39F48CCC78')
+			expect(res.quality).to.equal('1080p')
+			done()
+		}).catch(done)
+	})
+	
 	it('Set quality', (done)=>{
 		Movie.findByTrakt(data.ids.trakt).then(movie=>{
 			expect(movie.setQuality('1080p').file.quality).to.equal('1080p')
