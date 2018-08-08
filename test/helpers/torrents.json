@@ -1,5 +1,11 @@
 {
 	"arguments": {
+		"removed": [1],
+		"torrent-added": {
+			"hashString": "ABC123",
+			"id": 1,
+			"name": "S01E01.mp4"
+		},
 		"torrents": [{
 			"addedDate": 1524220980,
 			"doneDate": 1524220982,
@@ -8,6 +14,10 @@
 				"bytesCompleted": 30,
 				"length": 30,
 				"name": "S01E01.mp4"
+			},{
+				"bytesCompleted": 10,
+				"length": 10,
+				"name": "readme.nfo"
 			}],
 			"hashString": "ABC123",
 			"id": 1,
