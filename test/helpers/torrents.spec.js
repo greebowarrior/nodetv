@@ -8,10 +8,8 @@ describe('Torrent helpers', function(){
 	const data = require('./torrents.json')
 	
 	beforeEach(function(){
-		nock('http://127.0.0.1:9091').post('/transmission/rpc').reply(200, data)
-	})
-	after(function(){
-		nock.removeInterceptor({hostname:'127.0.0.1',path:'/transmission/rpc'})
+		nock(`http://${process.env.TRANSMISSION_HOST}:${process.env.TRANSMISSION_PORT}`)
+			.post(process.env.TRANSMISSION_URL).reply(200, data)
 	})
 	
 	it ('List torrents', done=>{
@@ -36,7 +34,6 @@ describe('Torrent helpers', function(){
 			done()
 		}).catch(done)
 	})
-	
 	it ('Create magnet', done=>{
 		torrents.createMagnet('ABC123').then(result=>{
 			expect(result).to.be.a('string')
