@@ -6,6 +6,8 @@ require('mongoose-long')(mongoose)
 mongoose.Promise = global.Promise
 mongoose.plugin(require('mongoose-unique-validator'))
 
+mongoose.set('useCreateIndex', true)
+
 const Database = ()=>{
 	
 	let conn = 'mongodb://'
