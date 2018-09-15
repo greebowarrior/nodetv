@@ -76,24 +76,10 @@
 			<div class="grid-header">
 				<h3>Latest Movie Releases</h3>
 			</div>
-			
 			<div class="cover" ng-repeat="movie in $ctrl.movies">
 				<a ng-click="$ctrl.addMovie(movie)"><img ng-src="{{movie.image}}" ng-alt="{{movie.title}}" class="img-responsive center-block yts" /></a>
 			</div>
-			
 		</div>
-		<!--
-		<div class="row">
-			<div class="col-xs-12">
-				<h3>Latest Movie Releases</h3>
-			</div>
-			
-			
-			<div class="col-xs-4 col-md-2" ng-repeat="movie in $ctrl.movies">
-				<a ng-click="$ctrl.addMovie(movie)"><img ng-src="{{movie.image}}" ng-alt="{{movie.title}}" class="img-responsive center-block yts" /></a>
-			</div>
-		</div>
-		-->
 	</uib-tab>
 </uib-tabset>
 

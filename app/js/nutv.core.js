@@ -224,23 +224,27 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 		}]
 	})
 	.component('nutvGrid', {
-		bindings: {list:'<',type:'<',page:'<'},
+		bindings: {list:'<',type:'<', page:'<',sort:'<',order:'<'},
 		templateUrl: 'views/components/grid.html',
 		controller: ['$http','$log','$sessionStorage','$state',function($http,$log,$sessionStorage,$state){
+			if (!$sessionStorage.filter) $sessionStorage.filter = {title:''}
+			if (!$sessionStorage.sort) $sessionStorage.sort = {by:{}}
+			
 			this.$onInit = ()=>{
 				this.sortOptions = [
 					{type:'title',reverse:false,label:'A-Z'},
 					{type:'added',reverse:true,label:'Recently Added'}
 				]
 				
-				if (!$sessionStorage.filter) $sessionStorage.filter = {title: ''}
-//				if (!$sessionStorage.sortBy) $sessionStorage.sortBy = {sort:this.sortOptions[0]}
-
 				this.filter = $sessionStorage.filter
-				this.sortBy = this.sortOptions[0] //$sessionStorage.sortBy
+				this.sort = $sessionStorage.sort
 				
+				if (!this.sort.by.type) this.sort.by = this.sortOptions[0]
 				this.pagination = {items:18, page:this.page}
 			}
+		//	this.$onChanges = (changes)=>{
+		//		$log.debug(changes)
+		//	}
 			this.uiOnParamsChanged = (params)=>{
 				this.pagination.page = params.page
 			}
@@ -248,8 +252,8 @@ angular.module('nutv.core', ['ngAnimate','ngCookies','ngSanitize','ngStorage','n
 				this.results = []
 			}
 			this.sortFilter = (item)=>{
-				if (this.sortBy.type == 'title') return this.definiteArticle(item)
-				if (this.sortBy.type == 'added') return item.added
+				if (this.sort.by.type == 'title') return this.definiteArticle(item)
+				if (this.sort.by.type == 'added') return item.added
 			}
 			this.definiteArticle = (item)=>{
 				return item.title.replace(/^(The\s|A\s|\W)/i, '')
