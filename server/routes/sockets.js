@@ -73,7 +73,7 @@ module.exports = io=>{
 			.then(user=>{
 				if (!user) throw new Error(`User not found`)
 				client.user = user
-				return Socket.update({id:client.id},{user:user._id})
+				return Socket.updateOne({id:client.id},{user:user._id})
 			})
 			.then(()=>{
 				client.emit('authenticated', {status:true})

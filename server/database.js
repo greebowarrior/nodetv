@@ -7,6 +7,8 @@ mongoose.Promise = global.Promise
 mongoose.plugin(require('mongoose-unique-validator'))
 
 mongoose.set('useCreateIndex', true)
+mongoose.set('useFindAndModify', false)
+mongoose.set('useNewUrlParser', true)
 
 const Database = ()=>{
 	
