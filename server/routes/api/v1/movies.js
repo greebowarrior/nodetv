@@ -26,7 +26,7 @@ const MoviesAPI = (api)=>{
 			Movie.findBySlug(req.body.slug)
 				.then(movie=>{
 					if (movie) return movie
-					movie = new Movie({ids:{slug:req.body.slug}})
+					movie = new Movie({ids:{slug:req.body.slug, trakt:req.body.trakt}})
 					return movie.sync(req.user)
 				})
 				.then(movie=>{
