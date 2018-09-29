@@ -2,7 +2,7 @@ FROM node:10
 
 WORKDIR /usr/src/nutv
 
-COPY package*.json /usr/src/nutv
+COPY package*.json /usr/src/nutv/
 
 RUN npm install --only=production
 
