@@ -22,6 +22,7 @@ services:
     environment:
       - MEDIA_ROOT=/videos
       - DB_HOST=mongo
+      - TRANSMISSION_HOST=transmission
   minidlna:
     container_name: minidlna
     image: vladgh/minidlna
