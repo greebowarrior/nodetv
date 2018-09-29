@@ -1,0 +1,16 @@
+._*
+.DS_Store
+.codekit-cache
+.env
+.eslintcache
+.npm
+.nyc_output
+.sass-cache
+.yarn-integrity
+
+.git
+node_modules
+scripts
+
+*.log
+*.log*
