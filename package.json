@@ -16,7 +16,7 @@
     "url": "https://github.com/greebowarrior/nodetv/issues"
   },
   "scripts": {
-    "start": "nodemon",
+    "start": "node server.js",
     "test": "nyc mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
