@@ -50,8 +50,8 @@ Okay, you need some slight technical experience, and some software. We'll assume
 
 - [nginx](https://nginx.org) 1.13.0 +
 - [Node.js](https://nodejs.org) 8.9.0 +
-- [MongoDB](https://mongodb.org) 3.2.0 +
-- [Transmission](https://transmissionbt.com) 2.92 with RPC Enabled
+- [MongoDB](https://mongodb.org) 3.4.0 +
+- [Transmission](https://transmissionbt.com) 2.94 with RPC Enabled
 
 # Install
 
@@ -62,14 +62,28 @@ Create a user named `media`
 > su media
 > npm i
 
-
-
 Install the systemd service
 
 > sudo cp /opt/nutv/scripts/nutv.service /etc/systemd/system/  
 > sudo systemctl reload-daemon  
 > sudo systemctl enable nutv.service  
 > sudo systemctl start nutv.service  
+
+# Configure
+
+You'll need to create a `.env` file in your home directory, using `.env.default` as a template. In most cases, the only variables you may need to edit are:
+
+- `MEDIA_ROOT`
+- `DB_*`
+- `TRANSMISSION_*`
+
+
+# Docker
+
+If all that seems like too much trouble, or you just prefer containers, a [Docker](https://docker.org) image is available
+
+> docker run -d --name="nutv" -v /path/to/your/media:/media -v /path/to/your/downloads:/downloads -p 3001:3001 --net=host greebowarrior/nutv
+
 
 # Running
 

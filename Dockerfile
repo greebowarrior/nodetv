@@ -1,5 +1,8 @@
 FROM node:10
 
+VOLUME /media
+VOLUME /downloads
+
 WORKDIR /usr/src/nutv
 
 COPY package*.json /usr/src/nutv/
