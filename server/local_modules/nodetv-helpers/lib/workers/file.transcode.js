@@ -2,7 +2,6 @@
 
 const fs = require('fs-extra')
 const mime = require('mime-types')
-const ffmpeg = require('ffmpeg-binaries')
 
 process.on('message', (msg)=>{
 	try {
@@ -54,7 +53,7 @@ process.on('message', (msg)=>{
 		
 		args.push(msg.target)
 		
-		const remux = require('child_process').spawn(ffmpeg, args)
+		const remux = require('child_process').spawn('ffmpeg', args)
 		remux.on('close', (code)=>{
 			process.exit(code)
 		})

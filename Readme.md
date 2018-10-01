@@ -73,17 +73,20 @@ Install the systemd service
 
 You'll need to create a `.env` file in your home directory, using `.env.default` as a template. In most cases, the only variables you may need to edit are:
 
-- `MEDIA_ROOT`
+- `SECRET_KEY`
 - `DB_*`
 - `TRANSMISSION_*`
 
+The Secret Key is **required**.
+By default, NodeTV assumes that MongoDB and Transmission are running on the same machine, using the default ports.  
+In the case of MongoDB, it also assumes that you're not using authentication.
 
 # Docker
 
-If all that seems like too much trouble, or you just prefer containers, a [Docker](https://docker.org) image is available
+If all that seems like too much trouble, or you just prefer containers, a [Docker](https://docker.com) image is available.
+You'll still need to make a `.env` file (see above), but that's pretty much it.
 
-> docker run -d --name="nutv" -v /path/to/your/media:/media -v /path/to/your/downloads:/downloads -p 3001:3001 --net=host greebowarrior/nutv
-
+> docker run -d --name="nutv" -v /path/to/your/media:/media -v /path/to/your/downloads:/downloads -p 3001:3001 --net=host --env-file ~/.env greebowarrior/nutv
 
 # Running
 

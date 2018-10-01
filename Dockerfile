@@ -1,4 +1,6 @@
-FROM node:10
+FROM node:10-stretch
+
+RUN apt-get update && apt-get install ffmpeg -y && apt-get autoclean
 
 VOLUME /media
 VOLUME /downloads
