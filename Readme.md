@@ -73,11 +73,10 @@ Install the systemd service
 
 You'll need to create a `.env` file in your home directory, using `.env.default` as a template. In most cases, the only variables you may need to edit are:
 
-- `SECRET_KEY`
+- `SECRET_KEY` **required**
 - `DB_*`
 - `TRANSMISSION_*`
 
-The Secret Key is **required**.
 By default, NodeTV assumes that MongoDB and Transmission are running on the same machine, using the default ports.  
 In the case of MongoDB, it also assumes that you're not using authentication.
 
