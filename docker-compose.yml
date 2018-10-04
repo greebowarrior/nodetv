@@ -1,7 +1,6 @@
 version: "2"
 volumes:
   data-volume:
-  config-volume:
 services:
   nutv:
     container_name: nutv
@@ -18,9 +17,9 @@ services:
       - transmission
     volumes:
       - ~/Downloads:/downloads
-      - ~/Videos:/videos
+      - ~/Media:/media
     environment:
-      - MEDIA_ROOT=/videos
+      - MEDIA_ROOT=/media
       - DB_HOST=mongo
       - TRANSMISSION_HOST=transmission
   minidlna:
@@ -29,7 +28,7 @@ services:
     ports:
       - "8200:8200"
     volumes:
-      - ~/Videos:/media
+      - ~/Media:/media
     environment:
       - MINIDLNA_MEDIA_DIR=/media
       - MINIDLNA_FRIENDLY_NAME=NuTV
@@ -49,6 +48,6 @@ services:
       - "51413:51413"
       - "51413:51413/udp"
     volumes:
-      - config-volume:/config
+      - ~/config:/config
       - ~/Downloads:/downloads
       - ~/Downloads/watch:/watch
