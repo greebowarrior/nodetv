@@ -83,9 +83,20 @@ In the case of MongoDB, it also assumes that you're not using authentication.
 # Docker
 
 If all that seems like too much trouble, or you just prefer containers, a [Docker](https://docker.com) image is available.
-You'll still need to make a `.env` file (see above), but that's pretty much it.
+You'll need to copy the `docker-compose.yml` file to your home directory, and create a .env file
 
-> docker run -d --name="nutv" -v /path/to/your/media:/media -v /path/to/your/downloads:/downloads -p 3001:3001 --net=host --env-file ~/.env greebowarrior/nutv
+## .env file
+
+- `SECRET_KEY=`
+- `MEDIA_ROOT=`
+- `TRAKT_CLIENT_ID=`
+- `TRAKT_CLIENT_SECRET=`
+
+## Running
+
+As simple as:
+
+> docker-compose up
 
 # Running
 

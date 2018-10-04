@@ -5,24 +5,24 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ./config
+      device: "${PWD}/config"
       o: bind
   downloads_volume: 
     driver: local
     driver_opts:
       type: none
-      device: ./Downloads
+      device: "${PWD}/Downloads"
       o: bind
   media_volume:
     driver: local
     driver_opts:
       type: none
-      device: ./Movies/NuTV
+      device: "${MEDIA_ROOT}"
       o: bind
 services:
   nutv:
     container_name: nutv
-    image: greebowarrior/nutv
+    image: greebowarrior/nutv:docker
     restart: unless-stopped
     ports:
       - 3001:3001
@@ -35,11 +35,11 @@ services:
     volumes:
       - downloads_volume:/downloads
       - media_volume:/media
+    env_file:
+      - .env
     environment:
       - DB_HOST=mongo
-      - MEDIA_ROOT=/media
       - TRANSMISSION_HOST=transmission
-      - SECRET_KEY="Correct-Horse-Battery-Staple"
   minidlna:
     container_name: minidlna
     image: vladgh/minidlna
