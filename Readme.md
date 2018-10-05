@@ -50,8 +50,8 @@ Okay, you need some slight technical experience, and some software. We'll assume
 
 - [nginx](https://nginx.org) 1.13.0 +
 - [Node.js](https://nodejs.org) 8.9.0 +
-- [MongoDB](https://mongodb.org) 3.2.0 +
-- [Transmission](https://transmissionbt.com) 2.92 with RPC Enabled
+- [MongoDB](https://mongodb.org) 3.4.0 +
+- [Transmission](https://transmissionbt.com) 2.94 with RPC Enabled
 
 # Install
 
@@ -62,14 +62,41 @@ Create a user named `media`
 > su media
 > npm i
 
-
-
 Install the systemd service
 
 > sudo cp /opt/nutv/scripts/nutv.service /etc/systemd/system/  
 > sudo systemctl reload-daemon  
 > sudo systemctl enable nutv.service  
 > sudo systemctl start nutv.service  
+
+# Configure
+
+You'll need to create a `.env` file in your home directory, using `.env.default` as a template. In most cases, the only variables you may need to edit are:
+
+- `SECRET_KEY` **required**
+- `DB_*`
+- `TRANSMISSION_*`
+
+By default, NodeTV assumes that MongoDB and Transmission are running on the same machine, using the default ports.  
+In the case of MongoDB, it also assumes that you're not using authentication.
+
+# Docker
+
+If all that seems like too much trouble, or you just prefer containers, a [Docker](https://docker.com) image is available.
+You'll need to copy the `docker-compose.yml` file to your home directory, and create a .env file
+
+## .env file
+
+- `SECRET_KEY=`
+- `MEDIA_ROOT=`
+- `TRAKT_CLIENT_ID=`
+- `TRAKT_CLIENT_SECRET=`
+
+## Running
+
+As simple as:
+
+> docker-compose up
 
 # Running
 

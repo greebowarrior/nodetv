@@ -1,0 +1,72 @@
+version: "2"
+volumes:
+  data_volume:
+  config_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: "${PWD}/config"
+      o: bind
+  downloads_volume: 
+    driver: local
+    driver_opts:
+      type: none
+      device: "${PWD}/Downloads"
+      o: bind
+  media_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: "${MEDIA_ROOT}"
+      o: bind
+services:
+  nutv:
+    container_name: nutv
+    image: greebowarrior/nutv:docker
+    restart: unless-stopped
+    ports:
+      - 3001:3001
+    depends_on:
+      - mongo
+    links:
+      - minidlna
+      - mongo
+      - transmission
+    volumes:
+      - downloads_volume:/downloads
+      - media_volume:/media
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=mongo
+      - TRANSMISSION_HOST=transmission
+  minidlna:
+    container_name: minidlna
+    image: vladgh/minidlna
+    restart: always
+    ports:
+      - 8200:8200
+    volumes:
+      - media_volume:/media
+    environment:
+      - MINIDLNA_MEDIA_DIR=/media
+      - MINIDLNA_FRIENDLY_NAME=NuTV
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: always
+    ports:
+      - 27017
+    volumes:
+      - data_volume:/data/db
+  transmission:
+    container_name: transmission
+    image: linuxserver/transmission
+    restart: always
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    volumes:
+      - config_volume:/config
+      - downloads_volume:/downloads
