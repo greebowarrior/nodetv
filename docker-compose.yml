@@ -22,7 +22,7 @@ volumes:
 services:
   nutv:
     container_name: nutv
-    image: greebowarrior/nutv:docker
+    image: greebowarrior/nutv
     restart: unless-stopped
     ports:
       - 3001:3001
