@@ -1,17 +1,22 @@
-FROM node:10-stretch
+FROM node:10-stretch AS assets
 
-RUN apt-get update && apt-get install ffmpeg -y && apt-get autoclean
+WORKDIR /usr/src/nutv
+
+COPY . /usr/src/nutv
+RUN npm install --only=production --quiet
+
+FROM node:10-alpine
 
 VOLUME /media
 VOLUME /downloads
 
+RUN apk --no-cache add ffmpeg 
+
 WORKDIR /usr/src/nutv
-
-COPY package*.json /usr/src/nutv/
-
-RUN npm install --only=production
-
-COPY . /usr/src/nutv
+COPY --from=assets /usr/src/nutv/ /usr/src/nutv/
 
 EXPOSE 3001
-CMD [ "npm", "start" ]
+CMD ["npm","start"]
+
+
+
