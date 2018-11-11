@@ -3,6 +3,8 @@
 const helpers = require('nodetv-helpers')
 const mongoose = require('mongoose')
 
+//const Latest = require('./latest')
+
 let movieSchema = new mongoose.Schema({
 	title: {type: String, required: true},
 	overview: String,
@@ -115,14 +117,29 @@ movieSchema.statics.findByUser = function(user){
 }
 
 movieSchema.statics.updateLatest = function(){
-	// TODO: Proxy support
+	// TODO: Proxy support, cache support
 	return require('request-promise')({url:process.env.YTS_API, json:true, proxy:false})
 		.then(json=>{
 			return json.data.movie_count >= 1 ? json.data.movies : []
 		})
 		.map(result=>{
 			return this.findOne({'ids.imdb':result.imdb_code}).exec().then(movie=>{
-				if (!movie) return null
+				if (!movie){
+					return null
+					/*
+					Latest.findOne({'ids.imdb': result.imdb_code}).exec().then()
+					
+					movie = new Latest({
+						title: result.title,
+						year: result.year,
+						overview: result.summary,
+						ids: {
+							imdb: result.imdb_code,
+							slug: result.slug
+						}
+					})
+					*/
+				}
 				
 				result.torrents.forEach(torrent=>{
 					let idx = movie.hashes.findIndex(item=>item.btih == torrent.hash)
@@ -131,6 +148,7 @@ movieSchema.statics.updateLatest = function(){
 						movie.hashes.push({
 							btih: torrent.hash,
 							quality: torrent.quality,
+							size: torrent.size,
 							added: new Date(torrent.date_uploaded)
 						})
 					}
