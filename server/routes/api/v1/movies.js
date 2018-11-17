@@ -45,27 +45,37 @@ const MoviesAPI = (api)=>{
 	
 	router.route('/available')
 		.get((req,res)=>{
-			// TODO: Add proxy support and caching
-			return require('request-promise').get({url:process.env.YTS_API, qs:{limit:18}, json:true, proxy:false})
-				.then(json=>{
-					let results = json.data.movies.map(item=>{
-						return {
-							title: item.title,
-							year: item.year,
-							ids: {
-								imdb: item.imdb_code,
-								slug: item.slug
-							},
-							image: item.medium_cover_image,
-							added: new Date(item.date_added)
-						}
-					})
-					res.send(results)
+			
+			const request = require('cached-request')(require('request'))
+			request.setCacheDirectory('/tmp/cache')
+			request.setValue('ttl', '3600000')
+			
+			return new Promise((resolve,reject)=>{
+				request({url:process.env.YTS_API, qs:{limit:18}, json:true, proxy:false}, function(error,res,body){
+					if (error) reject(error)
+					if (body) resolve(body)
 				})
-				.catch(error=>{
-					if (error) console.error(error.message)
-					res.status(404).end()
+			})
+			// return require('request-promise').get({url:process.env.YTS_API, qs:{limit:18}, json:true, proxy:false})
+			.then(json=>{
+				let results = json.data.movies.map(item=>{
+					return {
+						title: item.title,
+						year: item.year,
+						ids: {
+							imdb: item.imdb_code,
+							slug: item.slug
+						},
+						image: item.medium_cover_image,
+						added: new Date(item.date_added)
+					}
 				})
+				res.send(results)
+			})
+			.catch(error=>{
+				if (error) console.error(error.message)
+				res.status(404).end()
+			})
 		})
 	
 	router.route('/scan')
