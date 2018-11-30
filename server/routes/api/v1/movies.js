@@ -46,18 +46,17 @@ const MoviesAPI = (api)=>{
 	router.route('/available')
 		.get((req,res)=>{
 			
-			const request = require('cached-request')(require('request'))
-			request.setCacheDirectory('/tmp/cache')
-			request.setValue('ttl', '3600000')
-			
-			return new Promise((resolve,reject)=>{
-				request({url:process.env.YTS_API, qs:{limit:18}, json:true, proxy:false}, function(error,res,body){
-					if (error) reject(error)
-					if (body) resolve(body)
-				})
-			})
-			// return require('request-promise').get({url:process.env.YTS_API, qs:{limit:18}, json:true, proxy:false})
-			.then(json=>{
+			return require('request-promise-cache').get({
+				url: process.env.YTS_API,
+				
+				cacheKey: process.env.YTS_API,
+				cacheTTL: 60*60*1000,
+				
+				qs: {limit:18},
+				json: true,
+				proxy: false
+				
+			}).then(json=>{
 				let results = json.data.movies.map(item=>{
 					return {
 						title: item.title,
