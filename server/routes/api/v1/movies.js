@@ -46,7 +46,7 @@ const MoviesAPI = (api)=>{
 	router.route('/available')
 		.get((req,res)=>{
 			
-			return require('request-promise-cache').get({
+			return require('request-promise-cache')({
 				url: process.env.YTS_API,
 				
 				cacheKey: process.env.YTS_API,
