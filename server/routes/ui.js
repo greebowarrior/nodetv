@@ -37,7 +37,7 @@ const UI = (app,io)=>{
 			// Render views
 			app.route('/views/*')
 				.get((req,res)=>{
-					let template = require('path').join(process.cwd(),'app', req.url)
+					let template = require('path').join(process.cwd(),app.locals.theme.path, req.url)
 					res.render(template, {layout:false}, (error,html)=>{
 						if (error){
 							console.error(error)
@@ -50,7 +50,7 @@ const UI = (app,io)=>{
 			// Send the dashboard by default
 			app.use((req,res)=>{
 				let preload = [
-					`</static/css/classic.css?v=${app.locals.nutv.version}>; rel=preload; as=style`,
+					`<${app.locals.theme.uri}/assets/css/classic.css?v=${app.locals.nutv.version}>; rel=preload; as=style`,
 					`</static/js/libs/ng-socket.min.js>; rel=preload; as=script`,
 					`</static/js/libs/ng-storage-0.3.10.min.js>; rel=preload; as=script`,
 					`</static/js/libs/ui-bootstrap-tpls-2.5.0.min.js>; rel=preload; as=script`,
