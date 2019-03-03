@@ -1,0 +1,7 @@
+<ol class="breadcrumb" ng-show="$ctrl.crumbs.length">
+	<li><a ui-sref="dashboard.home">Home</a></li>
+	<li ng-repeat="breadcrumb in $ctrl.crumbs" ng-class="{active:$last}">
+		<a ui-sref="{{breadcrumb.state}}" ng-hide="$last">{{breadcrumb.title}}</a>
+		<span ng-show="$last">{{breadcrumb.title}}</span>
+	</li>
+</ol>

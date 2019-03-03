@@ -1,0 +1,75 @@
+<div>
+	<div class="row">
+		<div class="col-sm-12">
+			<nutv-banner item="$ctrl.movie" type="movie"></nutv-banner>
+		</div>
+		<div class="col-sm-12">
+			<div class="well">
+				<p>{{$ctrl.movie.overview}}</p>
+				
+				<ul class="details">
+					<li>{{$ctrl.movie.year}}</li>
+					<li>Runtime: {{$ctrl.movie.runtime}} mins</li>
+					<li ng-show="$ctrl.movie.file.added">Downloaded: {{$ctrl.movie.file.added|date:'medium'}}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<uib-tabset>
+		<uib-tab heading="Downloads">
+			<div class="btn-group">
+				<button class="btn btn-default" ng-click="$ctrl.getDownloads()"><span class="fa fa-refresh"></span></button>
+				<button class="btn btn-default" ng-repeat="hash in $ctrl.movie.hashes" ng-click="$ctrl.download(hash.btih)"> {{hash.quality}}</button>
+			</div>
+			
+			<div ng-show="$ctrl.movie.file.filename">
+				<button type="button" class="btn btn-default" ng-click="$ctrl.play()"><span class="fa fa-play"></span> Play {{$ctrl.movie.file.quality}}</button>
+			</div>
+			
+		</uib-tab>
+		
+		<uib-tab heading="Artwork">
+			<button class="btn btn-default" ng-click="$ctrl.getArtwork()">Get Artwork</button>
+			
+			<div class="row" ng-show="$ctrl.images.banners.length">
+				<div class="col-xs-12"><h6>Banners</h6></div>
+				<div class="col-sm-3" ng-repeat="image in $ctrl.images.banners">
+					<show-artwork show="$ctrl.movie" artwork="image" type="banner"></show-artwork>
+				</div>
+			</div>
+			
+			<div class="row" ng-show="$ctrl.images.posters.length">
+				<div class="col-xs-12"><h6>Posters</h6></div>
+				<div class="col-xs-3 col-sm-3 col-md-2" ng-repeat="image in $ctrl.images.posters">
+					<show-artwork show="$ctrl.movie" artwork="image" type="poster"></show-artwork>
+				</div>
+			</div>
+			
+			<div class="row" ng-show="$ctrl.images.backgrounds.length">
+				<div class="col-sm-12"><h6>Backgrounds</h6></div>
+				<div class="col-sm-3" ng-repeat="image in $ctrl.images.backgrounds">
+					<show-artwork show="$ctrl.movie" artwork="image" type="background"></show-artwork>
+				</div>
+			</div>
+		</uib-tab>
+		
+		<uib-tab heading="Tools">
+			<div class="row">
+				<div class="col-sm-12">
+					<button class="btn btn-warning" ng-click="$ctrl.scan()">
+						<span class="fa fa-search"></span> Scan movie folder
+					</button>
+					<button class="btn btn-info" ng-click="$ctrl.sync()">
+						<span class="fa fa-refresh"></span> Sync movie data
+					</button>
+					<button class="btn btn-danger" ng-click="$ctrl.remove()">
+						<span class="fa fa-trash-o"></span> Remove movie
+					</button>
+					
+				</div>
+			</div>
+			
+		</uib-tab>
+	</uib-tabset>
+</div>

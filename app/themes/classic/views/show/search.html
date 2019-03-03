@@ -1,0 +1,16 @@
+	<div class="col-sm-12">
+		<h4><span class="highlight">{{::result.show.title}}</span> ({{::result.show.year}})</h4>
+	</div>
+	<div class="col-sm-10">
+		<h5>{{::result.show.overview}}</h5>
+		<ul class="result-details">
+			<li ng-show="result.show.network">Network: {{::result.show.network}}</li>
+			<li ng-show="result.show.airs">Airs: {{::result.show.airs.time}} {{::result.show.airs.day}}</li>
+			<li ng-show="result.show.runtime">Runtime: {{::result.show.runtime}}</li>
+			<li ng-show="result.show.genres.length">Genres: {{::result.show.genres.join(', ').replace('-',' ')}}</li>
+		</ul>
+	</div>
+	
+	<div class="col-sm-2 text-right">
+		<button class="btn btn-success" ng-click="$ctrl.add(result.show)">Add show</button>
+	</div>

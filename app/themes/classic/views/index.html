@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="nutv" class="dark">
+<head>
+	<meta charset="UTF-8">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="mobile-web-app-capable" content="yes" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
+	<link rel="stylesheet" href="<%- theme_uri %>/assets/css/classic.css?v=<%- nutv.version %>" />
+	
+	<link rel="manifest" href="/manifest.json" />
+	<meta name="theme-color" content="#ffffff" />
+	<meta name="msapplication-config" content="/static/browserconfig.xml" />
+	
+	<link rel="shortcut icon" href="<%- theme_uri %>/assets/gfx/icons/favicon.ico" />
+	<link rel="icon" type="image/png" sizes="32x32" href="<%- theme_uri %>/assets/gfx/icons/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="<%- theme_uri %>/assets/gfx/icons/favicon-16x16.png" />
+	<link rel="apple-touch-icon" sizes="180x180" href="<%- theme_uri %>/assets/gfx/icons/apple-touch-icon.png" />
+	<link rel="mask-icon" href="<%- theme_uri %>/assets/gfx/icons/safari-pinned-tab.svg" color="#ED1C24" />
+	
+	<title>NodeTV</title>
+	<base href="/" />
+</head>
+
+</head>
+<body>
+	<noscript>JavaScript is required. Sorry about that!</noscript>
+	<nutv-navigation></nutv-navigation>
+	
+	<main role="main">
+		<nutv-alerts></nutv-alerts>
+		<div class="container ng-cloak">
+			<nutv-breadcrumbs></nutv-breadcrumbs>
+			<ui-view />
+		</div>
+	</main>
+	
+	<footer>
+		<div class="info">NodeTV v<%- nutv.version %></div>
+	</footer>
+	
+	<script src="/socket.io/socket.io.js"></script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular-animate.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular-cookies.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular-sanitize.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular-touch.min.js"></script>
+	
+	<script src="https://unpkg.com/sweetalert2@7/dist/sweetalert2.all.js"></script>
+	<script src="https://unpkg.com/@uirouter/angularjs@1.0/release/angular-ui-router.min.js"></script>
+	
+	<script src="/static/js/libs/ui-bootstrap-tpls-2.5.0.min.js"></script>
+	<script src="/static/js/libs/ng-socket.min.js"></script>
+	<script src="/static/js/libs/ng-storage-0.3.10.min.js"></script>
+	
+	<script src="/static/js/nutv.core.js?v=<%- nutv.version %>"></script>
+	<script src="/static/js/nutv.shows.js?v=<%- nutv.version %>"></script>
+	<script src="/static/js/nutv.movies.js?v=<%- nutv.version %>"></script>
+	<script src="/static/js/nutv.users.js?v=<%- nutv.version %>"></script>
+	
+	<script src="/static/js/components/artwork.js?v=<%- nutv.version %>"></script>
+	
+	<script src="/static/js/nutv.js?v=<%- nutv.version %>"></script>
+</body>
+</html>

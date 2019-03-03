@@ -1,0 +1,28 @@
+<div>
+	<form ng-submit="search()" name="searchForm">
+		<div class="form-group">
+			<label>Search for a show</label>
+			<span class="input-group">
+				<input type="text" class="form-control" ng-model="query" required="true" />
+				<span class="input-group-btn">
+					<button type="submit" class="btn btn-success" ng-disabled="searchForm.$invalid"><span class="fa fa-search"></span></button>
+				</span>
+			</span>
+		</div>
+	</form>
+	
+	<hr />
+	
+	<div class="row" ng-repeat="result in results" ng-controller="ResultCtrl">
+			<div class="col-sm-12">
+				<h4>{{::result.show.title}} ({{::result.show.year}})</h4>
+			</div>
+			<div class="col-sm-9">
+				<h5>{{::result.show.overview}}</h5>
+			</div>
+			<div class="col-sm-3">
+				<button class="btn btn-default" ng-click="add()">Add show</button>
+			</div>
+	</div>
+
+</div>

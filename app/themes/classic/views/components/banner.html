@@ -1,0 +1,8 @@
+<div class="nutv-banner">
+	<div class="background-art" ng-show="$ctrl.item.images.background.enabled" style="{{$ctrl.background}}"></div>
+	<picture>
+		<source ng-srcset="{{$ctrl.srcset}}"></source>
+		<img class="img-responsive" width="100%" />
+	</picture>
+	<h1 ng-hide="$ctrl.item.images.banner.enabled">{{::$ctrl.item.title}}</h1>
+</div>

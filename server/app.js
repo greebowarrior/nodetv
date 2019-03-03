@@ -20,12 +20,9 @@ const App = app=>{
 	// Template Engine
 	app.engine('html', require('ejs').renderFile)
 	app.set('view engine', 'html')
-	app.set('views', require('path').join(process.cwd(),'app','views'))
+	app.use(require('express-ejs-layouts'))
 	
 	if (process.env.NODE_ENV == 'development') app.disable('view cache')
-	
-	app.use(require('express-ejs-layouts'))
-	app.set('layout', 'layouts/classic')
 	
 	// Define headers and static paths
 	app.use((req,res,next)=>{
@@ -62,11 +59,19 @@ const App = app=>{
 	app.use(session)
 	
 	app.use((req,res,next)=>{
-		// TODO: load layout/theme based on session data
-	//	app.set('layout', 'layouts/classic')
+		let theme = 'classic'
+		// load layout/theme based on request/cookie/session data
+		if (req.query.theme || req.cookies.theme){
+			// TODO: check theme exists
+			theme = req.query.theme || req.cookies.theme
+		}
+		
+		app.locals.theme_uri = '/' + require('path').join('static','themes',theme)
+		
+		app.set('views', require('path').join(process.cwd(),'app','themes',theme,'views'))
+		app.set('layout', 'index')
 		
 		next()
 	})
-	
 }
 module.exports = App

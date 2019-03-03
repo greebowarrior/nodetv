@@ -1,0 +1,7 @@
+<div class="messages">
+    <div ng-message="required">Required</div>
+    <div ng-message="minlength">Too short</div>
+    <div ng-message="maxlength">Too long</div>
+    <div ng-message="email">Invalid email address</div>
+    <div ng-message="compareTo">Must match the previous entry</div>
+</div>

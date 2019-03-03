@@ -1,0 +1,73 @@
+<form name="userForm" ng-submit="$ctrl.save()">
+	<div uib-tabset>
+		<div uib-tab>
+			<uib-tab-heading>General</uib-tab-heading>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group" ng-class="{'has-error':userForm.username.$invalid}">
+						<label class="control-label" for="ipt_username">Username</label>
+						<input type="text" name="username" id="ipt_username" class="form-control" required="true" ng-model="$ctrl.user.username" />
+					</div>
+					<div class="form-group" ng-class="{'has-error':userForm.email.$invalid}">
+						<label class="control-label" for="ipt_email">Email</label>
+						<input type="email" name="email" id="ipt_email" class="form-control" required="true" ng-model="$ctrl.user.email" />
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group" ng-class="{'has-error':userForm.password.$invalid}">
+						<label class="control-label" for="ipt_password">New password</label>
+						<input type="password" name="password" id="ipt_password" class="form-control" ng-model="$ctrl.user.password" ng-required="$ctrl.user.new" />
+					</div>
+					<div class="form-group" ng-class="{'has-error':userForm.passconf.$invalid}">
+						<label class="control-label" for="ipt_passconf">Confirm new password</label>
+						<input type="password" name="passconf" id="ipt_passconf" class="form-control" ng-model="$ctrl.user.passconf" ng-required="$ctrl.user.new" compare-to="$ctrl.user.password" />
+						<!--div ng-messages="userForm.passconf.$error" ng-messages-include="views/components/messages.html"></div-->
+					</div>
+				</div>			
+			</div>
+		</div>
+		<div uib-tab>
+			<uib-tab-heading>Trakt.tv</uib-tab-heading>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group" ng-show="$ctrl.user._id">
+						<trakt-auth user="$ctrl.user"></trakt-auth>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--
+		<div uib-tab ng-show="$ctrl.user._id">
+			<uib-tab-heading>Tools</uib-tab-heading>
+			<div class="alert alert-warning"><strong>Warning</strong>: These tools perform some serious shit. Use with caution.</div>
+			
+			<div class="form-group">
+				<button type="button" class="btn btn-warning" ng-click="$ctrl.sync()"><span class="fa fa-refresh"></span> Sync data</button>
+				<span class="help-block small">Sync collection, watchlist, and history for this user.</span>
+			</div>
+			<hr />
+			
+			<div class="form-group">
+				<button type="button" class="btn btn-danger"><span class="fa fa-warning"></span> Rebuild database</button>
+				<span class="help-block small">Rebuild the entire show database for all users. This may take a very long time.</span>
+			</div>
+			
+			<div class="form-group">
+				<button type="button" class="btn btn-danger" ng-click="$ctrl.delete()">Delete</button><
+			/div>
+		</div>
+		-->
+	</div>
+	
+	<hr />
+	
+	<div class="row">
+		<div class="col-md-12">
+			<div class="form-group">
+				<button type="submit" class="btn btn-success" ng-disabled="userForm.$invalid || userForm.$pristine" >Save</button>
+				<button type="button" class="btn btn-default" ui-sref="^.list">Back</button>
+			</div>
+		</div>
+	</div>
+	
+</form>
