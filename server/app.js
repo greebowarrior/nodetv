@@ -65,9 +65,10 @@ const App = app=>{
 			// TODO: check theme exists
 			theme = req.query.theme || req.cookies.theme
 		}
-		
-		app.locals.theme_path = require('path').join('app','themes',theme)
-		app.locals.theme_uri = '/' + require('path').join('static','themes',theme)
+		app.locals.theme = {
+			path: require('path').join('app','themes',theme),
+			uri: '/' + require('path').join('static','themes',theme)
+		}
 		
 		app.set('views', require('path').join(process.cwd(),'app','themes',theme,'views'))
 		app.set('layout', 'index')
