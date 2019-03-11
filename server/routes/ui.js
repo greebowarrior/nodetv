@@ -34,6 +34,12 @@ const UI = (app,io)=>{
 					res.send(json)
 				})
 			
+			app.route('/robots.txt')
+				.get((req,res)=>{
+					const robots = require('path').join(process.cwd(),'app', 'robots.txt')
+					res.sendFile(robots)
+				})
+				
 			// Render views
 			app.route('/views/*')
 				.get((req,res)=>{

@@ -64,6 +64,7 @@ const App = app=>{
 		if (req.query.theme || req.cookies.theme){
 			// TODO: check theme exists
 			theme = req.query.theme || req.cookies.theme
+			// TODO: Set cookie/session data
 		}
 		app.locals.theme = {
 			path: require('path').join('app','themes',theme),
