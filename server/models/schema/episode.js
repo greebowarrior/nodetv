@@ -311,7 +311,23 @@ episodeSchema.virtual('uri').get(function(){
 })
 episodeSchema.virtual('file.url').get(function(){
 	if (this.parent().config.directory && this.file.filename){
-		return process.env.WEB_URL +'media/'+ process.env.MEDIA_SHOWS + this.parent().config.directory +'/'+ this.file.filename
+		
+		let path = this.file.filename.split('/')
+		
+		let url = [
+			process.env.DLNA_URL || process.env.WEB_URL,
+			'media/',
+			process.env.MEDIA_SHOWS,
+			encodeURIComponent(this.parent().config.directory),
+			path[0],
+			encodeURIComponent(path[1])
+		]
+		return url.map(item=>item.replace(/\/$/,'')).join('/')
+		
+	//	let path = this.file.filename.split('/')
+	//	path[1] = encodeURIComponent(path[1])
+	//	return process.env.WEB_URL +'media/'+ process.env.MEDIA_SHOWS + this.parent().config.directory +'/'+ path.join('/')
+		
 	}
 })
 
