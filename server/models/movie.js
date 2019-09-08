@@ -589,10 +589,25 @@ movieSchema.virtual('uri').get(function(){
 	return `/api/movies/${this.ids.slug}`
 })
 movieSchema.virtual('file.url').get(function(){
+	
+	if (this.config.directory && this.file.filename){
+		let url = [
+			process.env.DLNA_URL || process.env.WEB_URL,
+			'media/',
+			process.env.MEDIA_MOVIES,
+			'A-Z',
+			this.getAlpha().replace('#','%23'),
+			this.config.directory,
+			this.file.filename
+		]
+		return url.map(item=>item.replace(/\/$/,'')).join('/')
+	}
+	/*
 	if (this.config.directory && this.file.filename){
 		return process.env.WEB_URL +'media/'+ process.env.MEDIA_MOVIES +'A-Z/'+ 
 			this.getAlpha().replace('#','%23') +'/'+ this.config.directory +'/'+ this.file.filename
 	}
+	*/
 })
 movieSchema.virtual('images.baseUrl').get(function(){
 	if (!this.config.directory) this.setDirectory()

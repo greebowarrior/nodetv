@@ -318,9 +318,9 @@ episodeSchema.virtual('file.url').get(function(){
 			process.env.DLNA_URL || process.env.WEB_URL,
 			'media/',
 			process.env.MEDIA_SHOWS,
-			encodeURIComponent(this.parent().config.directory),
+			this.parent().config.directory,
 			path[0],
-			encodeURIComponent(path[1])
+			path[1]
 		]
 		return url.map(item=>item.replace(/\/$/,'')).join('/')
 		
