@@ -19,7 +19,7 @@ if (!process.env.DLNA_URL){
 			address.push(iface.address)
 		})
 	})
-	if (address.length >= 1) process.env.DLNA_URL = `https://${address[0]}/`
+	if (address.length >= 1) process.env.DLNA_URL = `http://${address[0]}/`
 }
 
 
