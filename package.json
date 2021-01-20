@@ -60,7 +60,7 @@
     "request-promise-cache": "^2.0.1",
     "rss-parser": "^3.7.6",
     "sharp": "^0.25.2",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.4.0",
     "syserrno": "^1.0.1",
     "trakt.tv": "^8.0.0",
     "trakt.tv-artwork": "file:server/local_modules/trakt.tv-artwork",
