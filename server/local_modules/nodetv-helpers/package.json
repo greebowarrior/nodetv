@@ -5,13 +5,13 @@
   "description": "NodeTV - Utilities",
   "main": "./index.js",
   "peerDependencies": {
-	  "fs-extra": "^9.0.0",
-	  "glob-promise": "^3.4.0",
-	  "html-entities": "^1.2.1",
-	  "node-ssdp": "^4.0.0",
+	  "fs-extra": "^10.0.0",
+	  "glob-promise": "^4.2.0",
+	  "html-entities": "^2.3.2",
+	  "node-ssdp": "^4.0.1",
 	  "trakt.tv": "^8.0.0",
-	  "transmission": "^0.4.9",
+	  "transmission": "^0.4.10",
 	  "upnp-device-client": "^1.0.2",
-	  "upnp-mediarenderer-client": "^1.2.4"
+	  "upnp-mediarenderer-client": "^1.4.0"
   }
 }
