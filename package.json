@@ -58,7 +58,7 @@
     "request-promise": "^4.2.5",
     "request-promise-cache": "^2.0.1",
     "rss-parser": "^3.12.0",
-    "sharp": "^0.28.3",
+    "sharp": "^0.30.5",
     "socket.io": "^4.1.2",
     "syserrno": "^1.0.1",
     "trakt.tv": "^8.0.0",
